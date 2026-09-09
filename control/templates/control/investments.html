@@ -1,0 +1,201 @@
+{% extends "control/admin_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/investments.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="investments-page">
+
+
+<h2>Investments</h2>
+
+<p class="investments-subtitle">
+    Overview of all user investments.
+</p>
+
+<div class="investments-table-wrapper">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>S/N</th>
+                <th>User</th>
+                <th>Plan</th>
+                <th>Amount ($)</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for inv in investments_page %}
+
+            <tr>
+
+                <td>
+                    {{ forloop.counter }}
+                </td>
+
+                <td>
+                    {{ inv.user.username }}
+                </td>
+
+                <td>
+                    <span class="investment-plan">
+                        {{ inv.plan.name }}
+                    </span>
+                </td>
+
+                <td>
+                    <span class="investment-amount">
+                        ${{ inv.amount_usd|floatformat:2 }}
+                    </span>
+                </td>
+
+                <td>
+
+                    {% if inv.status == "active" %}
+
+                        <span class="investment-status status-active">
+                            Active
+                        </span>
+
+                    {% elif inv.status == "pending" %}
+
+                        <span class="investment-status status-pending">
+                            Pending
+                        </span>
+
+                    {% elif inv.status == "completed" %}
+
+                        <span class="investment-status status-completed">
+                            Completed
+                        </span>
+
+                    {% elif inv.status == "rejected" %}
+
+                        <span class="investment-status status-rejected">
+                            Rejected
+                        </span>
+
+                    {% else %}
+
+                        <span class="investment-status">
+                            {{ inv.status|title }}
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <div class="investment-date">
+
+                        <span>
+                            {{ inv.created_at|date:"M d, Y" }}
+                        </span>
+
+                        <small>
+                            {{ inv.created_at|date:"H:i" }}
+                        </small>
+
+                    </div>
+
+                </td>
+
+                <td>
+
+                    {% if inv.end_date %}
+
+                        {{ inv.end_date|date:"M d, Y H:i" }}
+
+                    {% else %}
+
+                        Lifetime
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="7" class="empty-investments">
+
+                    <i class="fas fa-chart-line"></i>
+
+                    No investments found.
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+
+{% if investments_page.paginator.num_pages > 1 %}
+
+<div class="pagination">
+
+    {% if investments_page.has_previous %}
+
+        <a href="?page={{ investments_page.previous_page_number }}">
+
+            <i class="fas fa-chevron-left"></i>
+            Previous
+
+        </a>
+
+    {% endif %}
+
+    <span>
+
+        Page {{ investments_page.number }}
+        of
+        {{ investments_page.paginator.num_pages }}
+
+    </span>
+
+    {% if investments_page.has_next %}
+
+        <a href="?page={{ investments_page.next_page_number }}">
+
+            Next
+            <i class="fas fa-chevron-right"></i>
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+
+</div>
+
+{% endblock %}

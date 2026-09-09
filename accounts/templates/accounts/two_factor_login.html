@@ -1,0 +1,64 @@
+
+{% extends 'accounts/dashboard_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/two_factor_login.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="two-factor-login-page">
+
+    <div class="two-factor-login-card">
+
+        <div class="two-factor-login-icon">
+            🔐
+        </div>
+
+        <h2>Two-Factor Authentication</h2>
+
+        <p class="login-description">
+            Enter the 6-digit verification code from your
+            authenticator app to continue.
+        </p>
+
+        <form method="post">
+
+            {% csrf_token %}
+
+            <label for="code">
+                Authentication Code
+            </label>
+
+            <input
+                type="text"
+                id="code"
+                name="code"
+                maxlength="6"
+                minlength="6"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+                placeholder="000000"
+                required
+                autofocus
+            >
+
+            <button type="submit">
+                Verify & Continue
+            </button>
+
+        </form>
+
+        <p class="security-note">
+            Your account is protected by Two-Factor Authentication.
+        </p>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+

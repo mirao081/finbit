@@ -1,0 +1,54 @@
+{% extends 'control/admin_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/investment_plans.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="investment-plans-page">
+    <h2>Investment Plans ({{ total_plans }})</h2>   
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Return Rate</th>
+                <th>Frequency</th>
+                <th>Duration</th>
+                <th>Total Return</th>
+                <th>Minimum Investment</th>
+                <th>Maximum Investment</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plan in plans %}
+            <tr>
+                <td>{{ plan.name }}</td>
+                <td>{{ plan.return_rate }}</td>
+                <td>{{ plan.frequency }}</td>
+                <td>{{ plan.duration }}</td>
+                <td>
+                    {% if plan.total_return %}
+                        {{ plan.total_return }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>{{ plan.minimum_investment }}</td>
+                <td>
+                    {% if plan.maximum_investment %}
+                        {{ plan.maximum_investment }}
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td><a href="{% url 'update_plan' plan.id %}">Update</a></td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="8">No plans found.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

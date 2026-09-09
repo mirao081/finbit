@@ -1,0 +1,184 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'accounts/css/referrals.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="referrals-page">
+  <div class="referrals-card-wrapper">
+
+    
+    <div class="referrals-heading">
+      <h2>Referral Program</h2>
+      <p>Invite your friends and earn commissions whenever they invest using your unique referral link.</p>
+    </div>
+
+
+    
+    <div class="referral-link-box">
+
+        <span>Your Referral Link</span>
+
+        <div class="referral-link-row">
+
+            <input
+                type="text"
+                id="referralLink"
+                value="{{ referral_link }}"
+                readonly
+            >
+
+            <button
+                type="button"
+                id="copyReferralBtn"
+            >
+                <i class="fas fa-copy"></i>
+                <span>Copy Link</span>
+            </button>
+
+        </div>
+
+        <small id="copyMessage"></small>
+
+    </div>
+
+
+
+    
+    <div class="referral-stats">
+      <div class="stat-item">
+        <span>Total Referrals</span>
+        <strong>{{ total_referrals }}</strong>
+      </div>
+      <div class="stat-item">
+        <span>Total Earnings</span>
+        <strong>${{ total_earnings|floatformat:2 }}</strong>
+      </div>
+    </div>
+
+ 
+    <section class="referral-table-section">
+
+        <h3>People You Referred</h3>
+
+        {% if referred_users %}
+
+            <div class="table-responsive">
+
+                <table class="referral-history-table">
+
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Email</th>
+                            <th>Date Joined</th>
+                            <th>Commission Earned</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for referral in referred_users %}
+
+                            <tr>
+
+                                <td data-label="Username">
+                                    {{ referral.referred_user.username }}
+                                </td>
+
+                                <td data-label="Email">
+                                    {{ referral.referred_user.email }}
+                                </td>
+
+                                <td data-label="Date Joined">
+                                    {{ referral.referred_user.date_joined|date:"M d, Y • h:i A" }}
+                                </td>
+
+                                <td data-label="Commission">
+                                    ${{ referral.commission_earned|floatformat:2 }}
+                                </td>
+
+                            </tr>
+
+                        {% empty %}
+
+                            <tr>
+                                <td colspan="4">
+                                    No referrals yet.
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            
+
+            <div class="pagination">
+
+                {% if referred_users.has_previous %}
+
+                    <a href="?page={{ referred_users.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i>
+                        Previous
+                    </a>
+
+                {% endif %}
+
+
+                <span>
+                    Page {{ referred_users.number }}
+                    of
+                    {{ referred_users.paginator.num_pages }}
+                </span>
+
+
+                {% if referred_users.has_next %}
+
+                    <a href="?page={{ referred_users.next_page_number }}">
+                        Next
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        {% else %}
+
+            <div class="empty-referrals">
+                <i class="fas fa-users"></i>
+                <p>No referrals yet.</p>
+            </div>
+
+        {% endif %}
+
+    </section>
+
+
+    
+    <section class="referral-progress">
+    <h3>Your Referral Progress</h3>
+    <canvas id="referralChart"></canvas>
+    <script id="chartData" type="application/json">{{ chart_data }}</script>
+    </section>
+
+
+
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static 'accounts/js/referrals.js' %}"></script>
+{% endblock %}
+

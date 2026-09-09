@@ -1,0 +1,540 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+>
+
+<link rel="stylesheet" href="{% static 'core/css/news_detail.css' %}">
+
+{% endblock %}
+
+
+{% block content %}
+
+<section class="ndxv9-hero">
+
+    <div class="ndxv9-hero-overlay"></div>
+
+    <div class="ndxv9-hero-content">
+
+        <h1>Blog Details</h1>
+
+        <div class="ndxv9-breadcrumb">
+
+            <a href="{% url 'home' %}">
+                <i class="fa fa-home"></i>
+                Home
+            </a>
+
+            <span>-</span>
+
+            <span class="ndxv9-blog">
+                Blog
+            </span>
+
+            <span>Details</span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="ndxv9-news-shell">
+
+    <div class="ndxv9-news-wrap">
+
+        <div class="ndxv9-layout">
+
+            <main class="ndxv9-main">
+
+                <article class="ndxv9-article">
+
+                    {% if item.image %}
+
+                    <div class="ndxv9-image-wrap">
+
+                        <img
+                            src="{{ item.image.url }}"
+                            class="ndxv9-image"
+                            alt="{{ item.subheading }}"
+                        >
+
+                        <div class="ndxv9-date-box">
+
+                            <span>
+                                {{ item.date|date:"d" }}
+                            </span>
+
+                            <small>
+                                {{ item.date|date:"M"|upper }}
+                            </small>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+
+                    {% if item.category %}
+
+                    <span class="ndxv9-category-badge">
+
+                        {{ item.category.name }}
+
+                    </span>
+
+                    {% endif %}
+
+
+                    <h2>
+                        {{ item.subheading }}
+                    </h2>
+
+
+                    <div class="ndxv9-meta">
+
+                        <span>
+
+                            <i class="fa fa-user"></i>
+
+                            {{ item.author }}
+
+                        </span>
+
+                        <span>
+
+                            <i class="fa fa-calendar"></i>
+
+                            {{ item.date|date:"F d, Y" }}
+
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        {{ item.content_title }}
+                    </h3>
+
+
+                    <div class="ndxv9-content">
+
+                        {% if item.body %}
+
+                            {{ item.body|linebreaks }}
+
+                        {% else %}
+
+                            {{ item.content_preview|linebreaks }}
+
+                        {% endif %}
+
+                    </div>
+
+
+                    {% if item.quote %}
+
+                    <blockquote class="ndxv9-feature-quote">
+
+                        {{ item.quote }}
+
+                    </blockquote>
+
+                    {% endif %}
+
+
+                    <div class="ndxv9-share">
+
+                        <h4>
+                            Share This Post
+                        </h4>
+
+                        <div class="ndxv9-icons">
+
+                            <a
+                                href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}"
+                                target="_blank"
+                            >
+
+                                <i class="fab fa-facebook-f"></i>
+
+                            </a>
+
+
+                            <a
+                                href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}"
+                                target="_blank"
+                            >
+
+                                <i class="fab fa-x-twitter"></i>
+
+                            </a>
+
+
+                            <a
+                                href="https://www.linkedin.com/sharing/share-offsite/?url={{ request.build_absolute_uri }}"
+                                target="_blank"
+                            >
+
+                                <i class="fab fa-linkedin-in"></i>
+
+                            </a>
+
+
+                            <a
+                                href="https://t.me/share/url?url={{ request.build_absolute_uri }}"
+                                target="_blank"
+                            >
+
+                                <i class="fab fa-telegram-plane"></i>
+
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+
+                
+
+                <section class="ndxv9-comments">
+
+                    <h3>
+
+                        {{ item.comments.count }}
+
+                        {% if item.comments.count == 1 %}
+
+                            Comment
+
+                        {% else %}
+
+                            Comments
+
+                        {% endif %}
+
+                    </h3>
+
+
+                    {% for comment in item.comments.all %}
+
+                        {% if comment.approved %}
+
+                        <div class="ndxv9-comment">
+
+                            <div class="ndxv9-comment-avatar">
+
+                                {% if comment.image %}
+
+                                    <img
+                                        src="{{ comment.image.url }}"
+                                        alt="{{ comment.name }}"
+                                        class="ndxv9-comment-image"
+                                    >
+
+                                {% else %}
+
+                                    <div class="ndxv9-avatar">
+
+                                        {{ comment.name|first|upper }}
+
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="ndxv9-comment-content">
+
+                                <h5>
+                                    {{ comment.name }}
+                                </h5>
+
+                                <span class="ndxv9-comment-time">
+
+                                    {{ comment.created_at|timesince }} ago
+
+                                </span>
+
+                                <p>
+
+                                    {{ comment.comment }}
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        {% endif %}
+
+                    {% empty %}
+
+                        <p class="ndxv9-no-comments">
+
+                            No comments yet. Be the first to comment.
+
+                        </p>
+
+                    {% endfor %}
+
+                </section>
+
+
+                
+
+                <section class="ndxv9-form-card">
+
+                    <h3>
+                        Leave a Comment
+                    </h3>
+
+
+                    <form
+                        method="POST"
+                        enctype="multipart/form-data"
+                        class="ndxv9-form"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <div class="ndxv9-grid">
+
+                            {{ form.name }}
+
+                            {{ form.email }}
+
+                        </div>
+
+
+                        <div class="ndxv9-image-upload">
+
+                            <label class="ndxv9-image-label">
+
+                                Profile Image
+
+                            </label>
+
+
+                            <label
+                                for="id_image"
+                                class="ndxv9-upload-button"
+                            >
+
+                                <i class="fa fa-camera"></i>
+
+                                Choose Image
+
+                            </label>
+
+
+                            {{ form.image }}
+
+
+                            <span class="ndxv9-file-name">
+
+                                No file chosen
+
+                            </span>
+
+
+                            <small>
+
+                                Optional - JPG, PNG or WEBP.
+
+                            </small>
+
+                        </div>
+
+
+                        {{ form.comment }}
+
+
+                        <button type="submit">
+
+                            Post Comment
+
+                        </button>
+
+                    </form>
+
+                </section>
+
+            </main>
+
+
+            
+
+            <aside class="ndxv9-sidebar">
+
+
+                
+
+                <div class="ndxv9-side-card">
+
+                    <h4>
+                        Categories
+                    </h4>
+
+
+                    <ul>
+
+                        {% for category in categories %}
+
+                        <li>
+
+                            {{ category.name }}
+
+                            <span class="ndxv9-count">
+
+                                ({{ category.news_items.count }})
+
+                            </span>
+
+                        </li>
+
+                        {% empty %}
+
+                        <li>
+                            No categories available.
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+
+                
+
+                <div class="ndxv9-side-card">
+
+                    <h4>
+                        Archive
+                    </h4>
+
+
+                    <ul>
+
+                        {% for month in archives %}
+
+                        <li>
+
+                            {{ month|date:"F Y" }}
+
+                        </li>
+
+                        {% empty %}
+
+                        <li>
+                            No archive available.
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+
+                </div>
+
+
+                
+
+                <div class="ndxv9-side-card">
+
+                    <h4>
+                        Popular Blog Posts
+                    </h4>
+
+
+                    {% for post in popular_posts %}
+
+                    <div class="ndxv9-popular">
+
+                        {% if post.image %}
+
+                        <img
+                            src="{{ post.image.url }}"
+                            alt="{{ post.subheading }}"
+                        >
+
+                        {% endif %}
+
+
+                        <div>
+
+                            <strong>
+                                {{ post.subheading }}
+                            </strong>
+
+                            <span>
+
+                                {{ post.date|date:"F d, Y" }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    {% empty %}
+
+                    <p>
+                        No popular posts available.
+                    </p>
+
+                    {% endfor %}
+
+                </div>
+
+
+                
+
+                <div class="ndxv9-side-card">
+
+                    <h4>
+                        Tags
+                    </h4>
+
+
+                    <div class="ndxv9-tags">
+
+                        {% for tag in item.tags.all %}
+
+                        <span>
+                            {{ tag.name }}
+                        </span>
+
+                        {% empty %}
+
+                        <span>
+                            No tags
+                        </span>
+
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+
+            </aside>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

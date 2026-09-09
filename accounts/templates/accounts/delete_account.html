@@ -1,0 +1,61 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/settings.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="settings-page">
+
+    <div class="settings-card delete-confirm-card">
+
+        <div class="danger-confirm-icon">
+            ⚠
+        </div>
+
+        <h2>Delete Your Account?</h2>
+
+        <p class="delete-confirm-text">
+            This action is permanent. Your account will be deleted
+            and you will no longer be able to access it.
+        </p>
+
+        <div class="danger-warning">
+
+            <strong>Before you continue</strong>
+
+            <ul>
+                <li>Your account will be permanently deleted.</li>
+                <li>You will be signed out immediately.</li>
+                <li>This action cannot be undone.</li>
+            </ul>
+
+        </div>
+
+        <form method="post" class="delete-confirm-actions">
+
+            {% csrf_token %}
+
+            <a
+                href="{% url 'settings' %}"
+                class="cancel-delete-btn"
+            >
+                Cancel
+            </a>
+
+            <button
+                type="submit"
+                class="confirm-delete-btn"
+            >
+                Yes, Delete My Account
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+{% endblock %}

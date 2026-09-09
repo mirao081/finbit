@@ -1,0 +1,99 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/login.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+<section class="login-page">
+    <div class="login-card">
+
+        <h2>Welcome Back</h2>
+        <p class="subtitle">Login to continue</p>
+
+        <form method="post" class="login-form">
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <p>
+                {{ form.username.errors }}
+
+                <input
+                    type="text"
+                    name="username"
+                    placeholder="Username or Email"
+                    value="{{ form.username.value|default:'' }}"
+                    autocomplete="username"
+                    required
+                >
+            </p>
+
+            <p>
+                {{ form.password.errors }}
+
+                <div class="password-wrapper">
+                    <input
+                        type="password"
+                        name="password"
+                        id="login-password"
+                        placeholder="Password"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <span
+                        class="toggle-password"
+                        onclick="togglePassword('login-password', this)"
+                    >
+                        <i class="fa fa-eye"></i>
+                    </span>
+                </div>
+            </p>
+
+            <div
+                class="g-recaptcha"
+                data-sitekey="{{ recaptcha_site_key }}"
+            ></div>
+
+            <button
+                type="submit"
+                class="login-btn"
+            >
+                Login
+            </button>
+
+            <p class="forgot-link">
+                <a href="{% url 'password_reset' %}">
+                    Forgot your password?
+                </a>
+            </p>
+
+        </form>
+
+        <p class="signup-link">
+            Don't have an account?
+
+            <a href="{% url 'signup' %}">
+                Sign up here
+            </a>
+        </p>
+
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'accounts/js/password-toggle.js' %}"></script>
+<script
+    src="https://www.google.com/recaptcha/api.js"
+    async
+    defer
+></script>
+{% endblock %}

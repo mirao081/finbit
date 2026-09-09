@@ -1,0 +1,58 @@
+{% extends 'control/admin_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/update_wallet.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="update-wallet-page">
+    <div class="update-wallet-header">
+
+        <div class="wallet-header-icon">
+            <i class="fas fa-wallet"></i>
+        </div>
+
+        <h2>Update {{ wallet.get_currency_display }} Wallet</h2>
+
+        <p>
+            Update the company wallet address and QR code for
+            <strong>{{ wallet.get_currency_display }}</strong>
+        </p>
+
+    </div>
+
+    <div class="update-wallet-card">
+
+        <form method="post" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="wallet-form">
+                {{ form.as_p }}
+            </div>
+
+            <div class="wallet-form-actions">
+
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-floppy-disk"></i>
+                    Save Changes
+                </button>
+
+                <a href="{% url 'payment_methods' %}" class="wallet-cancel">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Payment Methods
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,1171 @@
+
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block title %}
+    Admin Settings
+{% endblock %}
+
+{% block extra_css %}
+<link
+    rel="stylesheet"
+    href="{% static 'control/css/admin_settings.css' %}"
+>
+{% endblock %}
+
+{% block content %}
+
+<div class="admin-settings-page">
+
+    
+    <div class="admin-settings-header">
+
+        <div class="admin-settings-icon">
+            <i class="fas fa-sliders-h"></i>
+        </div>
+
+        <div class="settings-label">
+            <i class="fas fa-circle"></i>
+            Control Center
+        </div>
+
+        <h1>
+            Admin Settings
+        </h1>
+
+        <p>
+            Manage users, accounts, transactions, platform controls,
+            and administrative operations from one central location.
+        </p>
+
+    </div>
+
+
+    
+    <section class="settings-panel user-management-panel">
+
+        
+        <div class="panel-header">
+
+            <div class="panel-icon">
+                <i class="fas fa-users-cog"></i>
+            </div>
+
+            <div class="panel-header-text">
+
+                <span class="panel-kicker">
+                    Administration
+                </span>
+
+                <h2>
+                    User Management
+                </h2>
+
+                <p>
+                    Manage individual user accounts, balances,
+                    bonuses, communication, access, and account status.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+        {% if user_data %}
+
+        <div class="user-list">
+
+            {% for item in user_data %}
+
+            <div class="user-card">
+
+                
+                <div class="user-card-header">
+
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+
+                    <div class="user-information">
+
+                        <span class="user-label">
+                            User Account
+                        </span>
+
+                        <h3>
+                            {{ item.user.username }}
+                        </h3>
+
+                        <p>
+                            <i class="fas fa-envelope"></i>
+                            {{ item.user.email|default:"No email address" }}
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                
+                <div class="user-balance">
+
+                    
+                    <div class="balance-box">
+                        <span class="balance-label">
+                            <i class="fas fa-wallet"></i>
+                            Wallet Balance
+                        </span>
+
+                        <strong>
+                            ${{ item.wallet_balance|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="balance-divider"></div>
+
+                    
+                    <div class="balance-box">
+                        <span class="balance-label">
+                            <i class="fas fa-money-bill-wave"></i>
+                            Available Balance
+                        </span>
+
+                        <strong>
+                            ${{ item.available_balance|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="balance-divider"></div>
+
+                    
+                    <div class="balance-box">
+                        <span class="balance-label">
+                            <i class="fas fa-chart-pie"></i>
+                            Active Investments
+                        </span>
+
+                        <strong>
+                            ${{ item.active_investments|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="balance-divider"></div>
+
+                    
+                    <div class="balance-box">
+                        <span class="balance-label">
+                            <i class="fas fa-chart-line"></i>
+                            Profit
+                        </span>
+
+                        <strong>
+                            ${{ item.profit_total|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="balance-divider"></div>
+
+                    
+                    <div class="balance-box">
+                        <span class="balance-label">
+                            <i class="fas fa-gift"></i>
+                            Bonus
+                        </span>
+
+                        <strong>
+                            ${{ item.bonus_total|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="balance-divider"></div>
+
+                    
+                    <div class="balance-box">
+                        <span class="balance-label">
+                            <i class="fas fa-coins"></i>
+                            Total Earned
+                        </span>
+
+                        <strong>
+                            ${{ item.total_earned|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                    <div class="balance-divider"></div>
+
+                    
+                    <div class="balance-box portfolio-balance">
+                        <span class="balance-label">
+                            <i class="fas fa-chart-line"></i>
+                            Total Portfolio Value
+                        </span>
+
+                        <strong>
+                            ${{ item.total_portfolio|floatformat:2 }}
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                
+                <div class="user-actions-section">
+
+                    
+                    <div class="account-financial-snapshot">
+
+                        
+                        <div class="snapshot-header">
+
+                            <div class="snapshot-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+
+                            <div class="snapshot-heading">
+
+                                <span>
+                                    Financial Overview
+                                </span>
+
+                                <h4>
+                                    Account Balance &amp; Earnings
+                                </h4>
+
+                                <p>
+                                    Current financial information for
+                                    {{ item.user.username }}.
+                                </p>
+
+                            </div>
+
+                        </div>
+
+
+                        
+                        <div class="snapshot-grid">
+
+                            
+                            <div class="snapshot-card">
+                                <div class="snapshot-card-icon">
+                                    <i class="fas fa-wallet"></i>
+                                </div>
+
+                                <div class="snapshot-card-content">
+                                    <span>
+                                        Wallet Balance
+                                    </span>
+
+                                    <strong>
+                                        ${{ item.wallet_balance|floatformat:2 }}
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="snapshot-card">
+                                <div class="snapshot-card-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+
+                                <div class="snapshot-card-content">
+                                    <span>
+                                        Available Balance
+                                    </span>
+
+                                    <strong>
+                                        ${{ item.available_balance|floatformat:2 }}
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="snapshot-card">
+                                <div class="snapshot-card-icon">
+                                    <i class="fas fa-chart-pie"></i>
+                                </div>
+
+                                <div class="snapshot-card-content">
+                                    <span>
+                                        Active Investments
+                                    </span>
+
+                                    <strong>
+                                        ${{ item.active_investments|floatformat:2 }}
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="snapshot-card">
+                                <div class="snapshot-card-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+
+                                <div class="snapshot-card-content">
+                                    <span>
+                                        Profit
+                                    </span>
+
+                                    <strong>
+                                        ${{ item.profit_total|floatformat:2 }}
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="snapshot-card">
+                                <div class="snapshot-card-icon">
+                                    <i class="fas fa-gift"></i>
+                                </div>
+
+                                <div class="snapshot-card-content">
+                                    <span>
+                                        Bonus
+                                    </span>
+
+                                    <strong>
+                                        ${{ item.bonus_total|floatformat:2 }}
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="snapshot-card">
+                                <div class="snapshot-card-icon">
+                                    <i class="fas fa-coins"></i>
+                                </div>
+
+                                <div class="snapshot-card-content">
+                                    <span>
+                                        Total Earned
+                                    </span>
+
+                                    <strong>
+                                        ${{ item.total_earned|floatformat:2 }}
+                                    </strong>
+                                </div>
+                            </div>
+
+
+                            
+                            <div class="snapshot-card snapshot-portfolio">
+                                <div class="snapshot-card-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+
+                                <div class="snapshot-card-content">
+                                    <span>
+                                        Total Portfolio Value
+                                    </span>
+
+                                    <strong>
+                                        ${{ item.total_portfolio|floatformat:2 }}
+                                    </strong>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    
+                    <div class="user-actions-header">
+
+                        <div class="actions-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+
+                        <div class="actions-heading">
+
+                            <span>
+                                Account Control
+                            </span>
+
+                            <h4>
+                                Account Actions
+                            </h4>
+
+                            <p>
+                                Perform administrative actions
+                                for this user account.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    
+                    <div class="user-actions">
+
+
+                        
+                        <div class="action-card fund-card">
+
+                            <div class="action-card-top">
+
+                                <div class="action-icon">
+                                    <i class="fas fa-plus-circle"></i>
+                                </div>
+
+                                <div class="action-card-title">
+                                    Fund Account
+                                </div>
+
+                            </div>
+
+                            <div class="action-card-content">
+
+                                <p>
+                                    Add funds directly to the user's
+                                    selected cryptocurrency wallet.
+                                </p>
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="fund"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="user_id"
+                                        value="{{ item.user.id }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="page"
+                                        value="{{ page_obj.number }}"
+                                    >
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="fund-wallet-{{ item.user.id }}"
+                                        >
+                                            Wallet
+                                        </label>
+
+                                        <select
+                                            id="fund-wallet-{{ item.user.id }}"
+                                            name="wallet_currency"
+                                            required
+                                        >
+
+                                            <option value="">
+                                                Select wallet
+                                            </option>
+
+                                            {% for wallet in item.wallets %}
+                                                <option
+                                                    value="{{ wallet.currency }}"
+                                                >
+                                                    {{ wallet.get_currency_display }}
+                                                </option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="fund-{{ item.user.id }}"
+                                        >
+                                            Amount (USD)
+                                        </label>
+
+                                        <input
+                                            id="fund-{{ item.user.id }}"
+                                            type="number"
+                                            name="amount"
+                                            step="0.01"
+                                            min="0.01"
+                                            placeholder="0.00"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="action-button fund"
+                                    >
+                                        <i class="fas fa-wallet"></i>
+                                        Fund User
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        
+                        <div class="action-card deduct-card">
+
+                            <div class="action-card-top">
+
+                                <div class="action-icon">
+                                    <i class="fas fa-minus-circle"></i>
+                                </div>
+
+                                <div class="action-card-title">
+                                    Deduct Funds
+                                </div>
+
+                            </div>
+
+                            <div class="action-card-content">
+
+                                <p>
+                                    Remove funds from the user's
+                                    selected cryptocurrency wallet.
+                                </p>
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="deduct"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="user_id"
+                                        value="{{ item.user.id }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="page"
+                                        value="{{ page_obj.number }}"
+                                    >
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="deduct-wallet-{{ item.user.id }}"
+                                        >
+                                            Wallet
+                                        </label>
+
+                                        <select
+                                            id="deduct-wallet-{{ item.user.id }}"
+                                            name="wallet_currency"
+                                            required
+                                        >
+
+                                            <option value="">
+                                                Select wallet
+                                            </option>
+
+                                            {% for wallet in item.wallets %}
+                                                <option
+                                                    value="{{ wallet.currency }}"
+                                                >
+                                                    {{ wallet.get_currency_display }}
+                                                </option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="deduct-{{ item.user.id }}"
+                                        >
+                                            Amount (USD)
+                                        </label>
+
+                                        <input
+                                            id="deduct-{{ item.user.id }}"
+                                            type="number"
+                                            name="amount"
+                                            step="0.01"
+                                            min="0.01"
+                                            placeholder="0.00"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="action-button deduct"
+                                    >
+                                        <i class="fas fa-minus-circle"></i>
+                                        Deduct Funds
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        
+                        <div class="action-card profit-card">
+
+                            <div class="action-card-top">
+
+                                <div class="action-icon">
+                                    <i class="fas fa-chart-line"></i>
+                                </div>
+
+                                <div class="action-card-title">
+                                    Add Profit
+                                </div>
+
+                            </div>
+
+                            <div class="action-card-content">
+
+                                <p>
+                                    Add approved investment profit
+                                    to this user's account.
+                                </p>
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="add_profit"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="user_id"
+                                        value="{{ item.user.id }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="page"
+                                        value="{{ page_obj.number }}"
+                                    >
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="profit-plan-{{ item.user.id }}"
+                                        >
+                                            Investment Plan
+                                        </label>
+
+                                        <select
+                                            id="profit-plan-{{ item.user.id }}"
+                                            name="plan_id"
+                                            required
+                                        >
+
+                                            <option value="">
+                                                Select investment plan
+                                            </option>
+
+                                            {% for plan in item.investment_plans %}
+                                                <option
+                                                    value="{{ plan.id }}"
+                                                >
+                                                    {{ plan.name }}
+                                                </option>
+                                            {% endfor %}
+
+                                        </select>
+
+                                    </div>
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="profit-{{ item.user.id }}"
+                                        >
+                                            Profit Amount (USD)
+                                        </label>
+
+                                        <input
+                                            id="profit-{{ item.user.id }}"
+                                            type="number"
+                                            name="amount"
+                                            step="0.01"
+                                            min="0.01"
+                                            placeholder="0.00"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="action-button profit"
+                                    >
+                                        <i class="fas fa-chart-line"></i>
+                                        Add Profit
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        
+                        <div class="action-card referral-card">
+
+                            <div class="action-card-top">
+
+                                <div class="action-icon">
+                                    <i class="fas fa-gift"></i>
+                                </div>
+
+                                <div class="action-card-title">
+                                    Referral Bonus
+                                </div>
+
+                            </div>
+
+                            <div class="action-card-content">
+
+                                <p>
+                                    Add a referral bonus to this
+                                    user's account.
+                                </p>
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="referral_bonus"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="user_id"
+                                        value="{{ item.user.id }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="page"
+                                        value="{{ page_obj.number }}"
+                                    >
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="bonus-{{ item.user.id }}"
+                                        >
+                                            Bonus Amount (USD)
+                                        </label>
+
+                                        <input
+                                            id="bonus-{{ item.user.id }}"
+                                            type="number"
+                                            name="amount"
+                                            step="0.01"
+                                            min="0.01"
+                                            placeholder="0.00"
+                                            required
+                                        >
+
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="action-button referral"
+                                    >
+                                        <i class="fas fa-gift"></i>
+                                        Add Bonus
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        
+                        <div class="action-card email-card">
+
+                            <div class="action-card-top">
+
+                                <div class="action-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
+
+                                <div class="action-card-title">
+                                    Send Email
+                                </div>
+
+                            </div>
+
+                            <div class="action-card-content">
+
+                                <p>
+                                    Send a direct message to this
+                                    user's email address.
+                                </p>
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="send_email"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="user_id"
+                                        value="{{ item.user.id }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="page"
+                                        value="{{ page_obj.number }}"
+                                    >
+
+                                    <div class="form-group">
+
+                                        <label
+                                            for="email-{{ item.user.id }}"
+                                        >
+                                            Message
+                                        </label>
+
+                                        <textarea
+                                            id="email-{{ item.user.id }}"
+                                            name="message"
+                                            rows="4"
+                                            placeholder="Write your message..."
+                                            required
+                                        ></textarea>
+
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="action-button email"
+                                    >
+                                        <i class="fas fa-paper-plane"></i>
+                                        Send Email
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        
+                        <div class="action-card login-card">
+
+                            <div class="action-card-top">
+
+                                <div class="action-icon">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </div>
+
+                                <div class="action-card-title">
+                                    Login As User
+                                </div>
+
+                            </div>
+
+                            <div class="action-card-content">
+
+                                <p>
+                                    Enter this user's dashboard
+                                    for administrative support.
+                                </p>
+
+                                <form method="POST">
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="login_as_user"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="user_id"
+                                        value="{{ item.user.id }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="page"
+                                        value="{{ page_obj.number }}"
+                                    >
+
+                                    <div class="security-notice">
+
+                                        <i class="fas fa-shield-alt"></i>
+
+                                        <span>
+                                            Secure administrative access
+                                        </span>
+
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="action-button login"
+                                    >
+                                        <i class="fas fa-sign-in-alt"></i>
+                                        Login As User
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                        
+                        <div class="action-card delete-card">
+
+                            <div class="action-card-top">
+
+                                <div class="action-icon">
+                                    <i class="fas fa-trash-alt"></i>
+                                </div>
+
+                                <div class="action-card-title">
+                                    Delete User
+                                </div>
+
+                            </div>
+
+                            <div class="action-card-content">
+
+                                <p>
+                                    Permanently remove this user
+                                    account from the platform.
+                                </p>
+
+                                <form
+                                    method="POST"
+                                    onsubmit="return confirm(
+                                        'Are you sure you want to permanently delete this user? This action cannot be undone.'
+                                    );"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <input
+                                        type="hidden"
+                                        name="action"
+                                        value="delete_user"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="user_id"
+                                        value="{{ item.user.id }}"
+                                    >
+
+                                    <input
+                                        type="hidden"
+                                        name="page"
+                                        value="{{ page_obj.number }}"
+                                    >
+
+                                    <div class="danger-notice">
+
+                                        <i class="fas fa-exclamation-triangle"></i>
+
+                                        <span>
+                                            This action cannot be undone
+                                        </span>
+
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        class="action-button delete"
+                                    >
+                                        <i class="fas fa-trash-alt"></i>
+                                        Delete User
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        
+        {% if page_obj.paginator.num_pages > 1 %}
+
+        <div class="user-pagination">
+
+            
+            {% if page_obj.has_previous %}
+
+                <a
+                    href="?page={{ page_obj.previous_page_number }}"
+                    class="pagination-button"
+                >
+                    <i class="fas fa-chevron-left"></i>
+                    Previous
+                </a>
+
+            {% else %}
+
+                <span class="pagination-button disabled">
+                    <i class="fas fa-chevron-left"></i>
+                    Previous
+                </span>
+
+            {% endif %}
+
+
+            
+            <div class="pagination-pages">
+
+                {% for num in page_obj.paginator.page_range %}
+
+                    {% if page_obj.number == num %}
+
+                        <span class="pagination-number active">
+                            {{ num }}
+                        </span>
+
+                    {% else %}
+
+                        <a
+                            href="?page={{ num }}"
+                            class="pagination-number"
+                        >
+                            {{ num }}
+                        </a>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+
+            
+            {% if page_obj.has_next %}
+
+                <a
+                    href="?page={{ page_obj.next_page_number }}"
+                    class="pagination-button"
+                >
+                    Next
+                    <i class="fas fa-chevron-right"></i>
+                </a>
+
+            {% else %}
+
+                <span class="pagination-button disabled">
+                    Next
+                    <i class="fas fa-chevron-right"></i>
+                </span>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+
+        
+        <div class="pagination-info">
+
+            Showing
+
+            <strong>
+                {{ page_obj.start_index }}
+            </strong>
+
+            -
+
+            <strong>
+                {{ page_obj.end_index }}
+            </strong>
+
+            of
+
+            <strong>
+                {{ page_obj.paginator.count }}
+            </strong>
+
+            users
+
+        </div>
+
+
+    {% else %}
+
+
+        
+        <div class="empty-users">
+
+            <div class="empty-users-icon">
+                <i class="fas fa-users"></i>
+            </div>
+
+            <h3>
+                No Users Found
+            </h3>
+
+            <p>
+                There are currently no user accounts to manage.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+    </section>
+
+</div>
+
+{% endblock %}
+

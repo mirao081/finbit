@@ -1,0 +1,126 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ settings.title }}</title>
+
+    <link rel="stylesheet" href="{% static 'control/css/admin.css' %}">
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+
+    {% block extra_css %}{% endblock %}
+
+    
+    <link rel="stylesheet" href="{% static 'control/css/darkmode.css' %}">
+
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="navbar">
+    <div class="navbar-left">
+        <button id="menu-toggle" class="icon-btn menu-toggle" type="button" aria-label="Toggle Sidebar">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <a href="{% url 'admin_dashboard' %}" class="brand">
+            {% if settings.logo %}
+                <img src="{{ settings.logo.url }}" alt="{{ settings.title }}" class="brand-logo">
+            {% else %}
+                <div class="brand-icon"><i class="fas fa-layer-group"></i></div>
+                <div class="brand-text">
+                    <span class="brand-title">{{ settings.title }}</span>
+                    <span class="brand-subtitle">Administration</span>
+                </div>
+            {% endif %}
+        </a>
+    </div>
+
+    <div class="nav-actions">
+        
+        <button id="dark-mode-toggle" class="dark-mode-btn" type="button" aria-label="Toggle Dark Mode">
+            <i class="fas fa-moon"></i> Dark Mode
+        </button>
+
+        <a href="{% url 'admin_announcements' %}" class="icon-btn notification-btn" aria-label="Notifications">
+            <i class="far fa-bell"></i>
+            {% if unread_replies_count > 0 %}
+                <span class="notification-badge">{{ unread_replies_count }}</span>
+            {% endif %}
+        </a>
+
+        <span class="nav-divider"></span>
+
+        
+        <a href="{% url 'admin_logout' %}" class="logout-btn" id="logout-btn">
+            <span class="logout-icon"><i class="fas fa-arrow-right-from-bracket"></i></span>
+            <span class="logout-text">Logout</span>
+        </a>
+    </div>
+</header>
+
+
+<div id="sidebar-overlay" class="sidebar-overlay"></div>
+
+
+<aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+        <div class="sidebar-header">
+            <span class="sidebar-label">Main Menu</span>
+        </div>
+        <nav class="sidebar-nav">
+            <ul>
+                {% for menu in menus %}
+                    <li class="sidebar-item">
+                        <a href="{% url menu.url_name %}" class="sidebar-link">
+                            <span class="menu-icon"><i class="{{ menu.icon }}"></i></span>
+                            <span class="menu-name">{{ menu.name }}</span>
+                            <span class="menu-arrow"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-status">
+                <span class="status-indicator"></span>
+                <div><strong>System Online</strong></div>
+            </div>
+        </div>
+    </div>
+</aside>
+
+
+<main class="content">
+    <div class="content-glow content-glow-one"></div>
+    <div class="content-glow content-glow-two"></div>
+    <div class="content-inner">
+        {% block content %}{% endblock %}
+    </div>
+</main>
+
+<footer class="admin-footer">
+    <div class="footer-content">
+        <p>
+            © 2020 {{ settings.title }}. All Rights Reserved.
+        </p>
+    </div>
+</footer>
+
+{% block scripts %}
+<script src="{% static 'control/js/main.js' %}" defer></script>
+
+<script src="{% static 'control/js/darkmode.js' %}" defer></script>
+{% endblock %}
+</body>
+</html>

@@ -1,0 +1,518 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'accounts/css/profile.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<section class="profile-page">
+
+
+<div class="profile-card-wrapper">
+
+    
+
+    <div class="profile-heading">
+
+        <h2>{{ profile_page.heading }}</h2>
+
+        <p>{{ profile_page.subheading }}</p>
+
+    </div>
+
+
+    
+
+    <div class="profile-picture-section">
+
+        {% if user_profile.picture %}
+
+            <img
+                src="{{ user_profile.picture.url }}"
+                alt="Profile Picture"
+                class="profile-picture"
+                id="profilePicturePreview"
+            >
+
+        {% else %}
+
+            <img
+                src="{% static 'accounts/img/default-avatar.png' %}"
+                alt="Default Avatar"
+                class="profile-picture"
+                id="profilePicturePreview"
+            >
+
+        {% endif %}
+
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            class="profile-picture-form"
+        >
+
+            {% csrf_token %}
+
+            {{ form.picture }}
+
+            <div class="profile-picture-actions">
+
+                <button
+                    type="button"
+                    class="premium-btn"
+                    id="uploadPictureBtn"
+                >
+                    Upload Picture
+                </button>
+
+                <button
+                    type="submit"
+                    class="premium-btn"
+                >
+                    Save
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    
+
+    <div class="profile-section">
+
+        <h3>Personal Information</h3>
+
+        <div class="profile-info-grid">
+
+            <div class="info-item">
+
+                <span>Username</span>
+
+                <strong>
+                    {{ request.user.username }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Email</span>
+
+                <strong>
+                    {{ request.user.email }}
+                </strong>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <span>Name</span>
+
+                <strong>
+                    {{ user_profile.name|default:"Not set" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    
+
+    <div class="profile-section">
+
+        <h3>Investment Overview</h3>
+
+        <div class="profile-stats">
+
+            <div class="stat-card">
+
+                <span>Active Investments</span>
+
+                <strong>
+                    {{ investments.count }}
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>Total Invested</span>
+
+                <strong>
+                    ${{ investment_total|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>Total Balance</span>
+
+                <strong>
+                    ${{ total_balance|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span>Investment Balance</span>
+
+                <strong>
+                    ${{ investment_total|floatformat:2 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    
+
+    <div class="profile-section">
+
+        <h3>Available Investment Plans</h3>
+
+        <div class="table-responsive">
+
+            <table class="profile-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Plan</th>
+
+                        <th>Return Rate</th>
+
+                        <th>Frequency</th>
+
+                        <th>Duration</th>
+
+                        <th>Total Return</th>
+
+                        <th>Investment Range</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for plan in plans %}
+
+                    <tr>
+
+                        <td>
+                            {{ plan.name }}
+                        </td>
+
+                        <td>
+                            {{ plan.return_rate }}
+                        </td>
+
+                        <td>
+                            {{ plan.frequency }}
+                        </td>
+
+                        <td>
+                            {{ plan.duration }}
+                        </td>
+
+                        <td>
+                            {{ plan.total_return|default:"N/A" }}
+                        </td>
+
+                        <td>
+
+                            ${{ plan.minimum_investment }}
+
+                            {% if plan.maximum_investment %}
+
+                                — ${{ plan.maximum_investment }}
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="empty-state"
+                        >
+                            No plans available.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    
+
+    <div class="profile-section">
+
+        <h3>Pending Deposits</h3>
+
+        <div class="table-responsive">
+
+            <table class="profile-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Amount (USD)</th>
+
+                        <th>Payment Method</th>
+
+                        <th>Date</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for dep in pending_deposits %}
+
+                    <tr>
+
+                        <td>
+                            ${{ dep.amount_usd|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            {{ dep.get_payment_method_display }}
+                        </td>
+
+                        <td>
+                            {{ dep.created_at|date:"Y-m-d H:i" }}
+                        </td>
+
+                        <td>
+                            {{ dep.status }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="empty-state"
+                        >
+                            No pending deposits.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    
+
+    <div class="profile-section">
+
+        <h3>Active Investments</h3>
+
+        <div class="table-responsive">
+
+            <table class="profile-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Plan</th>
+
+                        <th>Amount (USD)</th>
+
+                        <th>Date</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for inv in investments %}
+
+                    <tr>
+
+                        <td>
+                            {{ inv.plan.name }}
+                        </td>
+
+                        <td>
+                            ${{ inv.amount_usd|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            {{ inv.created_at|date:"Y-m-d H:i" }}
+                        </td>
+
+                        <td>
+                            {{ inv.status }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="empty-state"
+                        >
+                            No active investments yet.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    
+
+    <div class="profile-section">
+
+        <h3>Quick Financial Actions</h3>
+
+        <div class="action-buttons">
+
+            <a
+                href="{% url 'deposit' %}"
+                class="premium-btn"
+            >
+                Deposit Funds
+            </a>
+
+            <a
+                href="{% url 'withdraw' %}"
+                class="premium-btn"
+            >
+                Withdraw Funds
+            </a>
+
+            <a
+                href="{% url 'referrals' %}"
+                class="premium-btn"
+            >
+                Referral Program
+            </a>
+
+        </div>
+
+    </div>
+
+
+    
+
+    <div class="profile-section">
+
+        <h3>Referral Rewards Center</h3>
+
+        <div class="referral-box">
+
+            <span>Your Referral Link</span>
+
+            <div class="referral-row">
+
+                <input
+                    type="text"
+                    readonly
+                    value="{{ request.scheme }}://{{ request.get_host }}{% url 'signup' %}?ref={{ user_profile.referral_code|default:request.user.username|urlencode }}"
+                >
+
+            </div>
+
+            <small>
+                Share this link and earn commissions.
+            </small>
+
+
+            <div class="referral-earnings">
+
+                <span>Total Earnings</span>
+
+                <strong>
+                    ${{ referral_earnings|floatformat:2 }}
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'accounts/js/profile.js' %}"></script>
+
+{% endblock %}

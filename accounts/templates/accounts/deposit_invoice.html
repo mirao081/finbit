@@ -1,0 +1,310 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/deposit_invoice.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="deposit-invoice-page">
+
+    <div class="invoice-card">
+
+        <div class="invoice-header">
+
+            <div class="invoice-icon">
+                <i class="fas fa-wallet"></i>
+            </div>
+
+            <h1>Deposit Invoice</h1>
+
+            <p>
+                Complete your cryptocurrency payment using the details below.
+            </p>
+
+        </div>
+
+
+        <div class="invoice-status">
+
+            <span class="status-dot"></span>
+
+            <span>Deposit Pending</span>
+
+        </div>
+
+
+        <div class="transaction-summary">
+
+            <div class="transaction-item">
+
+                <span>Payment Method</span>
+
+                <strong>
+                    {{ deposit.get_payment_method_display }}
+                </strong>
+
+            </div>
+
+
+            <div class="transaction-item">
+
+                <span>Deposit Amount</span>
+
+                <strong>
+                    ${{ deposit.amount_usd|floatformat:2 }}
+                </strong>
+
+            </div>
+
+
+            {% if deposit.plan %}
+
+            <div class="transaction-item">
+
+                <span>Investment Plan</span>
+
+                <strong>
+                    {{ deposit.plan.name }}
+                </strong>
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="transaction-item">
+
+                <span>Status</span>
+
+                <strong class="pending-status">
+                    {{ deposit.get_status_display }}
+                </strong>
+
+            </div>
+
+
+            <div class="transaction-item">
+
+                <span>Date</span>
+
+                <strong>
+                    {{ deposit.created_at|date:"M d, Y H:i" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="payment-section">
+
+            <div class="section-title">
+
+                <i class="fas fa-coins"></i>
+
+                <h2>Payment Details</h2>
+
+            </div>
+
+
+            {% if company_wallet %}
+
+            <div class="payment-details">
+
+                <div class="payment-label">
+
+                    <span>
+                        {{ deposit.get_payment_method_display }} Address
+                    </span>
+
+                </div>
+
+
+                <div class="wallet-address">
+
+                    <span id="walletAddress">
+                        {{ company_wallet.address }}
+                    </span>
+
+
+                    <button
+                        type="button"
+                        class="copy-btn"
+                        onclick="copyAddress('{{ company_wallet.address|escapejs }}')"
+                    >
+
+                        <i class="fas fa-copy"></i>
+
+                        Copy
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            {% else %}
+
+            <div class="payment-details">
+
+                <div class="payment-label">
+
+                    <span>Payment Address</span>
+
+                </div>
+
+                <div class="wallet-not-found">
+
+                    <i class="fas fa-exclamation-circle"></i>
+
+                    <p>
+                        Payment wallet is currently unavailable.
+                        Please contact support.
+                    </p>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if company_wallet and company_wallet.qr_code %}
+
+        <div class="qr-section">
+
+            <div class="section-title">
+
+                <i class="fas fa-qrcode"></i>
+
+                <h2>Scan QR Code</h2>
+
+            </div>
+
+
+            <div class="qr-container">
+
+                <img
+                    src="{{ company_wallet.qr_code.url }}"
+                    alt="{{ deposit.get_payment_method_display }} Payment QR Code"
+                >
+
+            </div>
+
+
+            <p>
+                Scan the QR code with your cryptocurrency wallet to make
+                the payment.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+
+        <div class="payment-warning">
+
+            <div class="warning-icon">
+
+                <i class="fas fa-exclamation-triangle"></i>
+
+            </div>
+
+
+            <div class="warning-content">
+
+                <h3>Important</h3>
+
+
+                <p>
+
+                    Send only
+
+                    <strong>
+                        {{ deposit.get_payment_method_display }}
+                    </strong>
+
+                    to the address provided above.
+
+                </p>
+
+
+                <p>
+
+                    Sending cryptocurrency through the wrong network or
+                    sending a different cryptocurrency may result in
+                    permanent loss of funds.
+
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="invoice-actions">
+
+            <a
+                href="{% url 'dashboard' %}"
+                class="dashboard-btn"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+function copyAddress(address) {
+
+    navigator.clipboard.writeText(address)
+        .then(function () {
+
+            const buttons = document.querySelectorAll(".copy-btn");
+
+            buttons.forEach(function (button) {
+
+                button.innerHTML =
+                    '<i class="fas fa-check"></i> Copied';
+
+            });
+
+
+            setTimeout(function () {
+
+                buttons.forEach(function (button) {
+
+                    button.innerHTML =
+                        '<i class="fas fa-copy"></i> Copy';
+
+                });
+
+            }, 2000);
+
+        })
+
+        .catch(function () {
+
+            alert("Unable to copy the address.");
+
+        });
+
+}
+
+</script>
+
+{% endblock %}

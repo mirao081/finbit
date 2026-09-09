@@ -1,0 +1,111 @@
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/admin_announcement_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="announcement-detail-page">
+
+    
+    <div class="announcement-detail-header">
+        <span class="announcement-detail-badge">
+            <i class="fas fa-bullhorn"></i>
+            Announcement
+        </span>
+        <h1>{{ announcement.title }}</h1>
+        <p>View announcement details and manage user replies.</p>
+    </div>
+
+    
+    <div class="announcement-main-card">
+        <div class="announcement-card-top">
+            <div class="announcement-icon"><i class="fas fa-bullhorn"></i></div>
+            <div class="announcement-meta">
+                <span class="announcement-label">Announcement Message</span>
+                <span class="announcement-status">
+                    <span class="status-dot"></span>
+                    {% if announcement.is_active %} Active {% else %} Inactive {% endif %}
+                </span>
+            </div>
+        </div>
+        <div class="announcement-content">
+            <h2>{{ announcement.title }}</h2>
+            <div class="announcement-message">{{ announcement.message|linebreaks }}</div>
+        </div>
+    </div>
+
+    
+    <div class="replies-section">
+        <div class="section-heading">
+            <div>
+                <span class="section-kicker">Community</span>
+                <h2>User Replies</h2>
+                <p>Responses from users to this announcement.</p>
+            </div>
+            <div class="reply-count"><i class="fas fa-comments"></i> {{ replies.paginator.count }}</div>
+        </div>
+
+        <div class="replies-card">
+            {% for reply in replies %}
+            <div class="reply-item">
+                <div class="reply-avatar"><i class="fas fa-user"></i></div>
+                <div class="reply-content">
+                    <div class="reply-header">
+                        <strong>{{ reply.user.username }}</strong>
+                        <span class="reply-date">{{ reply.created_at|date:"Y-m-d H:i" }}</span>
+                    </div>
+                    <p>{{ reply.message }}</p>
+                </div>
+            </div>
+            {% empty %}
+            <div class="no-replies">
+                <div class="no-replies-icon"><i class="fas fa-comments"></i></div>
+                <h3>No replies yet</h3>
+                <p>Users haven't responded to this announcement yet.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        
+        <div class="pagination">
+            {% if replies.has_previous %}
+                <a href="?page={{ replies.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span>Page {{ replies.number }} of {{ replies.paginator.num_pages }}</span>
+            {% if replies.has_next %}
+                <a href="?page={{ replies.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    </div>
+
+    
+    <div class="admin-reply-section">
+        <div class="section-heading">
+            <div>
+                <span class="section-kicker">Administrator</span>
+                <h2>Reply as Admin</h2>
+                <p>Send a response to the users participating in this announcement.</p>
+            </div>
+            <div class="admin-badge"><i class="fas fa-shield-alt"></i> Admin</div>
+        </div>
+        <div class="admin-reply-card">
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="adminReply">Your Message</label>
+                    <textarea id="adminReply" name="message" rows="5" placeholder="Type your reply..." required></textarea>
+                </div>
+                <div class="reply-form-footer">
+                    <span class="secure-note"><i class="fas fa-lock"></i> Admin response</span>
+                    <button type="submit" class="admin-send-btn">
+                        <i class="fas fa-paper-plane"></i> Send Reply
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

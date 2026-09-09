@@ -1,0 +1,62 @@
+{% extends 'control/admin_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/payment_methods.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="payment-methods-page">
+
+    <h2>Payment Methods</h2>
+
+    <div class="payment-methods">
+
+        {% for wallet in wallets %}
+
+        <div class="wallet-box">
+
+            <div class="wallet-icon">
+                <i class="fas fa-wallet"></i>
+            </div>
+
+            <h3>{{ wallet.get_currency_display }}</h3>
+
+            {% if wallet.qr_code %}
+                <div class="wallet-qr">
+                    <img
+                        src="{{ wallet.qr_code.url }}"
+                        alt="{{ wallet.get_currency_display }} QR Code"
+                    >
+                </div>
+            {% endif %}
+
+            <div class="wallet-address">
+                {{ wallet.address }}
+            </div>
+
+            <a href="{% url 'update_wallet' wallet.id %}" class="btn btn-success">
+                <i class="fas fa-pen-to-square"></i>
+                Update {{ wallet.get_currency_display }}
+            </a>
+
+        </div>
+
+        {% empty %}
+
+        <div class="wallet-empty">
+            <i class="fas fa-wallet"></i>
+            <h3>No Payment Methods</h3>
+            <p>No company wallets configured yet.</p>
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+</div>
+
+{% endblock %}

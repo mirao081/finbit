@@ -1,0 +1,54 @@
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/admin_user_detail.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="user-detail-page">
+    <h1>User Detail</h1>
+    <p>Comprehensive information about the selected user and their wallet.</p>
+
+    <div class="user-card">
+        <h2>{{ user.username }}</h2>
+        <p><strong>Email:</strong> {{ user.email }}</p>
+        <p><strong>Joined:</strong> {{ user.date_joined|date:"Y-m-d H:i" }}</p>
+        {% if profile %}
+            <p><strong>Full Name:</strong> {{ profile.full_name }}</p>
+            <p><strong>Phone:</strong> {{ profile.phone }}</p>
+        {% endif %}
+    </div>
+
+    <div class="wallet-card">
+        <h3>Wallet Information</h3>
+        <p><strong>Wallet Address:</strong> {{ wallet_address }}</p>
+        <p><strong>Balance:</strong> ${{ wallet_balance|floatformat:0 }}</p>
+    </div>
+
+    <div class="transactions-section">
+        <h3>Recent Deposits</h3>
+        <ul>
+            {% for d in recent_deposits %}
+                <li>${{ d.amount|floatformat:0 }} on {{ d.created_at|date:"Y-m-d H:i" }} ({{ d.status }})</li>
+            {% empty %}
+                <li>No deposits found.</li>
+            {% endfor %}
+        </ul>
+
+        <h3>Recent Withdrawals</h3>
+        <ul>
+            {% for w in recent_withdrawals %}
+                <li>${{ w.amount|floatformat:0 }} on {{ w.created_at|date:"Y-m-d H:i" }} ({{ w.status }})</li>
+            {% empty %}
+                <li>No withdrawals found.</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'admin_adjust_wallet' user.id %}" class="btn btn-warning">Adjust Wallet</a>
+        <a href="{% url 'user_wallets' %}" class="btn btn-secondary">Back to Wallets</a>
+    </div>
+</div>
+{% endblock %}

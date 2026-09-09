@@ -1,0 +1,137 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="plans-section">
+
+<div class="plans-container">
+
+    <h1>All Investment Plans</h1>
+
+    <p>
+        Explore our investment packages and choose the plan that suits your financial goals.
+    </p>
+
+    <div class="plans-grid">
+
+        {% for plan in plans %}
+
+        <div class="plan-card-container">
+
+            <div class="plan-card">
+
+                <h2>
+                    {{ plan.name }}
+                </h2>
+
+                <h3>
+                    {{ plan.return_rate }}
+                </h3>
+
+                <p>
+                    {{ plan.frequency }}
+                </p>
+
+                <p>
+                    {{ plan.duration }}
+                </p>
+
+                <p>
+                    {{ plan.total_return }}
+                </p>
+
+                <p>
+                    Minimum Investment:
+                    ${{ plan.minimum_investment }}
+                </p>
+
+                <a
+                    href="{% url 'signup' %}"
+                    class="plan-btn"
+                >
+                    Invest Now
+                </a>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="plan-card-container">
+
+            <div class="plan-card">
+
+                <h2>No Investment Plans</h2>
+
+                <p>
+                    There are currently no investment plans available.
+                </p>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    <div class="view-all">
+
+        <a
+            href="{% url 'plan' %}#investment-plans"
+            class="view-btn"
+        >
+            ← Back to Investment Plans
+        </a>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<section class="site-links">
+
+
+<div class="container text-center">
+
+    {% if footer.logo %}
+
+        <img
+            src="{{ footer.logo.url }}"
+            alt="{{ footer.company_name }} Logo"
+            class="footer-logo"
+        >
+
+    {% endif %}
+
+    <nav class="footer-nav">
+
+        <a href="{% url 'home' %}">
+            Home
+        </a>
+
+        <a href="{% url 'privacy_policy' %}">
+            Privacy & Policy
+        </a>
+
+        <a href="{% url 'terms_conditions' %}">
+            Terms & Conditions
+        </a>
+
+    </nav>
+
+</div>
+
+
+</section>
+
+{% endblock %}
+

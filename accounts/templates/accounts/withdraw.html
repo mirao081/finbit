@@ -1,0 +1,338 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/withdraw.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="withdraw-page">
+
+    <div class="withdraw-card">
+
+        <h2>Withdraw Funds</h2>
+
+        <p>
+            Select your asset and enter your withdrawal details.
+        </p>
+
+        <div class="balance-info">
+            <strong>Your Total Balance:</strong>
+            ${{ available_balance|floatformat:2 }}
+        </div>
+
+        <form method="post" class="withdraw-form">
+
+            {% csrf_token %}
+
+            {% if form.non_field_errors %}
+                <div class="error-message form-error">
+                    {{ form.non_field_errors }}
+                </div>
+            {% endif %}
+
+            <div class="form-group">
+
+                <label for="{{ form.wallet_currency.id_for_label }}">
+                    Select Asset
+                </label>
+
+                {{ form.wallet_currency }}
+
+                {% if form.wallet_currency.errors %}
+                    <div class="error-message">
+                        {{ form.wallet_currency.errors.0 }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="{{ form.amount_usd.id_for_label }}">
+                    Amount (USD)
+                </label>
+
+                {{ form.amount_usd }}
+
+                {% if form.amount_usd.errors %}
+                    <div class="error-message">
+                        {{ form.amount_usd.errors.0 }}
+                    </div>
+                {% endif %}
+
+                <small>
+                    Minimum withdrawal is $6.
+                </small>
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="{{ form.destination_wallet.id_for_label }}">
+                    Destination Wallet Address
+                </label>
+
+                {% if user_wallet %}
+
+                    <input
+                        type="text"
+                        name="destination_wallet"
+                        id="id_destination_wallet"
+                        value="{{ user_wallet.address }}"
+                        readonly
+                    >
+
+                {% else %}
+
+                    {{ form.destination_wallet }}
+
+                    <small>
+                        No wallet saved yet.
+                        Please add one in the Wallets page.
+                    </small>
+
+                {% endif %}
+
+                {% if form.destination_wallet.errors %}
+                    <div class="error-message">
+                        {{ form.destination_wallet.errors.0 }}
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <button
+                type="submit"
+                class="withdraw-submit-btn"
+            >
+                Submit Withdrawal
+            </button>
+
+        </form>
+
+    </div>
+
+</section>
+
+<section class="withdraw-history">
+
+    <h2>Your Withdrawal History</h2>
+
+    {% if withdrawals %}
+
+        <div class="withdraw-history-wrapper">
+
+            <table class="withdraw-history-table">
+
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Asset</th>
+                        <th>Amount (USD)</th>
+                        <th>Crypto Amount</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for w in withdrawals %}
+
+                        <tr>
+
+                            <td>
+                                {{ w.created_at|date:"M d, Y • h:i A" }}
+                            </td>
+
+                            <td>
+
+                                {% if w.wallet %}
+                                    {{ w.wallet.get_currency_display }}
+                                {% else %}
+                                    —
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+                                ${{ w.amount_usd|floatformat:2 }}
+                            </td>
+
+                            <td>
+
+                                {% if w.asset_amount %}
+
+                                    {{ w.asset_amount|floatformat:12 }}
+
+                                    {% if w.wallet %}
+                                        {{ w.wallet.currency }}
+                                    {% endif %}
+
+                                {% else %}
+                                    —
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if w.status == "pending" %}
+
+                                    <span class="status-pending">
+                                        Pending
+                                    </span>
+
+                                {% elif w.status == "approved" %}
+
+                                    <span class="status-approved">
+                                        Approved
+                                    </span>
+
+                                {% elif w.status == "rejected" %}
+
+                                    <span class="status-declined">
+                                        Declined
+                                    </span>
+
+                                {% else %}
+
+                                    <span>
+                                        {{ w.status|title }}
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        {% if withdrawals.paginator.num_pages > 1 %}
+
+            <div class="pagination">
+
+                {% if withdrawals.has_previous %}
+
+                    <a
+                        href="?page={{ withdrawals.previous_page_number }}"
+                        class="pagination-btn"
+                    >
+                        Previous
+                    </a>
+
+                {% endif %}
+
+                <span class="pagination-info">
+                    Page {{ withdrawals.number }}
+                    of {{ withdrawals.paginator.num_pages }}
+                </span>
+
+                {% if withdrawals.has_next %}
+
+                    <a
+                        href="?page={{ withdrawals.next_page_number }}"
+                        class="pagination-btn"
+                    >
+                        Next
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        {% endif %}
+
+    {% else %}
+
+        <div class="empty-withdrawals">
+
+            <i class="fas fa-receipt"></i>
+
+            <h3>No Withdrawal History</h3>
+
+            <p>
+                You have not made any withdrawals yet.
+            </p>
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+<section class="security-reminder">
+
+    <i class="fas fa-lock"></i>
+
+    <div>
+
+        <strong>Security Reminder</strong>
+
+        <p>
+            Always verify the wallet address and asset type before
+            confirming your withdrawal. Funds sent to an incorrect
+            address or unsupported network may not be recoverable.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="processing-notice">
+
+    <i class="fas fa-hourglass-half"></i>
+
+    <div>
+
+        <strong>Processing Time</strong>
+
+        <p>
+            Withdrawals are typically processed within 24 hours.
+            Larger amounts may require additional verification.
+        </p>
+
+    </div>
+
+</section>
+
+<section class="withdraw-tips">
+
+    <i class="fas fa-info-circle"></i>
+
+    <div>
+
+        <strong>Tips</strong>
+
+        <ul>
+
+            <li>
+                Ensure your wallet supports the selected asset
+                and network.
+            </li>
+
+            <li>
+                Minimum withdrawal is $6 — larger amounts may
+                reduce transaction fees.
+            </li>
+
+            <li>
+                Keep your transaction ID for reference until
+                funds are confirmed.
+            </li>
+
+        </ul>
+
+    </div>
+
+</section>
+
+{% endblock %}

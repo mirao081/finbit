@@ -1,0 +1,102 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/announcements.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="announcements-page">
+
+    <div class="announcements-card">
+
+        
+        <div class="announcements-header">
+            <div class="announcements-header-icon">📢</div>
+            <div class="announcements-header-content">
+                <h2>Announcements</h2>
+                <p>Stay updated with the latest news, promotions, and important company information.</p>
+            </div>
+        </div>
+
+        
+        {% if announcements %}
+            <div class="announcement-list">
+                {% for ann in announcements %}
+                    <article class="announcement-item">
+                        <div class="announcement-icon">📣</div>
+                        <div class="announcement-content">
+
+                            <div class="announcement-top">
+                                <h3>{{ ann.title }}</h3>
+                                <span class="announcement-date">{{ ann.created_at|date:"M d, Y H:i" }}</span>
+                            </div>
+
+                            <p>{{ ann.message }}</p>
+
+                            <div class="announcement-meta">
+                                <span class="announcement-status">● Latest Update</span>
+                            </div>
+
+                            
+                            <div class="announcement-replies">
+                                <h4>Replies</h4>
+                                <ul>
+                                    {% for reply in ann.replies.all %}
+                                        <li>
+                                            <strong>{{ reply.user.username }}</strong>: {{ reply.message }}
+                                            <em>({{ reply.created_at|date:"M d, Y H:i" }})</em>
+                                        </li>
+                                    {% empty %}
+                                        <li>No replies yet.</li>
+                                    {% endfor %}
+                                </ul>
+
+                                
+                                <div class="pagination">
+                                    {% if replies.has_previous %}
+                                        <a href="?page={{ replies.previous_page_number }}">Previous</a>
+                                    {% endif %}
+                                    <span>Page {{ replies.number }} of {{ replies.paginator.num_pages }}</span>
+                                    {% if replies.has_next %}
+                                        <a href="?page={{ replies.next_page_number }}">Next</a>
+                                    {% endif %}
+                                </div>
+                            </div>
+
+                            
+                            <form method="post" class="reply-form">
+                                {% csrf_token %}
+                                <input type="hidden" name="announcement_id" value="{{ ann.id }}">
+                                <textarea name="message" rows="2" placeholder="Write your reply..." required></textarea>
+                                <button type="submit" class="btn btn-primary">Send Reply</button>
+                            </form>
+
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+
+            
+            <div class="pagination">
+                {% if announcements.has_previous %}
+                    <a href="?page={{ announcements.previous_page_number }}">Previous</a>
+                {% endif %}
+                <span>Page {{ announcements.number }} of {{ announcements.paginator.num_pages }}</span>
+                {% if announcements.has_next %}
+                    <a href="?page={{ announcements.next_page_number }}">Next</a>
+                {% endif %}
+            </div>
+
+        {% else %}
+            
+            <div class="announcements-empty">
+                <div class="empty-icon">📭</div>
+                <h3>No Announcements</h3>
+                <p>There are no announcements available right now. Please check back later for updates.</p>
+            </div>
+        {% endif %}
+    </div>
+
+</section>
+{% endblock %}

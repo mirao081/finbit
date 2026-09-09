@@ -1,0 +1,107 @@
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/admin_announcements.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="announcements-page">
+
+    
+    <div class="announcements-header">
+        <span class="announcements-kicker">
+            <i class="fas fa-bullhorn"></i>
+            Communication Center
+        </span>
+        <h1>Announcements</h1>
+        <p>
+            Send information about promotions, deposits, withdrawals,
+            important updates, and other platform notifications.
+        </p>
+    </div>
+
+    
+    <div class="announcements-list">
+        {% for ann in announcements %}
+        <article class="announcement-card">
+            
+            <div class="announcement-card-top">
+                <div class="announcement-icon">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="announcement-card-heading">
+                    <div class="announcement-title-row">
+                        <h2>{{ ann.title }}</h2>
+                        {% if ann.is_active %}
+                            <span class="status-badge status-active">
+                                <span class="status-dot"></span>
+                                Active
+                            </span>
+                        {% else %}
+                            <span class="status-badge status-inactive">
+                                <span class="status-dot"></span>
+                                Inactive
+                            </span>
+                        {% endif %}
+                    </div>
+                    <div class="announcement-meta">
+                        <span><i class="far fa-calendar-alt"></i> {{ ann.created_at|date:"Y-m-d H:i" }}</span>
+                        <span class="meta-divider"></span>
+                        <span><i class="far fa-bell"></i> Announcement</span>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="announcement-message">
+                <div class="message-label">
+                    <i class="far fa-comment-alt"></i> Message
+                </div>
+                <div class="message-content">
+                    {{ ann.message|linebreaks }}
+                </div>
+            </div>
+
+            
+            <div class="announcement-card-footer">
+                <div class="announcement-footer-info">
+                    {% if ann.is_active %}
+                        <span class="footer-status active-text">
+                            <i class="fas fa-check-circle"></i> Currently visible to users
+                        </span>
+                    {% else %}
+                        <span class="footer-status inactive-text">
+                            <i class="fas fa-pause-circle"></i> Currently inactive
+                        </span>
+                    {% endif %}
+                </div>
+                <a href="{% url 'admin_announcement_detail' ann.id %}" class="btn-view">
+                    <i class="fas fa-eye"></i>
+                    <span>View Announcement</span>
+                    <i class="fas fa-arrow-right btn-arrow"></i>
+                </a>
+            </div>
+        </article>
+        {% empty %}
+        
+        <div class="empty-state">
+            <div class="empty-icon"><i class="fas fa-bullhorn"></i></div>
+            <h2>No announcements yet</h2>
+            <p>Create your first announcement to notify users about important platform updates.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+    <div class="pagination">
+        {% if announcements.has_previous %}
+            <a href="?page={{ announcements.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span>Page {{ announcements.number }} of {{ announcements.paginator.num_pages }}</span>
+        {% if announcements.has_next %}
+            <a href="?page={{ announcements.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/wallets.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="wallets-page edit-wallet-page">
+
+    <div class="wallets-card edit-card">
+
+        <div class="wallets-heading">
+
+            <div class="edit-wallet-icon">
+                <i class="fas fa-pen"></i>
+            </div>
+
+            <h4>Edit {{ wallet.get_currency_display }} Wallet</h4>
+
+            <p>
+                Update your wallet information securely
+            </p>
+
+        </div>
+
+
+        <form method="post" class="wallet-form edit-wallet-form">
+
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button type="submit" class="wallet-btn save-wallet-btn">
+                <i class="fas fa-save"></i>
+                Update Wallet
+            </button>
+
+        </form>
+
+
+        <div class="edit-back">
+
+            <a href="{% url 'wallets' %}">
+                <i class="fas fa-arrow-left"></i>
+                Back to My Wallets
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+

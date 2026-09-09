@@ -1,0 +1,769 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'core/css/about.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+
+
+<section class="about-page" style="background-image: url(
+    {% if site_settings.hero_background %}
+        {{ site_settings.hero_background.url }}
+    {% else %}
+        {% static 'core/images/investment.jpg' %}
+    {% endif %}
+);">
+
+    <div class="overlay"></div>
+
+    <div class="breadcrumb">
+
+        <i class="fa fa-home"></i>
+
+        <a href="{% url 'home' %}">Home</a>
+
+        -
+
+        <span>About</span>
+
+    </div>
+
+    <div class="about-container">
+
+        <h1 class="about-heading">
+            {{ site_settings.about_heading }}
+        </h1>
+
+        <p class="about-content">
+            {{ site_settings.about_content }}
+        </p>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="three-steps"
+         style="background-image: url('{% static 'core/images/newimage.jpg' %}');">
+
+    <div class="container text-center">
+
+        {% if three_step_section %}
+
+            <h2 class="three-steps-title">
+
+                <span class="white">How</span>
+
+                <span class="gold">Finbit</span>
+
+                <span class="white">Works</span>
+
+            </h2>
+
+            <p class="three-steps-subtitle">
+                {{ three_step_section.subheading }}
+            </p>
+
+            <div class="steps-row">
+
+                {% for step in three_step_section.steps.all %}
+
+                    <div class="step-circle">
+
+                        <div class="circle-icon">
+
+                            <i class="fa {{ step.icon }}"></i>
+
+                            <div class="step-number-circle">
+
+                                <span class="step-number">
+                                    {{ step.number|stringformat:"02d" }}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+                        <p class="step-title">
+                            {{ step.title }}
+                        </p>
+
+                    </div>
+
+                    {% if not forloop.last %}
+
+                        <div class="step-connector">
+
+                            {% for i in "xxxxxxxxxxxxxxxxxxxxxx" %}
+                                <span></span>
+                            {% endfor %}
+
+                        </div>
+
+                    {% endif %}
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+
+
+<section class="team-section">
+
+    <div class="container text-center">
+
+        <h2 class="team-title">
+
+            <span class="white">Our</span>
+
+            <span class="gold">Expert</span>
+
+            <span class="white">Team Members</span>
+
+        </h2>
+
+        <p class="team-subtitle">
+
+            Discover the experts committed to safeguarding your investments with insight, integrity, and proven experience.
+
+        </p>
+
+        <div class="team-container">
+
+            {% for member in team_members %}
+
+                <div class="team-card">
+
+                    <div class="team-image">
+
+                        <img
+                            src="{{ member.image.url }}"
+                            alt="{{ member.name }}">
+
+                    </div>
+
+                    
+
+                    <p class="team-name">
+                        {{ member.name }}
+                    </p>
+
+                    <p class="team-position">
+                        {{ member.position }}
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="faq-section"
+         style="background-image: url('{% static 'core/images/finfaqs.jpg' %}');">
+
+    <div class="faq-overlay">
+
+        <div class="container text-center">
+
+            <h2 class="faq-title">
+
+                <span class="white">Frequently</span>
+
+                <span class="gold">Asked</span>
+
+                <span class="white">Questions</span>
+
+            </h2>
+
+            <p class="faq-subtitle">
+
+                Find quick answers to common queries about deposits, withdrawals, and account management.
+
+            </p>
+
+            <div class="faq-container">
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        1. When can I deposit/withdraw from my Investment account?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        Deposit and withdrawal are available at any time. Be sure that your funds are not used in any ongoing trade before the withdrawal. The available amount is shown in your dashboard on the main page of the Investing platform.
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        2. How do I check my account balance?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        You can see this anytime on your accounts dashboard.
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        3. I forgot my password, what should I do?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        Visit the password reset page, type in your email address and click the Reset button.
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        4. How will I know that the withdrawal has been successful?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        You will get an automatic notification once we send the funds and you can always check your transactions or account balance. Your chosen payment system dictates how long it will take for the funds to reach you.
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        5. How much can I withdraw?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        You can withdraw the full amount of your account balance minus the funds that are used currently for supporting opened positions.
+
+                    </div>
+
+                </div>
+
+
+                <div class="faq-item">
+
+                    <button class="faq-question">
+
+                        6. What is the referral bonus?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        We value community growth. For every successful referral, you earn a bonus of
+
+                        <strong>8.4%</strong>.
+
+                        This reward is automatically credited once your referral completes their first qualifying investment, allowing you to benefit while helping others discover Finbit.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="mission-vision">
+
+    <div class="glass-container text-center">
+
+        <h2 class="section-title super-effect">
+            Mission & Vision
+        </h2>
+
+        <p class="section-subtitle">
+
+            Empowering investors with transparency, innovation, and security. We combine advanced AI insights with human expertise to democratize crypto investing, ensuring accessibility and trust for everyone. Our mission is to democratize cryptocurrency investing by blending advanced AI insights with human expertise. Our vision is to create a transparent, secure, and accessible investment ecosystem that empowers investors worldwide.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="core-values">
+
+    <div class="glass-container text-center">
+
+        <h2 class="section-title super-effect">
+            Our Core Values
+        </h2>
+
+        <p class="section-subtitle">
+
+            The principles that guide Finbit: transparency, security, innovation, and investor success. These values shape every decision we make and every service we deliver, ensuring trust and long-term growth for our global community.
+
+        </p>
+
+        <div class="values-grid">
+
+            <div class="value-card">
+
+                <i class="fa fa-balance-scale"></i>
+
+                <h3>
+                    Transparency
+                </h3>
+
+                <p>
+
+                    We believe investors deserve clarity. From real-time reporting to open communication, every transaction and performance metric is shared honestly, building confidence and accountability.
+
+                </p>
+
+            </div>
+
+
+            <div class="value-card">
+
+                <i class="fa fa-shield-alt"></i>
+
+                <h3>
+                    Security
+                </h3>
+
+                <p>
+
+                    Protecting your assets is our highest priority. With advanced encryption, cold storage, and multi-layer authentication, we safeguard your investments against evolving digital threats.
+
+                </p>
+
+            </div>
+
+
+            <div class="value-card">
+
+                <i class="fa fa-lightbulb"></i>
+
+                <h3>
+                    Innovation
+                </h3>
+
+                <p>
+
+                    The crypto market evolves rapidly, and so do we. By combining AI-driven insights with expert analysis, we deliver smarter strategies and cutting-edge solutions that keep you ahead.
+
+                </p>
+
+            </div>
+
+
+            <div class="value-card">
+
+                <i class="fa fa-users"></i>
+
+                <h3>
+                    Investor Success
+                </h3>
+
+                <p>
+
+                    Your growth is our mission. We focus on sustainable returns, personalized support, and long-term value creation, ensuring every investor has the tools to succeed.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="compliance">
+
+    <div class="glass-container text-center">
+
+        <h2 class="section-title super-effect">
+            Regulatory Compliance
+        </h2>
+
+        <p class="section-subtitle">
+
+            Trust is built on accountability. Finbit adheres to strict international financial regulations, undergoes independent audits, and maintains licenses across jurisdictions to protect our investors. We comply with global standards to ensure transparency and confidence, with operations regularly reviewed by certified auditors and full licensing maintained to meet the highest industry benchmarks.
+
+        </p>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="security-features">
+
+    <div class="glass-container text-center">
+
+        <h2 class="section-title super-effect">
+            Security Features
+        </h2>
+
+        <p class="section-subtitle">
+
+            Protecting your investments is our highest priority. Finbit employs advanced security measures to ensure your assets remain safe in a rapidly evolving digital landscape.
+
+        </p>
+
+        <div class="features-grid">
+
+            <div class="feature-card">
+
+                <i class="fa fa-lock"></i>
+
+                <h3>
+                    Encryption
+                </h3>
+
+                <p>
+
+                    End-to-end encryption safeguards every transaction and communication. By using industry-leading cryptographic protocols, we ensure that sensitive data remains private and tamper-proof, giving investors peace of mind.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <i class="fa fa-database"></i>
+
+                <h3>
+                    Cold Storage
+                </h3>
+
+                <p>
+
+                    The majority of funds are stored offline in secure cold wallets, isolated from online threats. This strategy minimizes exposure to cyber-attacks and ensures maximum safety for long-term holdings.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <i class="fa fa-key"></i>
+
+                <h3>
+                    Multi-Factor Authentication
+                </h3>
+
+                <p>
+
+                    Account access requires multiple layers of verification, including passwords, device confirmation, and biometric checks. This layered defense dramatically reduces the risk of unauthorized access.
+
+                </p>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <i class="fa fa-chart-line"></i>
+
+                <h3>
+                    Risk Management
+                </h3>
+
+                <p>
+
+                    Our disciplined risk management framework continuously monitors market volatility and trading exposure. Automated safeguards and expert oversight protect your portfolio against sudden downturns.
+
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="testimonials-section">
+
+    <div class="container text-center">
+
+        <h2 class="testimonials-title">
+
+            <span class="white">What</span>
+
+            <span class="gold">People</span>
+
+            <span class="white">Say</span>
+
+        </h2>
+
+        <p class="testimonials-subtitle">
+
+            Hear from our growing community of investors and trusted partners as they share their experiences, success stories, and the confidence they've gained through investing with Finbit.
+
+        </p>
+
+        <div class="testimonials-container">
+
+            {% for testimonial in testimonials %}
+
+                <div class="testimonial-card">
+
+                    <div class="testimonial-subheading">
+
+                        {{ testimonial.subheading }}
+
+                    </div>
+
+                    <div class="divider-line"></div>
+
+                    <div class="testimonial-bottom">
+
+                        <div class="testimonial-image">
+
+                            <img
+                                src="{{ testimonial.image.url }}"
+                                alt="{{ testimonial.name }}">
+
+                        </div>
+
+                        <div class="testimonial-info">
+
+                            
+
+                            <p class="testimonial-name">
+                                {{ testimonial.name }}
+                            </p>
+
+                            <p class="testimonial-position">
+                                {{ testimonial.position }}
+                            </p>
+
+                            <div class="testimonial-stars">
+
+                                {% for i in "12345"|slice:":testimonial.stars" %}
+
+                                    <i class="fa fa-star"></i>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="testimonial-pagination">
+
+            <span class="page-line" data-page="1"></span>
+
+            <span class="page-line" data-page="2"></span>
+
+            <span class="page-line" data-page="3"></span>
+
+            <span class="page-line" data-page="4"></span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="global-reach">
+
+    <div class="glass-container text-center">
+
+        <h2 class="section-title">
+            Global Reach
+        </h2>
+
+        <div class="counters">
+
+            <div class="counter">
+
+                <span class="count" data-target="10000">
+                    0
+                </span>
+
+                <p>
+                    Investors Worldwide
+                </p>
+
+            </div>
+
+
+            <div class="counter">
+
+                <span class="count" data-target="59">
+                    0
+                </span>
+
+                <p>
+                    Countries Served
+                </p>
+
+            </div>
+
+
+            <div class="counter">
+
+                <span class="count" data-target="50000000">
+                    0
+                </span>
+
+                <p>
+                    Assets Managed ($)
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="cta">
+
+    <div class="glass-container text-center">
+
+        <h2 class="section-title">
+            Join Finbit Today
+        </h2>
+
+        <p class="section-text">
+
+            Invest with confidence in the future of AI-powered cryptocurrency trading. Our platform combines advanced algorithms, real-time market insights, and enterprise-grade security to help you grow your portfolio. Whether you’re a seasoned investor or just starting out, Finbit provides the tools, transparency, and support you need to succeed in the global digital economy.
+
+        </p>
+
+        <a href="{% url 'signup' %}" class="cta-btn">
+            Get Started
+        </a>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="site-links">
+
+    <div class="container text-center">
+
+        {% if footer.logo %}
+
+            <img
+                src="{{ footer.logo.url }}"
+                alt="{{ footer.company_name }} Logo"
+                class="footer-logo">
+
+        {% endif %}
+
+        <nav class="footer-nav">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'privacy_policy' %}">
+                Privacy & Policy
+            </a>
+
+            <a href="{% url 'terms_conditions' %}">
+                Terms & Conditions
+            </a>
+
+        </nav>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'core/js/home.js' %}"></script>
+
+<script src="{% static 'core/js/faq.js' %}"></script>
+
+{% endblock %}

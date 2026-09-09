@@ -1,0 +1,811 @@
+{% extends 'control/admin_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/dashboard.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-page">
+
+
+
+
+<section class="dashboard-hero">
+
+    <div class="hero-content">
+
+        <span class="hero-badge">ADMINISTRATION</span>
+
+        <h1 class="dashboard-title">
+            {{ settings.title }}
+        </h1>
+
+        <p class="dashboard-subtitle">
+            Monitor platform performance, oversee user accounts, and manage financial operations from one centralized workspace.
+        </p>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="dashboard-grid">
+
+    <div class="dashboard-card">
+        <div class="card-info">
+            <h2>{{ total_users }}</h2>
+            <p>Total Users</p>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-info">
+            <h2>{{ total_referrals }}</h2>
+            <p>Total Referrals</p>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-info">
+            <h2>${{ total_deposits|floatformat:2 }}</h2>
+            <p>Total Deposits</p>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-info">
+            <h2>${{ total_investments|floatformat:2 }}</h2>
+            <p>Total Investments</p>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-info">
+            <h2>{{ active_investments }}</h2>
+            <p>Active Investments</p>
+        </div>
+    </div>
+
+    <div class="dashboard-card">
+        <div class="card-info">
+            <h2>${{ total_withdrawals|floatformat:2 }}</h2>
+            <p>Total Withdrawals</p>
+        </div>
+    </div>
+
+</section>
+
+
+
+<section class="dashboard-tables">
+
+    <div class="tables-container">
+
+
+        
+
+        <div class="table-box">
+
+            <h3>Recent Investments</h3>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>User</th>
+
+                        <th>Amount</th>
+
+                        <th>Plan</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for inv in investments_page %}
+
+                    <tr>
+
+                        <td>
+                            {{ inv.user.username }}
+                        </td>
+
+                        <td>
+                            ${{ inv.amount_usd|floatformat:2 }}
+                        </td>
+
+                        <td>
+                            {{ inv.plan.name }}
+                        </td>
+
+                        <td>
+                            {{ inv.status }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+                        <td colspan="4">
+                            No investments found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            
+
+            <div class="pagination">
+
+                {% if investments_page.has_previous %}
+
+                    <a href="?investments_page={{ investments_page.previous_page_number }}">
+                        Previous
+                    </a>
+
+                {% endif %}
+
+
+                <span>
+                    Page {{ investments_page.number }}
+                    of
+                    {{ investments_page.paginator.num_pages }}
+                </span>
+
+
+                {% if investments_page.has_next %}
+
+                    <a href="?investments_page={{ investments_page.next_page_number }}">
+                        Next
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        
+
+        <div class="table-box">
+
+            <h3>Recent Users</h3>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>User</th>
+
+                        <th>Date Joined</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    {% for u in users_page %}
+
+                    <tr>
+
+                        <td>
+                            {{ u.username }}
+                        </td>
+
+                        <td>
+                            {{ u.date_joined }}
+                        </td>
+
+                    </tr>
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="2">
+                            No users found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+
+            
+
+            <div class="pagination">
+
+                {% if users_page.has_previous %}
+
+                    <a href="?users_page={{ users_page.previous_page_number }}">
+                        Previous
+                    </a>
+
+                {% endif %}
+
+
+                <span>
+                    Page {{ users_page.number }}
+                    of
+                    {{ users_page.paginator.num_pages }}
+                </span>
+
+
+                {% if users_page.has_next %}
+
+                    <a href="?users_page={{ users_page.next_page_number }}">
+                        Next
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+<section class="all-users">
+
+    <h3>Total Users ({{ total_users }})</h3>
+
+    <div class="table-responsive">
+
+        <table>
+
+            <thead>
+
+                <tr>
+                    <th>S/N</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Balance</th>
+                    <th>Referrer</th>
+                    <th>Status</th>
+                    <th>Date Joined</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for u in all_users_page %}
+
+                <tr>
+
+                    
+                    <td data-label="S/N">
+                        {{ forloop.counter }}
+                    </td>
+
+                    
+                    <td data-label="Username">
+                        {{ u.user.username }}
+                    </td>
+
+                    
+                    <td data-label="Email">
+                        {{ u.user.email }}
+                    </td>
+
+                    
+                    <td data-label="Balance">
+                        ${{ u.total_balance|floatformat:2 }}
+                    </td>
+
+                    
+                    <td data-label="Referrer">
+
+                        {% if u.referrer %}
+
+                            {{ u.referrer.username }}
+
+                        {% else %}
+
+                            -
+
+                        {% endif %}
+
+                    </td>
+
+                    
+                    <td data-label="Status">
+
+                        {% if u.profile and u.profile.kyc_verified %}
+
+                            <span class="status verified">
+                                Verified
+                            </span>
+
+                        {% else %}
+
+                            <span class="status unverified">
+                                Unverified
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    
+                    <td data-label="Date Joined">
+
+                        {{ u.user.date_joined|date:"M. d, Y, g:i a" }}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td colspan="7">
+
+                        No users found.
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+
+    
+    
+    
+
+    {% if all_users_page.paginator.num_pages > 1 %}
+
+    <div class="pagination">
+
+        {% if all_users_page.has_previous %}
+
+            <a href="?all_users_page={{ all_users_page.previous_page_number }}">
+
+                Previous
+
+            </a>
+
+        {% endif %}
+
+
+        <span>
+
+            Page {{ all_users_page.number }}
+
+            of
+
+            {{ all_users_page.paginator.num_pages }}
+
+        </span>
+
+
+        {% if all_users_page.has_next %}
+
+            <a href="?all_users_page={{ all_users_page.next_page_number }}">
+
+                Next
+
+            </a>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+<section class="referral-overview">
+
+    <h3>Referral Overview</h3>
+
+    
+
+    <form method="get" class="search-bar">
+
+        <input
+            type="text"
+            name="search"
+            placeholder="Search referrals..."
+            value="{{ search_query }}"
+        >
+
+        <button type="submit">
+            Search
+        </button>
+
+    </form>
+
+    
+
+    <table>
+
+        <thead>
+
+            <tr>
+                <th>S/N</th>
+                <th>Referred User</th>
+                <th>Referrer</th>
+                <th>Total Referrals</th>
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for referral in referral_page %}
+
+            <tr>
+
+                <td>
+                    {{ forloop.counter }}
+                </td>
+
+                <td>
+                    {{ referral.referred_user.username }}
+                </td>
+
+                <td>
+                    {{ referral.user.username }}
+                </td>
+
+                <td>
+                    {{ referral.referrer_count }}
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="4">
+                    No referral records found.
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+    
+
+    {% if referral_page.paginator.num_pages > 1 %}
+
+    <div class="pagination">
+
+        {% if referral_page.has_previous %}
+
+            <a href="?referral_page={{ referral_page.previous_page_number }}{% if search_query %}&search={{ search_query|urlencode }}{% endif %}">
+                Previous
+            </a>
+
+        {% endif %}
+
+        <span>
+            Page {{ referral_page.number }}
+            of
+            {{ referral_page.paginator.num_pages }}
+        </span>
+
+        {% if referral_page.has_next %}
+
+            <a href="?referral_page={{ referral_page.next_page_number }}{% if search_query %}&search={{ search_query|urlencode }}{% endif %}">
+                Next
+            </a>
+
+        {% endif %}
+
+    </div>
+
+    {% endif %}
+
+</section>
+
+
+<section class="activity-logs">
+
+    <h3>System Activity Logs</h3>
+
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Type</th>
+
+                <th>User</th>
+
+                <th>Amount</th>
+
+                <th>Status</th>
+
+                <th>Date</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for log in activity_page %}
+
+            <tr>
+
+                <td>
+                    {{ log.type }}
+                </td>
+
+                <td>
+
+                    {% if log.user %}
+
+                        {{ log.user.username }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    ${{ log.amount|floatformat:2 }}
+
+                </td>
+
+                <td>
+                    {{ log.status }}
+                </td>
+
+                <td>
+                    {{ log.created_at }}
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="5">
+                    No activity found.
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    
+
+    <div class="pagination">
+
+        {% if activity_page.has_previous %}
+
+            <a href="?activity_page={{ activity_page.previous_page_number }}">
+                Previous
+            </a>
+
+        {% endif %}
+
+
+        <span>
+            Page {{ activity_page.number }}
+            of
+            {{ activity_page.paginator.num_pages }}
+        </span>
+
+
+        {% if activity_page.has_next %}
+
+            <a href="?activity_page={{ activity_page.next_page_number }}">
+                Next
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+
+
+<section class="financial-summary">
+
+    <h3>Financial Summary</h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Total Deposits</th>
+
+                <th>Total Withdrawals</th>
+
+                <th>Net Balance</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            <tr>
+
+                <td>
+                    ${{ deposits_total|floatformat:2 }}
+                </td>
+
+                <td>
+                    ${{ withdrawals_total|floatformat:2 }}
+                </td>
+
+                <td>
+                    ${{ net_balance|floatformat:2 }}
+                </td>
+
+            </tr>
+
+        </tbody>
+
+    </table>
+
+</section>
+
+
+
+
+<section class="top-investors">
+
+    <h3>Top Investors</h3>
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>Rank</th>
+
+                <th>User</th>
+
+                <th>Total Investment</th>
+
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for investor in top_investors_page %}
+
+            <tr>
+
+                <td>
+                    {{ forloop.counter }}
+                </td>
+
+                <td>
+                    {{ investor.username }}
+                </td>
+
+                <td>
+                    ${{ investor.total_investment|floatformat:2 }}
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="3">
+                    No investors found.
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+
+    
+
+    <div class="pagination">
+
+        {% if top_investors_page.has_previous %}
+
+            <a href="?investors_page={{ top_investors_page.previous_page_number }}">
+                Previous
+            </a>
+
+        {% endif %}
+
+
+        <span>
+            Page {{ top_investors_page.number }}
+            of
+            {{ top_investors_page.paginator.num_pages }}
+        </span>
+
+
+        {% if top_investors_page.has_next %}
+
+            <a href="?investors_page={{ top_investors_page.next_page_number }}">
+                Next
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+</div>
+
+{% endblock %}

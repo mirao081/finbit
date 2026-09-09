@@ -1,0 +1,177 @@
+{% extends "control/admin_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/deposits.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="deposits-page">
+
+<h2>Deposits ({{ deposits_page.paginator.count }})</h2>
+
+<div class="deposits-table-wrapper">
+
+    <table>
+
+        <thead>
+
+            <tr>
+
+                <th>S/N</th>
+
+                <th>User</th>
+
+                <th>Type</th>
+
+                <th>Amount ($)</th>
+
+                <th>Payment Method</th>
+
+                <th>Status</th>
+
+                <th>Action</th>
+
+            </tr>
+
+        </thead>
+
+        <tbody>
+
+            {% for deposit in deposits_page %}
+
+            <tr>
+
+                <td>
+                    {{ forloop.counter }}
+                </td>
+
+                <td>
+                    {{ deposit.user.username }}
+                </td>
+
+                <td>
+
+                    <span class="deposit-type">
+                        Deposit
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <span class="deposit-amount">
+                        ${{ deposit.amount_usd|floatformat:2 }}
+                    </span>
+
+                </td>
+
+                <td>
+                    {{ deposit.get_payment_method_display }}
+                </td>
+
+                <td>
+
+                    <span class="deposit-status">
+                        {{ deposit.status }}
+                    </span>
+
+                </td>
+
+                <td>
+
+                    <a
+                        href="{% url 'deposit_detail' deposit.id %}"
+                        class="deposit-view-btn"
+                    >
+
+                        <i class="fas fa-eye"></i>
+
+                        View
+
+                    </a>
+
+                </td>
+
+            </tr>
+
+            {% empty %}
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    class="empty-deposits"
+                >
+
+                    <i class="fas fa-wallet"></i>
+
+                    <span>
+                        No deposits found.
+                    </span>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+
+
+<div class="pagination">
+
+    {% if deposits_page.has_previous %}
+
+        <a
+            href="?page={{ deposits_page.previous_page_number }}"
+        >
+
+            <i class="fas fa-chevron-left"></i>
+
+            Previous
+
+        </a>
+
+    {% endif %}
+
+
+    <span>
+
+        Page {{ deposits_page.number }}
+
+        of {{ deposits_page.paginator.num_pages }}
+
+    </span>
+
+
+    {% if deposits_page.has_next %}
+
+        <a
+            href="?page={{ deposits_page.next_page_number }}"
+        >
+
+            Next
+
+            <i class="fas fa-chevron-right"></i>
+
+        </a>
+
+    {% endif %}
+
+</div>
+
+
+</div>
+
+{% endblock %}

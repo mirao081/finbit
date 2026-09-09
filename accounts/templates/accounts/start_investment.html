@@ -1,0 +1,785 @@
+{% extends "accounts/dashboard_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'accounts/css/start_investment.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="page-wrapper">
+
+    <div class="main-content">
+
+        <section class="investment-page">
+
+            <div class="investment-card-wrapper">
+
+
+                
+
+                <div class="investment-heading">
+
+                    <div class="heading-badge">
+                        Investment Center
+                    </div>
+
+                    <h1>
+                        {{ investment_page.hero_title|default:"Start Your Investment Journey" }}
+                    </h1>
+
+                    <p>
+                        {{ investment_page.hero_subtitle|default:"Choose a plan that matches your goals and invest from your approved balance." }}
+                    </p>
+
+                    <div class="balance-box">
+
+                        <span>
+                            {{ investment_page.balance_label|default:"Available Balance" }}
+                        </span>
+
+                        <strong>
+                            ${{ balance|floatformat:2 }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                
+
+                <section class="investment-plans-section">
+
+                    <div class="section-heading">
+
+                        <span class="section-kicker">
+                            Explore Your Options
+                        </span>
+
+                        <h2>
+                            Available Investment Plans
+                        </h2>
+
+                        <p>
+                            Select the plan that best matches your investment objectives.
+                        </p>
+
+                    </div>
+
+
+                    <div class="investment-grid">
+
+                        {% for plan in plans %}
+
+                        <article class="investment-card">
+
+                            <div class="plan-glow"></div>
+
+
+                            
+
+                            <h3>
+                                {{ plan.name }}
+                            </h3>
+
+
+                            
+
+                            <div class="plan-details">
+
+
+                                
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        Interest
+                                    </span>
+
+                                    <strong>
+                                        {{ plan.return_rate }}
+                                    </strong>
+
+                                </div>
+
+
+                                
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        Duration
+                                    </span>
+
+                                    <strong>
+                                        {{ plan.duration }}
+                                    </strong>
+
+                                </div>
+
+
+                                
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        Frequency
+                                    </span>
+
+                                    <strong>
+                                        {{ plan.frequency }}
+                                    </strong>
+
+                                </div>
+
+
+                                
+
+                                <div class="detail-item">
+
+                                    <span>
+                                        Total Return
+                                    </span>
+
+                                    <strong>
+                                        {{ plan.total_return }}
+                                    </strong>
+
+                                </div>
+
+
+                                
+
+                                <div class="detail-item full-width">
+
+                                    <span>
+                                        Investment Range
+                                    </span>
+
+                                    <strong>
+
+                                        ${{ plan.minimum_investment|floatformat:2 }}
+
+                                        {% if plan.maximum_investment %}
+
+                                            –
+                                            ${{ plan.maximum_investment|floatformat:2 }}
+
+                                        {% endif %}
+
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+
+                            
+
+                            <form
+                                method="post"
+                                class="investment-form"
+                            >
+
+                                {% csrf_token %}
+
+
+                                
+
+                                <input
+                                    type="hidden"
+                                    name="plan"
+                                    value="{{ plan.id }}"
+                                >
+
+
+                                
+
+                                <div class="form-group">
+
+                                    <label for="wallet_{{ plan.id }}">
+
+                                        Invest From Wallet
+
+                                    </label>
+
+
+                                    <select
+                                        name="wallet_currency"
+                                        id="wallet_{{ plan.id }}"
+                                        required
+                                    >
+
+                                        <option
+                                            value=""
+                                            selected
+                                            disabled
+                                        >
+                                            Select Wallet
+                                        </option>
+
+
+                                        {% for wallet in wallets %}
+
+                                            <option
+                                                value="{{ wallet.currency }}"
+                                            >
+
+                                                {{ wallet.get_currency_display }}
+
+                                                —
+
+                                                {{ wallet.balance|floatformat:8 }}
+
+                                                {{ wallet.currency }}
+
+                                            </option>
+
+                                        {% empty %}
+
+                                            <option
+                                                value=""
+                                                disabled
+                                            >
+                                                No wallets available
+                                            </option>
+
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+
+
+                                
+
+                                <div class="form-group">
+
+                                    <label for="amount_{{ plan.id }}">
+
+                                        Investment Amount (USD)
+
+                                    </label>
+
+
+                                    <input
+                                        type="number"
+                                        step="0.01"
+                                        min="0.01"
+                                        name="amount"
+                                        id="amount_{{ plan.id }}"
+                                        placeholder="Enter investment amount"
+                                        required
+                                        data-min="{{ plan.minimum_investment }}"
+
+                                        {% if plan.maximum_investment %}
+
+                                            data-max="{{ plan.maximum_investment }}"
+
+                                        {% endif %}
+                                    >
+
+
+                                    <div
+                                        class="error-message"
+                                        id="error_{{ plan.id }}"
+                                        aria-live="polite"
+                                    ></div>
+
+                                </div>
+
+
+                                
+
+                                <div class="investment-wallet-note">
+
+                                    <i class="fas fa-circle-info"></i>
+
+                                    <span>
+                                        Your USD investment amount will be converted
+                                        into the selected cryptocurrency using the
+                                        current exchange rate.
+                                    </span>
+
+                                </div>
+
+
+                                
+
+                                <button
+                                    type="submit"
+                                    class="invest-btn"
+                                >
+
+                                    <i class="fas fa-chart-line"></i>
+
+                                    <span>
+                                        Invest in {{ plan.name }}
+                                    </span>
+
+                                </button>
+
+                            </form>
+
+                        </article>
+
+
+                        {% empty %}
+
+                        <div class="empty-plans">
+
+                            <p>
+                                No investment plans are available at the moment.
+                            </p>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+
+                
+
+                <section class="premium-section how-section">
+
+                    <div class="section-heading">
+
+                        <span class="section-kicker">
+                            Simple & Transparent
+                        </span>
+
+                        <h2>
+                            {{ investment_page.how_title|default:"How Your Investment Works" }}
+                        </h2>
+
+                        <p>
+                            {{ investment_page.how_subtitle|default:"A simple process designed to make investing straightforward." }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="how-grid">
+
+                        {% for item in how_it_works %}
+
+                        <div class="how-card">
+
+                            <div class="step-number">
+
+                                <i class="{{ item.icon }}"></i>
+
+                            </div>
+
+                            <h3>
+                                {{ item.title }}
+                            </h3>
+
+                            <p>
+                                {{ item.description }}
+                            </p>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+
+                
+
+                <section class="premium-section calculator-section">
+
+                    <div class="section-heading">
+
+                        <span class="section-kicker">
+                            Plan Ahead
+                        </span>
+
+                        <h2>
+                            {{ investment_page.calculator_title|default:"Investment Calculator" }}
+                        </h2>
+
+                        <p>
+                            {{ investment_page.calculator_subtitle|default:"Select a plan and enter your investment amount to see your expected return." }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="calculator-card">
+
+
+                        
+
+                        <div class="calculator-input">
+
+                            <label for="planSelect">
+                                Choose Investment Plan
+                            </label>
+
+                            <select id="planSelect">
+
+                                <option
+                                    value=""
+                                    selected
+                                    disabled
+                                >
+                                    Select a Plan
+                                </option>
+
+
+                                {% for plan in plans %}
+
+                                <option
+                                    value="{{ plan.id }}"
+                                    data-rate="{{ plan.return_rate }}"
+                                    data-min="{{ plan.minimum_investment }}"
+
+                                    {% if plan.maximum_investment %}
+                                        data-max="{{ plan.maximum_investment }}"
+                                    {% endif %}
+
+                                    data-frequency="{{ plan.frequency }}"
+                                    data-duration="{{ plan.duration }}"
+                                    data-name="{{ plan.name }}"
+                                >
+
+                                    {{ plan.name }}
+
+                                </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        
+
+                        <div class="calculator-input">
+
+                            <label for="investAmount">
+                                Investment Amount (USD)
+                            </label>
+
+                            <input
+                                type="number"
+                                id="investAmount"
+                                placeholder="Enter investment amount"
+                                min="0"
+                                step="0.01"
+                                disabled
+                            >
+
+
+                            <div
+                                class="calculator-range"
+                                id="calculatorRange"
+                            >
+                                Select a plan to see its investment range.
+                            </div>
+
+
+                            <div
+                                class="error-message"
+                                id="calcError"
+                                aria-live="polite"
+                            ></div>
+
+                        </div>
+
+
+                        
+
+                        <div
+                            class="calculator-result"
+                            id="calculatorResultBox"
+                        >
+
+                            <div class="result-label">
+                                Expected Profit
+                            </div>
+
+
+                            <div class="result-main">
+
+                                <span class="result-currency">
+                                    $
+                                </span>
+
+                                <strong id="profitAmount">
+                                    0.00
+                                </strong>
+
+                            </div>
+
+
+                            <div
+                                class="result-frequency"
+                                id="resultFrequency"
+                            >
+                                Select a plan and enter an amount
+                            </div>
+
+
+                            <div class="result-breakdown">
+
+
+                                
+
+                                <div class="result-item">
+
+                                    <span>
+                                        Investment
+                                    </span>
+
+                                    <strong id="resultInvestment">
+                                        $0.00
+                                    </strong>
+
+                                </div>
+
+
+                                
+
+                                <div class="result-item">
+
+                                    <span>
+                                        Return Rate
+                                    </span>
+
+                                    <strong id="resultRate">
+                                        0%
+                                    </strong>
+
+                                </div>
+
+
+                                
+
+                                <div class="result-item">
+
+                                    <span>
+                                        Profit
+                                    </span>
+
+                                    <strong id="resultProfit">
+                                        $0.00
+                                    </strong>
+
+                                </div>
+
+
+                                
+
+                                <div class="result-item">
+
+                                    <span>
+                                        Total Return
+                                    </span>
+
+                                    <strong id="resultTotal">
+                                        $0.00
+                                    </strong>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                
+
+                <section class="premium-section security-section">
+
+                    <div class="section-heading">
+
+                        <span class="section-kicker">
+                            Invest With Confidence
+                        </span>
+
+                        <h2>
+                            {{ investment_page.security_title|default:"Built Around Security & Transparency" }}
+                        </h2>
+
+                        <p>
+                            {{ investment_page.security_text|default:"Your investment experience is designed around clarity, security and transparency." }}
+                        </p>
+
+                    </div>
+
+
+                    <div class="features-grid">
+
+                        {% for feature in investment_features %}
+
+                        <div class="feature-card">
+
+                            <div class="feature-icon">
+                                {{ feature.icon }}
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    {{ feature.title }}
+                                </h3>
+
+                                <p>
+                                    {{ feature.description }}
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+
+                
+
+                <section class="important-section">
+
+                    <div class="important-icon">
+                        !
+                    </div>
+
+                    <div>
+
+                        <h2>
+                            {{ investment_page.terms_title|default:"Important Investment Information" }}
+                        </h2>
+
+                        <p>
+                            {{ investment_page.terms_text|default:"Please review the terms, duration, return rate and conditions of your selected plan carefully before investing." }}
+                        </p>
+
+                    </div>
+
+                </section>
+
+
+                
+
+                <section class="premium-section faq-section">
+
+                    <div class="section-heading">
+
+                        <span class="section-kicker">
+                            Need Answers?
+                        </span>
+
+                        <h2>
+                            {{ investment_page.faq_title|default:"Frequently Asked Questions" }}
+                        </h2>
+
+                    </div>
+
+
+                    <div class="faq-list">
+
+                        {% for faq in investment_faqs %}
+
+                        <details class="faq-item">
+
+                            <summary>
+
+                                <span>
+                                    {{ faq.question }}
+                                </span>
+
+                                <b>
+                                    +
+                                </b>
+
+                            </summary>
+
+
+                            <div class="faq-answer">
+
+                                <p>
+                                    {{ faq.answer }}
+                                </p>
+
+                            </div>
+
+                        </details>
+
+                        {% endfor %}
+
+                    </div>
+
+                </section>
+
+
+                
+
+                <section class="support-section">
+
+                    <div class="support-content">
+
+                        <span class="section-kicker">
+                            We're Here To Help
+                        </span>
+
+                        <h2>
+                            {{ investment_page.support_title|default:"Need Help Before You Invest?" }}
+                        </h2>
+
+                        <p>
+                            {{ investment_page.support_text|default:"Our support team is available to help you understand the investment process." }}
+                        </p>
+
+
+                        <a
+                            href="{% url 'support' %}"
+                            class="support-btn"
+                        >
+
+                            {{ investment_page.support_button_text|default:"Contact Support" }}
+
+                        </a>
+
+                    </div>
+
+                </section>
+
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'accounts/js/start_investment.js' %}"></script>
+
+<script src="{% static 'accounts/js/start_investment_calculator.js' %}"></script>
+
+{% endblock %}

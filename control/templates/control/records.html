@@ -1,0 +1,113 @@
+{% extends "control/admin_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/records.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="records-page">
+
+
+<h1>Investment Records ({{ records_page.paginator.count }})</h1>
+
+<table>
+
+    <thead>
+        <tr>
+            <th>S/N</th>
+            <th>Username</th>
+            <th>Investment Plan</th>
+            <th>Amount Invested</th>
+            <th>% Return</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+        {% for record in records_page %}
+
+        <tr>
+
+            <td>
+                {{ forloop.counter }}
+            </td>
+
+            <td>
+                {{ record.user.username }}
+            </td>
+
+            <td>
+                {{ record.plan.name }}
+            </td>
+
+            <td>
+                ${{ record.amount_usd|floatformat:2 }}
+            </td>
+
+            <td>
+                {{ record.plan.return_rate }}
+            </td>
+
+            <td>
+                {{ record.created_at|date:"Y-m-d H:i" }}
+            </td>
+
+            <td>
+                {% if record.end_date %}
+                    {{ record.end_date|date:"Y-m-d H:i" }}
+                {% else %}
+                    —
+                {% endif %}
+            </td>
+
+        </tr>
+
+        {% empty %}
+
+        <tr>
+            <td colspan="7">
+                No records found.
+            </td>
+        </tr>
+
+        {% endfor %}
+
+    </tbody>
+
+</table>
+
+
+
+
+<div class="pagination">
+
+    {% if records_page.has_previous %}
+        <a href="?page={{ records_page.previous_page_number }}">
+            Previous
+        </a>
+    {% endif %}
+
+    <span>
+        Page {{ records_page.number }}
+        of
+        {{ records_page.paginator.num_pages }}
+    </span>
+
+    {% if records_page.has_next %}
+        <a href="?page={{ records_page.next_page_number }}">
+            Next
+        </a>
+    {% endif %}
+
+</div>
+
+
+</div>
+
+{% endblock %}

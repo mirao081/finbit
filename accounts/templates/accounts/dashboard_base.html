@@ -1,0 +1,501 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html
+    lang="{{ LANGUAGE_CODE|default:'en' }}"
+    dir="{% if LANGUAGE_CODE == 'ar' %}rtl{% else %}ltr{% endif %}"
+>
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Finbit Dashboard
+    </title>
+
+
+    
+
+    <link
+        rel="stylesheet"
+        href="{% static 'accounts/css/styles.css' %}"
+    >
+
+
+    
+
+    <link
+        rel="stylesheet"
+        href="{% static 'core/css/style.css' %}"
+    >
+
+
+    
+
+    {% block extra_css %}
+    {% endblock %}
+
+
+    
+
+    <link
+        rel="stylesheet"
+        href="{% static 'accounts/css/darkmode.css' %}"
+    >
+
+
+    
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    >
+
+</head>
+
+
+<body>
+
+
+    
+
+    <header class="dashboard-header">
+
+
+        
+
+        <div class="logo">
+
+            <img
+                src="{% static 'accounts/images/finbit.png' %}"
+                alt="Finbit Logo"
+            >
+
+        </div>
+
+
+        
+
+        <nav class="top-nav">
+
+
+            
+
+            <div class="google-translate">
+
+                <button
+                    type="button"
+                    class="google-translate-button"
+                    aria-label="Choose language"
+                    aria-expanded="false"
+                    aria-controls="google-language-menu"
+                >
+
+                    <i
+                        class="fa-solid fa-globe"
+                        aria-hidden="true"
+                    ></i>
+
+                </button>
+
+
+                <div
+                    id="google-language-menu"
+                    class="google-language-menu"
+                    role="menu"
+                    hidden
+                ></div>
+
+
+                <div
+                    id="google_translate_element"
+                    aria-hidden="true"
+                ></div>
+
+            </div>
+
+
+            
+
+            <a
+                href="{% url 'announcements' %}"
+                class="icon-btn notification-btn"
+                aria-label="Notifications"
+                title="Notifications"
+            >
+
+                <i class="far fa-bell"></i>
+
+
+                {% if unread_announcements_count > 0 %}
+
+                    <span class="notification-badge">
+                        {{ unread_announcements_count }}
+                    </span>
+
+                {% endif %}
+
+            </a>
+
+
+            
+
+            <button
+                id="dark-mode-toggle"
+                class="dark-mode-btn"
+                type="button"
+                aria-label="Toggle Dark Mode"
+                aria-pressed="false"
+                title="Toggle Dark Mode"
+            >
+
+                <i
+                    class="fa-solid fa-moon"
+                    aria-hidden="true"
+                ></i>
+
+
+                <span class="dark-mode-text">
+                    Dark
+                </span>
+
+            </button>
+
+
+            
+
+            <a
+                href="{% url 'logout' %}"
+                class="logout-icon"
+                aria-label="Logout"
+                title="Logout"
+            >
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+            </a>
+
+
+            
+
+            <button
+                type="button"
+                class="hamburger"
+                id="menu-toggle"
+                aria-label="Open menu"
+                aria-expanded="false"
+                aria-controls="sidebar"
+            >
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+        </nav>
+
+    </header>
+
+
+
+    
+
+    <div
+        class="sidebar-overlay"
+        id="sidebar-overlay"
+    ></div>
+
+
+
+    
+
+    <aside
+        class="sidebar"
+        id="sidebar"
+    >
+
+
+        
+
+        <div class="top-section">
+
+
+            
+
+            <h2 class="username">
+
+                Welcome,
+                {{ request.user.username }}
+
+            </h2>
+
+
+
+            
+
+            {% if user_profile.kyc_verified %}
+
+                <span class="status verified-text">
+
+                    <i class="fa-solid fa-circle-check"></i>
+
+                    Verified
+
+                </span>
+
+            {% else %}
+
+                <span class="status unverified-text">
+
+                    <i class="fa-solid fa-circle-exclamation"></i>
+
+                    Unverified
+
+                </span>
+
+            {% endif %}
+
+
+
+            
+
+            <hr class="kyc-separator">
+
+
+
+            
+
+            <h3
+                class="{% if user_profile.kyc_verified %}verified-text{% else %}unverified-text{% endif %}"
+            >
+
+                KYC Verification
+
+            </h3>
+
+
+
+            
+
+            {% if submission %}
+
+                {% if submission.document %}
+
+                    <div class="kyc-preview">
+
+                        <img
+                            src="{{ submission.document.url }}"
+                            alt="KYC Document"
+                            class="kyc-image {% if user_profile.kyc_verified %}approved{% endif %}"
+                        >
+
+
+                        {% if user_profile.kyc_verified %}
+
+                            <span class="document-badge">
+
+                                <i class="fa-solid fa-check"></i>
+
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endif %}
+
+
+
+            
+
+            <form
+                method="post"
+                enctype="multipart/form-data"
+                action="{% url 'kyc_verification' %}"
+                class="kyc-form"
+            >
+
+                {% csrf_token %}
+
+
+                <input
+                    type="file"
+                    name="document"
+                    id="kyc-file"
+                    accept="image/*"
+                    hidden
+                    onchange="this.form.submit()"
+                >
+
+
+                <label
+                    for="kyc-file"
+                    class="kyc-btn"
+                >
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    <span>
+                        Upload Document
+                    </span>
+
+                </label>
+
+            </form>
+
+        </div>
+
+
+
+        
+
+        <nav
+            class="sidebar-navigation"
+            aria-label="Dashboard navigation"
+        >
+
+            <ul class="menu-list">
+
+
+                {% for menu in menus %}
+
+                    <li>
+
+                        <a
+                            href="{% url menu.url_name %}"
+                            class="menu-link"
+                        >
+
+
+                            
+
+                            <span class="menu-icon">
+
+                                <i class="{{ menu.icon }}"></i>
+
+                            </span>
+
+
+                            
+
+                            <span class="menu-title">
+
+                                {{ menu.title }}
+
+                            </span>
+
+
+                            
+
+                            <span class="menu-arrow">
+
+                                <i class="fa-solid fa-chevron-right"></i>
+
+                            </span>
+
+
+                        </a>
+
+                    </li>
+
+
+                {% empty %}
+
+                    <li>
+
+                        No menus configured
+
+                    </li>
+
+                {% endfor %}
+
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+
+
+    
+
+    <main class="dashboard-main">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+
+    
+
+    <footer class="dashboard-footer">
+
+        <p>
+
+            &copy; 2020
+            {{ site_settings.site_name }}
+            —
+            All rights reserved.
+
+        </p>
+
+    </footer>
+
+
+
+    
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
+
+
+    
+
+    <script
+        src="{% static 'accounts/js/dashboard.js' %}"
+    ></script>
+
+
+
+    
+
+    <script
+        src="{% static 'core/js/google-translate.js' %}"
+    ></script>
+
+
+    <script
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    ></script>
+
+
+
+    
+
+    <script
+        src="{% static 'accounts/js/darkmode.js' %}"
+    ></script>
+
+
+
+    
+
+    {% block extra_js %}
+    {% endblock %}
+
+
+</body>
+
+</html>

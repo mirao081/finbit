@@ -1,0 +1,949 @@
+
+
+
+
+
+
+.investments-page {
+
+    position: relative;
+    width: 100%;
+    margin: 0;
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+    overflow-x: hidden;
+
+}
+
+
+
+
+.investments-page > h2 {
+
+    position: relative;
+
+    margin: 0 0 10px;
+
+    text-align: center;
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+    font-size: 2rem;
+
+    font-weight: 800;
+
+    line-height: 1.3;
+
+    letter-spacing: .3px;
+
+    background: linear-gradient(
+        90deg,
+        #b8ecff 0%,
+        #66cfff 20%,
+        #438cff 40%,
+        #8b6cff 62%,
+        #d9f5ff 82%,
+        #f2c66d 100%
+    );
+
+    background-size: 220% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    text-shadow:
+        0 0 20px rgba(77,232,255,.12),
+        0 0 25px rgba(139,108,255,.08);
+
+    animation: investmentsHeadingShimmer 8s ease-in-out infinite;
+
+}
+
+
+@keyframes investmentsHeadingShimmer {
+
+    0% {
+        background-position: 0% center;
+    }
+
+    50% {
+        background-position: 100% center;
+    }
+
+    100% {
+        background-position: 0% center;
+    }
+
+}
+
+
+
+
+.investments-subtitle {
+
+    position: relative;
+
+    margin: 0 0 28px;
+
+    text-align: center;
+
+    color: rgba(184,236,255,.58);
+
+    font-family: "Inter", "Montserrat", sans-serif;
+
+    font-size: .82rem;
+
+    font-weight: 600;
+
+    letter-spacing: .2px;
+
+}
+
+
+
+
+.investments-table-wrapper {
+
+    width: 100%;
+
+    overflow-x: auto;
+
+    border-radius: 22px;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(77,232,255,.35)
+        transparent;
+
+}
+
+
+
+
+.investments-page table {
+
+    position: relative;
+
+    width: 100%;
+
+    min-width: 1000px;
+
+    border-collapse: separate;
+
+    border-spacing: 0;
+
+    overflow: hidden;
+
+    border-radius: 22px;
+
+    border: 1px solid rgba(77,232,255,.13);
+
+    background:
+
+        radial-gradient(
+            circle at 8% 0%,
+            rgba(77,232,255,.07),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 92% 100%,
+            rgba(139,108,255,.07),
+            transparent 35%
+        ),
+
+        linear-gradient(
+            145deg,
+            rgba(20,45,78,.78),
+            rgba(10,30,57,.89) 40%,
+            rgba(5,16,33,.95) 75%,
+            rgba(2,8,19,.98)
+        );
+
+    box-shadow:
+
+        0 18px 45px rgba(0,0,0,.28),
+
+        0 0 30px rgba(67,140,255,.035),
+
+        inset 0 1px 0 rgba(255,255,255,.035);
+
+    backdrop-filter: blur(18px);
+
+    -webkit-backdrop-filter: blur(18px);
+
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease;
+
+}
+
+
+
+
+.investments-page table:hover {
+
+    border-color: rgba(77,232,255,.21);
+
+    box-shadow:
+
+        0 22px 50px rgba(0,0,0,.34),
+
+        0 0 30px rgba(77,232,255,.055),
+
+        0 0 22px rgba(139,108,255,.04),
+
+        inset 0 1px 0 rgba(255,255,255,.045);
+
+}
+
+
+
+
+.investments-page thead tr {
+
+    background: linear-gradient(
+        90deg,
+        rgba(77,232,255,.055),
+        rgba(67,140,255,.045),
+        rgba(139,108,255,.055)
+    );
+
+}
+
+
+.investments-page thead th {
+
+    padding: 16px 15px;
+
+    text-align: center;
+
+    white-space: nowrap;
+
+    color: rgba(184,236,255,.82);
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+    font-size: .76rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .8px;
+
+    border-bottom: 1px solid rgba(77,232,255,.10);
+
+}
+
+
+
+
+.investments-page tbody tr {
+
+    transition:
+        background .25s ease,
+        transform .25s ease;
+
+}
+
+
+.investments-page tbody tr:hover {
+
+    background: linear-gradient(
+        90deg,
+        rgba(77,232,255,.045),
+        rgba(67,140,255,.035),
+        rgba(139,108,255,.045)
+    );
+
+}
+
+
+
+
+.investments-page tbody td {
+
+    padding: 16px 15px;
+
+    text-align: center;
+
+    vertical-align: middle;
+
+    white-space: nowrap;
+
+    color: #d9e7f5;
+
+    font-family: "Inter", "Montserrat", sans-serif;
+
+    font-size: .87rem;
+
+    font-weight: 600;
+
+    border-bottom: 1px solid rgba(255,255,255,.045);
+
+    background: rgba(255,255,255,.012);
+
+    transition:
+        color .25s ease,
+        background .25s ease;
+
+}
+
+
+.investments-page tbody tr:hover td {
+
+    color: #eef9ff;
+
+    background: linear-gradient(
+        90deg,
+        rgba(77,232,255,.035),
+        rgba(139,108,255,.035)
+    );
+
+}
+
+
+
+
+.investments-page tbody td:first-child {
+
+    color: rgba(184,236,255,.65);
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+    font-size: .78rem;
+
+    font-weight: 800;
+
+}
+
+
+
+
+.investments-page tbody td:nth-child(2) {
+
+    color: #d9f5ff;
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+    font-weight: 700;
+
+}
+
+
+
+
+.investment-plan {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 6px 11px;
+
+    border-radius: 9px;
+
+    color: #b8ecff;
+
+    background: rgba(77,232,255,.065);
+
+    border: 1px solid rgba(77,232,255,.12);
+
+    font-size: .70rem;
+
+    font-weight: 800;
+
+    text-transform: uppercase;
+
+    letter-spacing: .3px;
+
+}
+
+
+
+
+.investment-amount {
+
+    color: #f2c66d;
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+    font-size: .90rem;
+
+    font-weight: 800;
+
+    text-shadow:
+        0 0 12px rgba(242,198,109,.06);
+
+}
+
+
+
+
+.investment-status {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-width: 82px;
+
+    padding: 6px 11px;
+
+    border-radius: 9px;
+
+    color: #d9f5ff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(77,232,255,.055),
+            rgba(139,108,255,.055)
+        );
+
+    border: 1px solid rgba(77,232,255,.11);
+
+    font-size: .70rem;
+
+    font-weight: 800;
+
+    text-transform: capitalize;
+
+    letter-spacing: .2px;
+
+}
+
+
+
+
+.investment-status.status-active {
+
+    color: #83f5b1;
+
+    background: rgba(34,197,94,.065);
+
+    border-color: rgba(34,197,94,.16);
+
+}
+
+
+
+
+.investment-status.status-pending {
+
+    color: #f2c66d;
+
+    background: rgba(242,198,109,.065);
+
+    border-color: rgba(242,198,109,.16);
+
+}
+
+
+
+
+.investment-status.status-completed {
+
+    color: #8edcff;
+
+    background: rgba(77,232,255,.065);
+
+    border-color: rgba(77,232,255,.16);
+
+}
+
+
+
+
+.investment-status.status-rejected {
+
+    color: #ff8f9d;
+
+    background: rgba(239,68,68,.065);
+
+    border-color: rgba(239,68,68,.16);
+
+}
+
+
+
+
+.investment-date {
+
+    display: inline-flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 3px;
+
+}
+
+
+.investment-date span {
+
+    color: #c8dff0;
+
+    font-size: .78rem;
+
+    font-weight: 650;
+
+}
+
+
+.investment-date small {
+
+    color: rgba(184,236,255,.45);
+
+    font-size: .68rem;
+
+    font-weight: 600;
+
+}
+
+
+
+
+.investments-page tbody tr:last-child td {
+
+    border-bottom: none;
+
+}
+
+
+
+
+.investments-page .empty-investments {
+
+    padding: 42px 20px;
+
+    color: rgba(184,236,255,.50);
+
+    font-family: "Inter", "Montserrat", sans-serif;
+
+    font-size: .85rem;
+
+    font-weight: 600;
+
+    font-style: italic;
+
+}
+
+
+.empty-investments i {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #66cfff;
+
+    font-size: 2rem;
+
+    font-style: normal;
+
+    text-shadow:
+        0 0 20px rgba(77,232,255,.12);
+
+}
+
+
+
+
+.investments-page .pagination {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 12px;
+
+    margin-top: 24px;
+
+    padding: 4px;
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+}
+
+
+.investments-page .pagination span {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 9px 17px;
+
+    border-radius: 12px;
+
+    color: #b8ecff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(77,232,255,.055),
+            rgba(139,108,255,.055)
+        );
+
+    border: 1px solid rgba(77,232,255,.12);
+
+    font-size: .76rem;
+
+    font-weight: 700;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.025);
+
+}
+
+
+.investments-page .pagination a {
+
+    display: inline-flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    min-height: 40px;
+
+    padding: 9px 17px;
+
+    border-radius: 12px;
+
+    color: #07111f;
+
+    background: linear-gradient(
+        135deg,
+        #f1d9a5 0%,
+        #f2c66d 35%,
+        #c7a570 70%,
+        #a9854d 100%
+    );
+
+    border: 1px solid rgba(241,217,165,.35);
+
+    text-decoration: none;
+
+    font-family: "Montserrat", "Inter", sans-serif;
+
+    font-size: .75rem;
+
+    font-weight: 800;
+
+    box-shadow:
+
+        0 6px 18px rgba(199,165,112,.20),
+
+        inset 0 1px 0 rgba(255,255,255,.30);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+
+}
+
+
+.investments-page .pagination a:hover {
+
+    transform: translateY(-2px);
+
+    filter: brightness(1.07);
+
+    box-shadow:
+
+        0 10px 25px rgba(199,165,112,.32),
+
+        0 0 18px rgba(199,165,112,.15),
+
+        inset 0 1px 0 rgba(255,255,255,.38);
+
+}
+
+
+
+
+.investments-table-wrapper::-webkit-scrollbar {
+
+    height: 6px;
+
+}
+
+
+.investments-table-wrapper::-webkit-scrollbar-track {
+
+    background: transparent;
+
+}
+
+
+.investments-table-wrapper::-webkit-scrollbar-thumb {
+
+    background: linear-gradient(
+        90deg,
+        rgba(77,232,255,.30),
+        rgba(139,108,255,.30),
+        rgba(242,198,109,.30)
+    );
+
+    border-radius: 20px;
+
+}
+
+
+.investments-table-wrapper::-webkit-scrollbar-thumb:hover {
+
+    background: linear-gradient(
+        90deg,
+        rgba(77,232,255,.55),
+        rgba(139,108,255,.50),
+        rgba(242,198,109,.50)
+    );
+
+}
+
+
+
+
+@media(max-width:768px) {
+
+    .investments-page > h2 {
+
+        font-size: 1.45rem;
+
+        margin-bottom: 8px;
+
+    }
+
+
+    .investments-subtitle {
+
+        margin-bottom: 22px;
+
+        font-size: .75rem;
+
+    }
+
+
+    .investments-page table {
+
+        min-width: 900px;
+
+        border-radius: 18px;
+
+    }
+
+
+    .investments-page thead th {
+
+        padding: 14px 12px;
+
+        font-size: .68rem;
+
+    }
+
+
+    .investments-page tbody td {
+
+        padding: 14px 12px;
+
+        font-size: .80rem;
+
+    }
+
+
+    .investment-plan,
+    .investment-status {
+
+        padding: 6px 10px;
+
+        font-size: .66rem;
+
+    }
+
+
+    .investments-page .pagination {
+
+        gap: 8px;
+
+        margin-top: 20px;
+
+    }
+
+
+    .investments-page .pagination a,
+    .investments-page .pagination span {
+
+        min-height: 37px;
+
+        padding: 8px 13px;
+
+        font-size: .70rem;
+
+    }
+
+}
+
+
+
+
+@media(max-width:480px) {
+
+    .investments-page > h2 {
+
+        font-size: 1.15rem;
+
+        margin-bottom: 7px;
+
+    }
+
+
+    .investments-subtitle {
+
+        margin-bottom: 18px;
+
+        font-size: .68rem;
+
+    }
+
+
+    .investments-page table {
+
+        min-width: 820px;
+
+        border-radius: 16px;
+
+    }
+
+
+    .investments-page thead th {
+
+        padding: 12px 9px;
+
+        font-size: .61rem;
+
+        letter-spacing: .55px;
+
+    }
+
+
+    .investments-page tbody td {
+
+        padding: 12px 9px;
+
+        font-size: .73rem;
+
+    }
+
+
+    .investment-plan,
+    .investment-status {
+
+        padding: 5px 9px;
+
+        font-size: .62rem;
+
+    }
+
+
+    .investment-amount {
+
+        font-size: .75rem;
+
+    }
+
+
+    .investment-date span {
+
+        font-size: .68rem;
+
+    }
+
+
+    .investment-date small {
+
+        font-size: .61rem;
+
+    }
+
+
+    .investments-page .empty-investments {
+
+        padding: 32px 15px;
+
+        font-size: .75rem;
+
+    }
+
+
+    .investments-page .pagination {
+
+        gap: 6px;
+
+        flex-wrap: wrap;
+
+        margin-top: 18px;
+
+    }
+
+
+    .investments-page .pagination a,
+    .investments-page .pagination span {
+
+        min-height: 35px;
+
+        padding: 7px 11px;
+
+        border-radius: 10px;
+
+        font-size: .66rem;
+
+    }
+
+}
+
+
+
+
+@media(prefers-reduced-motion: reduce) {
+
+    .investments-page > h2 {
+
+        animation: none !important;
+
+    }
+
+
+    .investments-page table,
+    .investments-page tbody tr,
+    .investments-page tbody td,
+    .investments-page .pagination a {
+
+        transition: none !important;
+
+    }
+
+}
+

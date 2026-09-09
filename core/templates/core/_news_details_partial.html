@@ -1,0 +1,36 @@
+<section class="news-detail">
+  <div class="news-container">
+
+    <h2 class="news-title">
+      {{ item.subheading }}
+    </h2>
+
+    <div class="news-meta">
+      <i class="fa fa-user"></i>
+      {{ item.author }}
+
+      <i class="fa fa-calendar"></i>
+      {{ item.date }}
+    </div>
+
+    {% if item.image %}
+      <img
+        src="{{ item.image.url }}"
+        alt="{{ item.subheading }}"
+        class="news-detail-img">
+    {% endif %}
+
+    <h3 class="news-card-title">
+      {{ item.content_title }}
+    </h3>
+
+    <p class="news-body">
+      {% if item.body %}
+        {{ item.body }}
+      {% else %}
+        {{ item.content_preview }}
+      {% endif %}
+    </p>
+
+  </div>
+</section>

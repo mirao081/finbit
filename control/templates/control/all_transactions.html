@@ -1,0 +1,275 @@
+{% extends "control/admin_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/all_transactions.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="transactions-page">
+
+
+
+
+<div class="transactions-header">
+
+    <h1>All Transactions</h1>
+
+    <p>
+        Complete list of transactions across the platform.
+    </p>
+
+</div>
+
+
+
+
+<div class="transactions-table-wrapper">
+
+    <table class="transactions-table">
+
+        <thead>
+
+            <tr>
+                <th>Investor</th>
+                <th>Transaction Type</th>
+                <th>Asset</th>
+                <th>Asset Amount</th>
+                <th>Amount ($)</th>
+                <th>Direction</th>
+                <th>Date</th>
+                <th>Reference</th>
+            </tr>
+
+        </thead>
+
+
+        <tbody>
+
+            {% for tx in transactions_page %}
+
+            <tr>
+
+                
+
+                <td class="transaction-investor">
+                    {{ tx.investor }}
+                </td>
+
+
+                
+
+                <td>
+
+                    <span class="transaction-type">
+
+                        {% if tx.transaction_type %}
+                            {{ tx.get_transaction_type_display }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </span>
+
+                </td>
+
+
+                
+
+                <td>
+
+                    <span class="transaction-asset">
+
+                        {% if tx.wallet %}
+                            {{ tx.wallet.currency }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </span>
+
+                </td>
+
+
+                
+
+                <td>
+
+                    {% if tx.asset_amount %}
+
+                        <span class="transaction-asset-amount">
+                            {{ tx.asset_amount|floatformat:12 }}
+
+                            {% if tx.wallet %}
+                                <small>
+                                    {{ tx.wallet.currency }}
+                                </small>
+                            {% endif %}
+                        </span>
+
+                    {% else %}
+
+                        <span class="transaction-muted">
+                            —
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                
+
+                <td>
+
+                    {% if tx.usd_value is not None %}
+
+                        <span class="transaction-amount">
+                            ${{ tx.usd_value|floatformat:2 }}
+                        </span>
+
+                    {% else %}
+
+                        <span class="transaction-muted">
+                            —
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                
+
+                <td>
+
+                    {% if tx.direction == "credit" %}
+
+                        <span class="transaction-direction transaction-credit">
+                            Credit
+                        </span>
+
+                    {% elif tx.direction == "debit" %}
+
+                        <span class="transaction-direction transaction-debit">
+                            Debit
+                        </span>
+
+                    {% else %}
+
+                        <span class="transaction-muted">
+                            —
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+
+                
+
+                <td class="transaction-date">
+
+                    {{ tx.date|date:"M d, Y H:i" }}
+
+                </td>
+
+
+                
+
+                <td class="transaction-reference">
+
+                    {% if tx.reference %}
+                        {{ tx.reference }}
+                    {% else %}
+                        —
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+
+            {% empty %}
+
+            <tr>
+
+                <td colspan="8" class="empty-transactions">
+
+                    <i class="fa-solid fa-receipt"></i>
+
+                    <span>
+                        No transactions found.
+                    </span>
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+
+
+
+{% if transactions_page.paginator.num_pages > 1 %}
+
+<div class="transactions-pagination">
+
+    {% if transactions_page.has_previous %}
+
+    <a
+        href="?page={{ transactions_page.previous_page_number }}"
+        class="pagination-btn"
+    >
+
+        <i class="fa-solid fa-chevron-left"></i>
+
+        Previous
+
+    </a>
+
+    {% endif %}
+
+
+    <span class="pagination-info">
+
+        Page
+        {{ transactions_page.number }}
+        of
+        {{ transactions_page.paginator.num_pages }}
+
+    </span>
+
+
+    {% if transactions_page.has_next %}
+
+    <a
+        href="?page={{ transactions_page.next_page_number }}"
+        class="pagination-btn"
+    >
+
+        Next
+
+        <i class="fa-solid fa-chevron-right"></i>
+
+    </a>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+
+</div>
+
+{% endblock %}

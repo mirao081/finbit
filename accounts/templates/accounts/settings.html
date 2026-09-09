@@ -1,0 +1,438 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'accounts/css/settings.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<section class="settings-page">
+
+
+    <div class="settings-card">
+
+        
+
+        <div class="settings-header">
+
+            <div class="settings-header-icon">
+                ⚙
+            </div>
+
+            <div class="settings-header-content">
+
+                <h2>Settings</h2>
+
+                <p>
+                    Manage your account, investment preferences,
+                    notifications, and security.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        
+
+        {% if messages %}
+
+            <div class="settings-messages">
+
+                {% for message in messages %}
+
+                    <div class="settings-message {{ message.tags }}">
+
+                        <span class="message-icon">✓</span>
+
+                        <span>
+                            {{ message }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        
+
+        <form method="post" class="settings-form">
+
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+
+            
+
+            <div class="settings-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">
+                        👤
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Account Information
+                        </h3>
+
+                        <p>
+                            Manage the basic information associated
+                            with your account.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="settings-fields">
+
+                    
+
+                    <div class="settings-field">
+
+                        {{ form.username.errors }}
+
+                        <label for="{{ form.username.id_for_label }}">
+                            Username
+                        </label>
+
+                        {{ form.username }}
+
+                    </div>
+
+
+                    
+
+                    <div class="settings-field">
+
+                        {{ form.email.errors }}
+
+                        <label for="{{ form.email.id_for_label }}">
+                            Email Address
+                        </label>
+
+                        {{ form.email }}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            
+
+            <div class="settings-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">
+                        💼
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Investment Preferences
+                        </h3>
+
+                        <p>
+                            Customize how the platform presents
+                            your investment experience.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="settings-fields">
+
+                    
+
+                    <div class="settings-field">
+
+                        <label for="{{ form.preferred_currency.id_for_label }}">
+                            Preferred Currency
+                        </label>
+
+                        {{ form.preferred_currency }}
+
+                        {% if form.preferred_currency.errors %}
+                            {{ form.preferred_currency.errors }}
+                        {% endif %}
+
+                    </div>
+
+
+                    
+
+                    <div class="settings-field">
+
+                        <label for="{{ form.risk_level.id_for_label }}">
+                            Investment Risk Level
+                        </label>
+
+                        {{ form.risk_level }}
+
+                        {% if form.risk_level.errors %}
+                            {{ form.risk_level.errors }}
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            
+
+            <div class="settings-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">
+                        🔔
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Notifications
+                        </h3>
+
+                        <p>
+                            Choose how you want to receive
+                            investment updates.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <label
+                    class="settings-toggle"
+                    for="{{ form.notification_emails.id_for_label }}"
+                >
+
+                    <div class="toggle-content">
+
+                        <strong>
+                            Email Investment Updates
+                        </strong>
+
+                        <span>
+                            Receive important investment updates,
+                            portfolio information, and platform
+                            notifications by email.
+                        </span>
+
+                    </div>
+
+
+                    <div class="toggle-control">
+
+                        {{ form.notification_emails }}
+
+                    </div>
+
+                </label>
+
+
+                {% if form.notification_emails.errors %}
+                    {{ form.notification_emails.errors }}
+                {% endif %}
+
+            </div>
+
+
+            
+
+            <div class="settings-section">
+
+                <div class="section-heading">
+
+                    <div class="section-icon">
+                        🔐
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Security
+                        </h3>
+
+                        <p>
+                            Manage your password and account
+                            security from one central location.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                
+
+                <div class="security-action">
+
+                    <div class="security-action-icon">
+                        🔑
+                    </div>
+
+
+                    <div class="security-action-content">
+
+                        <strong>
+                            Change Password
+                        </strong>
+
+                        <span>
+                            Update your password to keep your
+                            account secure.
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'password_change' %}"
+                        class="settings-link"
+                    >
+                        Change
+                    </a>
+
+                </div>
+
+
+                
+
+                <div class="security-action">
+
+                    <div class="security-action-icon">
+                        🛡️
+                    </div>
+
+
+                    <div class="security-action-content">
+
+                        <strong>
+                            Security Center
+                        </strong>
+
+                        <span>
+                            Manage Two-Factor Authentication,
+                            login activity, recovery options,
+                            active sessions, and other security
+                            controls.
+                        </span>
+
+                    </div>
+
+
+                    <a
+                        href="{% url 'security_center' %}"
+                        class="settings-link"
+                    >
+                        Manage
+                    </a>
+
+                </div>
+
+            </div>
+
+
+            
+
+            <div class="settings-actions">
+
+                <button
+                    type="submit"
+                    class="settings-btn"
+                >
+
+                    <span>💾</span>
+
+                    Save Changes
+
+                </button>
+
+            </div>
+
+        </form>
+
+
+        
+
+        <div class="danger-section">
+
+            <div class="danger-heading">
+
+                <div class="danger-icon">
+                    ⚠
+                </div>
+
+                <div>
+
+                    <h3>
+                        Danger Zone
+                    </h3>
+
+                    <p>
+                        Permanent account actions that cannot
+                        be easily undone.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="danger-content">
+
+                <div class="danger-info">
+
+                    <strong>
+                        Delete Account
+                    </strong>
+
+                    <p>
+                        Permanently delete your account and
+                        associated account information.
+                    </p>
+
+                </div>
+
+
+                <a
+                    href="{% url 'delete_account' %}"
+                    class="delete-account-btn"
+                >
+                    Delete Account
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+{% endblock %}

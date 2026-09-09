@@ -1,0 +1,784 @@
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+
+.transactions-page {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 180px);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 35px 18px 50px;
+    overflow: hidden;
+}
+
+
+
+
+.transactions-page::before {
+    content: "";
+    position: fixed;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 460px;
+    height: 460px;
+    background: radial-gradient(
+        circle,
+        rgba(103, 147, 227, .12),
+        transparent 70%
+    );
+    filter: blur(35px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+
+
+
+.transactions-card {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1100px;
+    padding: 35px;
+    border-radius: 24px;
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(103, 147, 227, .12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 100% 100%,
+            rgba(200, 164, 82, .08),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(25, 34, 49, .98),
+            rgba(8, 13, 21, .99)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, .55),
+        0 0 35px rgba(103, 147, 227, .08),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+
+
+
+.transactions-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -20%;
+    width: 140%;
+    height: 3px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #6793e3,
+        #9ec1ff,
+        #d4af5a,
+        #9ec1ff,
+        #6793e3,
+        transparent
+    );
+
+    background-size: 250% 100%;
+    animation: transactionGlow 5s linear infinite;
+}
+
+
+
+
+.transactions-card::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    top: -80px;
+    right: -70px;
+
+    background: rgba(103, 147, 227, .08);
+    border-radius: 50%;
+    filter: blur(45px);
+
+    pointer-events: none;
+}
+
+
+
+
+.transactions-card h2 {
+    margin: 0 0 12px;
+    text-align: center;
+
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: .6px;
+
+    background: linear-gradient(
+        90deg,
+        #fff,
+        #9ec1ff,
+        #6793e3,
+        #fff,
+        #d4af5a,
+        #fff
+    );
+
+    background-size: 300% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: titleGlow 6s linear infinite;
+}
+
+
+.transactions-card > p {
+    text-align: center;
+    color: #8f9bad;
+    margin: 0 0 30px;
+
+    font-size: .92rem;
+    line-height: 1.6;
+}
+
+
+
+
+.transactions-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+
+
+
+.transactions-table thead th {
+    padding: 0 14px 10px;
+
+    text-align: left;
+
+    color: #6793e3;
+
+    font-size: .75rem;
+    font-weight: 700;
+
+    text-transform: uppercase;
+    letter-spacing: .6px;
+}
+
+
+
+
+.transactions-table tbody tr {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .05),
+            rgba(255, 255, 255, .02)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .15);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .03);
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+
+
+.transactions-table tbody td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.transactions-table tbody td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+
+
+
+.transactions-table tbody td {
+    padding: 16px 14px;
+
+    color: #d8e0eb;
+
+    font-size: .88rem;
+    vertical-align: middle;
+}
+
+
+
+
+.transactions-table tbody td:nth-child(4) {
+    color: #d4af5a;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+
+
+
+.transactions-table tbody td:nth-child(2) {
+    color: #cbd3df;
+    font-weight: 600;
+}
+
+
+
+
+.transactions-table tbody tr:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(103, 147, 227, .35);
+
+    box-shadow:
+        0 12px 24px rgba(0, 0, 0, .25),
+        0 0 18px rgba(103, 147, 227, .08);
+}
+
+
+
+
+.status-pending,
+.status-approved,
+.status-declined,
+.status-completed {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 88px;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: .72rem;
+    font-weight: 700;
+
+    text-transform: capitalize;
+
+    letter-spacing: .2px;
+
+    border: 1px solid;
+}
+
+
+
+
+.status-pending {
+    color: #f0c674;
+
+    background: rgba(212, 175, 90, .10);
+
+    border-color: rgba(212, 175, 90, .30);
+
+    box-shadow:
+        0 0 12px rgba(212, 175, 90, .08);
+}
+
+
+
+
+.status-approved {
+    color: #7ee2a8;
+
+    background: rgba(34, 197, 94, .10);
+
+    border-color: rgba(34, 197, 94, .28);
+
+    box-shadow:
+        0 0 12px rgba(34, 197, 94, .08);
+}
+
+
+
+
+.status-declined {
+    color: #ff9a9a;
+
+    background: rgba(220, 38, 38, .10);
+
+    border-color: rgba(220, 38, 38, .28);
+
+    box-shadow:
+        0 0 12px rgba(220, 38, 38, .08);
+}
+
+
+
+
+.status-completed {
+    color: #9ec1ff;
+
+    background: rgba(103, 147, 227, .10);
+
+    border-color: rgba(103, 147, 227, .30);
+
+    box-shadow:
+        0 0 12px rgba(103, 147, 227, .08);
+}
+
+
+
+
+.transactions-card > p:last-child {
+    padding: 25px 10px;
+
+    color: #8f9bad;
+
+    text-align: center;
+
+    font-size: .9rem;
+}
+
+
+
+
+@keyframes transactionGlow {
+
+    from {
+        background-position: 250% 50%;
+    }
+
+    to {
+        background-position: -250% 50%;
+    }
+}
+
+
+@keyframes titleGlow {
+
+    from {
+        background-position: 300% center;
+    }
+
+    to {
+        background-position: -300% center;
+    }
+}
+
+
+
+
+@media (max-width: 900px) {
+
+    .transactions-page {
+        padding: 28px 15px 40px;
+    }
+
+    .transactions-card {
+        padding: 28px 24px;
+        border-radius: 20px;
+    }
+
+    .transactions-table thead th {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .transactions-table tbody td {
+        padding: 14px 10px;
+        font-size: .82rem;
+    }
+
+}
+
+
+
+
+@media (max-width: 600px) {
+
+    .transactions-page {
+        padding: 22px 12px 35px;
+    }
+
+    .transactions-card {
+        padding: 24px 18px;
+        border-radius: 18px;
+    }
+
+    .transactions-card h2 {
+        font-size: 1.45rem;
+    }
+
+    .transactions-card > p {
+        font-size: .82rem;
+        margin-bottom: 22px;
+    }
+
+
+    
+
+    .transactions-table {
+        border-spacing: 0 10px;
+    }
+
+    .transactions-table thead {
+        display: none;
+    }
+
+    .transactions-table,
+    .transactions-table tbody,
+    .transactions-table tr,
+    .transactions-table td {
+        display: block;
+        width: 100%;
+    }
+
+
+    .transactions-table tbody tr {
+
+        padding: 7px 0;
+
+        border-radius: 14px;
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(255, 255, 255, .055),
+                rgba(255, 255, 255, .02)
+            );
+    }
+
+
+    .transactions-table tbody td {
+
+        display: flex;
+
+        justify-content: space-between;
+        align-items: center;
+
+        gap: 15px;
+
+        padding: 11px 15px;
+
+        border-radius: 0 !important;
+
+        font-size: .82rem;
+
+        text-align: right;
+    }
+
+
+    
+
+    .transactions-table tbody td::before {
+
+        color: #6793e3;
+
+        font-size: .7rem;
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: .5px;
+
+        flex-shrink: 0;
+    }
+
+
+    .transactions-table tbody td:nth-child(1)::before {
+        content: "Date";
+    }
+
+    .transactions-table tbody td:nth-child(2)::before {
+        content: "Type";
+    }
+
+    .transactions-table tbody td:nth-child(3)::before {
+        content: "Asset / Plan";
+    }
+
+    .transactions-table tbody td:nth-child(4)::before {
+        content: "Amount";
+    }
+
+    .transactions-table tbody td:nth-child(5)::before {
+        content: "Status";
+    }
+
+
+    .transactions-table tbody td:first-child {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+    }
+
+    .transactions-table tbody td:last-child {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+
+
+    .transactions-table tbody td:nth-child(4) {
+        white-space: normal;
+    }
+
+
+    .status-pending,
+    .status-approved,
+    .status-declined,
+    .status-completed {
+        min-width: 80px;
+        padding: 5px 10px;
+        font-size: .68rem;
+    }
+
+}
+
+
+
+
+@media (max-width: 380px) {
+
+    .transactions-card {
+        padding: 22px 15px;
+    }
+
+    .transactions-card h2 {
+        font-size: 1.35rem;
+    }
+
+    .transactions-table tbody td {
+        padding: 10px 12px;
+        font-size: .78rem;
+    }
+
+    .transactions-table tbody td::before {
+        font-size: .65rem;
+    }
+
+}
+
+
+
+
+@media (hover: none) and (pointer: coarse) {
+
+    .transactions-table tbody tr:hover {
+        transform: none;
+
+        border-color: rgba(103, 147, 227, .15);
+
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, .03);
+    }
+
+}
+
+
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .transactions-card::before,
+    .transactions-card h2 {
+        animation: none;
+    }
+
+    .transactions-table tbody tr {
+        transition: none;
+    }
+
+    .transactions-table tbody tr:hover {
+        transform: none;
+    }
+
+}
+
+
+
+
+.pagination {
+    width: 100%;
+    margin-top: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    flex-wrap: wrap;
+}
+
+
+
+
+.pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 90px;
+    min-height: 40px;
+
+    padding: 8px 16px;
+
+    border-radius: 10px;
+
+    color: #d4af5a;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .12),
+            rgba(212, 175, 90, .07)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    text-decoration: none;
+
+    font-size: .78rem;
+    font-weight: 700;
+
+    letter-spacing: .2px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .04),
+        0 5px 15px rgba(0, 0, 0, .20);
+
+    transition:
+        transform .3s ease,
+        color .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+
+
+
+.pagination a:hover {
+    transform: translateY(-2px);
+
+    color: #ffffff;
+
+    border-color: rgba(103, 147, 227, .55);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .20),
+            rgba(212, 175, 90, .12)
+        );
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .30),
+        0 0 18px rgba(103, 147, 227, .10);
+}
+
+
+
+
+.pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 8px 15px;
+
+    border-radius: 10px;
+
+    color: #9ec1ff;
+
+    background: rgba(103, 147, 227, .07);
+
+    border: 1px solid rgba(103, 147, 227, .16);
+
+    font-size: .76rem;
+    font-weight: 600;
+
+    letter-spacing: .2px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+
+
+
+
+@media (max-width: 480px) {
+
+    .pagination {
+        margin-top: 20px;
+        gap: 8px;
+    }
+
+    .pagination a {
+        min-width: 78px;
+        min-height: 38px;
+
+        padding: 7px 12px;
+
+        font-size: .72rem;
+    }
+
+    .pagination span {
+        min-height: 38px;
+
+        padding: 7px 11px;
+
+        font-size: .7rem;
+    }
+
+}
+
+
+
+
+@media (hover: none) and (pointer: coarse) {
+
+    .pagination a:hover {
+        transform: none;
+        color: #d4af5a;
+
+        border-color: rgba(103, 147, 227, .25);
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(103, 147, 227, .12),
+                rgba(212, 175, 90, .07)
+            );
+
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, .04),
+            0 5px 15px rgba(0, 0, 0, .20);
+    }
+
+}
+

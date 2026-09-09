@@ -1,0 +1,122 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/support.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+{% endblock %}
+
+{% block content %}
+
+<section class="support-page">
+    <div class="support-card">
+
+        
+        <div class="support-heading">
+            <h2>{{ support_page.heading }}</h2>
+            <p>{{ support_page.intro_text }}</p>
+        </div>
+
+        
+        <div class="support-section">
+            <div class="section-icon">
+                <i class="fas fa-book-open"></i>
+            </div>
+
+            <div class="section-content">
+                <h3>No Articles Yet</h3>
+                <p>{{ support_page.articles_text }}</p>
+            </div>
+        </div>
+
+        
+        <div class="support-section">
+            <div class="section-icon">
+                <i class="fas fa-life-ring"></i>
+            </div>
+
+            <div class="section-content">
+                <h3>Need Help With Your Account?</h3>
+                <p>{{ support_page.account_help_text }}</p>
+            </div>
+        </div>
+
+        
+        <div class="support-section">
+            <div class="section-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+
+            <div class="section-content">
+                <h3>Contact Support</h3>
+
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+
+                    <div class="contact-info">
+                        <h4>Email Support</h4>
+                        <p>Reach our support team at any time through email.</p>
+
+                        <a href="mailto:{{ support_page.email_support }}">
+                            {{ support_page.email_support }}
+                        </a>
+                    </div>
+                </div>
+
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+
+                    <div class="contact-info">
+                        <h4>Phone Support</h4>
+                        <p>Speak directly with our representatives.</p>
+
+                        {% if support_page.phone_support %}
+                            <a href="tel:{{ support_page.phone_support }}">
+                                {{ support_page.phone_support }}
+                            </a>
+                        {% else %}
+                            <p class="contact-muted">Phone support not available.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                
+                <div class="contact-method">
+                    <div class="contact-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+
+                    <div class="contact-info">
+                        <h4>Live Chat</h4>
+
+                        {% if support_page.live_chat_available %}
+                            <p>Get instant assistance from within your dashboard.</p>
+
+                            <span class="status-badge available">
+                                <i class="fas fa-circle"></i>
+                                Available 24/7
+                            </span>
+                        {% else %}
+                            <p>Live chat is currently unavailable.</p>
+
+                            <span class="status-badge offline">
+                                <i class="fas fa-circle"></i>
+                                Offline
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+{% endblock %}

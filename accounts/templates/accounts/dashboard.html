@@ -1,0 +1,289 @@
+{% extends "accounts/dashboard_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="{% static 'accounts/css/dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<h2 class="page-title">Dashboard Overview</h2>
+
+<section class="stats">
+
+    <div class="card balance-card">
+        <h4>Total Portfolio Value</h4>
+        <p>${{ total_balance|floatformat:2 }}</p>
+        <small>Principal + Profits + Bonuses + Investments</small>
+    </div>
+
+    <div class="card balance-card">
+        <h4>Investment Balance</h4>
+        <p>${{ active_investments|floatformat:2 }}</p>
+        <small>Currently invested funds</small>
+    </div>
+
+    <div class="card balance-card">
+        <h4>Active Investment Funds</h4>
+        <p>${{ active_investments|floatformat:2 }}</p>
+        <small>Currently running investments</small>
+    </div>
+
+    <div class="card balance-card">
+        <h4>Accumulated Profits</h4>
+        <p>${{ profit_total|floatformat:2 }}</p>
+        <small>Approved investment profits</small>
+    </div>
+
+    <div class="card balance-card">
+        <h4>Bonus Earned</h4>
+        <p>${{ bonus_total|floatformat:2 }}</p>
+        <small>Approved bonuses</small>
+    </div>
+
+    <div class="card balance-card">
+        <h4>Total Earned</h4>
+        <p>${{ profit_total|add:bonus_total|floatformat:2 }}</p>
+        <small>Profits + Bonuses</small>
+    </div>
+
+    <div class="card balance-card referral-program-card">
+        <h4>Referral Program</h4>
+
+        <p>{{ referral_count }}</p>
+        <small>Registered Referrals</small>
+
+        <p>
+            ${{ referral_bonus|floatformat:2 }}
+        </p>
+        <small>Referral Bonus Earned</small>
+    </div>
+</section>
+
+<section class="card referral-card">
+
+    <h4>Your Referral Link</h4>
+
+    <p>
+        Share your referral link with others to invite them to register.
+    </p>
+
+    <div class="referral-link-container">
+
+        <input
+            type="text"
+            id="referral-link"
+            class="referral-link-input"
+            value="{{ referral_link }}"
+            readonly
+        >
+
+        <button
+            type="button"
+            class="referral-copy-btn"
+            id="copy-referral-btn"
+        >
+            <i class="fa-solid fa-copy"></i>
+            <span>Click to copy referral link</span>
+        </button>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="card analytics-card">
+
+    <h4>Performance Analytics</h4>
+
+    <canvas id="performanceChart"></canvas>
+
+</section>
+
+
+
+
+<section class="card transactions-card">
+
+    <h4>Recent Transactions</h4>
+
+    <div class="transactions-table-wrapper">
+
+        <table class="transactions-table">
+
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Amount ($)</th>
+                    <th>Currency</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for tx in transactions %}
+
+                <tr>
+
+                    <td>
+                        {{ tx.type }}
+                    </td>
+
+                    <td>
+                        ${{ tx.amount|floatformat:2 }}
+                    </td>
+
+                    <td>
+                        {{ tx.asset }}
+                    </td>
+
+                    <td>
+                        {{ tx.date|date:"M d, Y H:i" }}
+                    </td>
+
+                    <td>
+
+                        {% if tx.type == "Investment" %}
+
+                            {% if tx.status == "active" %}
+
+                                <span class="status-active">
+                                    Active
+                                </span>
+
+                            {% elif tx.status == "completed" %}
+
+                                <span class="status-completed">
+                                    Completed
+                                </span>
+
+                            {% else %}
+
+                                <span class="status-{{ tx.status }}">
+                                    {{ tx.status|title }}
+                                </span>
+
+                            {% endif %}
+
+                        {% else %}
+
+                            {% if tx.status == "approved" %}
+
+                                <span class="status-approved">
+                                    Approved
+                                </span>
+
+                            {% elif tx.status == "rejected" %}
+
+                                <span class="status-rejected">
+                                    Rejected
+                                </span>
+
+                            {% elif tx.status == "pending" %}
+
+                                <span class="status-pending">
+                                    Pending
+                                </span>
+
+                            {% else %}
+
+                                <span>
+                                    {{ tx.status|title }}
+                                </span>
+
+                            {% endif %}
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr class="no-transactions-row">
+
+                    <td colspan="5">
+                        No recent transactions
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</section>
+
+<section class="card quick-actions-card">
+
+    <h4>Quick Actions</h4>
+
+    <div class="quick-actions">
+
+        {% for action in quick_actions %}
+
+            <a
+                href="{% url action.url_name %}"
+                class="quick-action-btn"
+            >
+                <i class="{{ action.icon }}"></i>
+                {{ action.title }}
+            </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+<section class="card announcement-card">
+
+    <h4>Latest Announcement</h4>
+
+    {% if latest_announcement %}
+
+        <div class="announcement-popup {% if unread_announcement %}unread{% endif %}">
+
+            <p>
+                📢 Important: {{ latest_announcement.title }}
+
+                <a href="{% url 'announcements' %}">
+                    Read more
+                </a>
+            </p>
+
+            {% if unread_announcement %}
+
+                <span class="announcement-indicator"></span>
+
+            {% endif %}
+
+        </div>
+
+    {% else %}
+
+        <p>No announcements at the moment.</p>
+
+    {% endif %}
+
+</section>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+{% endblock %}

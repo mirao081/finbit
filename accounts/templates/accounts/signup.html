@@ -1,0 +1,195 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'accounts/css/signup.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+{% endblock %}
+
+{% block content %}
+
+<section class="signup-page">
+
+
+<div class="signup-card">
+
+    <h2>Create Account</h2>
+
+    <p class="subtitle">
+        Join Finbit today
+    </p>
+
+
+    <form method="post" class="signup-form">
+
+        {% csrf_token %}
+
+
+        {% if messages %}
+            <div class="form-messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+
+        {% if form.non_field_errors %}
+            <div class="form-errors">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+
+        
+        <div class="form-group">
+
+            {{ form.username.errors }}
+
+            <input
+                type="text"
+                name="username"
+                placeholder="Username"
+                value="{{ form.username.value|default:'' }}"
+                autocomplete="username"
+                required
+            >
+
+        </div>
+
+
+        
+        <div class="form-group">
+
+            {{ form.email.errors }}
+
+            <input
+                type="email"
+                name="email"
+                placeholder="Email Address"
+                value="{{ form.email.value|default:'' }}"
+                autocomplete="email"
+                required
+            >
+
+        </div>
+
+
+        
+        <div class="form-group">
+
+            {{ form.password1.errors }}
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    name="password1"
+                    id="signup-password1"
+                    placeholder="Password"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <span
+                    class="toggle-password"
+                    onclick="togglePassword('signup-password1', this)"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Show or hide password"
+                >
+                    <i class="fa fa-eye"></i>
+                </span>
+
+            </div>
+
+        </div>
+
+
+        
+        <div class="form-group">
+
+            {{ form.password2.errors }}
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    name="password2"
+                    id="signup-password2"
+                    placeholder="Confirm Password"
+                    autocomplete="new-password"
+                    required
+                >
+
+                <span
+                    class="toggle-password"
+                    onclick="togglePassword('signup-password2', this)"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Show or hide password"
+                >
+                    <i class="fa fa-eye"></i>
+                </span>
+
+            </div>
+
+        </div>
+
+
+        
+        <div class="recaptcha-container">
+
+            <div
+                class="g-recaptcha"
+                data-sitekey="{{ recaptcha_site_key }}"
+            ></div>
+
+        </div>
+
+
+        
+        <button
+            type="submit"
+            class="signup-btn"
+        >
+            Sign Up
+        </button>
+
+    </form>
+
+
+    <p class="login-link">
+
+        Already have an account?
+
+        <a href="{% url 'login' %}">
+            Login here
+        </a>
+
+    </p>
+
+</div>
+
+
+</section>
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="{% static 'accounts/js/password-toggle.js' %}"></script>
+
+
+
+<script
+    src="https://www.google.com/recaptcha/api.js"
+    async
+    defer
+></script>
+
+{% endblock %}

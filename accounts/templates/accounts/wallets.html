@@ -1,0 +1,617 @@
+{% extends "accounts/dashboard_base.html" %}
+
+{% load static %}
+
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'accounts/css/wallets.css' %}">
+
+{% endblock %}
+
+
+
+{% block content %}
+
+<section class="wallets-page">
+
+    <div class="wallets-card">
+
+
+        
+
+        <div class="wallets-heading">
+
+            <h4>
+                My Crypto Wallets
+            </h4>
+
+            <p>
+                Manage your cryptocurrency wallets securely
+            </p>
+
+        </div>
+
+
+
+        
+
+        <div class="wallets-grid">
+
+            {% for wallet in wallets %}
+
+                <div class="wallet-card">
+
+
+                    
+
+                    <div class="wallet-icon">
+
+                        {% if wallet.currency == "BTC" %}
+
+                            <i class="fab fa-bitcoin"></i>
+
+                        {% elif wallet.currency == "ETH" %}
+
+                            <i class="fab fa-ethereum"></i>
+
+                        {% else %}
+
+                            <i class="fas fa-dollar-sign"></i>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    
+
+                    <h5>
+                        {{ wallet.get_currency_display }}
+                    </h5>
+
+
+
+                    
+
+                    <div class="wallet-balance">
+
+                        <span>
+                            Available Balance
+                        </span>
+
+
+                        
+
+                        <strong>
+                            ${{ wallet.available_usd|floatformat:2 }}
+                        </strong>
+
+
+                        
+
+                        <small class="asset-balance">
+
+                            {{ wallet.available_asset|floatformat:12 }}
+
+                            {% if wallet.currency == "USDT_TRC20" %}
+
+                                USDT
+
+                            {% elif wallet.currency == "USDT_ERC20" %}
+
+                                USDT
+
+                            {% else %}
+
+                                {{ wallet.currency }}
+
+                            {% endif %}
+
+                        </small>
+
+                    </div>
+
+
+
+                    
+
+                    <div class="wallet-address">
+
+                        <span>
+                            Wallet Address
+                        </span>
+
+
+                        {% if wallet.address %}
+
+                            <p>
+                                {{ wallet.address }}
+                            </p>
+
+
+                            {% if wallet.qr_base64 %}
+
+                                <img
+                                    src="data:image/png;base64,{{ wallet.qr_base64 }}"
+                                    class="wallet-qr"
+                                    alt="QR Code"
+                                >
+
+                            {% endif %}
+
+
+                        {% else %}
+
+                            <p class="no-address">
+                                No address saved yet.
+                            </p>
+
+                        {% endif %}
+
+                    </div>
+
+
+
+                    
+
+                    <div
+                        class="wallet-transactions"
+                        id="transactions-{{ wallet.id }}"
+                    >
+
+
+                        
+
+                        <div class="transactions-header">
+
+                            <div>
+
+                                <span class="transactions-kicker">
+                                    Activity
+                                </span>
+
+                                <h6>
+                                    Recent Transactions
+                                </h6>
+
+                            </div>
+
+
+                            {% if wallet.transaction_page.paginator.count %}
+
+                                <span class="transaction-count">
+
+                                    {{ wallet.transaction_page.paginator.count }}
+
+                                    transaction{{ wallet.transaction_page.paginator.count|pluralize }}
+
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+
+                        
+
+                        {% if wallet.transaction_page.object_list %}
+
+                            <div class="transactions-list">
+
+
+                                {% for tx in wallet.transaction_page %}
+
+                                    <div class="transaction-row">
+
+
+                                        
+
+                                        <div
+                                            class="
+                                                transaction-icon
+
+                                                {% if tx.direction == 'credit' %}
+                                                    transaction-credit
+                                                {% elif tx.direction == 'debit' %}
+                                                    transaction-debit
+                                                {% endif %}
+                                            "
+                                        >
+
+                                            {% if tx.transaction_type == "deposit" %}
+
+                                                <i class="fas fa-arrow-down"></i>
+
+                                            {% elif tx.transaction_type == "withdrawal" %}
+
+                                                <i class="fas fa-arrow-up"></i>
+
+                                            {% elif tx.transaction_type == "investment" %}
+
+                                                <i class="fas fa-chart-line"></i>
+
+                                            {% elif tx.transaction_type == "profit" %}
+
+                                                <i class="fas fa-coins"></i>
+
+                                            {% elif tx.transaction_type == "bonus" %}
+
+                                                <i class="fas fa-gift"></i>
+
+                                            {% else %}
+
+                                                <i class="fas fa-exchange-alt"></i>
+
+                                            {% endif %}
+
+                                        </div>
+
+
+
+                                        
+
+                                        <div class="transaction-details">
+
+                                            <span class="transaction-type">
+
+                                                {{ tx.get_transaction_type_display }}
+
+                                            </span>
+
+
+                                            <span class="transaction-date">
+
+                                                {{ tx.date|date:"Y-m-d H:i" }}
+
+                                            </span>
+
+                                        </div>
+
+
+
+                                        
+
+                                        <div class="transaction-value">
+
+
+                                            {% if tx.usd_value %}
+
+                                                <strong
+                                                    class="
+                                                        {% if tx.direction == 'credit' %}
+                                                            amount-credit
+                                                        {% elif tx.direction == 'debit' %}
+                                                            amount-debit
+                                                        {% endif %}
+                                                    "
+                                                >
+
+                                                    {% if tx.direction == "credit" %}
+
+                                                        +
+
+                                                    {% elif tx.direction == "debit" %}
+
+                                                        -
+
+                                                    {% endif %}
+
+                                                    ${{ tx.usd_value|floatformat:2 }}
+
+                                                </strong>
+
+
+                                            {% else %}
+
+                                                <strong class="amount-neutral">
+
+                                                    —
+
+                                                </strong>
+
+                                            {% endif %}
+
+
+                                        </div>
+
+                                    </div>
+
+                                {% endfor %}
+
+                            </div>
+
+
+
+                        {% else %}
+
+
+                            
+
+                            <div class="transactions-empty">
+
+                                <div class="transactions-empty-icon">
+
+                                    <i class="fas fa-receipt"></i>
+
+                                </div>
+
+
+                                <strong>
+                                    No transactions yet
+                                </strong>
+
+
+                                <span>
+                                    Your wallet activity will appear here.
+                                </span>
+
+                            </div>
+
+
+                        {% endif %}
+
+
+
+                        
+
+                        {% if wallet.transaction_page.paginator.num_pages > 1 %}
+
+                            <div class="transactions-pagination">
+
+
+                                
+
+                                {% if wallet.transaction_page.has_previous %}
+
+                                    <a
+                                        href="?{{ wallet.transaction_page_parameter }}={{ wallet.transaction_page.previous_page_number }}#transactions-{{ wallet.id }}"
+                                        class="transaction-page-btn"
+                                        aria-label="Previous page"
+                                    >
+
+                                        <i class="fas fa-chevron-left"></i>
+
+                                        <span>
+                                            Previous
+                                        </span>
+
+                                    </a>
+
+
+                                {% else %}
+
+                                    <span class="transaction-page-btn disabled">
+
+                                        <i class="fas fa-chevron-left"></i>
+
+                                        <span>
+                                            Previous
+                                        </span>
+
+                                    </span>
+
+                                {% endif %}
+
+
+
+                                
+
+                                <div class="transaction-page-numbers">
+
+                                    {% for page_number in wallet.transaction_page.paginator.page_range %}
+
+
+                                        {% if page_number == wallet.transaction_page.number %}
+
+                                            <span class="transaction-page-number active">
+
+                                                {{ page_number }}
+
+                                            </span>
+
+
+                                        {% else %}
+
+                                            <a
+                                                href="?{{ wallet.transaction_page_parameter }}={{ page_number }}#transactions-{{ wallet.id }}"
+                                                class="transaction-page-number"
+                                            >
+
+                                                {{ page_number }}
+
+                                            </a>
+
+                                        {% endif %}
+
+
+                                    {% endfor %}
+
+                                </div>
+
+
+
+                                
+
+                                {% if wallet.transaction_page.has_next %}
+
+                                    <a
+                                        href="?{{ wallet.transaction_page_parameter }}={{ wallet.transaction_page.next_page_number }}#transactions-{{ wallet.id }}"
+                                        class="transaction-page-btn"
+                                        aria-label="Next page"
+                                    >
+
+                                        <span>
+                                            Next
+                                        </span>
+
+                                        <i class="fas fa-chevron-right"></i>
+
+                                    </a>
+
+
+                                {% else %}
+
+                                    <span class="transaction-page-btn disabled">
+
+                                        <span>
+                                            Next
+                                        </span>
+
+                                        <i class="fas fa-chevron-right"></i>
+
+                                    </span>
+
+                                {% endif %}
+
+
+                            </div>
+
+                        {% endif %}
+
+
+                    </div>
+
+
+
+                    
+
+                    <div class="wallet-actions">
+
+
+                        
+
+                        <a
+                            href="{% url 'deposit' %}"
+                            class="wallet-btn deposit-btn"
+                        >
+
+                            <i class="fas fa-arrow-down"></i>
+
+                            Deposit
+
+                        </a>
+
+
+
+                        
+
+                        <a
+                            href="{% url 'withdraw' %}"
+                            class="wallet-btn withdraw-btn"
+                        >
+
+                            <i class="fas fa-arrow-up"></i>
+
+                            Withdraw
+
+                        </a>
+
+
+
+                        
+
+                        <a
+                            href="{% url 'edit_wallet' wallet.id %}"
+                            class="wallet-btn edit-btn"
+                        >
+
+                            <i class="fas fa-pen"></i>
+
+                            Edit
+
+                        </a>
+
+
+
+                        
+
+                        <a
+                            href="{% url 'confirm_delete_wallet' wallet.id %}"
+                            class="wallet-btn delete-btn"
+                        >
+
+                            <i class="fas fa-trash"></i>
+
+                            Delete
+
+                        </a>
+
+
+                    </div>
+
+
+                </div>
+
+
+            {% empty %}
+
+
+                
+
+                <div class="empty-wallets">
+
+                    <h5>
+                        No Wallets Yet
+                    </h5>
+
+                    <p>
+                        Your wallets will appear here.
+                    </p>
+
+                </div>
+
+
+            {% endfor %}
+
+        </div>
+
+
+
+        
+
+        <div class="add-wallet-section">
+
+            <h5>
+                Save Your Wallet
+            </h5>
+
+            <p>
+                Select your cryptocurrency and enter your wallet address.
+            </p>
+
+
+            <form
+                method="post"
+                class="wallet-form"
+            >
+
+                {% csrf_token %}
+
+
+                {{ form.as_p }}
+
+
+                <button
+                    type="submit"
+                    class="wallet-btn save-wallet-btn"
+                >
+
+                    <i class="fas fa-save"></i>
+
+                    Save Wallet
+
+                </button>
+
+            </form>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'accounts/css/withdraw_invoice.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="invoice-page">
+  <div class="invoice-card">
+
+    <h2>Withdrawal Confirmation</h2>
+
+    <p>
+      Please review your withdrawal details carefully before confirming.
+    </p>
+
+    <div class="invoice-section">
+
+      <div class="transaction-item">
+        <span>Asset</span>
+        <strong>{{ asset }}</strong>
+      </div>
+
+      <div class="transaction-item">
+        <span>Amount</span>
+        <strong>${{ amount|floatformat:2 }}</strong>
+      </div>
+
+      <div class="transaction-item">
+        <span>Available Balance</span>
+        <strong>${{ available_balance|floatformat:2 }}</strong>
+      </div>
+
+      <div class="transaction-item">
+        <span>Destination Wallet</span>
+        <strong class="wallet-address">
+          {{ wallet.address }}
+        </strong>
+      </div>
+
+    </div>
+
+    <div class="invoice-warning">
+
+      <i class="fas fa-exclamation-triangle"></i>
+
+      <div>
+        <strong>Important</strong>
+
+        <p>
+          Make sure the destination wallet address and selected asset
+          are correct. Cryptocurrency transactions sent to an incorrect
+          address or unsupported network may not be recoverable.
+        </p>
+      </div>
+
+    </div>
+
+    <form
+      method="post"
+      action="{% url 'confirm_withdrawal' %}"
+    >
+
+      {% csrf_token %}
+
+      <button
+        type="submit"
+        class="confirm-withdrawal-btn"
+      >
+        Confirm Withdrawal
+      </button>
+
+    </form>
+
+    <a
+      href="{% url 'withdraw' %}"
+      class="cancel-withdrawal-btn"
+    >
+      Cancel
+    </a>
+
+  </div>
+</section>
+{% endblock %}

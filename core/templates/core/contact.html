@@ -1,0 +1,259 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'core/css/contact.css' %}">
+
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+
+
+<section class="contact-page" style="background-image: url({% static 'core/images/investment.jpg' %});">
+
+    <div class="overlay"></div>
+
+    <div class="breadcrumb">
+
+        <i class="fa fa-home"></i>
+
+        <a href="{% url 'home' %}">Home</a> - <span>Contact</span>
+
+    </div>
+
+    <div class="contact-description">
+
+        <h1 class="contact-title">Contact Us</h1>
+
+        <p class="contact-subtitle">
+
+            Connect with Finbit's dedicated support team. Whether you need assistance with your account, guidance on investment strategies, or insights into the latest financial trends, we're here to help. Our professionals deliver clear answers, timely support, and personalized solutions that empower your financial journey. Reach out today - let's build smarter, stronger strategies together.
+
+        </p>
+
+    </div>
+
+    
+
+    <div class="bubble-layer"></div>
+
+</section>
+
+
+
+
+<section class="contact-form-section" style="background-image: url({% static 'core/images/finbitbg1.jpg' %});">
+
+    <div class="contact-form-container">
+
+        <div class="form-overlay"></div>
+
+        <div class="form-box">
+
+            <h2 class="form-heading">Get in touch</h2>
+
+            <p class="form-subheading">Leave us a message</p>
+
+            <form method="post">
+
+                {% csrf_token %}
+
+                <div class="form-row">
+
+                    {{ form.full_name }}
+
+                    {{ form.email }}
+
+                </div>
+
+                <div class="form-row">
+
+                    {{ form.message }}
+
+                </div>
+
+                <button type="submit" class="send-btn">
+                    Send Message
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="map-section">
+
+    {% if site_map %}
+
+        <div class="map-container">
+
+            {{ site_map.embed_code|safe }}
+
+        </div>
+
+    {% endif %}
+
+</section>
+
+
+
+
+<section class="quick-support-section">
+
+    <div class="quick-support-container">
+
+        <h2 class="quick-support-heading">
+            Quick Support
+        </h2>
+
+        <p class="quick-support-subheading">
+
+            We're here to assist you with any questions or concerns.
+
+        </p>
+
+        <div class="support-cards">
+
+            {% for card in support_cards %}
+
+                <div class="support-card">
+
+                    <h3>{{ card.heading }}</h3>
+
+                    <p>{{ card.detail_line1 }}</p>
+
+                    <p>{{ card.detail_line2 }}</p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+<section class="compliance-section">
+
+    {% for notice in compliance_notices %}
+
+        <h2>{{ notice.title }}</h2>
+
+        <p>{{ notice.description }}</p>
+
+    {% endfor %}
+
+</section>
+
+
+
+
+<section class="social-section">
+
+    <h2>Connect With Us</h2>
+
+    <div class="social-icons">
+
+        {% for s in social_links %}
+
+            <a href="{{ s.url }}" target="_blank">
+                {{ s.platform|title }}
+            </a>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+
+
+<section class="newsletter-section">
+
+    <h2>Stay Updated</h2>
+
+    <form
+        id="newsletter-form"
+        method="POST"
+        action="{% url 'contact' %}"
+    >
+
+        {% csrf_token %}
+
+        {{ newsletter_form.email }}
+
+        <button
+            type="submit"
+            name="newsletter"
+            value="1"
+        >
+            Subscribe
+        </button>
+
+    </form>
+
+    <p id="newsletter-message"></p>
+
+</section>
+
+
+
+
+<section class="site-links">
+
+    <div class="container text-center">
+
+        {% if footer.logo %}
+
+            <img
+                src="{{ footer.logo.url }}"
+                alt="{{ footer.company_name }} Logo"
+                class="footer-logo"
+            >
+
+        {% endif %}
+
+        <nav class="footer-nav">
+
+            <a href="{% url 'home' %}">
+                Home
+            </a>
+
+            <a href="{% url 'privacy_policy' %}">
+                Privacy & Policy
+            </a>
+
+            <a href="{% url 'terms_conditions' %}">
+                Terms & Conditions
+            </a>
+
+        </nav>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+
+<script src="{% static 'core/js/newsletter.js' %}"></script>
+
+{% endblock %}

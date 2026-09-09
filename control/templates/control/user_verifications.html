@@ -1,0 +1,119 @@
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/user_verifications.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="kyc-page">
+
+    <div class="kyc-header">
+        <h1>KYC Verification Center</h1>
+        <p class="kyc-subtitle">
+            Review customer identity documents and securely approve or reject verification requests.
+        </p>
+    </div>
+
+    <div class="kyc-table-wrapper">
+
+        <table class="kyc-table">
+
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Document</th>
+                    <th>Status</th>
+                    <th>Submitted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for sub in submissions %}
+
+                <tr>
+
+                    <td class="kyc-user">
+                        {{ sub.user.username }}
+                    </td>
+
+                    <td class="kyc-email">
+                        {{ sub.user.email }}
+                    </td>
+
+                    <td class="kyc-document">
+
+                        {% if sub.document %}
+
+                            <a
+                                href="{{ sub.document.url }}"
+                                target="_blank"
+                                class="document-link"
+                            >
+                                View Document
+                            </a>
+
+                        {% else %}
+
+                            <span class="no-document">
+                                No document uploaded
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="kyc-status">
+
+                        {% if sub.approved %}
+
+                            <span class="status-badge status-approved">
+                                ✔ Approved
+                            </span>
+
+                        {% else %}
+
+                            <span class="status-badge status-pending">
+                                Pending
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td class="kyc-date">
+                        {{ sub.uploaded_at|date:"M d, Y H:i" }}
+                    </td>
+
+                    <td class="kyc-actions">
+                        <a href="{% url 'kyc_detail' sub.id %}" class="btn btn-info">Review</a>
+                    </td>
+
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="6" class="empty-kyc">
+                        <span class="empty-icon">⌁</span>
+                        No submissions found.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% endblock %}
+

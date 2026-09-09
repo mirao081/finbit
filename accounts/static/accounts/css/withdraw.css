@@ -1,0 +1,1059 @@
+*{
+    box-sizing:border-box;
+}
+
+
+.withdraw-page{
+    position:relative;
+    width:100%;
+    min-height:calc(100vh - 180px);
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:35px 18px 50px;
+    overflow:hidden;
+}
+
+
+
+.withdraw-page::before{
+    content:"";
+    position:fixed;
+    top:15%;
+    left:50%;
+    transform:translateX(-50%);
+    width:460px;
+    height:460px;
+    background:radial-gradient(circle,
+        rgba(103,147,227,.12),
+        transparent 70%);
+    filter:blur(35px);
+    pointer-events:none;
+    z-index:0;
+}
+
+
+
+.withdraw-card{
+    position:relative;
+    z-index:1;
+    width:100%;
+    max-width:620px;
+    padding:35px;
+    border-radius:24px;
+    overflow:hidden;
+
+    background:
+        radial-gradient(circle at 10% 0%, rgba(103,147,227,.12), transparent 35%),
+        radial-gradient(circle at 100% 100%, rgba(200,164,82,.08), transparent 35%),
+        linear-gradient(145deg,
+            rgba(25,34,49,.98),
+            rgba(8,13,21,.99));
+
+    border:1px solid rgba(103,147,227,.25);
+
+    box-shadow:
+        0 25px 60px rgba(0,0,0,.55),
+        0 0 35px rgba(103,147,227,.08),
+        inset 0 1px 0 rgba(255,255,255,.05);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+}
+
+
+
+.withdraw-card::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-20%;
+    width:140%;
+    height:3px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        #6793e3,
+        #9ec1ff,
+        #d4af5a,
+        #9ec1ff,
+        #6793e3,
+        transparent);
+
+    background-size:250% 100%;
+    animation:withdrawGlow 5s linear infinite;
+}
+
+
+
+.withdraw-card::after{
+    content:"";
+    position:absolute;
+    width:180px;
+    height:180px;
+    top:-80px;
+    right:-70px;
+    background:rgba(103,147,227,.08);
+    border-radius:50%;
+    filter:blur(45px);
+}
+
+
+
+.withdraw-card h2{
+    margin:0 0 12px;
+    text-align:center;
+    font-size:clamp(1.7rem,3vw,2.2rem);
+    font-weight:800;
+    letter-spacing:.6px;
+
+    background:linear-gradient(
+        90deg,
+        #fff,
+        #9ec1ff,
+        #6793e3,
+        #fff,
+        #d4af5a,
+        #fff);
+
+    background-size:300% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:titleGlow 6s linear infinite;
+}
+
+.withdraw-card>p{
+    text-align:center;
+    color:#8f9bad;
+    margin:0 0 30px;
+    font-size:.92rem;
+    line-height:1.6;
+}
+
+
+
+.withdraw-form{
+    display:flex;
+    flex-direction:column;
+    gap:22px;
+}
+
+.form-group{
+    display:flex;
+    flex-direction:column;
+}
+
+.form-group label{
+    margin-bottom:8px;
+    color:#cbd3df;
+    font-size:.84rem;
+    font-weight:600;
+    letter-spacing:.3px;
+}
+
+
+
+.withdraw-form input,
+.withdraw-form select,
+.withdraw-form textarea{
+    width:100%;
+    min-height:48px;
+    padding:13px 15px;
+
+    background:rgba(0,0,0,.28);
+    color:#fff;
+
+    border:1px solid rgba(103,147,227,.22);
+    border-radius:12px;
+
+    outline:none;
+    font-family:inherit;
+    font-size:.9rem;
+
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+.withdraw-form textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.withdraw-form input::placeholder,
+.withdraw-form textarea::placeholder{
+    color:#687386;
+}
+
+.withdraw-form input:focus,
+.withdraw-form select:focus,
+.withdraw-form textarea:focus{
+    border-color:rgba(103,147,227,.65);
+    background:rgba(0,0,0,.35);
+
+    box-shadow:
+        0 0 0 3px rgba(103,147,227,.08),
+        0 0 20px rgba(103,147,227,.12);
+}
+
+
+
+.withdraw-form select{
+    appearance:none;
+    cursor:pointer;
+}
+
+
+
+.form-group small{
+    margin-top:8px;
+    color:#d4af5a;
+    font-size:.76rem;
+}
+
+
+
+.errorlist{
+    list-style:none;
+    margin:0 0 12px;
+    padding:0;
+}
+
+.errorlist li{
+    padding:10px 12px;
+    border-radius:10px;
+    color:#ff8f8f;
+    background:rgba(220,38,38,.12);
+    border:1px solid rgba(220,38,38,.3);
+    font-size:.82rem;
+}
+
+
+
+.withdraw-submit-btn{
+    position:relative;
+    width:100%;
+    min-height:52px;
+    margin-top:8px;
+
+    border:none;
+    border-radius:12px;
+
+    cursor:pointer;
+
+    font-size:.95rem;
+    font-weight:700;
+    letter-spacing:.3px;
+
+    color:#111;
+
+    background:linear-gradient(
+        135deg,
+        #d4af5a,
+        #f0d47f,
+        #d4af5a);
+
+    box-shadow:
+        0 10px 25px rgba(200,164,82,.22);
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        filter .3s ease;
+}
+
+.withdraw-submit-btn:hover{
+    transform:translateY(-3px);
+
+    filter:brightness(1.05);
+
+    box-shadow:
+        0 14px 32px rgba(200,164,82,.35),
+        0 0 20px rgba(200,164,82,.15);
+}
+
+.withdraw-submit-btn:active{
+    transform:translateY(-1px);
+}
+
+
+
+@keyframes withdrawGlow{
+    from{background-position:250% 50%;}
+    to{background-position:-250% 50%;}
+}
+
+@keyframes titleGlow{
+    from{background-position:300% center;}
+    to{background-position:-300% center;}
+}
+
+
+
+@media(max-width:768px){
+
+    .withdraw-page{
+        padding:28px 15px 40px;
+    }
+
+    .withdraw-card{
+        padding:28px 24px;
+        border-radius:20px;
+    }
+
+    .withdraw-card h2{
+        font-size:1.7rem;
+    }
+}
+
+
+
+@media(max-width:480px){
+
+    .withdraw-page{
+        padding:22px 12px 35px;
+    }
+
+    .withdraw-card{
+        padding:24px 18px;
+        border-radius:18px;
+    }
+
+    .withdraw-card h2{
+        font-size:1rem;
+    }
+
+    .withdraw-card>p{
+        font-size:.82rem;
+    }
+
+    .withdraw-form{
+        gap:18px;
+    }
+
+    .withdraw-submit-btn{
+        min-height:48px;
+    }
+}
+
+
+
+@media(hover:none) and (pointer:coarse){
+
+    .withdraw-submit-btn:hover{
+        transform:none;
+        filter:none;
+    }
+}
+
+
+
+@media(prefers-reduced-motion:reduce){
+
+    .withdraw-card::before,
+    .withdraw-card h2{
+        animation:none;
+    }
+
+    .withdraw-submit-btn{
+        transition:none;
+    }
+}
+
+
+
+.security-reminder,
+.processing-notice,
+.withdraw-history-link,
+.withdraw-tips{
+    position:relative;
+    width:100%;
+    max-width:620px;
+    margin:18px auto 0;
+    padding:22px;
+
+    display:flex;
+    align-items:flex-start;
+    gap:16px;
+
+    border-radius:18px;
+    overflow:hidden;
+
+    background:
+        radial-gradient(circle at 0% 0%, rgba(103,147,227,.08), transparent 40%),
+        linear-gradient(145deg,
+            rgba(22,31,45,.96),
+            rgba(8,13,21,.98));
+
+    border:1px solid rgba(103,147,227,.18);
+
+    box-shadow:
+        0 14px 35px rgba(0,0,0,.35),
+        inset 0 1px 0 rgba(255,255,255,.04);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+
+    transition:
+        transform .35s ease,
+        border-color .35s ease,
+        box-shadow .35s ease;
+}
+
+
+
+.security-reminder::before,
+.processing-notice::before,
+.withdraw-history-link::before,
+.withdraw-tips::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:12%;
+    width:76%;
+    height:2px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        #6793e3,
+        #d4af5a,
+        #6793e3,
+        transparent);
+
+    box-shadow:0 0 12px rgba(103,147,227,.35);
+}
+
+
+
+.security-reminder:hover,
+.processing-notice:hover,
+.withdraw-history-link:hover,
+.withdraw-tips:hover{
+    transform:translateY(-4px);
+
+    border-color:rgba(103,147,227,.45);
+
+    box-shadow:
+        0 20px 42px rgba(0,0,0,.45),
+        0 0 24px rgba(103,147,227,.08),
+        inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+
+
+.security-reminder i,
+.processing-notice i,
+.withdraw-history-link i,
+.withdraw-tips>i{
+    flex-shrink:0;
+
+    width:48px;
+    height:48px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:linear-gradient(
+        145deg,
+        rgba(103,147,227,.20),
+        rgba(212,175,90,.10));
+
+    border:1px solid rgba(103,147,227,.28);
+
+    color:#9ec1ff;
+    font-size:1.15rem;
+
+    box-shadow:
+        0 0 18px rgba(103,147,227,.12),
+        inset 0 1px 0 rgba(255,255,255,.05);
+}
+
+
+
+.withdraw-tips>i{
+    color:#d4af5a;
+    border-color:rgba(212,175,90,.30);
+    background:linear-gradient(
+        145deg,
+        rgba(212,175,90,.18),
+        rgba(212,175,90,.08));
+}
+
+
+
+.security-reminder strong,
+.processing-notice strong,
+.withdraw-tips strong{
+    display:block;
+    margin-bottom:8px;
+
+    color:#ffffff;
+    font-size:1rem;
+    font-weight:700;
+}
+
+.security-reminder p,
+.processing-notice p{
+    margin:0;
+    color:#9aa8ba;
+    line-height:1.65;
+    font-size:.88rem;
+}
+
+
+
+.withdraw-history-link{
+    align-items:center;
+}
+
+.withdraw-history-link a{
+    color:#d4af5a;
+    text-decoration:none;
+    font-weight:700;
+    font-size:.92rem;
+    transition:color .3s ease;
+}
+
+.withdraw-history-link a:hover{
+    color:#ffffff;
+}
+
+
+
+.withdraw-tips{
+    flex-wrap:wrap;
+}
+
+.withdraw-tips strong{
+    width:100%;
+    margin:0 0 6px 64px;
+}
+
+.withdraw-tips ul{
+    width:100%;
+    margin:0 0 0 64px;
+    padding-left:18px;
+}
+
+.withdraw-tips li{
+    color:#cbd3df;
+    margin-bottom:10px;
+    line-height:1.6;
+    font-size:.88rem;
+}
+
+.withdraw-tips li::marker{
+    color:#d4af5a;
+}
+
+
+
+.error-message{
+    margin-top:8px;
+    padding:10px 12px;
+
+    border-radius:10px;
+
+    background:rgba(220,38,38,.12);
+    border:1px solid rgba(220,38,38,.28);
+
+    color:#ff9a9a;
+    font-size:.82rem;
+}
+
+
+
+@media(max-width:480px){
+
+    .security-reminder,
+    .processing-notice,
+    .withdraw-history-link,
+    .withdraw-tips{
+        padding:18px;
+        gap:14px;
+        border-radius:16px;
+    }
+
+    .security-reminder i,
+    .processing-notice i,
+    .withdraw-history-link i,
+    .withdraw-tips>i{
+        width:42px;
+        height:42px;
+        font-size:1rem;
+    }
+
+    .withdraw-tips strong,
+    .withdraw-tips ul{
+        margin-left:56px;
+    }
+
+    .security-reminder strong,
+    .processing-notice strong,
+    .withdraw-tips strong{
+        font-size:.95rem;
+    }
+
+    .security-reminder p,
+    .processing-notice p,
+    .withdraw-tips li{
+        font-size:.84rem;
+    }
+
+    .withdraw-history-link a{
+        font-size:.86rem;
+    }
+}
+
+
+
+@media(hover:none) and (pointer:coarse){
+
+    .security-reminder:hover,
+    .processing-notice:hover,
+    .withdraw-history-link:hover,
+    .withdraw-tips:hover{
+        transform:none;
+        border-color:rgba(103,147,227,.18);
+        box-shadow:
+            0 14px 35px rgba(0,0,0,.35),
+            inset 0 1px 0 rgba(255,255,255,.04);
+    }
+}
+
+
+
+@media(prefers-reduced-motion:reduce){
+
+    .security-reminder,
+    .processing-notice,
+    .withdraw-history-link,
+    .withdraw-tips{
+        transition:none;
+    }
+
+    .security-reminder:hover,
+    .processing-notice:hover,
+    .withdraw-history-link:hover,
+    .withdraw-tips:hover{
+        transform:none;
+    }
+}
+
+
+.withdraw-history{
+    position:relative;
+    width:100%;
+    max-width:620px;
+    margin:22px auto 0;
+    padding:28px;
+    overflow:hidden;
+
+    border-radius:22px;
+
+    background:
+        radial-gradient(circle at 10% 0%, rgba(103,147,227,.10), transparent 35%),
+        radial-gradient(circle at 100% 100%, rgba(212,175,90,.06), transparent 35%),
+        linear-gradient(145deg,
+            rgba(22,31,45,.97),
+            rgba(8,13,21,.99));
+
+    border:1px solid rgba(103,147,227,.20);
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,.40),
+        inset 0 1px 0 rgba(255,255,255,.04);
+
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+}
+
+
+
+.withdraw-history::before{
+    content:"";
+    position:absolute;
+    top:0;
+    left:10%;
+    width:80%;
+    height:3px;
+
+    background:linear-gradient(
+        90deg,
+        transparent,
+        #6793e3,
+        #d4af5a,
+        #6793e3,
+        transparent);
+
+    background-size:220% 100%;
+    animation:historyGlow 5s linear infinite;
+}
+
+
+
+.withdraw-history h2{
+    margin:0 0 22px;
+    text-align:center;
+    font-size:1.5rem;
+    font-weight:800;
+
+    background:linear-gradient(
+        90deg,
+        #fff,
+        #9ec1ff,
+        #d4af5a,
+        #fff);
+
+    background-size:250% auto;
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+
+    animation:titleGlow 6s linear infinite;
+}
+
+
+
+.withdraw-history>p{
+    text-align:center;
+    color:#8f9bad;
+    margin:0;
+    line-height:1.6;
+}
+
+
+
+.withdraw-history-table{
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0 10px;
+}
+
+
+
+.withdraw-history-table thead th{
+    padding:0 12px 10px;
+    text-align:left;
+
+    color:#6793e3;
+    font-size:.75rem;
+    font-weight:700;
+    text-transform:uppercase;
+    letter-spacing:.6px;
+}
+
+
+
+.withdraw-history-table tbody tr{
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,.05),
+            rgba(255,255,255,.02));
+
+    border:1px solid rgba(103,147,227,.15);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.03);
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+
+.withdraw-history-table tbody td:first-child{
+    border-top-left-radius:12px;
+    border-bottom-left-radius:12px;
+}
+
+.withdraw-history-table tbody td:last-child{
+    border-top-right-radius:12px;
+    border-bottom-right-radius:12px;
+}
+
+
+
+.withdraw-history-table tbody td{
+    padding:16px 12px;
+    color:#d8e0eb;
+    font-size:.88rem;
+}
+
+
+
+.withdraw-history-table tbody td:last-child{
+    color:#d4af5a;
+    font-weight:700;
+}
+
+
+
+.withdraw-history-table tbody tr:hover{
+    transform:translateY(-2px);
+
+    border-color:rgba(103,147,227,.35);
+
+    box-shadow:
+        0 12px 24px rgba(0,0,0,.25),
+        0 0 18px rgba(103,147,227,.08);
+}
+
+
+
+@keyframes historyGlow{
+    from{background-position:220% 50%;}
+    to{background-position:-220% 50%;}
+}
+
+
+
+@media(max-width:600px){
+
+    .withdraw-history{
+        padding:22px 18px;
+        border-radius:18px;
+    }
+
+    .withdraw-history h2{
+        font-size:1rem;
+        margin-bottom:18px;
+    }
+
+    .withdraw-history-table{
+        border-spacing:0 8px;
+    }
+
+    .withdraw-history-table thead{
+        display:none;
+    }
+
+    .withdraw-history-table,
+    .withdraw-history-table tbody,
+    .withdraw-history-table tr,
+    .withdraw-history-table td{
+        display:block;
+        width:100%;
+    }
+
+    .withdraw-history-table tbody tr{
+        padding:6px 0;
+        border-radius:14px;
+    }
+
+    .withdraw-history-table tbody td{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        padding:12px 16px;
+        border-radius:0 !important;
+    }
+
+    .withdraw-history-table tbody td:first-child::before{
+        content:"Date";
+    }
+
+    .withdraw-history-table tbody td:nth-child(2)::before{
+        content:"Asset";
+    }
+
+    .withdraw-history-table tbody td:last-child::before{
+        content:"Amount";
+    }
+
+    .withdraw-history-table tbody td::before{
+        color:#6793e3;
+        font-size:.72rem;
+        font-weight:700;
+        text-transform:uppercase;
+        letter-spacing:.5px;
+    }
+}
+
+
+
+@media(hover:none) and (pointer:coarse){
+
+    .withdraw-history-table tbody tr:hover{
+        transform:none;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,.03);
+    }
+}
+
+
+
+.withdraw-history .pagination {
+    width: 100%;
+    margin-top: 25px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    flex-wrap: wrap;
+}
+
+
+
+
+.withdraw-history .pagination a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 90px;
+    min-height: 40px;
+
+    padding: 8px 16px;
+
+    border-radius: 10px;
+
+    color: #d4af5a;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .12),
+            rgba(212, 175, 90, .07)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    text-decoration: none;
+
+    font-size: .78rem;
+    font-weight: 700;
+
+    letter-spacing: .2px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .04),
+        0 5px 15px rgba(0, 0, 0, .20);
+
+    transition:
+        transform .3s ease,
+        color .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease,
+        background .3s ease;
+}
+
+
+
+
+.withdraw-history .pagination a:hover {
+    transform: translateY(-2px);
+
+    color: #ffffff;
+
+    border-color: rgba(103, 147, 227, .55);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .20),
+            rgba(212, 175, 90, .12)
+        );
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .30),
+        0 0 18px rgba(103, 147, 227, .10);
+}
+
+
+
+
+.withdraw-history .pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 8px 15px;
+
+    border-radius: 10px;
+
+    color: #9ec1ff;
+
+    background: rgba(103, 147, 227, .07);
+
+    border: 1px solid rgba(103, 147, 227, .16);
+
+    font-size: .76rem;
+    font-weight: 600;
+
+    letter-spacing: .2px;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+
+
+
+
+@media (max-width: 480px) {
+
+    .withdraw-history .pagination {
+        margin-top: 20px;
+        gap: 8px;
+    }
+
+    .withdraw-history .pagination a {
+        min-width: 78px;
+        min-height: 38px;
+
+        padding: 7px 12px;
+
+        font-size: .72rem;
+    }
+
+    .withdraw-history .pagination span {
+        min-height: 38px;
+
+        padding: 7px 11px;
+
+        font-size: .70rem;
+    }
+
+}
+
+
+
+
+@media (hover: none) and (pointer: coarse) {
+
+    .withdraw-history .pagination a:hover {
+        transform: none;
+
+        color: #d4af5a;
+
+        border-color: rgba(103, 147, 227, .25);
+
+        background:
+            linear-gradient(
+                145deg,
+                rgba(103, 147, 227, .12),
+                rgba(212, 175, 90, .07)
+            );
+
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, .04),
+            0 5px 15px rgba(0, 0, 0, .20);
+    }
+
+}
+

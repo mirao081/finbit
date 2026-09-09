@@ -1,0 +1,87 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/blog.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}"> 
+{% endblock %}
+{% block content %}
+<section class="blog-page" style="background-image: url(
+    {% static 'core/images/blog-bg.jpg' %}
+);">
+    <div class="overlay"></div>
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="{% url 'home' %}">Home</a> - <span>Blog</span>
+    </div>
+    <div class="blog-description">
+        <h1 class="blog-title">Finbit Blog</h1>
+        <p class="blog-subtitle">
+            Financial news, expert tips, and crypto insights from Finbit. Stay informed with the latest trends in digital assets, investment strategies, and blockchain innovation. Our blog empowers investors with actionable knowledge - from market analysis and trading strategies to regulatory updates and emerging blockchain technologies. Whether you're a seasoned trader or just starting out, Finbit delivers clear, reliable insights to help you navigate the fast-moving world of cryptocurrency.
+        </p>
+    </div>
+</section>
+<section class="news-section" id="news-section">
+  <div id="news-content">
+    <div class="news-container">
+      <h2 class="news-title">
+        <span class="white">Our</span>
+        <span class="gold">Latest</span>
+        <span class="white">News</span>
+      </h2>
+      <p class="news-subtitle">{{ news_section.subheading }}</p>
+      <div class="news-grid">
+        {% for item in news_page_obj %}
+        <div class="news-card">
+          {% if item.image %}
+            <img src="{{ item.image.url }}" alt="{{ item.subheading }}">
+          {% endif %}
+          <h3 class="news-card-subheading">{{ item.subheading }}</h3>
+          <div class="news-meta">
+            <i class="fa fa-user"></i> {{ item.author }}
+            <i class="fa fa-calendar"></i> {{ item.date }}
+          </div>
+          <h4 class="news-card-title">{{ item.content_title }}</h4>
+          <p>{{ item.content_preview|truncatewords:25 }}</p>
+          <a href="{% url 'news_detail' item.id %}" class="news-btn">
+            Read More
+        </a>
+        </div>
+        {% empty %}
+          <p>No news available yet.</p>
+        {% endfor %}
+      </div>
+      <div class="pagination">
+      {% if news_page_obj.has_previous %}
+        <a href="?news_page={{ news_page_obj.previous_page_number }}#news-section" class="page-btn">Previous</a>
+      {% endif %}
+      <span class="page-info">
+        Page {{ news_page_obj.number }} of {{ news_page_obj.paginator.num_pages }}
+      </span>
+      {% if news_page_obj.has_next %}
+        <a href="?news_page={{ news_page_obj.next_page_number }}#news-section"class="page-btn">Next</a>
+      {% endif %}
+    </div>
+    </div>
+  </div>
+  <div id="newsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <div id="modal-body"></div>
+    </div>
+  </div>
+</section>
+<section class="site-links">
+  <div class="container text-center">
+    {% if footer.logo %}
+      <img src="{{ footer.logo.url }}" alt="{{ footer.company_name }} Logo" class="footer-logo">
+    {% endif %}
+
+    <nav class="footer-nav">
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'privacy_policy' %}">Privacy & Policy</a>
+      <a href="{% url 'terms_conditions' %}">Terms & Conditions</a>
+    </nav>
+  </div>
+</section>
+{% endblock %}
+

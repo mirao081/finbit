@@ -1,0 +1,88 @@
+<div class="news-grid">
+
+  {% for item in news_page_obj %}
+
+  <div class="news-card">
+
+    {% if item.image %}
+      <img
+        src="{{ item.image.url }}"
+        alt="{{ item.subheading }}">
+    {% endif %}
+
+    <h3 class="news-card-subheading">
+      {{ item.subheading }}
+    </h3>
+
+    <div class="news-meta">
+
+      <i class="fa fa-user"></i>
+      {{ item.author }}
+
+      <i class="fa fa-calendar"></i>
+      {{ item.date }}
+
+    </div>
+
+    <h4 class="news-card-title">
+      {{ item.content_title }}
+    </h4>
+
+    <p>
+      {{ item.content_preview|truncatewords:20 }}
+    </p>
+
+    <a
+      href="#"
+      class="news-btn read-more-btn"
+      data-id="{{ item.id }}">
+      Read More
+    </a>
+
+  </div>
+
+  {% empty %}
+
+  <p>
+    No news available yet.
+  </p>
+
+  {% endfor %}
+
+</div>
+
+
+<div class="pagination">
+
+  {% if news_page_obj.has_previous %}
+
+    <a
+      href="?news_page={{ news_page_obj.previous_page_number }}"
+      class="page-btn">
+      Previous
+    </a>
+
+  {% endif %}
+
+
+  <span class="page-info">
+
+    Page
+    {{ news_page_obj.number }}
+    of
+    {{ news_page_obj.paginator.num_pages }}
+
+  </span>
+
+
+  {% if news_page_obj.has_next %}
+
+    <a
+      href="?news_page={{ news_page_obj.next_page_number }}"
+      class="page-btn">
+      Next
+    </a>
+
+  {% endif %}
+
+</div>

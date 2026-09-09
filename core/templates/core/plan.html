@@ -1,0 +1,90 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'core/css/plan.css' %}">
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}">
+{% endblock %}
+{% block content %}
+<section class="plan-page" style="background-image: url(
+    {% if site_settings.hero_background %}
+        {{ site_settings.hero_background.url }}
+    {% else %}
+        {% static 'core/images/investment.jpg' %}
+    {% endif %}
+);">
+    <div class="overlay"></div>
+    <div class="breadcrumb">
+        <i class="fa fa-home"></i>
+        <a href="{% url 'home' %}">Home</a> - <span>Plan</span>
+    </div>
+    <div class="plan-description">
+        <h1 class="plan-title">Our Investment Plans</h1>
+        <p class="plan-subtitle">
+            Discover a world-class portfolio designed to maximize growth and minimize risk. At Finbit, every plan blends cutting-edge AI insights with expert trading strategies, giving you the confidence to invest smarter and achieve consistent results.
+        </p>
+        <ul class="plan-highlights">
+            <li>AI-driven insights for smarter investing</li>
+            <li>Expert risk management for consistent growth</li>
+            <li>Transparent performance tracking for trust</li>
+        </ul>
+        <div class="plan-visual">
+            <img src="{% static 'core/images/btclogo.jpg' %}" alt="Crypto Illustration" class="rotating-bitcoin">
+        </div>
+
+    </div>
+</section>
+<section id="investment-plans" class="plans-section">
+    <div class="plans-container">
+        <h1>Investment Plans</h1>
+        <p>Choose the plan that suits you best</p>
+
+        <div class="plans-grid">
+            {% for plan in plans %}
+            <div class="plan-card-container">
+                <div class="plan-card">
+                    <h2>{{ plan.name }}</h2>
+                    <h3>Return {{ plan.return_rate }}</h3>
+                    <p>{{ plan.duration }}</p>
+                    <p>{{ plan.frequency }}</p>
+                    <p>Total: {{ plan.total_return }}</p>
+                    <p>Minimum Investment: {{ plan.minimum_investment }}</p>
+
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'login' %}" class="plan-btn" title="Sign up or log in to start investing instantly">Invest Now</a>
+                    {% else %}
+                        <a href="{% url 'signup' %}" class="plan-btn" title="Sign up or log in to start investing instantly">Invest Now</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="view-all">
+            <a href="{% url 'all_plans' %}" class="view-btn">View All Packages</a>
+        </div>
+    </div>
+</section>
+<section class="trust-signals">
+    <div class="trust-container">
+        <h2>Why Choose Finbit?</h2>
+        <ul>
+            <li>Secure transactions - SSL & blockchain verified</li>
+            <li>24/7 customer support</li>
+            <li>Global investor community</li>
+        </ul>
+    </div>
+</section>
+<section class="site-links">
+  <div class="container text-center">
+    {% if footer.logo %}
+      <img src="{{ footer.logo.url }}" alt="{{ footer.company_name }} Logo" class="footer-logo">
+    {% endif %}
+    <nav class="footer-nav">
+    <a href="{% url 'home' %}">Home</a>
+    <a href="{% url 'privacy_policy' %}">Privacy & Policy</a>
+    <a href="{% url 'terms_conditions' %}">Terms & Conditions</a>
+    </nav>
+  </div>
+</section>
+{% endblock %}
+

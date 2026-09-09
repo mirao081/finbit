@@ -1,0 +1,1227 @@
+
+
+
+* {
+    box-sizing: border-box;
+}
+
+
+
+
+.profit-history-page {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 180px);
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 35px 18px 50px;
+
+    overflow: hidden;
+}
+
+
+
+
+.profit-history-page::before {
+    content: "";
+
+    position: fixed;
+
+    top: 12%;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 480px;
+    height: 480px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(103, 147, 227, .12),
+            transparent 70%
+        );
+
+    filter: blur(38px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+
+
+
+.profit-card-wrapper {
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+    max-width: 1100px;
+
+    padding: 35px;
+
+    border-radius: 24px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(103, 147, 227, .12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 100% 100%,
+            rgba(212, 175, 90, .08),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(25, 34, 49, .98),
+            rgba(8, 13, 21, .99)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, .55),
+        0 0 35px rgba(103, 147, 227, .08),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+}
+
+
+
+
+.profit-card-wrapper::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -20%;
+
+    width: 140%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #6793e3,
+            #9ec1ff,
+            #d4af5a,
+            #9ec1ff,
+            #6793e3,
+            transparent
+        );
+
+    background-size: 250% 100%;
+
+    animation: profitTopGlow 5s linear infinite;
+}
+
+
+
+
+.profit-card-wrapper::after {
+    content: "";
+
+    position: absolute;
+
+    width: 190px;
+    height: 190px;
+
+    top: -80px;
+    right: -70px;
+
+    border-radius: 50%;
+
+    background: rgba(103, 147, 227, .08);
+
+    filter: blur(45px);
+
+    pointer-events: none;
+}
+
+
+
+
+.profit-heading {
+    position: relative;
+
+    z-index: 1;
+
+    text-align: center;
+
+    margin-bottom: 30px;
+}
+
+
+.profit-heading h2 {
+    margin: 0 0 12px;
+
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+
+    font-weight: 800;
+
+    letter-spacing: .6px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #ffffff,
+            #9ec1ff,
+            #6793e3,
+            #ffffff,
+            #d4af5a,
+            #ffffff
+        );
+
+    background-size: 300% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    -webkit-text-fill-color: transparent;
+
+    animation: profitTitleGlow 6s linear infinite;
+}
+
+
+.profit-heading p {
+    margin: 0;
+
+    color: #8f9bad;
+
+    font-size: .92rem;
+
+    line-height: 1.6;
+}
+
+
+
+
+.profit-summary {
+    position: relative;
+
+    z-index: 1;
+
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 18px;
+
+    margin-bottom: 30px;
+}
+
+
+
+
+.summary-item {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 22px;
+
+    border-radius: 16px;
+
+    text-align: center;
+
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(103, 147, 227, .10),
+            transparent 55%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .055),
+            rgba(255, 255, 255, .018)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .18);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .04),
+        0 12px 28px rgba(0, 0, 0, .25);
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+
+
+.summary-item::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 12%;
+
+    width: 76%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #6793e3,
+            #d4af5a,
+            #6793e3,
+            transparent
+        );
+}
+
+
+.summary-item:hover {
+    transform: translateY(-4px);
+
+    border-color: rgba(103, 147, 227, .40);
+
+    box-shadow:
+        0 18px 35px rgba(0, 0, 0, .35),
+        0 0 22px rgba(103, 147, 227, .08);
+}
+
+
+.summary-item span {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #8f9bad;
+
+    font-size: .75rem;
+
+    font-weight: 600;
+
+    text-transform: uppercase;
+
+    letter-spacing: .5px;
+}
+
+
+.summary-item strong {
+    display: block;
+
+    color: #d4af5a;
+
+    font-size: 1.4rem;
+
+    font-weight: 800;
+
+    letter-spacing: .3px;
+}
+
+
+
+
+.profit-table-section {
+    position: relative;
+
+    z-index: 1;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(103, 147, 227, .08),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(22, 31, 45, .96),
+            rgba(8, 13, 21, .98)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .18);
+
+    box-shadow:
+        0 16px 38px rgba(0, 0, 0, .35),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+
+.profit-table-section h3 {
+    margin: 0 0 22px;
+
+    text-align: center;
+
+    color: #ffffff;
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+    letter-spacing: .3px;
+}
+
+
+
+
+.profit-history-table {
+    width: 100%;
+
+    border-collapse: separate;
+
+    border-spacing: 0 10px;
+}
+
+
+
+
+.profit-history-table thead th {
+    padding: 0 14px 10px;
+
+    text-align: left;
+
+    color: #6793e3;
+
+    font-size: .72rem;
+
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: .6px;
+}
+
+
+
+
+.profit-history-table tbody tr {
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, .05),
+            rgba(255, 255, 255, .02)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .15);
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .03);
+
+    transition:
+        transform .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+
+
+.profit-history-table tbody tr:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(103, 147, 227, .35);
+
+    box-shadow:
+        0 12px 24px rgba(0, 0, 0, .25),
+        0 0 18px rgba(103, 147, 227, .08);
+}
+
+
+
+
+.profit-history-table tbody td {
+    padding: 16px 14px;
+
+    color: #d8e0eb;
+
+    font-size: .86rem;
+
+    vertical-align: middle;
+}
+
+
+
+
+.profit-history-table tbody td:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+
+
+
+.profit-history-table tbody td:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+
+
+
+.profit-history-table tbody td:nth-child(2) {
+    color: #cbd3df;
+
+    font-weight: 600;
+}
+
+
+
+
+.profit-history-table tbody td:nth-child(3) {
+    color: #d4af5a;
+
+    font-weight: 800;
+
+    white-space: nowrap;
+}
+
+
+
+
+.status-pending,
+.status-approved,
+.status-declined {
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 86px;
+
+    padding: 6px 12px;
+
+    border-radius: 20px;
+
+    font-size: .70rem;
+
+    font-weight: 700;
+
+    text-transform: capitalize;
+
+    border: 1px solid;
+}
+
+
+
+
+.status-pending {
+    color: #f0c674;
+
+    background: rgba(212, 175, 90, .10);
+
+    border-color: rgba(212, 175, 90, .30);
+
+    box-shadow:
+        0 0 12px rgba(212, 175, 90, .08);
+}
+
+
+
+
+.status-approved {
+    color: #7ee2a8;
+
+    background: rgba(34, 197, 94, .10);
+
+    border-color: rgba(34, 197, 94, .28);
+
+    box-shadow:
+        0 0 12px rgba(34, 197, 94, .08);
+}
+
+
+
+
+.status-declined {
+    color: #ff9a9a;
+
+    background: rgba(220, 38, 38, .10);
+
+    border-color: rgba(220, 38, 38, .28);
+
+    box-shadow:
+        0 0 12px rgba(220, 38, 38, .08);
+}
+
+
+
+
+.profit-table-section > p {
+    margin: 0;
+
+    padding: 20px 10px;
+
+    text-align: center;
+
+    color: #8f9bad;
+
+    font-size: .88rem;
+}
+
+
+
+
+.profit-table-section .pagination {
+    width: 100%;
+
+    margin-top: 25px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 14px;
+
+    flex-wrap: wrap;
+}
+
+
+.profit-table-section .pagination a {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-width: 90px;
+    min-height: 40px;
+
+    padding: 8px 16px;
+
+    border-radius: 10px;
+
+    color: #d4af5a;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .12),
+            rgba(212, 175, 90, .07)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    text-decoration: none;
+
+    font-size: .76rem;
+
+    font-weight: 700;
+
+    transition:
+        transform .3s ease,
+        color .3s ease,
+        border-color .3s ease,
+        box-shadow .3s ease;
+}
+.profit-chart h3 {
+    color: #ffffff;
+}
+
+.profit-table-section .pagination a:hover {
+    transform: translateY(-2px);
+
+    color: #ffffff;
+
+    border-color: rgba(103, 147, 227, .55);
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, .30),
+        0 0 18px rgba(103, 147, 227, .10);
+}
+
+
+.profit-table-section .pagination span {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    min-height: 40px;
+
+    padding: 8px 15px;
+
+    border-radius: 10px;
+
+    color: #9ec1ff;
+
+    background: rgba(103, 147, 227, .07);
+
+    border: 1px solid rgba(103, 147, 227, .16);
+
+    font-size: .75rem;
+
+    font-weight: 600;
+}
+
+
+
+
+.profit-chart {
+    position: relative;
+
+    z-index: 1;
+
+    margin-top: 22px;
+
+    padding: 28px;
+
+    border-radius: 20px;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(103, 147, 227, .08),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(22, 31, 45, .96),
+            rgba(8, 13, 21, .98)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .18);
+
+    box-shadow:
+        0 16px 38px rgba(0, 0, 0, .35),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+
+.profit-chart h3 {
+    margin: 0 0 25px;
+
+    text-align: center;
+
+    color: #ffffff;
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+
+    letter-spacing: .3px;
+}
+
+
+#profitGrowthChart {
+    display: block;
+
+    width: 100% !important;
+
+    max-height: 360px;
+}
+
+
+
+
+#profitLabels,
+#profitData {
+    display: none !important;
+}
+
+
+
+
+.profit-card-wrapper .security-reminder {
+    position: relative;
+
+    z-index: 1;
+
+    width: 100%;
+
+    margin-top: 22px;
+
+    padding: 22px;
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 16px;
+
+    border-radius: 18px;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(103, 147, 227, .08),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(22, 31, 45, .96),
+            rgba(8, 13, 21, .98)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .18);
+
+    box-shadow:
+        0 14px 35px rgba(0, 0, 0, .35),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+
+.profit-card-wrapper .security-reminder::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 12%;
+
+    width: 76%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #6793e3,
+            #d4af5a,
+            #6793e3,
+            transparent
+        );
+}
+
+
+.profit-card-wrapper .security-reminder i {
+    flex-shrink: 0;
+
+    width: 48px;
+    height: 48px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    color: #9ec1ff;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .20),
+            rgba(212, 175, 90, .10)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .28);
+
+    font-size: 1.1rem;
+
+    box-shadow:
+        0 0 18px rgba(103, 147, 227, .12),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+}
+
+
+.profit-card-wrapper .security-reminder strong {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #ffffff;
+
+    font-size: .98rem;
+
+    font-weight: 700;
+}
+
+
+.profit-card-wrapper .security-reminder p {
+    margin: 0;
+
+    color: #9aa8ba;
+
+    font-size: .86rem;
+
+    line-height: 1.65;
+}
+
+
+
+
+@media (max-width: 900px) {
+
+    .profit-history-page {
+        padding: 28px 15px 40px;
+    }
+
+    .profit-card-wrapper {
+        padding: 28px 24px;
+
+        border-radius: 20px;
+    }
+
+    .profit-history-table thead th {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .profit-history-table tbody td {
+        padding: 14px 10px;
+
+        font-size: .81rem;
+    }
+
+}
+
+
+
+
+@media (max-width: 600px) {
+
+    .profit-history-page {
+        padding: 22px 12px 35px;
+    }
+
+    .profit-card-wrapper {
+        padding: 24px 18px;
+
+        border-radius: 18px;
+    }
+
+
+    
+
+    .profit-heading {
+        margin-bottom: 24px;
+    }
+
+    .profit-heading h2 {
+        font-size: 1.45rem;
+    }
+
+    .profit-heading p {
+        font-size: .82rem;
+    }
+
+
+    
+
+    .profit-summary {
+        grid-template-columns: 1fr;
+
+        gap: 12px;
+
+        margin-bottom: 22px;
+    }
+
+    .summary-item {
+        padding: 18px;
+    }
+
+    .summary-item strong {
+        font-size: 1.2rem;
+    }
+
+
+    
+
+    .profit-table-section {
+        padding: 20px 15px;
+
+        border-radius: 17px;
+    }
+
+    .profit-table-section h3 {
+        font-size: .98rem;
+    }
+
+
+    
+
+    .profit-history-table {
+        border-spacing: 0 10px;
+    }
+
+    .profit-history-table thead {
+        display: none;
+    }
+
+    .profit-history-table,
+    .profit-history-table tbody,
+    .profit-history-table tr,
+    .profit-history-table td {
+        display: block;
+
+        width: 100%;
+    }
+
+
+    .profit-history-table tbody tr {
+        padding: 7px 0;
+
+        border-radius: 14px;
+    }
+
+
+    .profit-history-table tbody td {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+
+        padding: 11px 14px;
+
+        border-radius: 0 !important;
+
+        font-size: .80rem;
+
+        text-align: right;
+    }
+
+
+    
+
+    .profit-history-table tbody td::before {
+        flex-shrink: 0;
+
+        color: #6793e3;
+
+        font-size: .68rem;
+
+        font-weight: 700;
+
+        text-transform: uppercase;
+
+        letter-spacing: .5px;
+    }
+
+
+    .profit-history-table tbody td:nth-child(1)::before {
+        content: "Date";
+    }
+
+    .profit-history-table tbody td:nth-child(2)::before {
+        content: "Plan";
+    }
+
+    .profit-history-table tbody td:nth-child(3)::before {
+        content: "Profit";
+    }
+
+    .profit-history-table tbody td:nth-child(4)::before {
+        content: "Status";
+    }
+
+
+    
+
+    .profit-table-section .pagination {
+        margin-top: 20px;
+
+        gap: 8px;
+    }
+
+    .profit-table-section .pagination a {
+        min-width: 78px;
+
+        min-height: 38px;
+
+        padding: 7px 12px;
+
+        font-size: .70rem;
+    }
+
+    .profit-table-section .pagination span {
+        min-height: 38px;
+
+        padding: 7px 11px;
+
+        font-size: .68rem;
+    }
+
+
+    
+
+    .profit-chart {
+        padding: 20px 15px;
+
+        border-radius: 17px;
+    }
+
+    .profit-chart h3 {
+        font-size: .98rem;
+         color: white;
+
+        margin-bottom: 20px;
+    }
+
+    #profitGrowthChart {
+        max-height: 260px;
+       
+    }
+
+
+    
+
+    .profit-card-wrapper .security-reminder {
+        padding: 18px;
+
+        gap: 14px;
+
+        border-radius: 16px;
+    }
+
+    .profit-card-wrapper .security-reminder i {
+        width: 42px;
+        height: 42px;
+
+        font-size: 1rem;
+    }
+
+    .profit-card-wrapper .security-reminder strong {
+        font-size: .90rem;
+    }
+    
+
+    .profit-card-wrapper .security-reminder p {
+        font-size: .82rem;
+        line-height: 1rem;
+    }
+
+}
+
+
+
+
+@media (max-width: 380px) {
+
+    .profit-card-wrapper {
+        padding: 22px 15px;
+    }
+
+    .profit-heading h2 {
+        font-size: 1rem;
+    }
+
+    .summary-item {
+        padding: 16px;
+    }
+
+    .profit-table-section {
+        padding: 18px 12px;
+    }
+
+    .profit-history-table tbody td {
+        padding: 10px 11px;
+
+        font-size: .76rem;
+    }
+
+    .profit-history-table tbody td::before {
+        font-size: .64rem;
+    }
+
+}
+
+
+
+
+@media (hover: none) and (pointer: coarse) {
+
+    .summary-item:hover {
+        transform: none;
+
+        border-color: rgba(103, 147, 227, .18);
+
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, .04),
+            0 12px 28px rgba(0, 0, 0, .25);
+    }
+
+    .profit-history-table tbody tr:hover {
+        transform: none;
+
+        border-color: rgba(103, 147, 227, .15);
+
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, .03);
+    }
+
+    .profit-table-section .pagination a:hover {
+        transform: none;
+
+        color: #d4af5a;
+
+        border-color: rgba(103, 147, 227, .25);
+
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, .04),
+            0 5px 15px rgba(0, 0, 0, .20);
+    }
+
+}
+
+
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .profit-card-wrapper::before,
+    .profit-heading h2 {
+        animation: none;
+        
+    }
+
+    .summary-item,
+    .profit-history-table tbody tr,
+    .profit-table-section .pagination a {
+        transition: none;
+    }
+
+    .summary-item:hover,
+    .profit-history-table tbody tr:hover,
+    .profit-table-section .pagination a:hover {
+        transform: none;
+    }
+
+}
+
+
+
+
+@keyframes profitTopGlow {
+
+    from {
+        background-position: 250% 50%;
+    }
+
+    to {
+        background-position: -250% 50%;
+    }
+}
+
+
+@keyframes profitTitleGlow {
+
+    from {
+        background-position: 300% center;
+    }
+
+    to {
+        background-position: -300% center;
+    }
+}
+

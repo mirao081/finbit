@@ -1,0 +1,384 @@
+
+{% extends 'accounts/dashboard_base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'accounts/css/security_center.css' %}">
+
+<section class="security-page">
+
+    <div class="security-card">
+
+        
+        <div class="security-heading">
+            <h2>{{ content.hero_title }}</h2>
+            <p>{{ content.hero_subtitle }}</p>
+        </div>
+
+
+        
+        <section class="security-section">
+            <div class="section-content">
+
+                <h3>{{ content.compliance_title }}</h3>
+
+                <p>{{ content.compliance_text }}</p>
+
+                <div class="kyc-status">
+
+                    <span>KYC Status</span>
+
+                    {% if request.user.userprofile.kyc_verified %}
+                        <strong class="status-approved">
+                            Approved
+                        </strong>
+                    {% else %}
+                        <strong class="status-unverified">
+                            Unverified
+                        </strong>
+                    {% endif %}
+
+                </div>
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="security-btn primary"
+                >
+                    Verify Identity
+                </a>
+
+            </div>
+        </section>
+
+
+        
+        <section class="security-section">
+
+            <div class="section-content">
+
+                <h3>{{ content.activity_title }}</h3>
+
+                <p>{{ content.activity_text }}</p>
+
+                <div class="table-wrapper">
+
+                    <table class="activity-table">
+
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>IP Address</th>
+                                <th>Device</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% if activities %}
+
+                                {% for item in activities %}
+
+                                    <tr>
+                                        <td>{{ item.created_at }}</td>
+                                        <td>{{ item.ip_address }}</td>
+                                        <td>{{ item.device }}</td>
+                                        <td>{{ item.status }}</td>
+                                    </tr>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <tr>
+                                    <td colspan="4">
+                                        No recent login activity.
+                                    </td>
+                                </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+                <div class="btn-group">
+
+                    <a
+                        href="{% url 'login_activity' %}"
+                        class="security-btn info"
+                    >
+                        View Activity
+                    </a>
+
+                    <a
+                        href="{% url 'revoke_sessions' %}"
+                        class="security-btn danger"
+                    >
+                        Revoke Sessions
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        
+        <section class="security-section">
+
+            <div class="section-content">
+
+                <h3>Active Sessions</h3>
+
+                <p>
+                    Manage devices currently logged into your account.
+                </p>
+
+                <div class="table-wrapper">
+
+                    <table class="activity-table">
+
+                        <thead>
+                            <tr>
+                                <th>Device</th>
+                                <th>IP Address</th>
+                                <th>Location</th>
+                                <th>Last Active</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            {% if sessions %}
+
+                                {% for session in sessions %}
+
+                                    <tr>
+
+                                        <td>{{ session.device }}</td>
+
+                                        <td>
+                                            {{ session.ip_address }}
+                                        </td>
+
+                                        <td>
+                                            {{ session.location }}
+                                        </td>
+
+                                        <td>
+                                            {{ session.last_active }}
+                                        </td>
+
+                                        <td>
+
+                                            <a
+                                                href="{% url 'logout_session' session.id %}"
+                                                class="security-btn danger"
+                                            >
+                                                Logout
+                                            </a>
+
+                                        </td>
+
+                                    </tr>
+
+                                {% endfor %}
+
+                            {% else %}
+
+                                <tr>
+                                    <td colspan="5">
+                                        No active sessions.
+                                    </td>
+                                </tr>
+
+                            {% endif %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        
+        <section class="security-section">
+
+            <div class="section-content">
+
+                <h3>Recovery Options</h3>
+
+                <p>
+                    Keep your account safe by updating recovery details.
+                </p>
+
+                <p>
+                    <strong>Email:</strong>
+                    {{ request.user.userprofile.recovery_email|default:"Not set" }}
+                </p>
+
+                <p>
+                    <strong>Phone:</strong>
+                    {{ request.user.userprofile.recovery_phone|default:"Not set" }}
+                </p>
+
+                <a
+                    href="{% url 'update_recovery' %}"
+                    class="security-btn primary"
+                >
+                    Update Recovery Info
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <section class="security-section">
+
+            <div class="section-content">
+
+                <h3>Two-Factor Authentication</h3>
+
+                <p>
+                    Add an additional layer of protection when signing in.
+                </p>
+
+                <div class="kyc-status">
+
+                    <span>2FA Status</span>
+
+                    {% if request.user.two_factor.is_enabled %}
+
+                        <strong class="status-approved">
+                            Enabled
+                        </strong>
+
+                    {% else %}
+
+                        <strong class="status-unverified">
+                            Disabled
+                        </strong>
+
+                    {% endif %}
+
+                </div>
+
+                <a
+                    href="{% url 'two_factor_setup' %}"
+                    class="security-btn primary"
+                >
+
+                    {% if request.user.two_factor.is_enabled %}
+                        Manage 2FA
+                    {% else %}
+                        Enable 2FA
+                    {% endif %}
+
+                </a>
+
+            </div>
+
+        </section>
+
+        
+        <section class="security-section">
+
+            <div class="section-content">
+
+                <h3>{{ content.controls_title }}</h3>
+
+                <p>{{ content.controls_text }}</p>
+
+                <a
+                    href="{% url 'password_change' %}"
+                    class="security-btn warning"
+                >
+                    Change Password
+                </a>
+
+            </div>
+
+        </section>
+
+
+        
+        <section class="security-section">
+
+            <div class="section-content">
+
+                <h3>{{ content.alerts_title }}</h3>
+
+                <p>{{ content.alerts_text }}</p>
+
+                <ul class="alerts-list">
+
+                    {% if alerts %}
+
+                        {% for alert in alerts %}
+
+                            <li>
+                                <span class="alert-date">
+                                    {{ alert.date }}
+                                </span>
+                                -
+                                {{ alert.message }}
+                            </li>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <li>
+                            No security alerts at this time.
+                        </li>
+
+                    {% endif %}
+
+                </ul>
+
+            </div>
+
+        </section>
+
+
+        
+        <section class="security-section">
+
+            <div class="section-content">
+
+                <h3>Account Data</h3>
+
+                <p>
+                    You can download a copy of your account data for review.
+                </p>
+
+                <a
+                    href="{% url 'download_account_data' %}"
+                    class="security-btn info"
+                >
+                    Download Data
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+

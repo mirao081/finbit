@@ -1,0 +1,97 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'accounts/css/profit_history.css' %}">
+{% endblock %}
+{% block content %}
+<section class="profit-history-page">
+  <div class="profit-card-wrapper">
+    <div class="profit-heading">
+      <h2>Profit History</h2>
+      <p>Track all profits earned from your investments in one place.</p>
+    </div>
+    <div class="profit-summary">
+      <div class="summary-item">
+        <span>Total Profit Earned</span>
+        <strong>${{ total_profit|floatformat:2 }}</strong>
+      </div>
+      <div class="summary-item">
+        <span>Active Investments</span>
+        <strong>{{ active_investments }}</strong>
+      </div>
+      <div class="summary-item">
+        <span>Average ROI</span>
+        <strong>{{ average_roi }}%</strong>
+      </div>
+    </div>
+    <section class="profit-table-section">
+      <h3>Detailed Profit Records</h3>
+      {% if profits %}
+        <table class="profit-history-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Plan</th>
+              <th>Profit Amount (USD)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for profit in profits %}
+              <tr>
+                <td>{{ profit.created_at|date:"M d, Y • h:i A" }}</td>
+                <td>{{ profit.plan.name }}</td>
+                <td>${{ profit.amount|floatformat:2 }}</td>
+                <td>
+                  {% if profit.status == "pending" %}
+                    <span class="status-pending">Pending</span>
+                  {% elif profit.status == "approved" %}
+                    <span class="status-approved">Approved</span>
+                  {% elif profit.status == "rejected" %}
+                    <span class="status-declined">Declined</span>
+                  {% else %}
+                    <span>{{ profit.status }}</span>
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <div class="pagination">
+          {% if profits.has_previous %}
+            <a href="?page={{ profits.previous_page_number }}">Previous</a>
+          {% endif %}
+
+          <span>Page {{ profits.number }} of {{ profits.paginator.num_pages }}</span>
+
+          {% if profits.has_next %}
+            <a href="?page={{ profits.next_page_number }}">Next</a>
+          {% endif %}
+        </div>
+      {% else %}
+        <p>You have not earned any profits yet.</p>
+      {% endif %}
+    </section>
+
+    <section class="profit-chart">
+        <h3>Profit Growth Over Time</h3>
+        <canvas id="profitGrowthChart"></canvas>
+        <script id="profitLabels" type="application/json">{{ profit_labels }}</script>
+        <script id="profitData" type="application/json">{{ profit_data }}</script>
+    </section>
+    <div class="security-reminder">
+      <i class="fas fa-lock"></i>
+      <div>
+        <strong>Transparency & Security</strong>
+        <p>All profits are calculated based on your active investment plans. Your funds and returns are securely managed and verified by our system.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="{% static 'accounts/js/profit_history.js' %}"></script>
+{% endblock %}
+

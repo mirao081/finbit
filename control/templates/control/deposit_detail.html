@@ -1,0 +1,573 @@
+{% extends "control/admin_base.html" %}
+
+{% load static %}
+
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'control/css/deposit_detail.css' %}"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="deposit-detail-page">
+
+
+    
+
+    <div class="deposit-detail-header">
+
+        <div class="deposit-detail-icon">
+
+            <i class="fas fa-receipt"></i>
+
+        </div>
+
+        <h2>
+            Deposit Detail
+        </h2>
+
+        <p>
+            Review and manage this deposit transaction.
+        </p>
+
+    </div>
+
+
+
+    
+
+    <div class="deposit-detail-card">
+
+
+        
+
+        <div class="deposit-information">
+
+
+            
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-user"></i>
+
+                    <span>
+                        User
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    {{ deposit.user.username }}
+
+                </span>
+
+            </div>
+
+
+
+            
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-dollar-sign"></i>
+
+                    <span>
+                        Deposit Value
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value amount-value">
+
+                    ${{ deposit.amount_usd|floatformat:2 }}
+
+                </span>
+
+            </div>
+
+
+
+            
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-wallet"></i>
+
+                    <span>
+                        Payment Method
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    {{ deposit.get_payment_method_display }}
+
+                </span>
+
+            </div>
+
+
+
+            
+
+            {% if deposit.plan %}
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-chart-line"></i>
+
+                    <span>
+                        Investment Plan
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    {{ deposit.plan.name }}
+
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+
+            
+
+            {% if deposit.asset_amount %}
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-coins"></i>
+
+                    <span>
+                        Asset Amount
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    {{ deposit.asset_amount }}
+
+                    {% if deposit.payment_method == "USDT_TRC20" %}
+
+                        USDT
+
+                    {% elif deposit.payment_method == "USDT_ERC20" %}
+
+                        USDT
+
+                    {% else %}
+
+                        {{ deposit.payment_method }}
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+
+            
+
+            {% if deposit.received_asset_amount %}
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-coins"></i>
+
+                    <span>
+                        Received Asset Amount
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    {{ deposit.received_asset_amount }}
+
+                    {% if deposit.payment_method == "USDT_TRC20" %}
+
+                        USDT
+
+                    {% elif deposit.payment_method == "USDT_ERC20" %}
+
+                        USDT
+
+                    {% else %}
+
+                        {{ deposit.payment_method }}
+
+                    {% endif %}
+
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+
+            
+
+            {% if deposit.exchange_rate %}
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-chart-line"></i>
+
+                    <span>
+                        Exchange Rate
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    ${{ deposit.exchange_rate|floatformat:2 }}
+
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+
+            
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-calendar"></i>
+
+                    <span>
+                        Date
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    {{ deposit.created_at|date:"Y-m-d H:i" }}
+
+                </span>
+
+            </div>
+
+
+
+            
+
+            {% if deposit.approved_at %}
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-clock"></i>
+
+                    <span>
+                        Processed At
+                    </span>
+
+                </span>
+
+                <span class="deposit-info-value">
+
+                    {{ deposit.approved_at|date:"Y-m-d H:i" }}
+
+                </span>
+
+            </div>
+
+            {% endif %}
+
+
+
+            
+
+            <div class="deposit-info-item">
+
+                <span class="deposit-info-label">
+
+                    <i class="fas fa-circle-check"></i>
+
+                    <span>
+                        Status
+                    </span>
+
+                </span>
+
+                <span class="deposit-status">
+
+                    {{ deposit.get_status_display }}
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        
+
+        {% if deposit.proof %}
+
+        <div class="deposit-proof-section">
+
+
+            <div class="deposit-section-title">
+
+                <i class="fas fa-file-image"></i>
+
+                <span>
+                    Proof of Payment
+                </span>
+
+            </div>
+
+
+            <div class="deposit-proof">
+
+                <img
+                    src="{{ deposit.proof.url }}"
+                    alt="Proof of Payment"
+                >
+
+            </div>
+
+
+        </div>
+
+        {% endif %}
+
+
+
+        
+
+        {% if deposit.status == "pending" %}
+
+        <div class="deposit-update-section">
+
+
+            
+
+            <div class="deposit-section-title">
+
+                <i class="fas fa-pen-to-square"></i>
+
+                <span>
+                    Process Deposit
+                </span>
+
+            </div>
+
+
+
+            
+
+            <div class="deposit-process-description">
+
+                <p>
+                    Review the deposit details and choose an action.
+                    The cryptocurrency amount will be calculated
+                    automatically using the current asset exchange rate.
+                </p>
+
+            </div>
+
+
+
+            
+
+            <div class="deposit-actions">
+
+
+                
+
+                <form
+                    method="post"
+                    action="{% url 'deposit_detail' deposit.id %}"
+                    class="deposit-action-form"
+                >
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="status"
+                        value="approved"
+                    >
+
+                    <button
+                        type="submit"
+                        class="deposit-update-btn"
+                    >
+
+                        <i class="fas fa-circle-check"></i>
+
+                        <span>
+                            Approve Deposit
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+
+                
+
+                <form
+                    method="post"
+                    action="{% url 'deposit_detail' deposit.id %}"
+                    class="deposit-action-form"
+                >
+
+                    {% csrf_token %}
+
+                    <input
+                        type="hidden"
+                        name="status"
+                        value="rejected"
+                    >
+
+                    <button
+                        type="submit"
+                        class="deposit-reject-btn"
+                    >
+
+                        <i class="fas fa-circle-xmark"></i>
+
+                        <span>
+                            Reject Deposit
+                        </span>
+
+                    </button>
+
+                </form>
+
+
+
+                
+
+                <a
+                    href="{% url 'deposits' %}"
+                    class="deposit-back-btn"
+                >
+
+                    <i class="fas fa-arrow-left"></i>
+
+                    <span>
+                        Back
+                    </span>
+
+                </a>
+
+
+            </div>
+
+
+        </div>
+
+
+
+        
+
+        {% else %}
+
+        <div class="deposit-processed-message">
+
+
+            {% if deposit.status == "approved" %}
+
+                <i class="fas fa-circle-check"></i>
+
+                <span>
+
+                    This deposit has been approved and credited
+                    to the user's
+                    {{ deposit.get_payment_method_display }}
+                    wallet.
+
+                </span>
+
+
+            {% elif deposit.status == "rejected" %}
+
+                <i class="fas fa-circle-xmark"></i>
+
+                <span>
+
+                    This deposit has been rejected.
+
+                </span>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+
+        
+
+        <div class="deposit-actions">
+
+            <a
+                href="{% url 'deposits' %}"
+                class="deposit-back-btn"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                <span>
+                    Back
+                </span>
+
+            </a>
+
+        </div>
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

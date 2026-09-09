@@ -1,0 +1,373 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'accounts/css/notifications.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="notifications-page">
+
+
+
+
+<div class="notifications-header">
+
+    <div class="notifications-icon">
+        <i class="fas fa-bell"></i>
+    </div>
+
+    <div>
+
+        <h1>
+            Notifications
+        </h1>
+
+        <p>
+            Stay updated with your Finbit account activity.
+        </p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="notifications-actions">
+
+    {% if unread_notifications_count > 0 %}
+
+        <span class="unread-count">
+
+            {{ unread_notifications_count }}
+            unread
+
+        </span>
+
+
+        <form
+            method="post"
+            action="{% url 'mark_all_notifications_read' %}"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="mark-all-btn"
+            >
+
+                <i class="fas fa-check-double"></i>
+
+                Mark All as Read
+
+            </button>
+
+        </form>
+
+    {% else %}
+
+        <span class="all-read">
+
+            <i class="fas fa-check-circle"></i>
+
+            All notifications read
+
+        </span>
+
+    {% endif %}
+
+</div>
+
+
+
+
+<div class="notifications-list">
+
+    {% if notifications %}
+
+
+        {% for notification in notifications %}
+
+            <div
+                class="notification-card
+                {% if not notification.is_read %}
+                    unread
+                {% endif %}"
+            >
+
+
+                
+
+                <div class="notification-card-icon">
+
+                    {% if notification.notification_type == "signup" %}
+
+                        <i class="fas fa-user-plus"></i>
+
+
+                    {% elif notification.notification_type == "verification" %}
+
+                        <i class="fas fa-shield-check"></i>
+
+
+                    {% elif notification.notification_type == "deposit" %}
+
+                        <i class="fas fa-wallet"></i>
+
+
+                    {% elif notification.notification_type == "investment" %}
+
+                        <i class="fas fa-chart-line"></i>
+
+
+                    {% elif notification.notification_type == "withdrawal" %}
+
+                        <i class="fas fa-money-bill-transfer"></i>
+
+
+                    {% elif notification.notification_type == "referral" %}
+
+                        <i class="fas fa-users"></i>
+
+
+                    {% elif notification.notification_type == "bonus" %}
+
+                        <i class="fas fa-gift"></i>
+
+
+                    {% else %}
+
+                        <i class="fas fa-bell"></i>
+
+                    {% endif %}
+
+                </div>
+
+
+                
+
+                <div class="notification-content">
+
+
+                    
+
+                    <div class="notification-top">
+
+                        <h3>
+                            {{ notification.title }}
+                        </h3>
+
+
+                        {% if not notification.is_read %}
+
+                            <span class="new-badge">
+                                NEW
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    
+
+                    <p class="notification-message">
+
+                        {{ notification.message }}
+
+                    </p>
+
+
+                    
+
+                    <div class="notification-bottom">
+
+
+                        <span class="notification-date">
+
+                            <i class="far fa-clock"></i>
+
+                            {{ notification.created_at|date:"M d, Y • h:i A" }}
+
+                        </span>
+
+
+                        {% if not notification.is_read %}
+
+
+                            <form
+                                method="post"
+                                action="{% url 'mark_notification_read' notification.id %}"
+                            >
+
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="mark-read-btn"
+                                >
+
+                                    <i class="fas fa-check"></i>
+
+                                    Mark as Read
+
+                                </button>
+
+                            </form>
+
+
+                        {% else %}
+
+
+                            <span class="read-status">
+
+                                <i class="fas fa-check-circle"></i>
+
+                                Read
+
+                            </span>
+
+
+                        {% endif %}
+
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+
+    {% else %}
+
+
+        
+
+        <div class="empty-notifications">
+
+            <div class="empty-icon">
+
+                <i class="far fa-bell-slash"></i>
+
+            </div>
+
+
+            <h2>
+                No Notifications
+            </h2>
+
+
+            <p>
+                You don't have any notifications yet.
+            </p>
+
+        </div>
+
+
+    {% endif %}
+
+</div>
+
+
+
+
+{% if notifications.paginator.num_pages > 1 %}
+
+    <div class="notifications-pagination">
+
+
+        
+
+        {% if notifications.has_previous %}
+
+            <a
+                href="?page={{ notifications.previous_page_number }}"
+                class="pagination-btn"
+            >
+
+                <i class="fas fa-chevron-left"></i>
+
+                Previous
+
+            </a>
+
+        {% else %}
+
+            <span class="pagination-btn disabled">
+
+                <i class="fas fa-chevron-left"></i>
+
+                Previous
+
+            </span>
+
+        {% endif %}
+
+
+        
+
+        <div class="pagination-pages">
+
+            <span class="pagination-number active">
+
+                {{ notifications.number }}
+
+            </span>
+
+
+            <span class="pagination-of">
+
+                of
+                {{ notifications.paginator.num_pages }}
+
+            </span>
+
+        </div>
+
+
+        
+
+        {% if notifications.has_next %}
+
+            <a
+                href="?page={{ notifications.next_page_number }}"
+                class="pagination-btn"
+            >
+
+                Next
+
+                <i class="fas fa-chevron-right"></i>
+
+            </a>
+
+        {% else %}
+
+            <span class="pagination-btn disabled">
+
+                Next
+
+                <i class="fas fa-chevron-right"></i>
+
+            </span>
+
+        {% endif %}
+
+
+    </div>
+
+{% endif %}
+
+
+</div>
+
+{% endblock %}

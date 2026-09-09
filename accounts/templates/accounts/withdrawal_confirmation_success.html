@@ -1,0 +1,85 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/withdraw_invoice.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="invoice-page">
+
+    <div class="invoice-card">
+
+        <h2>Withdrawal Submitted</h2>
+
+        <p>
+            Your withdrawal request has been successfully submitted.
+        </p>
+
+        <div class="invoice-section">
+
+            <div class="transaction-item">
+                <span>Asset</span>
+                <strong>{{ withdrawal.asset }}</strong>
+            </div>
+
+            <div class="transaction-item">
+                <span>Amount</span>
+                <strong>
+                    ${{ withdrawal.amount|floatformat:2 }}
+                </strong>
+            </div>
+
+            <div class="transaction-item">
+                <span>Destination Wallet</span>
+                <strong class="wallet-address">
+                    {{ withdrawal.destination_wallet }}
+                </strong>
+            </div>
+
+            <div class="transaction-item">
+                <span>Status</span>
+                <strong class="pending-text">
+                    {{ withdrawal.status|title }}
+                </strong>
+            </div>
+
+            <div class="transaction-item">
+                <span>Requested At</span>
+                <strong>
+                    {{ withdrawal.created_at|date:"M d, Y • h:i A" }}
+                </strong>
+            </div>
+
+        </div>
+
+        <div class="invoice-warning">
+
+            <i class="fas fa-clock"></i>
+
+            <div>
+                <strong>Awaiting Approval</strong>
+
+                <p>
+                    Your withdrawal request has been received and is
+                    awaiting administrative approval. Your reserved
+                    funds will remain unavailable until the request
+                    is approved or rejected.
+                </p>
+            </div>
+
+        </div>
+
+        <a
+            href="{% url 'withdraw' %}"
+            class="confirm-withdrawal-btn"
+        >
+            Back to Withdrawals
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

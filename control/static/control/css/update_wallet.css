@@ -1,0 +1,862 @@
+.update-wallet-page{
+
+   
+    position:relative;
+
+    width:100%;
+
+    max-width:900px;
+
+    margin:0 auto;
+
+    font-family:"Montserrat","Inter",sans-serif;
+   
+
+    }
+
+    
+
+    .update-wallet-header{
+
+   
+    display:flex;
+
+    flex-direction:column;
+
+    align-items:center;
+
+    justify-content:center;
+
+    text-align:center;
+
+    margin-bottom:30px;
+   
+
+    }
+
+    
+
+    .wallet-header-icon{
+
+   
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    width:70px;
+    height:70px;
+
+    margin-bottom:18px;
+
+    border-radius:20px;
+
+    color:#b8ecff;
+
+    background:
+
+        linear-gradient(
+            135deg,
+            rgba(77,232,255,.13),
+            rgba(67,140,255,.10),
+            rgba(139,108,255,.14)
+        );
+
+    border:1px solid rgba(77,232,255,.18);
+
+    box-shadow:
+
+        0 12px 30px rgba(0,0,0,.24),
+
+        0 0 25px rgba(77,232,255,.07),
+
+        inset 0 1px 0 rgba(255,255,255,.05);
+
+    font-size:1.5rem;
+
+    transition:
+        transform .3s ease,
+        box-shadow .3s ease,
+        color .3s ease;
+   
+
+    }
+
+    .update-wallet-header:hover .wallet-header-icon{
+
+   
+    transform:translateY(-3px);
+
+    color:#f2c66d;
+
+    box-shadow:
+
+        0 15px 35px rgba(0,0,0,.30),
+
+        0 0 30px rgba(77,232,255,.10),
+
+        0 0 20px rgba(242,198,109,.07);
+   
+
+    }
+
+    
+
+    .update-wallet-header h2{
+
+   
+    margin:0;
+
+    font-family:"Montserrat","Inter",sans-serif;
+
+    font-size:2rem;
+
+    font-weight:800;
+
+    line-height:1.3;
+
+    letter-spacing:.3px;
+
+    background:linear-gradient(
+        90deg,
+        #b8ecff 0%,
+        #66cfff 20%,
+        #438cff 40%,
+        #8b6cff 62%,
+        #d9f5ff 82%,
+        #f2c66d 100%
+    );
+
+    background-size:220% auto;
+
+    -webkit-background-clip:text;
+    background-clip:text;
+
+    -webkit-text-fill-color:transparent;
+
+    text-shadow:
+        0 0 20px rgba(77,232,255,.12),
+        0 0 25px rgba(139,108,255,.08);
+
+    animation:updateWalletHeadingShimmer 8s ease-in-out infinite;
+   
+
+    }
+
+    @keyframes updateWalletHeadingShimmer{
+
+   
+    0%{
+        background-position:0% center;
+    }
+
+    50%{
+        background-position:100% center;
+    }
+
+    100%{
+        background-position:0% center;
+    }
+   
+
+    }
+
+    
+
+    .update-wallet-header p{
+
+   
+    max-width:650px;
+
+    margin:10px 0 0;
+
+    color:rgba(184,236,255,.55);
+
+    font-family:"Inter","Montserrat",sans-serif;
+
+    font-size:.82rem;
+
+    font-weight:500;
+
+    line-height:1.7;
+   
+
+    }
+
+    .update-wallet-header p strong{
+
+   
+    color:#f2c66d;
+
+    font-weight:800;
+   
+
+    }
+
+    
+
+    .update-wallet-card{
+
+   
+    position:relative;
+
+    width:100%;
+
+    padding:34px;
+
+    overflow:hidden;
+
+    border-radius:24px;
+
+    border:1px solid rgba(77,232,255,.14);
+
+    background:
+
+        radial-gradient(
+            circle at 8% 0%,
+            rgba(77,232,255,.09),
+            transparent 30%
+        ),
+
+        radial-gradient(
+            circle at 95% 100%,
+            rgba(139,108,255,.10),
+            transparent 38%
+        ),
+
+        linear-gradient(
+            145deg,
+            rgba(20,45,78,.80),
+            rgba(10,30,57,.91) 42%,
+            rgba(5,16,33,.96) 75%,
+            rgba(2,8,19,.99)
+        );
+
+    box-shadow:
+
+        0 20px 50px rgba(0,0,0,.30),
+
+        0 0 35px rgba(67,140,255,.04),
+
+        inset 0 1px 0 rgba(255,255,255,.04);
+
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    transition:
+        border-color .3s ease,
+        box-shadow .3s ease;
+   
+
+    }
+
+    .update-wallet-card:hover{
+
+   
+    border-color:rgba(77,232,255,.21);
+
+    box-shadow:
+
+        0 25px 55px rgba(0,0,0,.36),
+
+        0 0 35px rgba(77,232,255,.055),
+
+        0 0 25px rgba(139,108,255,.04),
+
+        inset 0 1px 0 rgba(255,255,255,.05);
+   
+
+    }
+
+    
+
+    .update-wallet-card::before{
+
+   
+    content:"";
+
+    position:absolute;
+
+    top:-100px;
+    left:50%;
+
+    width:300px;
+    height:180px;
+
+    transform:translateX(-50%);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(77,232,255,.10),
+            transparent 70%
+        );
+
+    pointer-events:none;
+   
+
+    }
+
+    
+
+    .update-wallet-card form{
+
+   
+    position:relative;
+
+    z-index:2;
+
+    width:100%;
+   
+
+    }
+
+    
+
+    .wallet-form p{
+
+   
+    display:flex;
+
+    flex-direction:column;
+
+    width:100%;
+
+    margin:0 0 22px;
+   
+
+    }
+
+    
+
+    .wallet-form label{
+
+   
+    margin-bottom:9px;
+
+    color:#b8ecff;
+
+    font-family:"Montserrat","Inter",sans-serif;
+
+    font-size:.76rem;
+
+    font-weight:800;
+
+    letter-spacing:.5px;
+
+    text-transform:uppercase;
+   
+
+    }
+
+    
+
+    .wallet-form input,
+    .wallet-form textarea,
+    .wallet-form select{
+
+   
+    width:100%;
+
+    min-height:48px;
+
+    padding:12px 15px;
+
+    outline:none;
+
+    border-radius:13px;
+
+    border:1px solid rgba(77,232,255,.12);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.045),
+            rgba(77,232,255,.025)
+        );
+
+    color:#eaf8ff;
+
+    font-family:"Inter","Montserrat",sans-serif;
+
+    font-size:.86rem;
+
+    font-weight:600;
+
+    box-shadow:
+
+        inset 0 1px 0 rgba(255,255,255,.025),
+
+        0 4px 15px rgba(0,0,0,.10);
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease,
+        background .25s ease,
+        transform .25s ease;
+   
+
+    }
+
+    
+
+    .wallet-form textarea{
+
+   
+    min-height:130px;
+
+    resize:vertical;
+
+    line-height:1.6;
+   
+
+    }
+
+    
+
+    .wallet-form input:focus,
+    .wallet-form textarea:focus,
+    .wallet-form select:focus{
+
+   
+    border-color:rgba(77,232,255,.48);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(77,232,255,.06),
+            rgba(139,108,255,.045)
+        );
+
+    box-shadow:
+
+        0 0 0 3px rgba(77,232,255,.055),
+
+        0 0 22px rgba(77,232,255,.08),
+
+        inset 0 1px 0 rgba(255,255,255,.035);
+   
+
+    }
+
+    
+
+    .wallet-form input::placeholder,
+    .wallet-form textarea::placeholder{
+
+   
+    color:rgba(184,236,255,.35);
+   
+
+    }
+
+    
+
+    .wallet-form select option{
+
+   
+    background:#071426;
+
+    color:#eaf8ff;
+   
+
+    }
+
+    
+
+    .wallet-form .helptext{
+
+   
+    margin-top:7px;
+
+    color:rgba(184,236,255,.42);
+
+    font-family:"Inter","Montserrat",sans-serif;
+
+    font-size:.70rem;
+
+    line-height:1.5;
+   
+
+    }
+
+    
+
+    .wallet-form .errorlist{
+
+   
+    margin:0 0 8px;
+
+    padding:0;
+
+    list-style:none;
+
+    color:#ff8585;
+
+    font-family:"Inter","Montserrat",sans-serif;
+
+    font-size:.73rem;
+
+    font-weight:600;
+   
+
+    }
+
+    
+
+    .wallet-form-actions{
+
+   
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    gap:14px;
+
+    margin-top:30px;
+
+    padding-top:24px;
+
+    border-top:1px solid rgba(255,255,255,.055);
+   
+
+    }
+
+    
+
+    .wallet-form-actions .btn{
+
+   
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    min-height:46px;
+
+    padding:11px 23px;
+
+    border:none;
+
+    border-radius:13px;
+
+    color:#07111f;
+
+    background:linear-gradient(
+        135deg,
+        #f1d9a5 0%,
+        #f2c66d 35%,
+        #c7a570 70%,
+        #a9854d 100%
+    );
+
+    font-family:"Montserrat","Inter",sans-serif;
+
+    font-size:.76rem;
+
+    font-weight:800;
+
+    letter-spacing:.2px;
+
+    cursor:pointer;
+
+    box-shadow:
+
+        0 8px 22px rgba(199,165,112,.20),
+
+        inset 0 1px 0 rgba(255,255,255,.35);
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+   
+
+    }
+
+    .wallet-form-actions .btn:hover{
+
+   
+    transform:translateY(-3px);
+
+    filter:brightness(1.07);
+
+    box-shadow:
+
+        0 12px 30px rgba(199,165,112,.32),
+
+        0 0 20px rgba(199,165,112,.13),
+
+        inset 0 1px 0 rgba(255,255,255,.40);
+   
+
+    }
+
+    .wallet-form-actions .btn:active{
+
+   
+    transform:translateY(-1px);
+   
+
+    }
+
+    
+
+    .wallet-cancel{
+
+   
+    display:inline-flex;
+
+    align-items:center;
+    justify-content:center;
+
+    gap:8px;
+
+    min-height:46px;
+
+    padding:11px 20px;
+
+    border-radius:13px;
+
+    border:1px solid rgba(77,232,255,.14);
+
+    color:#b8ecff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(77,232,255,.055),
+            rgba(139,108,255,.055)
+        );
+
+    text-decoration:none;
+
+    font-family:"Montserrat","Inter",sans-serif;
+
+    font-size:.75rem;
+
+    font-weight:800;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.025);
+
+    transition:
+        transform .25s ease,
+        border-color .25s ease,
+        background .25s ease,
+        color .25s ease,
+        box-shadow .25s ease;
+   
+
+    }
+
+    .wallet-cancel:hover{
+
+   
+    transform:translateY(-3px);
+
+    color:#ffffff;
+
+    border-color:rgba(77,232,255,.30);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(77,232,255,.09),
+            rgba(139,108,255,.09)
+        );
+
+    box-shadow:
+
+        0 8px 22px rgba(0,0,0,.20),
+
+        0 0 18px rgba(77,232,255,.06);
+   
+
+    }
+
+    
+
+    @media(max-width:768px){
+
+   
+    .update-wallet-page{
+
+        max-width:100%;
+    }
+
+    .update-wallet-header{
+
+        margin-bottom:24px;
+    }
+
+    .wallet-header-icon{
+
+        width:60px;
+        height:60px;
+
+        border-radius:17px;
+
+        font-size:1.3rem;
+    }
+
+    .update-wallet-header h2{
+
+        font-size:1.5rem;
+    }
+
+    .update-wallet-header p{
+
+        font-size:.76rem;
+    }
+
+    .update-wallet-card{
+
+        padding:27px 22px;
+
+        border-radius:20px;
+    }
+
+    .wallet-form-actions{
+
+        margin-top:25px;
+
+        padding-top:21px;
+    }
+   
+
+    }
+
+    
+
+    @media(max-width:480px){
+
+   
+    .update-wallet-header{
+
+        margin-bottom:20px;
+    }
+
+    .wallet-header-icon{
+
+        width:54px;
+        height:54px;
+
+        margin-bottom:14px;
+
+        border-radius:15px;
+
+        font-size:1.1rem;
+    }
+
+    .update-wallet-header h2{
+
+        font-size:1.18rem;
+
+        line-height:1.4;
+    }
+
+    .update-wallet-header p{
+
+        max-width:95%;
+
+        margin-top:8px;
+
+        font-size:.70rem;
+
+        line-height:1.6;
+    }
+
+    .update-wallet-card{
+
+        padding:22px 16px;
+
+        border-radius:17px;
+    }
+
+    .wallet-form p{
+
+        margin-bottom:18px;
+    }
+
+    .wallet-form label{
+
+        margin-bottom:8px;
+
+        font-size:.68rem;
+    }
+
+    .wallet-form input,
+    .wallet-form textarea,
+    .wallet-form select{
+
+        min-height:45px;
+
+        padding:11px 12px;
+
+        border-radius:11px;
+
+        font-size:.78rem;
+    }
+
+    .wallet-form textarea{
+
+        min-height:110px;
+    }
+
+    .wallet-form-actions{
+
+        flex-direction:column;
+
+        gap:10px;
+
+        margin-top:22px;
+
+        padding-top:19px;
+    }
+
+    .wallet-form-actions .btn,
+    .wallet-cancel{
+
+        width:100%;
+
+        min-height:44px;
+
+        padding:10px 15px;
+
+        border-radius:11px;
+
+        font-size:.70rem;
+    }
+   
+
+    }
+
+    
+
+    @media(prefers-reduced-motion:reduce){
+
+   
+    .update-wallet-header h2{
+
+        animation:none!important;
+    }
+
+    .wallet-header-icon,
+    .update-wallet-card,
+    .wallet-form input,
+    .wallet-form textarea,
+    .wallet-form select,
+    .wallet-form-actions .btn,
+    .wallet-cancel{
+
+        transition:none!important;
+    }
+
+
+}

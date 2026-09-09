@@ -1,0 +1,194 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/two_factor_setup.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="two-factor-page">
+
+    <div class="two-factor-card">
+
+        <div class="two-factor-header">
+
+            <div class="two-factor-icon">
+                🔐
+            </div>
+
+            <h2>Two-Factor Authentication</h2>
+
+            {% if two_factor_enabled %}
+
+                <p>
+                    Two-Factor Authentication is currently enabled
+                    on your account.
+                </p>
+
+            {% else %}
+
+                <p>
+                    Add an additional layer of protection when signing
+                    in to your Finbit account.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        {% if two_factor_enabled %}
+
+            <div class="two-factor-status enabled">
+
+                <span class="status-dot"></span>
+
+                <div>
+                    <strong>2FA is enabled</strong>
+
+                    <p>
+                        Your account is protected with
+                        Two-Factor Authentication.
+                    </p>
+                </div>
+
+            </div>
+
+            <a
+                href="{% url 'security_center' %}"
+                class="two-factor-btn secondary"
+            >
+                Back to Security Center
+            </a>
+
+
+        {% else %}
+
+            <div class="two-factor-step">
+
+                <div class="step-number">
+                    1
+                </div>
+
+                <div class="step-content">
+
+                    <h3>Install an authenticator app</h3>
+
+                    <p>
+                        Install Google Authenticator, Microsoft Authenticator,
+                        or another compatible authenticator app on your phone.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="two-factor-step">
+
+                <div class="step-number">
+                    2
+                </div>
+
+                <div class="step-content">
+
+                    <h3>Scan the QR code</h3>
+
+                    <p>
+                        Open your authenticator app and scan the QR code below.
+                    </p>
+
+                    <div class="qr-container">
+
+                        <img
+                            src="data:image/png;base64,{{ qr_code }}"
+                            alt="Two-Factor Authentication QR Code"
+                        >
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="manual-secret">
+
+                <span>
+                    Can't scan the QR code?
+                </span>
+
+                <strong>
+                    {{ secret_key }}
+                </strong>
+
+            </div>
+
+
+            <div class="two-factor-step">
+
+                <div class="step-number">
+                    3
+                </div>
+
+                <div class="step-content">
+
+                    <h3>Enter your verification code</h3>
+
+                    <p>
+                        Enter the 6-digit code currently displayed
+                        in your authenticator app.
+                    </p>
+
+                    <form method="post" class="two-factor-form">
+
+                        {% csrf_token %}
+
+                        <label for="code">
+                            Verification Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="code"
+                            name="code"
+                            maxlength="6"
+                            minlength="6"
+                            inputmode="numeric"
+                            autocomplete="one-time-code"
+                            placeholder="000000"
+                            required
+                        >
+
+                        <button
+                            type="submit"
+                            class="two-factor-btn primary"
+                        >
+                            Verify & Enable 2FA
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+
+            <a
+                href="{% url 'security_center' %}"
+                class="cancel-link"
+            >
+                Cancel
+            </a>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+

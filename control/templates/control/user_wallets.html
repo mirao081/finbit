@@ -1,0 +1,353 @@
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/user_wallets.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="wallets-page">
+
+    <div class="wallets-header">
+        <h1>User Wallets</h1>
+        <p>View balances, wallet addresses, and manage user wallets.</p>
+    </div>
+
+    <div class="wallets-table-container">
+
+        <table class="wallets-table">
+
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Email</th>
+                    <th>Wallets</th>
+                    <th>Wallet Balance</th>
+                    <th>Total Deposits</th>
+                    <th>Total Withdrawals</th>
+                    <th>Investments</th>
+                    <th>Profits</th>
+                    <th>Bonuses</th>
+                    <th>Net Balance</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for item in page_obj %}
+
+                
+                <tr>
+
+                    <td class="user-cell">
+                        {{ item.user.username }}
+                    </td>
+
+                    <td class="email-cell">
+                        {{ item.user.email }}
+                    </td>
+
+                    
+                    <td class="address-cell">
+
+                        <div class="admin-wallet-list">
+
+                            {% for wallet in item.wallets %}
+
+                            <div class="admin-wallet-card">
+
+                                <div class="admin-wallet-top">
+
+                                    <div class="admin-wallet-icon">
+                                        {% if wallet.currency == "BTC" %}
+                                            <i class="fab fa-bitcoin"></i>
+                                        {% elif wallet.currency == "ETH" %}
+                                            <i class="fab fa-ethereum"></i>
+                                        {% else %}
+                                            <i class="fas fa-dollar-sign"></i>
+                                        {% endif %}
+                                    </div>
+
+                                    <div class="admin-wallet-title">
+                                        <h5>{{ wallet.get_currency_display }}</h5>
+                                        <span>{{ wallet.currency }}</span>
+                                    </div>
+
+                                </div>
+
+                                <div class="admin-wallet-balance">
+
+                                    <span>Balance</span>
+
+                                    <strong>
+                                        {{ wallet.balance|floatformat:12 }}
+                                    </strong>
+
+                                </div>
+
+                                {% if wallet.address %}
+
+                                <div class="admin-wallet-address">
+
+                                    <span>Wallet Address</span>
+
+                                    <code>{{ wallet.address }}</code>
+
+                                </div>
+
+                                {% else %}
+
+                                <div class="admin-wallet-empty">
+
+                                    <i class="fas fa-circle-info"></i>
+
+                                    No wallet address saved
+
+                                </div>
+
+                                {% endif %}
+
+                            </div>
+
+                            {% empty %}
+
+                            <div class="admin-wallet-empty-card">
+
+                                <i class="fas fa-wallet"></i>
+
+                                <span>No wallets</span>
+
+                            </div>
+
+                            {% endfor %}
+
+                        </div>
+
+                    </td>
+
+                    
+                    <td class="balance-cell">
+                        ${{ item.wallet_balance|floatformat:2 }}
+                    </td>
+
+                    
+                    <td class="deposit-cell">
+                        ${{ item.deposits_total|floatformat:2 }}
+                    </td>
+
+                    
+                    <td class="withdrawal-cell">
+                        ${{ item.withdrawals_total|floatformat:2 }}
+                    </td>
+
+                    
+                    <td class="investment-cell">
+                        ${{ item.investments_total|floatformat:2 }}
+                    </td>
+
+                    
+                    <td class="profit-cell">
+                        ${{ item.profits_total|floatformat:2 }}
+                    </td>
+
+                    
+                    <td class="bonus-cell">
+                        ${{ item.bonuses_total|floatformat:2 }}
+                    </td>
+
+                    
+                    <td class="net-cell">
+                        ${{ item.net_balance|floatformat:2 }}
+                    </td>
+
+                    
+                    <td class="actions-cell">
+
+                        <a href="{% url 'admin_user_detail' item.user.id %}"
+                           class="view-btn">
+                            View
+                        </a>
+
+                        <a href="{% url 'admin_adjust_wallet' item.user.id %}"
+                           class="adjust-btn">
+                            Adjust
+                        </a>
+
+                    </td>
+
+                </tr>
+
+                
+                <tr class="transactions-row">
+
+                    <td colspan="11">
+
+                        <table class="transactions-table">
+
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Recent Deposits</th>
+                                    <th colspan="3">Recent Withdrawals</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+
+                                <tr>
+
+                                    
+                                    <td colspan="3">
+
+                                        <table class="transaction-inner-table">
+
+                                            <thead>
+                                                <tr>
+                                                    <th>Amount (USD)</th>
+                                                    <th>Asset</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                                {% for d in item.recent_deposits %}
+                                                <tr>
+                                                    <td class="deposit-amount">
+                                                        ${{ d.amount_usd|floatformat:2 }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{ d.get_payment_method_display }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{ d.created_at|date:"Y-m-d H:i" }}
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="status-badge">
+                                                            {{ d.status }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="4"
+                                                        class="empty-transaction">
+                                                        No deposits
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </td>
+
+                                    
+                                    <td colspan="3">
+
+                                        <table class="transaction-inner-table">
+
+                                            <thead>
+                                                <tr>
+                                                    <th>Amount (USD)</th>
+                                                    <th>Asset</th>
+                                                    <th>Date</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+
+                                                {% for w in item.recent_withdrawals %}
+                                                <tr>
+                                                    <td class="withdrawal-amount">
+                                                        ${{ w.amount_usd|floatformat:2 }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{ w.wallet.get_currency_display }}
+                                                    </td>
+
+                                                    <td>
+                                                        {{ w.created_at|date:"Y-m-d H:i" }}
+                                                    </td>
+
+                                                    <td>
+                                                        <span class="status-badge withdrawal-status">
+                                                            {{ w.status }}
+                                                        </span>
+                                                    </td>
+                                                </tr>
+
+                                                {% empty %}
+                                                <tr>
+                                                    <td colspan="4"
+                                                        class="empty-transaction">
+                                                        No withdrawals
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+
+                                            </tbody>
+
+                                        </table>
+
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+                    <td colspan="11" class="no-wallets">
+                        No wallet data available.
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    
+    <div class="pagination">
+
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">
+                Previous
+            </a>
+        {% endif %}
+
+        <span>
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">
+                Next
+            </a>
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock %}

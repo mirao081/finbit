@@ -1,0 +1,551 @@
+
+* {
+    box-sizing: border-box;
+}
+
+.two-factor-page {
+    position: relative;
+    width: 100%;
+    min-height: calc(100vh - 180px);
+
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+
+    padding: 35px 18px 50px;
+
+    overflow: hidden;
+}
+
+.two-factor-page::before {
+    content: "";
+
+    position: fixed;
+
+    top: 10%;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    width: 500px;
+    height: 500px;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(103, 147, 227, .13),
+            transparent 70%
+        );
+
+    filter: blur(40px);
+
+    pointer-events: none;
+
+    z-index: 0;
+}
+
+.two-factor-card {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    max-width: 760px;
+
+    padding: 36px;
+
+    border-radius: 24px;
+
+    background:
+        radial-gradient(
+            circle at 10% 0%,
+            rgba(103, 147, 227, .12),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 100% 100%,
+            rgba(212, 175, 90, .08),
+            transparent 35%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(25, 34, 49, .98),
+            rgba(8, 13, 21, .99)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    box-shadow:
+        0 25px 60px rgba(0, 0, 0, .55),
+        0 0 35px rgba(103, 147, 227, .08),
+        inset 0 1px 0 rgba(255, 255, 255, .05);
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    overflow: hidden;
+}
+
+.two-factor-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -20%;
+
+    width: 140%;
+    height: 3px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #6793e3,
+            #9ec1ff,
+            #d4af5a,
+            #9ec1ff,
+            #6793e3,
+            transparent
+        );
+
+    background-size: 250% 100%;
+
+    animation: twoFactorGlow 5s linear infinite;
+}
+
+.two-factor-header {
+    text-align: center;
+
+    margin-bottom: 32px;
+}
+
+.two-factor-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .16),
+            rgba(103, 147, 227, .05)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .28);
+
+    font-size: 1.8rem;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .05),
+        0 10px 30px rgba(0, 0, 0, .25);
+}
+
+.two-factor-header h2 {
+    margin: 0 0 10px;
+
+    font-size: clamp(1.7rem, 3vw, 2.2rem);
+
+    font-weight: 800;
+
+    background:
+        linear-gradient(
+            90deg,
+            #fff,
+            #9ec1ff,
+            #6793e3,
+            #fff,
+            #d4af5a,
+            #fff
+        );
+
+    background-size: 300% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: twoFactorTitle 6s linear infinite;
+}
+
+.two-factor-header p {
+    max-width: 600px;
+
+    margin: 0 auto;
+
+    color: #b7c1d0;
+
+    line-height: 1.7;
+}
+
+.two-factor-step {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+
+    margin-bottom: 20px;
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22, 31, 45, .96),
+            rgba(8, 13, 21, .98)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .16);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, .30),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(103, 147, 227, .18),
+            rgba(103, 147, 227, .06)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    color: #9ec1ff;
+
+    font-weight: 800;
+}
+
+.step-content {
+    flex: 1;
+}
+
+.step-content h3 {
+    margin: 2px 0 8px;
+
+    color: #fff;
+
+    font-size: 1.05rem;
+}
+
+.step-content p {
+    margin: 0;
+
+    color: #8f9bad;
+
+    line-height: 1.65;
+}
+
+.qr-container {
+    width: fit-content;
+
+    margin: 22px auto 5px;
+
+    padding: 16px;
+
+    border-radius: 16px;
+
+    background: #fff;
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, .35),
+        0 0 25px rgba(103, 147, 227, .10);
+}
+
+.qr-container img {
+    display: block;
+
+    width: 220px;
+    height: 220px;
+}
+
+.manual-secret {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin: 0 0 20px;
+
+    padding: 18px;
+
+    border-radius: 14px;
+
+    background:
+        rgba(212, 175, 90, .06);
+
+    border: 1px solid rgba(212, 175, 90, .18);
+
+    text-align: center;
+}
+
+.manual-secret span {
+    color: #8f9bad;
+
+    font-size: .85rem;
+}
+
+.manual-secret strong {
+    color: #f0d47f;
+
+    font-family: monospace;
+
+    font-size: .95rem;
+
+    word-break: break-all;
+}
+
+.two-factor-form {
+    margin-top: 20px;
+}
+
+.two-factor-form label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #fff;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+}
+
+.two-factor-form input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(103, 147, 227, .22);
+
+    outline: none;
+
+    background:
+        rgba(255, 255, 255, .04);
+
+    color: #fff;
+
+    font-size: 1.1rem;
+
+    letter-spacing: .3em;
+
+    text-align: center;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.two-factor-form input:focus {
+    border-color: #6793e3;
+
+    box-shadow:
+        0 0 0 3px rgba(103, 147, 227, .10),
+        0 0 20px rgba(103, 147, 227, .08);
+}
+
+.two-factor-btn {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    margin-top: 16px;
+
+    padding: 13px 22px;
+
+    border-radius: 12px;
+
+    text-decoration: none;
+
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .25s ease,
+        box-shadow .25s ease,
+        filter .25s ease;
+}
+
+.two-factor-btn.primary {
+    width: 100%;
+
+    border: none;
+
+    color: #111;
+
+    background:
+        linear-gradient(
+            135deg,
+            #d4af5a,
+            #f0d47f,
+            #d4af5a
+        );
+
+    box-shadow:
+        0 10px 25px rgba(200, 164, 82, .20);
+}
+
+.two-factor-btn.primary:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.05);
+
+    box-shadow:
+        0 14px 32px rgba(200, 164, 82, .35);
+}
+
+.two-factor-btn.secondary {
+    color: #9ec1ff;
+
+    border: 1px solid rgba(103, 147, 227, .25);
+
+    background: rgba(103, 147, 227, .08);
+}
+
+.two-factor-btn.secondary:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(103, 147, 227, .45);
+}
+
+.two-factor-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    margin-bottom: 24px;
+
+    padding: 20px;
+
+    border-radius: 16px;
+}
+
+.two-factor-status.enabled {
+    border: 1px solid rgba(126, 220, 154, .25);
+
+    background:
+        rgba(126, 220, 154, .08);
+}
+
+.status-dot {
+    width: 12px;
+    height: 12px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #7edc9a;
+
+    box-shadow:
+        0 0 12px rgba(126, 220, 154, .45);
+}
+
+.two-factor-status strong {
+    color: #7edc9a;
+}
+
+.two-factor-status p {
+    margin: 4px 0 0;
+
+    color: #8f9bad;
+}
+
+.cancel-link {
+    display: block;
+
+    margin-top: 22px;
+
+    text-align: center;
+
+    color: #8f9bad;
+
+    text-decoration: none;
+
+    transition: color .25s ease;
+}
+
+.cancel-link:hover {
+    color: #d4af5a;
+}
+
+@keyframes twoFactorGlow {
+    from {
+        background-position: 250% 50%;
+    }
+
+    to {
+        background-position: -250% 50%;
+    }
+}
+
+@keyframes twoFactorTitle {
+    from {
+        background-position: 300% center;
+    }
+
+    to {
+        background-position: -300% center;
+    }
+}
+
+@media (max-width: 600px) {
+
+    .two-factor-page {
+        padding: 22px 12px 35px;
+    }
+
+    .two-factor-card {
+        padding: 24px 18px;
+        border-radius: 20px;
+    }
+
+    .two-factor-step {
+        padding: 18px;
+    }
+
+    .qr-container img {
+        width: 190px;
+        height: 190px;
+    }
+
+    .two-factor-header h2 {
+        font-size: 1.5rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .two-factor-card::before,
+    .two-factor-header h2 {
+        animation: none;
+    }
+
+    .two-factor-btn {
+        transition: none;
+    }
+}
+

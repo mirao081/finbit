@@ -1,0 +1,1861 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+
+<section class="home-page">
+
+    <div class="home-container">
+
+        <h1 class="hero-title">
+
+            <span class="white-text">{{ site_settings.hero_title_white }}</span>
+
+            <span class="gold-text">{{ site_settings.hero_title_gold }}</span>
+
+        </h1>
+
+        <p class="hero-subtitle">{{ site_settings.hero_subtitle }}</p>
+
+        <a href="{% url 'signup' %}" class="signup-btn">
+
+            {{ site_settings.hero_button_text }}
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+
+
+<section class="about-section">
+
+    <div class="about-container">
+
+        <div class="about-right">
+
+            <h1>{{ site_settings.about_heading }}</h1>
+
+            <p>{{ site_settings.about_content }}</p>
+
+            <a href="{% url 'about' %}" class="about-btn">
+
+                {{ site_settings.about_button_text }}
+
+            </a>
+
+        </div>
+
+        <div class="about-left">
+
+            <canvas id="bitcoinCanvas" width="300" height="300"></canvas>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section id="investment-plans" class="plans-section">
+
+    <div class="plans-container">
+
+        <h1>Investment Plans</h1>
+
+        <p>Choose the plan that suits you best</p>
+
+        <div class="plans-grid">
+
+            {% for plan in plans|slice:":6" %}
+
+            <div class="plan-card-container">
+
+                <div class="plan-card">
+
+                    <h2>{{ plan.name }}</h2>
+
+                    <h3>
+
+                        {{ plan.return_rate }}
+
+                    </h3>
+
+                    <p>{{ plan.frequency }}</p>
+
+                    <p>{{ plan.duration }}</p>
+
+                    <p>
+
+                        {{ plan.total_return }}
+
+                    </p>
+
+                    <p>
+
+                        Minimum Investment:
+
+                        {{ plan.minimum_investment }}
+
+                    </p>
+
+                    {% if user.is_authenticated %}
+
+                        <a href="{% url 'login' %}" class="plan-btn">
+
+                            Invest Now
+
+                        </a>
+
+                    {% else %}
+
+                        <a href="{% url 'signup' %}" class="plan-btn">
+
+                            Invest Now
+
+                        </a>
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        <div class="view-all">
+
+            <a href="{% url 'all_plans' %}" class="view-btn">
+
+                View All Packages
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="crypto-stats">
+
+    <div class="stats-container">
+
+        <div class="stat-card">
+
+            <h3>BITCOIN PRICE</h3>
+
+            <p id="btc-price">
+
+                Loading...
+
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>ETHEREUM PRICE</h3>
+
+            <p id="eth-price">
+
+                Loading...
+
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>USDT ERC20</h3>
+
+            <p id="usdt-erc20">
+
+                Loading...
+
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>USDT TRC20</h3>
+
+            <p id="usdt-trc20">
+
+                Loading...
+
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>24 VOLUME</h3>
+
+            <p id="btc-volume">
+
+                Loading...
+
+            </p>
+
+        </div>
+
+
+
+        <div class="stat-card">
+
+            <h3>ACTIVE TRADES</h3>
+
+            <p id="active-trades">
+
+                Loading...
+
+            </p>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+<section class="market-analysis">
+
+    <div class="container text-center">
+
+        <h2 class="market-title">
+
+            <span class="white">
+
+                Live
+
+            </span>
+
+            <span class="gold">
+
+                Market
+
+            </span>
+
+            <span class="white">
+
+                Analysis
+
+            </span>
+
+        </h2>
+
+        <div class="charts-row">
+
+            <div class="chart-box">
+
+                <iframe
+
+                    src="https://widget.coinlib.io/widget?type=chart&theme=dark&coins=BTC,ETH,SOL"
+
+                    width="100%"
+
+                    height="400"
+
+                    frameborder="0"
+
+                    style="border-radius:12px;">
+
+                </iframe>
+
+            </div>
+
+
+
+            <div class="chart-box">
+
+                <iframe
+
+                    src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_12345&symbol=NASDAQ:AAPL&interval=D&hidesidetoolbar=1&theme=dark"
+
+                    width="100%"
+
+                    height="400"
+
+                    frameborder="0"
+
+                    style="border-radius:12px;">
+
+                </iframe>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="why-choose-us">
+
+    <div class="container">
+
+        {% if section %}
+
+            <h2 class="section-title">
+
+                <span class="white">
+
+                    {{ section.heading|slice:":2" }}
+
+                </span>
+
+                <span class="gold">
+
+                    {{ section.heading|slice:"2:" }}
+
+                </span>
+
+            </h2>
+
+            <p class="section-subtitle">
+
+                {{ section.subheading }}
+
+            </p>
+
+        {% endif %}
+
+        <div class="feature-grid">
+
+            {% for card in feature_cards %}
+
+                <div class="feature-card">
+
+                    <h3 class="card-title">
+
+                        {{ card.title }}
+
+                    </h3>
+
+                    <p>
+
+                        {{ card.description }}
+
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="profit-calculator">
+
+    <div class="container text-center">
+
+        {% if profit_section %}
+
+            <h2 class="calculator-title">
+
+                <span class="white">
+
+                    Profit
+
+                </span>
+
+                <span class="gold">
+
+                    {{ profit_section.heading|slice:"7:" }}
+
+                </span>
+
+            </h2>
+
+            <p class="calculator-subtitle">
+
+                {{ profit_section.subheading }}
+
+            </p>
+
+        {% endif %}
+
+
+
+        <div class="calculator-box">
+
+
+
+            <div class="calculator-row">
+
+                <div class="calculator-field">
+
+                    <label for="planSelect">
+
+                        Choose Plan
+
+                    </label>
+
+                    <select id="planSelect">
+
+                        <option value="" disabled selected>
+
+                            Select a Plan
+
+                        </option>
+
+                        {% for plan in plans %}
+
+                            <option
+
+                                value="{{ plan.id }}"
+
+                                data-rate="{{ plan.return_rate }}"
+
+                                data-frequency="{{ plan.duration }}"
+
+                                data-periods="{{ plan.days }}"
+
+                                data-min="{{ plan.minimum_investment }}"
+
+                            >
+
+                                {{ plan.name }}
+
+                            </option>
+
+                        {% endfor %}
+
+                    </select>
+
+                </div>
+
+
+
+                <div class="calculator-field">
+
+                    <label>
+
+                        Invest Amount
+
+                    </label>
+
+                    <input
+
+                        type="number"
+
+                        id="investAmount"
+
+                        placeholder="Enter amount"
+
+                        min="0"
+
+                        step="0.01"
+
+                    >
+
+                    <div
+
+                        id="calcError"
+
+                        class="calculator-error"
+
+                        role="alert"
+
+                        aria-live="polite">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="calculator-row">
+
+                <div class="calculator-field full-width">
+
+                    <label>
+
+                        Profit Amount
+
+                    </label>
+
+                    <input
+
+                        type="text"
+
+                        id="profitAmount"
+
+                        placeholder="Calculated profit"
+
+                        readonly
+
+                    >
+
+                </div>
+
+            </div>
+
+
+
+            <div class="calculator-details">
+
+                <div class="calculator-detail">
+
+                    <span>
+
+                        Investment
+
+                    </span>
+
+                    <strong id="resultInvestment">
+
+                        $0.00
+
+                    </strong>
+
+                </div>
+
+
+
+                <div class="calculator-detail">
+
+                    <span>
+
+                        Return Rate
+
+                    </span>
+
+                    <strong id="resultRate">
+
+                        0%
+
+                    </strong>
+
+                </div>
+
+
+
+                <div class="calculator-detail">
+
+                    <span>
+
+                        Profit
+
+                    </span>
+
+                    <strong id="resultProfit">
+
+                        $0.00
+
+                    </strong>
+
+                </div>
+
+
+
+                <div class="calculator-detail">
+
+                    <span>
+
+                        Total Return
+
+                    </span>
+
+                    <strong id="resultTotal">
+
+                        $0.00
+
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+
+            <div
+
+                class="calculator-frequency"
+
+                id="resultFrequency"
+
+                data-default-text="Select a plan and enter an amount">
+
+                Select a plan and enter an amount
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+<section
+
+    class="three-steps"
+
+    style="background-image: url('{% static 'core/images/newimage.jpg' %}');">
+
+    <div class="container text-center">
+
+        {% if three_step_section %}
+
+            <h2 class="three-steps-title">
+
+                <span class="white">
+
+                    How
+
+                </span>
+
+                <span class="gold">
+
+                    Finbit
+
+                </span>
+
+                <span class="white">
+
+                    Works
+
+                </span>
+
+            </h2>
+
+            <p class="three-steps-subtitle">
+
+                {{ three_step_section.subheading }}
+
+            </p>
+
+        {% endif %}
+
+
+
+        <div class="steps-row">
+
+            {% for step in three_step_section.steps.all %}
+
+                <div class="step-circle">
+
+                    <div class="circle-icon">
+
+                        <i class="fa {{ step.icon }}"></i>
+
+                        <div class="step-number-circle">
+
+                            <span class="step-number">
+
+                                {{ step.number|stringformat:"02d" }}
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+                    <p class="step-title">
+
+                        {{ step.title }}
+
+                    </p>
+
+                </div>
+
+
+
+                {% if not forloop.last %}
+
+                    <div class="step-connector">
+
+                        {% for i in "xxxxxxxxxxxxxxxxxxxxxx" %}
+
+                            <span></span>
+
+                        {% endfor %}
+
+                    </div>
+
+                {% endif %}
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+<section
+
+    class="faq-section"
+
+    style="background-image: url('{% static 'core/images/finfaqs.jpg' %}');">
+
+    <div class="faq-overlay">
+
+        <div class="container text-center">
+
+            <h2 class="faq-title">
+
+                <span class="white">
+
+                    Frequently
+
+                </span>
+
+                <span class="gold">
+
+                    Asked
+
+                </span>
+
+                <span class="white">
+
+                    Questions
+
+                </span>
+
+            </h2>
+
+
+
+            <p class="faq-subtitle">
+
+                Find quick answers to common queries about deposits, withdrawals, and account management.
+
+            </p>
+
+
+
+            <div class="faq-container">
+
+
+
+                <div class="faq-item">
+
+                    <button type="button" class="faq-question">
+
+                        1. When can I deposit/withdraw from my Investment account?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        Deposit and withdrawal are available at any time. Be sure that your funds are not used in any ongoing trade before the withdrawal. The available amount is shown in your dashboard on the main page of the Investing platform.
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="faq-item">
+
+                    <button type="button" class="faq-question">
+
+                        2. How do I check my account balance?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        You can see this anytime on your accounts dashboard.
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="faq-item">
+
+                    <button type="button" class="faq-question">
+
+                        3. I forgot my password, what should I do?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        Visit the password reset page, type in your email address and click the Reset button.
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="faq-item">
+
+                    <button type="button" class="faq-question">
+
+                        4. How will I know that the withdrawal has been successful?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        You will get an automatic notification once we send the funds and you can always check your transactions or account balance. Your chosen payment system dictates how long it will take for the funds to reach you.
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="faq-item">
+
+                    <button type="button" class="faq-question">
+
+                        5. How much can I withdraw?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        You can withdraw the full amount of your account balance minus the funds that are used currently for supporting opened positions.
+
+                    </div>
+
+                </div>
+
+
+
+                <div class="faq-item">
+
+                    <button type="button" class="faq-question">
+
+                        6. What is the referral bonus?
+
+                    </button>
+
+                    <div class="faq-answer">
+
+                        We value community growth. For every successful referral, you earn a bonus of
+
+                        <strong>8.4%</strong>. This reward is automatically credited once your referral
+
+                        completes their first qualifying investment, allowing you to benefit while helping
+
+                        others discover Finbit.
+
+                    </div>
+
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+<section class="testimonials-section">
+
+    <div class="container text-center">
+
+        <h2 class="testimonials-title">
+
+            <span class="white">
+
+                What
+
+            </span>
+
+            <span class="gold">
+
+                People
+
+            </span>
+
+            <span class="white">
+
+                Say
+
+            </span>
+
+        </h2>
+
+
+
+        <p class="testimonials-subtitle">
+
+            Hear from our growing community of investors and trusted partners as they share their experiences, success stories, and the confidence they've gained through investing with Finbit.
+
+        </p>
+
+
+
+        <div class="testimonials-container">
+
+            {% for testimonial in testimonials %}
+
+                <div class="testimonial-card">
+
+                    <div class="testimonial-subheading">
+
+                        {{ testimonial.subheading }}
+
+                    </div>
+
+                    <div class="divider-line"></div>
+
+                    <div class="testimonial-bottom">
+
+                        <div class="testimonial-image">
+
+                            <img
+
+                                src="{{ testimonial.image.url }}"
+
+                                alt="{{ testimonial.name }}">
+
+                        </div>
+
+
+
+                        <div class="testimonial-info">
+
+                            <p class="testimonial-name">
+
+                                {{ testimonial.name }}
+
+                            </p>
+
+                            <p class="testimonial-position">
+
+                                {{ testimonial.position }}
+
+                            </p>
+
+                            <div class="testimonial-stars">
+
+                                {% for i in "12345"|slice:":testimonial.stars" %}
+
+                                    <i class="fa fa-star"></i>
+
+                                {% endfor %}
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+
+        <div class="testimonial-pagination">
+
+            <span class="page-line" data-page="1"></span>
+
+            <span class="page-line" data-page="2"></span>
+
+            <span class="page-line" data-page="3"></span>
+
+            <span class="page-line" data-page="4"></span>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+
+
+<section class="team-section">
+
+    <div class="container text-center">
+
+        <h2 class="team-title">
+
+            <span class="white">
+
+                Our
+
+            </span>
+
+            <span class="gold">
+
+                Expert
+
+            </span>
+
+            <span class="white">
+
+                Team Members
+
+            </span>
+
+        </h2>
+
+
+
+        <p class="team-subtitle">
+
+            Discover the experts committed to safeguarding your investments with insight, integrity, and proven experience.
+
+        </p>
+
+
+
+        <div class="team-container">
+
+            {% for member in team_members %}
+
+                <div class="team-card">
+
+                    <div class="team-image">
+
+                        <img
+
+                            src="{{ member.image.url }}"
+
+                            alt="{{ member.name }}">
+
+                    </div>
+
+                    <p class="team-name">
+
+                        {{ member.name }}
+
+                    </p>
+
+                    <p class="team-position">
+
+                        {{ member.position }}
+
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+<section id="transactions" class="transactions-section">
+
+    <div class="container text-center">
+
+        <h2 class="transactions-title">
+            <span class="white">
+                Recent
+            </span>
+
+            <span class="gold">
+                Transactions
+            </span>
+        </h2>
+
+
+        <p class="transactions-subtitle">
+            Discover the latest deposits, investments, and withdrawals made by our investors.
+        </p>
+
+
+        
+
+        <div class="transaction-buttons">
+
+            <a
+                href="?activity_type=deposit#transactions"
+                class="btn btn-deposit {% if activity_type == 'deposit' %}active{% endif %}">
+                Latest Deposit
+            </a>
+
+
+            <a
+                href="?activity_type=investment#transactions"
+                class="btn btn-investment {% if activity_type == 'investment' %}active{% endif %}">
+                Latest Investment
+            </a>
+
+
+            <a
+                href="?activity_type=withdrawal#transactions"
+                class="btn btn-withdrawal {% if activity_type == 'withdrawal' %}active{% endif %}">
+                Latest Withdrawal
+            </a>
+
+        </div>
+
+
+        
+
+        <div class="transactions-table-wrapper">
+
+            <table class="transactions-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Name
+                        </th>
+
+                        <th>
+                            Type
+                        </th>
+
+                        <th>
+                            Amount ($)
+                        </th>
+
+                        <th>
+                            Currency
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for transaction in page_obj_tx %}
+
+                    <tr>
+
+                        
+
+                        <td>
+
+                            <div class="investor-info">
+
+                                {% if transaction.investor.user.userprofile.picture %}
+
+                                    <img
+                                        src="{{ transaction.investor.user.userprofile.picture.url }}"
+                                        alt="{{ transaction.investor.name }}">
+
+                                {% else %}
+
+                                    <img
+                                        src="{% static 'core/images/default-user.png' %}"
+                                        alt="{{ transaction.investor.name }}">
+
+                                {% endif %}
+
+
+                                <span>
+                                    {{ transaction.investor.name }}
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        
+
+                        <td>
+                            {{ transaction.get_activity_type_display }}
+                        </td>
+
+
+                        
+
+                        <td>
+                            ${{ transaction.amount|floatformat:"-2" }}
+                        </td>
+
+
+                        
+
+                        <td>
+                            {{ transaction.wallet_currency }}
+                        </td>
+
+
+                        
+
+                        <td>
+                            {{ transaction.date|date:"M d, Y H:i" }}
+                        </td>
+
+
+                        
+
+                        <td>
+
+                            {% if transaction.activity_type == "deposit" %}
+
+                                Approved
+
+                            {% elif transaction.activity_type == "investment" %}
+
+                                Active
+
+                            {% elif transaction.activity_type == "withdrawal" %}
+
+                                Approved
+
+                            {% else %}
+
+                                Completed
+
+                            {% endif %}
+
+                        </td>
+
+                    </tr>
+
+
+                    {% empty %}
+
+                    <tr>
+
+                        <td colspan="6">
+                            No transactions found.
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        
+
+        <div class="pagination">
+
+            {% if page_obj_tx.has_previous %}
+
+                <a
+                    href="?tx_page={{ page_obj_tx.previous_page_number }}&activity_type={{ activity_type }}#transactions">
+
+                    Previous
+
+                </a>
+
+            {% endif %}
+
+
+            <span>
+
+                Page
+                {{ page_obj_tx.number }}
+                of
+                {{ page_obj_tx.paginator.num_pages }}
+
+            </span>
+
+
+            {% if page_obj_tx.has_next %}
+
+                <a
+                    href="?tx_page={{ page_obj_tx.next_page_number }}&activity_type={{ activity_type }}#transactions">
+
+                    Next
+
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="top-investors-section">
+
+    <div class="container text-center">
+
+        <h2 class="transactions-title">
+            <span class="white">Our</span>
+            <span class="gold">Top</span>
+            <span class="white">Investors</span>
+        </h2>
+
+        <p class="transactions-subtitle">
+            Discover the visionaries shaping our growth.
+            Their dedication fuels lasting success.
+            Celebrating the highest contributions made.
+        </p>
+
+        <div class="investor-grid">
+
+            {% for investor in page_obj_inv %}
+
+            <div class="investor-card">
+
+                <div class="investor-info">
+
+                    {% if investor.user.userprofile.picture %}
+
+                        <img
+                            src="{{ investor.user.userprofile.picture.url }}"
+                            alt="{{ investor.user.userprofile.name|default:investor.user.username }}"
+                            class="investor-picture"
+                        >
+
+                    {% else %}
+
+                        <img
+                            src="{% static 'core/images/default-user.png' %}"
+                            alt="{{ investor.user.userprofile.name|default:investor.user.username }}"
+                            class="investor-picture"
+                        >
+
+                    {% endif %}
+
+
+                    <div class="investor-details">
+
+                        <h4>
+
+                            {% if investor.user.userprofile.name %}
+
+                                {{ investor.user.userprofile.name }}
+
+                            {% elif investor.name %}
+
+                                {{ investor.name }}
+
+                            {% else %}
+
+                                {{ investor.user.username }}
+
+                            {% endif %}
+
+                        </h4>
+
+
+                        <p>
+
+                            <span>Total Investment:</span>
+
+                            <strong>
+                                ${{ investor.current_investment|default:0|floatformat:2 }}
+                            </strong>
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% empty %}
+
+                <p class="no-investors">
+                    No investors yet.
+                </p>
+
+            {% endfor %}
+
+        </div>
+
+
+        {% if page_obj_inv.paginator.num_pages > 1 %}
+
+        <div class="pagination">
+
+            {% if page_obj_inv.has_previous %}
+
+                <a
+                    href="?inv_page={{ page_obj_inv.previous_page_number }}"
+                    class="pagination-link"
+                >
+                    Previous
+                </a>
+
+            {% endif %}
+
+
+            <span class="pagination-status">
+
+                Page
+                {{ page_obj_inv.number }}
+                of
+                {{ page_obj_inv.paginator.num_pages }}
+
+            </span>
+
+
+            {% if page_obj_inv.has_next %}
+
+                <a
+                    href="?inv_page={{ page_obj_inv.next_page_number }}"
+                    class="pagination-link"
+                >
+                    Next
+                </a>
+
+            {% endif %}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+<section class="get-started-section">
+
+    <div class="get-started-container">
+
+        <h2 class="get-started-title">
+
+            <span class="white">
+
+                Get
+
+            </span>
+
+            <span class="gold">
+
+                Started
+
+            </span>
+
+            <span class="white">
+
+                With Us
+
+            </span>
+
+        </h2>
+
+
+
+        <p class="get-started-subtitle">
+
+            {{ get_started.subtitle }}
+
+        </p>
+
+
+
+        <a
+
+            href="{{ get_started.button_link }}"
+
+            class="get-started-btn">
+
+            {{ get_started.button_text }}
+
+        </a>
+
+    </div>
+
+</section>
+
+
+
+
+
+
+
+<section class="payment-section">
+
+    <div class="payment-container">
+
+        <h2 class="payment-title">
+
+            <span class="white">
+
+                Payment
+
+            </span>
+
+            <span class="gold">
+
+                We
+
+            </span>
+
+            <span class="white">
+
+                Accept
+
+            </span>
+
+        </h2>
+
+
+
+        <p class="payment-subtitle">
+
+            {{ payment_section.subheading }}
+
+        </p>
+
+
+
+        <div class="payment-grid">
+
+            {% for method in payment_methods %}
+
+                <div class="payment-card">
+
+                    <i class="fab {{ method.icon }}"></i>
+
+                    <h3>
+
+                        {{ method.name }}
+
+                    </h3>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="news-section" id="news-section">
+
+    <div id="news-content">
+
+        <div class="news-container">
+
+            <h2 class="news-title">
+
+                <span class="white">
+
+                    Our
+
+                </span>
+
+                <span class="gold">
+
+                    Latest
+
+                </span>
+
+                <span class="white">
+
+                    News
+
+                </span>
+
+            </h2>
+
+
+
+            <p class="news-subtitle">
+
+                {{ news_section.subheading }}
+
+            </p>
+
+
+
+            <div class="news-grid">
+
+                {% for item in news_page_obj %}
+
+                <div class="news-card">
+
+                    {% if item.image %}
+
+                        <img
+
+                            src="{{ item.image.url }}"
+
+                            alt="{{ item.subheading }}">
+
+                    {% endif %}
+
+
+
+                    <h3 class="news-card-subheading">
+
+                        {{ item.subheading }}
+
+                    </h3>
+
+
+
+                    <div class="news-meta">
+
+                        <i class="fa fa-user"></i>
+
+                        {{ item.author }}
+
+                        <i class="fa fa-calendar"></i>
+
+                        {{ item.date }}
+
+                    </div>
+
+
+
+                    <h4 class="news-card-title">
+
+                        {{ item.content_title }}
+
+                    </h4>
+
+
+
+                    <p>
+
+                        {{ item.content_preview|truncatewords:25 }}
+
+                    </p>
+
+
+
+                    <a
+
+                        href="#"
+
+                        class="news-btn read-more-btn"
+
+                        data-id="{{ item.id }}">
+
+                        Read More
+
+                    </a>
+
+                </div>
+
+
+
+                {% empty %}
+
+                <p>
+
+                    No news available yet.
+
+                </p>
+
+                {% endfor %}
+
+            </div>
+
+
+
+            <div class="pagination">
+
+                {% if news_page_obj.has_previous %}
+
+                    <a
+
+                        href="?news_page={{ news_page_obj.previous_page_number }}"
+
+                        class="page-btn">
+
+                        Previous
+
+                    </a>
+
+                {% endif %}
+
+
+
+                <span class="page-info">
+
+                    Page
+
+                    {{ news_page_obj.number }}
+
+                    of
+
+                    {{ news_page_obj.paginator.num_pages }}
+
+                </span>
+
+
+
+                {% if news_page_obj.has_next %}
+
+                    <a
+
+                        href="?news_page={{ news_page_obj.next_page_number }}"
+
+                        class="page-btn">
+
+                        Next
+
+                    </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="newsModal" class="modal">
+
+        <div class="modal-content">
+
+            <span class="close-btn">&times;</span>
+
+            <div id="modal-body"></div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<section class="site-links">
+
+    <div class="container text-center">
+
+        {% if footer.logo %}
+
+            <img
+
+                src="{{ footer.logo.url }}"
+
+                alt="{{ footer.company_name }} Logo"
+
+                class="footer-logo">
+
+        {% endif %}
+
+
+
+        <nav class="footer-nav">
+
+            <a href="{% url 'home' %}">
+
+                Home
+
+            </a>
+
+            <a href="{% url 'privacy_policy' %}">
+
+                Privacy & Policy
+
+            </a>
+
+            <a href="{% url 'terms_conditions' %}">
+
+                Terms & Conditions
+
+            </a>
+
+        </nav>
+
+    </div>
+
+</section>
+
+{% endblock %}
+
+
+
+{% block extra_js %}
+
+<script src="{% static 'core/js/home.js' %}"></script>
+
+<script src="{% static 'core/js/popup.js' %}"></script>
+
+<script src="{% static 'core/js/faq.js' %}"></script>
+
+{% endblock %}

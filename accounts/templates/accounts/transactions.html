@@ -1,0 +1,68 @@
+{% extends 'accounts/dashboard_base.html' %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'accounts/css/transactions.css' %}">
+{% endblock %}
+
+{% block content %}
+<section class="transactions-page">
+  <div class="transactions-card">
+    <h2>Transactions</h2>
+    <p>Here you can view all your deposits, investments, and withdrawals.</p>
+
+    {% if page_obj %}
+      <table class="transactions-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Plan / Asset</th>
+            <th>Amount (USD)</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in page_obj %}
+            <tr>
+              <td>{{ t.date|date:"M d, Y • h:i A" }}</td>
+              <td>{{ t.type }}</td>
+              <td>{{ t.asset }}</td>
+              <td>${{ t.amount|floatformat:2 }}</td>
+              <td>
+                {% if t.status == "pending" %}
+                  <span class="status-pending">Pending</span>
+                {% elif t.status == "approved" or t.status == "active" %}
+                  <span class="status-approved">Approved</span>
+                {% elif t.status == "rejected" %}
+                  <span class="status-declined">Declined</span>
+                {% elif t.status == "completed" %}
+                  <span class="status-completed">Completed</span>
+                {% else %}
+                  <span>{{ t.status }}</span>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      
+      <div class="pagination">
+        {% if page_obj.has_previous %}
+          <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+          <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+      </div>
+    {% else %}
+      <p>You have no transactions yet.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+

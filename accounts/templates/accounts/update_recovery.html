@@ -1,0 +1,583 @@
+{% extends 'accounts/dashboard_base.html' %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'accounts/css/update_recovery.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="recovery-page">
+
+    <div class="recovery-card">
+
+        
+
+        <div class="recovery-header">
+
+            <div class="header-icon">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+
+            {% if verification_stage == "old_email" %}
+
+                <h2>Verify Existing Email</h2>
+
+                <p>
+                    Enter the 6-digit verification code sent to
+                    your existing recovery email address.
+                </p>
+
+            {% elif verification_stage == "old_sms" %}
+
+                <h2>Verify Existing Phone</h2>
+
+                <p>
+                    Enter the 6-digit verification code sent to
+                    your existing recovery phone number.
+                </p>
+
+            {% elif verification_stage == "new_email" %}
+
+                <h2>Verify New Email</h2>
+
+                <p>
+                    Enter the 6-digit verification code sent to
+                    your new recovery email address.
+                </p>
+
+            {% elif verification_stage == "new_sms" %}
+
+                <h2>Verify New Phone</h2>
+
+                <p>
+                    Enter the 6-digit verification code sent to
+                    your new recovery phone number.
+                </p>
+
+            {% elif verification_stage == "authenticator" %}
+
+                <h2>Verify Your Identity</h2>
+
+                <p>
+                    Enter the current 6-digit code from your
+                    authenticator app.
+                </p>
+
+            {% else %}
+
+                <h2>Update Recovery Information</h2>
+
+                <p>
+                    Keep your recovery details up to date so you
+                    can securely recover access to your account.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        
+
+        {% if messages %}
+
+            <div class="recovery-messages">
+
+                {% for message in messages %}
+
+                    <div class="recovery-message {{ message.tags }}">
+
+                        {% if message.tags == "error" %}
+                            <i class="fas fa-exclamation-circle"></i>
+
+                        {% elif message.tags == "success" %}
+                            <i class="fas fa-check-circle"></i>
+
+                        {% elif message.tags == "warning" %}
+                            <i class="fas fa-exclamation-triangle"></i>
+
+                        {% else %}
+                            <i class="fas fa-info-circle"></i>
+
+                        {% endif %}
+
+                        <span>
+                            {{ message }}
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        
+
+        {% if not verification_stage %}
+
+            <form method="post" class="recovery-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="start_verification"
+                >
+
+
+                
+
+                <div class="input-group">
+
+                    <label for="current_password">
+
+                        <i class="fas fa-lock"></i>
+
+                        Current Password
+
+                    </label>
+
+                    <input
+                        type="password"
+                        id="current_password"
+                        name="current_password"
+                        autocomplete="current-password"
+                        placeholder="Enter your current password"
+                        required
+                    >
+
+                </div>
+
+
+                
+
+                <div class="input-group">
+
+                    <label for="recovery_email">
+
+                        <i class="fas fa-envelope"></i>
+
+                        Recovery Email
+
+                    </label>
+
+                    <input
+                        type="email"
+                        id="recovery_email"
+                        name="recovery_email"
+                        value="{{ request.user.userprofile.recovery_email|default:'' }}"
+                        autocomplete="email"
+                        placeholder="Enter your recovery email"
+                        required
+                    >
+
+                </div>
+
+
+                
+
+                <div class="input-group">
+
+                    <label for="recovery_phone">
+
+                        <i class="fas fa-phone"></i>
+
+                        Recovery Phone
+
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="recovery_phone"
+                        name="recovery_phone"
+                        value="{{ request.user.userprofile.recovery_phone|default:'' }}"
+                        autocomplete="tel"
+                        placeholder="Enter your recovery phone"
+                        required
+                    >
+
+                </div>
+
+
+                
+
+                <div class="security-tip">
+
+                    <i class="fas fa-shield-alt"></i>
+
+                    <span>
+                        Changing recovery information requires
+                        verification of your existing recovery
+                        methods and your new recovery methods
+                        before any changes are saved.
+                    </span>
+
+                </div>
+
+
+                
+
+                <button
+                    type="submit"
+                    class="recovery-btn"
+                >
+
+                    <i class="fas fa-arrow-right"></i>
+
+                    Continue to Verification
+
+                </button>
+
+            </form>
+
+
+        
+
+        {% elif verification_stage == "old_email" %}
+
+            <form method="post" class="recovery-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="verify_old_email_otp"
+                >
+
+                <div class="input-group">
+
+                    <label for="old_email_otp">
+
+                        <i class="fas fa-envelope"></i>
+
+                        Existing Email Verification Code
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="old_email_otp"
+                        name="otp_code"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="Enter 6-digit code"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="security-tip">
+
+                    <i class="fas fa-shield-alt"></i>
+
+                    <span>
+                        A verification code has been sent to
+                        your existing recovery email address.
+                        This verifies that you still control
+                        the trusted email currently attached
+                        to your account.
+                        The code expires in 10 minutes.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="recovery-btn"
+                >
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Verify Existing Email
+
+                </button>
+
+            </form>
+
+
+        
+
+        {% elif verification_stage == "old_sms" %}
+
+            <form method="post" class="recovery-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="verify_old_sms_otp"
+                >
+
+                <div class="input-group">
+
+                    <label for="old_sms_otp">
+
+                        <i class="fas fa-mobile-alt"></i>
+
+                        Existing Phone Verification Code
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="old_sms_otp"
+                        name="otp_code"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="Enter 6-digit code"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="security-tip">
+
+                    <i class="fas fa-shield-alt"></i>
+
+                    <span>
+                        A verification code has been sent to
+                        your existing recovery phone number.
+                        This verifies that you still control
+                        the trusted phone currently attached
+                        to your account.
+                        The code expires in 10 minutes.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="recovery-btn"
+                >
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Verify Existing Phone
+
+                </button>
+
+            </form>
+
+
+        
+
+        {% elif verification_stage == "new_email" %}
+
+            <form method="post" class="recovery-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="verify_new_email_otp"
+                >
+
+                <div class="input-group">
+
+                    <label for="new_email_otp">
+
+                        <i class="fas fa-envelope"></i>
+
+                        New Email Verification Code
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="new_email_otp"
+                        name="otp_code"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="Enter 6-digit code"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="security-tip">
+
+                    <i class="fas fa-envelope"></i>
+
+                    <span>
+                        A verification code has been sent to
+                        your new recovery email address.
+                        The code expires in 10 minutes.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="recovery-btn"
+                >
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Verify New Email
+
+                </button>
+
+            </form>
+
+
+        
+
+        {% elif verification_stage == "new_sms" %}
+
+            <form method="post" class="recovery-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="verify_new_sms_otp"
+                >
+
+                <div class="input-group">
+
+                    <label for="new_sms_otp">
+
+                        <i class="fas fa-mobile-alt"></i>
+
+                        New Phone Verification Code
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="new_sms_otp"
+                        name="otp_code"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="Enter 6-digit code"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="security-tip">
+
+                    <i class="fas fa-mobile-alt"></i>
+
+                    <span>
+                        A verification code has been sent to
+                        your new recovery phone number.
+                        The code expires in 10 minutes.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="recovery-btn"
+                >
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Verify New Phone
+
+                </button>
+
+            </form>
+
+
+        
+
+        {% elif verification_stage == "authenticator" %}
+
+            <form method="post" class="recovery-form">
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="verify_authenticator"
+                >
+
+                <div class="input-group">
+
+                    <label for="authenticator_otp">
+
+                        <i class="fas fa-key"></i>
+
+                        Authenticator Code
+
+                    </label>
+
+                    <input
+                        type="text"
+                        id="authenticator_otp"
+                        name="otp_code"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="Enter 6-digit code"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="security-tip">
+
+                    <i class="fas fa-shield-alt"></i>
+
+                    <span>
+                        Open your authenticator app and enter
+                        the current 6-digit verification code.
+                        This is the final identity verification
+                        step before your recovery information
+                        can be saved.
+                    </span>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="recovery-btn"
+                >
+
+                    <i class="fas fa-check-circle"></i>
+
+                    Verify &amp; Save Changes
+
+                </button>
+
+            </form>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+{% endblock %}
