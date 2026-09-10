@@ -1,0 +1,366 @@
+[
+{
+  "model": "accounts.wallet",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "currency": "BTC",
+    "balance": "0.037538461538",
+    "reserved_balance": "0E-12",
+    "address": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-09T08:44:36.837Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-07T21:38:16.575Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 4,
+  "fields": {
+    "user": 2,
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-07T21:38:16.575Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 5,
+  "fields": {
+    "user": 2,
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "TFDD1BF55GQUF6oJm4tPuZLaumxZHUnJEr",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-07T21:38:16.575Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 6,
+  "fields": {
+    "user": 1,
+    "currency": "BTC",
+    "balance": "0.007600000001",
+    "reserved_balance": "0E-12",
+    "address": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-09T13:22:27.528Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 7,
+  "fields": {
+    "user": 1,
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-07T21:38:16.575Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 8,
+  "fields": {
+    "user": 1,
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "TFDD1BF55GQUF6oJm4tPuZLaumxZHUnJEr",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-07T21:38:16.575Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 9,
+  "fields": {
+    "user": 1,
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546Z",
+    "updated_at": "2026-09-07T21:38:16.575Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 14,
+  "fields": {
+    "user": 11,
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.222Z",
+    "updated_at": "2026-09-09T12:41:31.222Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 15,
+  "fields": {
+    "user": 11,
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.231Z",
+    "updated_at": "2026-09-09T12:41:31.231Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 16,
+  "fields": {
+    "user": 11,
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.241Z",
+    "updated_at": "2026-09-09T12:41:31.241Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 17,
+  "fields": {
+    "user": 11,
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.251Z",
+    "updated_at": "2026-09-09T12:41:31.251Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 18,
+  "fields": {
+    "user": 12,
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.032Z",
+    "updated_at": "2026-09-09T13:25:24.032Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 19,
+  "fields": {
+    "user": 12,
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.043Z",
+    "updated_at": "2026-09-09T13:25:24.043Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 20,
+  "fields": {
+    "user": 12,
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.056Z",
+    "updated_at": "2026-09-09T13:25:24.056Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 21,
+  "fields": {
+    "user": 12,
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.069Z",
+    "updated_at": "2026-09-09T13:25:24.069Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 22,
+  "fields": {
+    "user": 13,
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.823Z",
+    "updated_at": "2026-09-09T13:58:04.823Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 23,
+  "fields": {
+    "user": 13,
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.838Z",
+    "updated_at": "2026-09-09T13:58:04.838Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 24,
+  "fields": {
+    "user": 13,
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.856Z",
+    "updated_at": "2026-09-09T13:58:04.856Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 25,
+  "fields": {
+    "user": 13,
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.872Z",
+    "updated_at": "2026-09-09T13:58:04.872Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 26,
+  "fields": {
+    "user": 14,
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.404Z",
+    "updated_at": "2026-09-09T14:11:04.404Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 27,
+  "fields": {
+    "user": 14,
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.419Z",
+    "updated_at": "2026-09-09T14:11:04.419Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 28,
+  "fields": {
+    "user": 14,
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.434Z",
+    "updated_at": "2026-09-09T14:11:04.434Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 29,
+  "fields": {
+    "user": 14,
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.448Z",
+    "updated_at": "2026-09-09T14:11:04.448Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 30,
+  "fields": {
+    "user": 15,
+    "currency": "BTC",
+    "balance": "0.003076923077",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.596Z",
+    "updated_at": "2026-09-09T14:36:39.914Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 31,
+  "fields": {
+    "user": 15,
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.612Z",
+    "updated_at": "2026-09-09T14:20:38.612Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 32,
+  "fields": {
+    "user": 15,
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.628Z",
+    "updated_at": "2026-09-09T14:20:38.628Z"
+  }
+},
+{
+  "model": "accounts.wallet",
+  "pk": 33,
+  "fields": {
+    "user": 15,
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.643Z",
+    "updated_at": "2026-09-09T14:20:38.643Z"
+  }
+}
+]

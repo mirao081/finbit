@@ -1,0 +1,38 @@
+[
+{
+  "model": "accounts.companywallet",
+  "pk": 1,
+  "fields": {
+    "currency": "BTC",
+    "address": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "qr_code": "company_wallets/qr.jpeg"
+  }
+},
+{
+  "model": "accounts.companywallet",
+  "pk": 2,
+  "fields": {
+    "currency": "ETH",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "qr_code": "company_wallets/qr_dVzVc7G.jpeg"
+  }
+},
+{
+  "model": "accounts.companywallet",
+  "pk": 3,
+  "fields": {
+    "currency": "USDT_TRC20",
+    "address": "TFDD1BF55GQUF6oJm4tPuZLaumxZHUnJEr",
+    "qr_code": "company_wallets/qr_aVVDJeo.jpeg"
+  }
+},
+{
+  "model": "accounts.companywallet",
+  "pk": 4,
+  "fields": {
+    "currency": "USDT_ERC20",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "qr_code": "company_wallets/qr_TJTPj0G.jpeg"
+  }
+}
+]

@@ -1,0 +1,128 @@
+[
+{
+  "model": "accounts.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "name": "Softboyvic",
+    "picture": "profile_pics/12_fRIMDkr.jpg",
+    "kyc_verified": true,
+    "total_balance": "340.00",
+    "investment_balance": "400.00",
+    "referral_code": "Softboyvic",
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "400.00",
+    "recovery_email": "chineduarize4@gmail.com",
+    "recovery_phone": "09130990859"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": 1,
+    "name": "Finbit",
+    "picture": "profile_pics/13.jpeg",
+    "kyc_verified": true,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": "Finbit",
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 10,
+  "fields": {
+    "user": 11,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 11,
+  "fields": {
+    "user": 12,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 12,
+  "fields": {
+    "user": 13,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 13,
+  "fields": {
+    "user": 14,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 14,
+  "fields": {
+    "user": 15,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+}
+]

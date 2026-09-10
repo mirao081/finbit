@@ -1,0 +1,182 @@
+[
+{
+  "model": "accounts.withdrawal",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "8.00",
+    "asset_amount": "0.000123076923",
+    "exchange_rate": "65000.000000000000",
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-08-30T07:50:25.733Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "7.00",
+    "asset_amount": "0.000107692308",
+    "exchange_rate": "65000.000000000000",
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-08-30T07:55:20.592Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 3,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "10.00",
+    "asset_amount": "0.000153846154",
+    "exchange_rate": "65000.000000000000",
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-08-30T08:13:36.681Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 4,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "30.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-09-06T11:15:08.458Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 5,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "30.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-09-06T11:18:15.471Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 6,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "200.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-09-06T11:20:20.973Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 7,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "100.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-09-06T11:28:41.262Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 8,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "6.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "rejected",
+    "created_at": "2026-09-07T17:13:11.782Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 9,
+  "fields": {
+    "user": 1,
+    "wallet": 6,
+    "amount_usd": "6.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-09-07T17:19:45.587Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 10,
+  "fields": {
+    "user": 2,
+    "wallet": 1,
+    "amount_usd": "6.00",
+    "asset_amount": "0.000092307692",
+    "exchange_rate": "65000.000000000000",
+    "destination_wallet": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "status": "rejected",
+    "created_at": "2026-09-08T14:30:48.458Z",
+    "approved_at": null
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 11,
+  "fields": {
+    "user": 1,
+    "wallet": 6,
+    "amount_usd": "6.00",
+    "asset_amount": "0.000092307692",
+    "exchange_rate": "65000.000000000000",
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-09-08T14:46:31.182Z",
+    "approved_at": "2026-09-08T14:47:01.892Z"
+  }
+},
+{
+  "model": "accounts.withdrawal",
+  "pk": 12,
+  "fields": {
+    "user": 1,
+    "wallet": 6,
+    "amount_usd": "6.00",
+    "asset_amount": "0.000092307692",
+    "exchange_rate": "65000.000000000000",
+    "destination_wallet": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "status": "approved",
+    "created_at": "2026-09-09T13:21:48.070Z",
+    "approved_at": "2026-09-09T13:22:27.531Z"
+  }
+}
+]

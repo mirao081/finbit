@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1,
+    "username": "Softboyvic",
+    "plan_name": "Finbit Starter",
+    "wallet_currency": null,
+    "amount_usd": "200.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "status": "active",
+    "created_at": "2026-09-05T08:30:21.531124+00:00",
+    "end_date": "2026-10-10T08:30:21.531124+00:00"
+  },
+  {
+    "id": 2,
+    "username": "Softboyvic",
+    "plan_name": "Finbit Starter",
+    "wallet_currency": null,
+    "amount_usd": "200.00",
+    "asset_amount": null,
+    "exchange_rate": null,
+    "status": "active",
+    "created_at": "2026-09-05T09:31:31.261154+00:00",
+    "end_date": "2026-10-10T09:31:31.261154+00:00"
+  },
+  {
+    "id": 4,
+    "username": "Finbit",
+    "plan_name": "Finbit Starter",
+    "wallet_currency": "BTC",
+    "amount_usd": "10.00",
+    "asset_amount": "0.000153846154",
+    "exchange_rate": "65000.000000000000",
+    "status": "active",
+    "created_at": "2026-09-08T15:07:08.043823+00:00",
+    "end_date": "2026-10-13T15:07:08.043823+00:00"
+  },
+  {
+    "id": 5,
+    "username": "Finbit",
+    "plan_name": "Infinity",
+    "wallet_currency": "BTC",
+    "amount_usd": "100.00",
+    "asset_amount": "0.001538461538",
+    "exchange_rate": "65000.000000000000",
+    "status": "active",
+    "created_at": "2026-09-08T15:29:45.259665+00:00",
+    "end_date": null
+  },
+  {
+    "id": 6,
+    "username": "Finbit",
+    "plan_name": "Finbit Starter",
+    "wallet_currency": "BTC",
+    "amount_usd": "200.00",
+    "asset_amount": "0.003076923077",
+    "exchange_rate": "65000.000000000000",
+    "status": "active",
+    "created_at": "2026-09-09T13:20:49.865255+00:00",
+    "end_date": "2026-10-14T13:20:49.865255+00:00"
+  }
+]

@@ -1,0 +1,503 @@
+[
+{
+  "model": "core.sitesettings",
+  "pk": 3,
+  "fields": {
+    "site_name": "Finbit",
+    "logo": "",
+    "favicon": "favicons/favicon.ico",
+    "hero_title_white": "Invest for Future in Stable Platform",
+    "hero_title_gold": "and Make Fast Money",
+    "hero_subtitle": "Invest in an Industry Leader, Professional, and Reliable Company. We provide you with the most necessary features that will make your experience better. Not only we guarantee the fastest and the most exciting returns on your investments, but we also guara",
+    "hero_button_text": "Sign Up",
+    "hero_background": "",
+    "about_heading": "About Us",
+    "about_content": "Finbit is a next-generation cryptocurrency investment platform that combines advanced artificial intelligence with the expertise of professional market analysts and traders to identify high-potential opportunities in the digital asset market. By blending data-driven AI insights with human trading expertise, we aim to deliver consistent investment growth while maintaining a disciplined approach to risk management.\r\n\r\nOur platform is designed to make crypto investing more accessible, transparent, and efficient. Through intelligent market analysis, automated trade execution, and continuous portfolio monitoring, we simplify the investment experience, allowing our investors to participate in the evolving cryptocurrency market with confidence.\r\n\r\nAt Finbit, we are committed to innovation, security, and long-term value creation. Every strategy is backed by advanced analytics, real-time market intelligence, and experienced oversight, ensuring that our investors benefit from a balanced approach that prioritizes sustainable growth.\r\n\r\nJoin Finbit and become part of a growing community that is embracing the future of AI-powered cryptocurrency investing.",
+    "about_button_text": "More Info",
+    "about_button_link": "#"
+  }
+},
+{
+  "model": "core.featuresection",
+  "pk": 1,
+  "fields": {
+    "heading": "Why Choose Finbit",
+    "subheading": "Our goal is to provide our investors with a reliable source of high income, while minimizing any possible risks and offering a high-quality service."
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 1,
+  "fields": {
+    "section": 1,
+    "title": "Legal Company",
+    "description": "Our company conducts absolutely legal activities in the legal field. We are certified to operate investment business, we are legal and safe.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 2,
+  "fields": {
+    "section": 1,
+    "title": "High reliability",
+    "description": "We are trusted by a huge number of people. We are working hard constantly to improve the level of our security system and minimize possible risks.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 3,
+  "fields": {
+    "section": 1,
+    "title": "Anonymity",
+    "description": "Anonymity and using cryptocurrency as a payment instrument. In the era of electronic money – this is one of the most convenient ways of cooperation.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 4,
+  "fields": {
+    "section": 1,
+    "title": "Quick Withdrawal",
+    "description": "Our all retreats are treated spontaneously once requested. There are high maximum limits. The minimum withdrawal amount is only $10.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 5,
+  "fields": {
+    "section": 1,
+    "title": "Referral Program",
+    "description": "Our referral program gives you the opportunity to earn extra income by inviting others to join. Every successful referral can increase your earnings, so even referring just a few people can make a real difference. It's a simple way to grow your income while sharing an opportunity with friends, family, and your network.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 6,
+  "fields": {
+    "section": 1,
+    "title": "24/7 Support",
+    "description": "We provide reliable 24/7 customer support through email and Telegram to ensure you're never left without assistance. Our dedicated support team is always ready to answer your questions, resolve any issues, and provide clear guidance whenever you need help, making your experience as smooth and hassle-free as possible.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 7,
+  "fields": {
+    "section": 1,
+    "title": "High-Performance Dedicated Hosting",
+    "description": "Our platform is powered by a dedicated server, giving us exclusive access to the server's full resources. This ensures faster performance, greater reliability, enhanced security, and a smoother experience for every user.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 8,
+  "fields": {
+    "section": 1,
+    "title": "Advanced SSL Security",
+    "description": "Our website is protected with industry-standard SSL encryption, helping secure data transmitted between your device and our platform. This encryption helps protect sensitive information and provides a safer, more secure browsing experience.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 9,
+  "fields": {
+    "section": 1,
+    "title": "Enterprise DDoS Protection",
+    "description": "Our platform is protected by a trusted DDoS mitigation service that helps defend against malicious traffic and keeps our services more stable, secure, and accessible.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.featurecard",
+  "pk": 10,
+  "fields": {
+    "section": 1,
+    "title": "Reliable System Monitoring",
+    "description": "We continuously monitor our platform's performance and security to detect potential issues early, maintain system stability, and provide a smoother experience for our users.",
+    "is_active": true
+  }
+},
+{
+  "model": "core.profitcalculatorsection",
+  "pk": 1,
+  "fields": {
+    "heading": "Profit Calculator",
+    "subheading": "You must know the calculation before investing in any plan, so you never make mistakes. Check the calculation and you will get as our calculator says."
+  }
+},
+{
+  "model": "core.threestepsection",
+  "pk": 1,
+  "fields": {
+    "heading": "How Finbit Works",
+    "subheading": "Get involved in our tremendous platform and Invest. We will utilize your money and give you profit in your wallet automatically."
+  }
+},
+{
+  "model": "core.stepitem",
+  "pk": 1,
+  "fields": {
+    "section": 1,
+    "number": 1,
+    "title": "Create Account",
+    "icon": "fa-user"
+  }
+},
+{
+  "model": "core.stepitem",
+  "pk": 2,
+  "fields": {
+    "section": 1,
+    "number": 2,
+    "title": "Invest To Plan",
+    "icon": "fa-dollar-sign"
+  }
+},
+{
+  "model": "core.stepitem",
+  "pk": 3,
+  "fields": {
+    "section": 1,
+    "number": 3,
+    "title": "Get Profit",
+    "icon": "fa-wallet"
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 1,
+  "fields": {
+    "subheading": "\"The platform’s clarity and transparency give me confidence in every transaction. I especially appreciate how deposits and withdrawals are seamless, and the dashboard keeps me informed at all times. It feels like having a trusted partner guiding my financ",
+    "name": "Elena Fischer",
+    "position": "Investment Consultant, Berlin",
+    "image": "testimonials/elena.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 2,
+  "fields": {
+    "subheading": "\"Finbit has streamlined the way I oversee client portfolios. The transparency in transactions and the intuitive dashboard make it easy to stay on top of investments. Every deposit and withdrawal feels secure, and the overall experience gives me confidence",
+    "name": "Bernard Watson",
+    "position": "Portfolio Manager",
+    "image": "testimonials/bernard.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 3,
+  "fields": {
+    "subheading": "\"Finbit has simplified the way I guide clients through their investment decisions. The platform’s transparency and smooth transaction process make it stand out. I feel confident recommending it because it combines security with an intuitive design that sa",
+    "name": "Sofia Laurent",
+    "position": "Wealth Advisor",
+    "image": "testimonials/sofia.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 4,
+  "fields": {
+    "subheading": "\"Finbit has given me the confidence to manage investments with ease. The seamless deposits and withdrawals, combined with a clear dashboard, make it stand out from other platforms. It feels secure, efficient, and designed with the investor in mind.\"",
+    "name": "Martin Schneider",
+    "position": "Financial Strategist",
+    "image": "testimonials/martin.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 5,
+  "fields": {
+    "subheading": "\"Finbit has completely changed the way I approach investments. The platform is intuitive, transactions are smooth, and the dashboard gives me full visibility. It’s rare to find a system that combines simplicity with such a strong sense of security.\"",
+    "name": "Isabella Romano",
+    "position": "Investment Specialist",
+    "image": "testimonials/romano.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 6,
+  "fields": {
+    "subheading": "\"Finbit has impressed me with its reliability and ease of use. Every transaction is smooth, and the dashboard provides clear insights that make managing investments straightforward. It’s a platform that truly understands the needs of professionals.\"",
+    "name": "Claude Novak",
+    "position": "Financial Consultant",
+    "image": "testimonials/claude.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 7,
+  "fields": {
+    "subheading": "\"Finbit has given me the assurance I need when handling investments. The clarity of the dashboard and the seamless flow of deposits and withdrawals make the entire process efficient and trustworthy. It’s a platform that truly values transparency.\"",
+    "name": "Daniel Weber",
+    "position": "Investment Analyst",
+    "image": "testimonials/weber.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.testimonial",
+  "pk": 8,
+  "fields": {
+    "subheading": "\"Managing portfolios has never been easier. Finbit combines security with simplicity, ensuring that every transaction is smooth and reliable. It’s the kind of system that makes professional investment management straightforward and stress‑free.\"",
+    "name": "Jonathan Hughes",
+    "position": "Financial Advisor",
+    "image": "testimonials/jonathan.jpg",
+    "stars": 5
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 1,
+  "fields": {
+    "name": "James Thornton",
+    "position": "Blockchain Strategy Director",
+    "image": "team_members/james.jpg"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 2,
+  "fields": {
+    "name": "Oliver Bennett",
+    "position": "Head of Crypto Risk Management",
+    "image": "team_members/oliver.jpg"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 3,
+  "fields": {
+    "name": "William Clarke",
+    "position": "Senior Investment Analyst",
+    "image": "team_members/william.jpg"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 4,
+  "fields": {
+    "name": "Henry Foster",
+    "position": "Chief Technology Officer",
+    "image": "team_members/foster.jpg"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 5,
+  "fields": {
+    "name": "George Mitchell",
+    "position": "Digital Asset Portfolio Manager",
+    "image": "team_members/sam.jpg"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 6,
+  "fields": {
+    "name": "Edward Hughes",
+    "position": "Director of Compliance & Security",
+    "image": "team_members/alex.jpg"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 7,
+  "fields": {
+    "name": "Juna Sun",
+    "position": "Lead Crypto Economist",
+    "image": "team_members/juna.jpg"
+  }
+},
+{
+  "model": "core.teammember",
+  "pk": 8,
+  "fields": {
+    "name": "Charles Whitmore",
+    "position": "Global Partnerships Manager",
+    "image": "team_members/profed.jpg"
+  }
+},
+{
+  "model": "core.getstartedsection",
+  "pk": 1,
+  "fields": {
+    "title": "Start Your Journey with Us Today",
+    "subtitle": "Build smarter habits, grow with every bit, and invest with confidence on a platform designed for stability and simplicity. With secure technology and a seamless experience, Finbit helps you take meaningful steps toward your financial goals—one smart move at a time.",
+    "button_text": "Join Us",
+    "button_link": "/account/signup/"
+  }
+},
+{
+  "model": "core.paymentsection",
+  "pk": 1,
+  "fields": {
+    "heading": "Payment We Accept",
+    "subheading": "We support multiple payment methods for your convenience."
+  }
+},
+{
+  "model": "core.paymentmethod",
+  "pk": 1,
+  "fields": {
+    "section": 1,
+    "name": "Bitcoin",
+    "icon": "fa-bitcoin",
+    "is_active": true
+  }
+},
+{
+  "model": "core.paymentmethod",
+  "pk": 2,
+  "fields": {
+    "section": 1,
+    "name": "Ethereum",
+    "icon": "fa-ethereum",
+    "is_active": true
+  }
+},
+{
+  "model": "core.paymentmethod",
+  "pk": 3,
+  "fields": {
+    "section": 1,
+    "name": "Usdt TRC20",
+    "icon": "fa-bolt",
+    "is_active": true
+  }
+},
+{
+  "model": "core.paymentmethod",
+  "pk": 4,
+  "fields": {
+    "section": 1,
+    "name": "Usdt ERC20",
+    "icon": "fa-link",
+    "is_active": true
+  }
+},
+{
+  "model": "core.sitefooter",
+  "pk": 1,
+  "fields": {
+    "logo": "footer/finbit.png",
+    "year": "2020",
+    "company_name": "Finbit. All right reserved"
+  }
+},
+{
+  "model": "core.sitemap",
+  "pk": 1,
+  "fields": {
+    "address": "221B Baker Street Marylebone London NW1 6XE United Kingdom",
+    "embed_code": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2482.4258871332295!2d-0.1585355!3d51.523748000000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x48761acf33628211%3A0x445d7677a88322e1!2s221B%20Baker%20St%2C%20London%20W1U%206QQ%2C%20UK!5e0!3m2!1sen!2sng!4v1787774379554!5m2!1sen!2sng\" width=\"600\" height=\"450\" style=\"border:0;\" allowfullscreen=\"\" loading=\"lazy\" referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>"
+  }
+},
+{
+  "model": "core.supportinfo",
+  "pk": 1,
+  "fields": {
+    "type": "call",
+    "heading": "Quick Support.",
+    "detail_line1": "+6594759944",
+    "detail_line2": "+6584749444"
+  }
+},
+{
+  "model": "core.supportinfo",
+  "pk": 2,
+  "fields": {
+    "type": "email",
+    "heading": "EMail Us",
+    "detail_line1": "finbit@support.com",
+    "detail_line2": "finbit@support.com"
+  }
+},
+{
+  "model": "core.supportinfo",
+  "pk": 3,
+  "fields": {
+    "type": "visit",
+    "heading": "Visit Us",
+    "detail_line1": "221B Baker Street Marylebone London",
+    "detail_line2": "NW1 6XE United Kingdom"
+  }
+},
+{
+  "model": "core.compliancenotice",
+  "pk": 1,
+  "fields": {
+    "title": "KYC & AML Compliance",
+    "description": "We strictly follow Know Your Customer (KYC) and Anti-Money Laundering (AML) regulations to protect your investments."
+  }
+},
+{
+  "model": "core.sociallink",
+  "pk": 1,
+  "fields": {
+    "platform": "twitter",
+    "url": "https://twitter.com"
+  }
+},
+{
+  "model": "core.sociallink",
+  "pk": 2,
+  "fields": {
+    "platform": "telegram",
+    "url": "https://telegram.com"
+  }
+},
+{
+  "model": "core.sociallink",
+  "pk": 3,
+  "fields": {
+    "platform": "linkedin",
+    "url": "https://linkedin.com"
+  }
+},
+{
+  "model": "core.sociallink",
+  "pk": 4,
+  "fields": {
+    "platform": "facebook",
+    "url": "https://facebook.com"
+  }
+},
+{
+  "model": "core.newslettersignup",
+  "pk": 1,
+  "fields": {
+    "email": "chineduarize4@gmail.com",
+    "created_at": "2026-08-26T20:58:57.230Z"
+  }
+},
+{
+  "model": "core.newslettersignup",
+  "pk": 2,
+  "fields": {
+    "email": "micholiver214@yahoo.com",
+    "created_at": "2026-08-26T21:20:44.983Z"
+  }
+},
+{
+  "model": "core.newslettersignup",
+  "pk": 3,
+  "fields": {
+    "email": "rmypeter23@gmail.com",
+    "created_at": "2026-08-26T21:22:40.332Z"
+  }
+}
+]

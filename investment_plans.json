@@ -1,0 +1,106 @@
+[
+{
+  "model": "core.investmentplan",
+  "pk": 1,
+  "fields": {
+    "name": "Finbit Starter",
+    "return_rate": "return 6%",
+    "frequency": "Every Week",
+    "duration": "For 5 Week",
+    "total_return": "Total 30% + Capital",
+    "minimum_investment": "200.00",
+    "maximum_investment": null
+  }
+},
+{
+  "model": "core.investmentplan",
+  "pk": 2,
+  "fields": {
+    "name": "Infinity",
+    "return_rate": "Return 1.2%",
+    "frequency": "Every Day",
+    "duration": "For Lifetime",
+    "total_return": "Lifetime Earning",
+    "minimum_investment": "100.00",
+    "maximum_investment": "200.00"
+  }
+},
+{
+  "model": "core.investmentplan",
+  "pk": 3,
+  "fields": {
+    "name": "Finbit Titan",
+    "return_rate": "Return 5%",
+    "frequency": "Every Week",
+    "duration": "For 40 Week",
+    "total_return": "Total 200%",
+    "minimum_investment": "500.00",
+    "maximum_investment": "5000.00"
+  }
+},
+{
+  "model": "core.investmentplan",
+  "pk": 4,
+  "fields": {
+    "name": "Finbit Nova",
+    "return_rate": "Return 5%",
+    "frequency": "Every Day",
+    "duration": "For 20 Day",
+    "total_return": "115%",
+    "minimum_investment": "5000.00",
+    "maximum_investment": "15000.00"
+  }
+},
+{
+  "model": "core.investmentplan",
+  "pk": 5,
+  "fields": {
+    "name": "Elephant Wealth Plan",
+    "return_rate": "Return 8.1USD",
+    "frequency": "Every Day",
+    "duration": "For 50 Day",
+    "total_return": "Total 55USD + Capital",
+    "minimum_investment": "500.00",
+    "maximum_investment": "700.00"
+  }
+},
+{
+  "model": "core.investmentplan",
+  "pk": 6,
+  "fields": {
+    "name": "Cobra Premium Plan",
+    "return_rate": "Return 3USD",
+    "frequency": "Every Hour",
+    "duration": "For 48 Hour",
+    "total_return": "Total 144USD + Capital",
+    "minimum_investment": "1000.00",
+    "maximum_investment": null
+  }
+},
+{
+  "model": "core.investmentplan",
+  "pk": 7,
+  "fields": {
+    "name": "Lion Legacy Plan",
+    "return_rate": "Return 2.2%",
+    "frequency": "Every Day",
+    "duration": "For Lifetime",
+    "total_return": "Lifetime Earning",
+    "minimum_investment": "100.00",
+    "maximum_investment": "50000.00"
+  }
+},
+{
+  "model": "core.investmentplan",
+  "pk": 8,
+  "fields": {
+    "name": "Tiger Legacy Plan",
+    "return_rate": "Return 2.5%",
+    "frequency": "Every Day",
+    "duration": "For Lifetime",
+    "total_return": "Lifetime Earning",
+    "minimum_investment": "200.00",
+    "maximum_investment": "50000.00"
+  }
+}
+]

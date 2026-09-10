@@ -1,0 +1,254 @@
+[
+  {
+    "username": "Softboyvic",
+    "currency": "BTC",
+    "balance": "0.037538461538",
+    "reserved_balance": "0E-12",
+    "address": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-09T08:44:36.837150+00:00"
+  },
+  {
+    "username": "Softboyvic",
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-07T21:38:16.575573+00:00"
+  },
+  {
+    "username": "Softboyvic",
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-07T21:38:16.575573+00:00"
+  },
+  {
+    "username": "Softboyvic",
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "TFDD1BF55GQUF6oJm4tPuZLaumxZHUnJEr",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-07T21:38:16.575573+00:00"
+  },
+  {
+    "username": "Finbit",
+    "currency": "BTC",
+    "balance": "0.007600000001",
+    "reserved_balance": "0E-12",
+    "address": "bc1q2s3x3zqnu6ejnvqdgraamnxs9adt2rcajwjn03",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-09T13:22:27.528285+00:00"
+  },
+  {
+    "username": "Finbit",
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-07T21:38:16.575573+00:00"
+  },
+  {
+    "username": "Finbit",
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "TFDD1BF55GQUF6oJm4tPuZLaumxZHUnJEr",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-07T21:38:16.575573+00:00"
+  },
+  {
+    "username": "Finbit",
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": "0xb08e963c792480Af5D6985b23B0C89D47Eb77B7d",
+    "created_at": "2026-09-07T21:38:16.546426+00:00",
+    "updated_at": "2026-09-07T21:38:16.575573+00:00"
+  },
+  {
+    "username": "NewSoft2",
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.222048+00:00",
+    "updated_at": "2026-09-09T12:41:31.222068+00:00"
+  },
+  {
+    "username": "NewSoft2",
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.231401+00:00",
+    "updated_at": "2026-09-09T12:41:31.231427+00:00"
+  },
+  {
+    "username": "NewSoft2",
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.241549+00:00",
+    "updated_at": "2026-09-09T12:41:31.241569+00:00"
+  },
+  {
+    "username": "NewSoft2",
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T12:41:31.251125+00:00",
+    "updated_at": "2026-09-09T12:41:31.251147+00:00"
+  },
+  {
+    "username": "Soft1",
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.032371+00:00",
+    "updated_at": "2026-09-09T13:25:24.032397+00:00"
+  },
+  {
+    "username": "Soft1",
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.043747+00:00",
+    "updated_at": "2026-09-09T13:25:24.043769+00:00"
+  },
+  {
+    "username": "Soft1",
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.056335+00:00",
+    "updated_at": "2026-09-09T13:25:24.056383+00:00"
+  },
+  {
+    "username": "Soft1",
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:25:24.069825+00:00",
+    "updated_at": "2026-09-09T13:25:24.069870+00:00"
+  },
+  {
+    "username": "Chyboy",
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.823165+00:00",
+    "updated_at": "2026-09-09T13:58:04.823211+00:00"
+  },
+  {
+    "username": "Chyboy",
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.838506+00:00",
+    "updated_at": "2026-09-09T13:58:04.838552+00:00"
+  },
+  {
+    "username": "Chyboy",
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.856027+00:00",
+    "updated_at": "2026-09-09T13:58:04.856082+00:00"
+  },
+  {
+    "username": "Chyboy",
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T13:58:04.872686+00:00",
+    "updated_at": "2026-09-09T13:58:04.872744+00:00"
+  },
+  {
+    "username": "test",
+    "currency": "BTC",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.404613+00:00",
+    "updated_at": "2026-09-09T14:11:04.404676+00:00"
+  },
+  {
+    "username": "test",
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.419482+00:00",
+    "updated_at": "2026-09-09T14:11:04.419531+00:00"
+  },
+  {
+    "username": "test",
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.434400+00:00",
+    "updated_at": "2026-09-09T14:11:04.434449+00:00"
+  },
+  {
+    "username": "test",
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:11:04.448020+00:00",
+    "updated_at": "2026-09-09T14:11:04.448055+00:00"
+  },
+  {
+    "username": "TEST1",
+    "currency": "BTC",
+    "balance": "0.003076923077",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.596790+00:00",
+    "updated_at": "2026-09-09T14:36:39.914264+00:00"
+  },
+  {
+    "username": "TEST1",
+    "currency": "ETH",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.612084+00:00",
+    "updated_at": "2026-09-09T14:20:38.612130+00:00"
+  },
+  {
+    "username": "TEST1",
+    "currency": "USDT_TRC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.628089+00:00",
+    "updated_at": "2026-09-09T14:20:38.628130+00:00"
+  },
+  {
+    "username": "TEST1",
+    "currency": "USDT_ERC20",
+    "balance": "0E-12",
+    "reserved_balance": "0E-12",
+    "address": null,
+    "created_at": "2026-09-09T14:20:38.643469+00:00",
+    "updated_at": "2026-09-09T14:20:38.643533+00:00"
+  }
+]

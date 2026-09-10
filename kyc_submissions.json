@@ -1,0 +1,82 @@
+[
+{
+  "model": "accounts.kycsubmission",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "document": "kyc_documents/fav.png",
+    "uploaded_at": "2026-08-27T17:38:27.179Z",
+    "approved": false
+  }
+},
+{
+  "model": "accounts.kycsubmission",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "document": "kyc_documents/fav_dFOjBiH.png",
+    "uploaded_at": "2026-08-27T17:38:40.506Z",
+    "approved": false
+  }
+},
+{
+  "model": "accounts.kycsubmission",
+  "pk": 3,
+  "fields": {
+    "user": 2,
+    "document": "kyc_documents/fav_s3jjeVA.png",
+    "uploaded_at": "2026-08-27T17:56:47.916Z",
+    "approved": false
+  }
+},
+{
+  "model": "accounts.kycsubmission",
+  "pk": 4,
+  "fields": {
+    "user": 2,
+    "document": "kyc_documents/fav_phMSlcU.png",
+    "uploaded_at": "2026-08-27T18:10:40.220Z",
+    "approved": false
+  }
+},
+{
+  "model": "accounts.kycsubmission",
+  "pk": 5,
+  "fields": {
+    "user": 2,
+    "document": "kyc_documents/nathan.jpeg",
+    "uploaded_at": "2026-08-28T06:16:36.037Z",
+    "approved": false
+  }
+},
+{
+  "model": "accounts.kycsubmission",
+  "pk": 6,
+  "fields": {
+    "user": 2,
+    "document": "kyc_documents/bitnetcompany1.png",
+    "uploaded_at": "2026-08-28T06:55:36.588Z",
+    "approved": false
+  }
+},
+{
+  "model": "accounts.kycsubmission",
+  "pk": 7,
+  "fields": {
+    "user": 2,
+    "document": "kyc_documents/12.jpg",
+    "uploaded_at": "2026-08-28T06:55:51.161Z",
+    "approved": true
+  }
+},
+{
+  "model": "accounts.kycsubmission",
+  "pk": 8,
+  "fields": {
+    "user": 1,
+    "document": "kyc_documents/360_F_328268657_OSSRDoZeO6isXj3QxRUTaXlmGF6lLmyZ.jpg",
+    "uploaded_at": "2026-09-09T13:15:20.163Z",
+    "approved": true
+  }
+}
+]

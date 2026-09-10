@@ -1,0 +1,62 @@
+[
+{
+  "model": "core.menuitem",
+  "pk": 1,
+  "fields": {
+    "title": "Home",
+    "url_name": "home",
+    "order": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "core.menuitem",
+  "pk": 2,
+  "fields": {
+    "title": "About",
+    "url_name": "about",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "core.menuitem",
+  "pk": 3,
+  "fields": {
+    "title": "Plan",
+    "url_name": "plan",
+    "order": 2,
+    "is_active": true
+  }
+},
+{
+  "model": "core.menuitem",
+  "pk": 4,
+  "fields": {
+    "title": "Blog",
+    "url_name": "blog",
+    "order": 3,
+    "is_active": true
+  }
+},
+{
+  "model": "core.menuitem",
+  "pk": 6,
+  "fields": {
+    "title": "Contact",
+    "url_name": "contact",
+    "order": 5,
+    "is_active": true
+  }
+},
+{
+  "model": "core.menuitem",
+  "pk": 7,
+  "fields": {
+    "title": "Login",
+    "url_name": "login",
+    "order": 4,
+    "is_active": true
+  }
+}
+]

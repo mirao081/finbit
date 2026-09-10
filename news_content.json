@@ -1,0 +1,407 @@
+[
+{
+  "model": "core.newssection",
+  "pk": 1,
+  "fields": {
+    "heading": "What's New at Finbit",
+    "subheading": "Stay informed with the latest news, product updates, and insights from Finbit."
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 1,
+  "fields": {
+    "name": "Investment",
+    "slug": "investment"
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 2,
+  "fields": {
+    "name": "Crypto & Digital Assets",
+    "slug": "crypto-digital-assets"
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 3,
+  "fields": {
+    "name": "Data Analysis",
+    "slug": "data-analysis"
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 4,
+  "fields": {
+    "name": "Finbit News",
+    "slug": "finbit-news"
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 5,
+  "fields": {
+    "name": "Financial Education",
+    "slug": "financial-education"
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 6,
+  "fields": {
+    "name": "Investment Tips",
+    "slug": "investment-tips"
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 7,
+  "fields": {
+    "name": "Technology",
+    "slug": "technology"
+  }
+},
+{
+  "model": "core.newscategory",
+  "pk": 8,
+  "fields": {
+    "name": "Security",
+    "slug": "security"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 1,
+  "fields": {
+    "name": "Bitcoin",
+    "slug": "bitcoin"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 2,
+  "fields": {
+    "name": "Ethereum",
+    "slug": "ethereum"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 3,
+  "fields": {
+    "name": "Usdt",
+    "slug": "usdt"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 4,
+  "fields": {
+    "name": "Cryptocurrency",
+    "slug": "cryptocurrency"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 5,
+  "fields": {
+    "name": "Blockchain",
+    "slug": "blockchain"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 6,
+  "fields": {
+    "name": "Digital Assets",
+    "slug": "digital-assets"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 7,
+  "fields": {
+    "name": "Investment",
+    "slug": "investment"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 8,
+  "fields": {
+    "name": "Trading",
+    "slug": "trading"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 9,
+  "fields": {
+    "name": "Market Trends",
+    "slug": "market-trends"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 10,
+  "fields": {
+    "name": "Market Analysis",
+    "slug": "market-analysis"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 11,
+  "fields": {
+    "name": "Passive Income",
+    "slug": "passive-income"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 12,
+  "fields": {
+    "name": "ortfolio",
+    "slug": "ortfolio"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 13,
+  "fields": {
+    "name": "Investment Strategy",
+    "slug": "investment-strategy"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 14,
+  "fields": {
+    "name": "Risk Management",
+    "slug": "risk-management"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 15,
+  "fields": {
+    "name": "Financial Planning",
+    "slug": "financial-planning"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 16,
+  "fields": {
+    "name": "Financial Education",
+    "slug": "financial-education"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 17,
+  "fields": {
+    "name": "Fintech",
+    "slug": "fintech"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 18,
+  "fields": {
+    "name": "AI",
+    "slug": "ai"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 19,
+  "fields": {
+    "name": "Analytics",
+    "slug": "analytics"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 20,
+  "fields": {
+    "name": "Finbit",
+    "slug": "finbit"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 21,
+  "fields": {
+    "name": "Beginners",
+    "slug": "beginners"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 22,
+  "fields": {
+    "name": "Long-Term Growth",
+    "slug": "long-term-growth"
+  }
+},
+{
+  "model": "core.newstag",
+  "pk": 23,
+  "fields": {
+    "name": "Security",
+    "slug": "security"
+  }
+},
+{
+  "model": "core.newsitem",
+  "pk": 1,
+  "fields": {
+    "section": 1,
+    "category": null,
+    "image": "news/btcoinnew.jpg",
+    "subheading": "Discover our newest announcements, platform enhancements, and valuable insights designed to keep you informed every step of the way.",
+    "author": "James Thornton",
+    "date": "2020-12-16",
+    "content_title": "Finbit Launches New Investment Plans",
+    "content_preview": "Finbit introduces flexible investment options designed to support both new and experienced investors in achieving their financial goals. Our platform offers a range of investment choices that cater to different strategies, risk preferences, and long-term objectives, making it easier to build a portfolio that fits your needs. With an intuitive experience, transparent insights, and real-time performance tracking, you can make informed decisions with greater confidence. Whether you're taking your first step into investing or refining an established strategy, Finbit provides the tools and flexibility to help you grow with confidence over time.",
+    "body": null,
+    "quote": null,
+    "is_active": true,
+    "tags": []
+  }
+},
+{
+  "model": "core.newsitem",
+  "pk": 2,
+  "fields": {
+    "section": 1,
+    "category": null,
+    "image": "news/bitcoinnews1.jpg",
+    "subheading": "Stay tuned for expert commentary and updates that highlight our continuous growth and innovation.",
+    "author": "Oliver Bennett",
+    "date": "2020-12-18",
+    "content_title": "Finbit Expands Global Reach",
+    "content_preview": "Finbit expands its global reach by opening new investment opportunities across multiple regions, making it easier for clients around the world to access our trusted platform. Our growing international presence reflects a commitment to connecting investors with broader financial opportunities while maintaining a seamless and secure experience. As we continue to expand, users can benefit from improved accessibility, localized support, and innovative tools designed to meet the needs of a diverse global community. With Finbit, investing becomes more accessible, reliable, and connected—wherever you are.",
+    "body": null,
+    "quote": null,
+    "is_active": true,
+    "tags": []
+  }
+},
+{
+  "model": "core.newsitem",
+  "pk": 3,
+  "fields": {
+    "section": 1,
+    "category": null,
+    "image": "news/bitcoinnews2.jpg",
+    "subheading": "xplore our latest strategic updates and innovations crafted to deliver greater value to our investors.",
+    "author": "William Clarke",
+    "date": "2021-01-24",
+    "content_title": "Finbit Introduces Smart Portfolio Tools",
+    "content_preview": "Finbit unveils advanced portfolio management features that empower users to take greater control of their investment journey. Our intuitive tools make it easy to track portfolio performance, monitor asset allocation, and stay informed with real-time updates. Explore diversification opportunities, analyze investment trends, and gain valuable insights that support smarter financial decisions. Designed for both new and experienced investors, these features simplify portfolio management while helping you plan with confidence. With Finbit, optimizing your investment strategy becomes more seamless, organized, and efficient every step of the way.",
+    "body": null,
+    "quote": null,
+    "is_active": true,
+    "tags": []
+  }
+},
+{
+  "model": "core.newsitem",
+  "pk": 4,
+  "fields": {
+    "section": 1,
+    "category": null,
+    "image": "news/bitcoinnews2_EhUe4ZA.jpg",
+    "subheading": "Discover insights into our latest financial strategies and innovations designed to empower investors.",
+    "author": "Edward Hughes",
+    "date": "2022-08-24",
+    "content_title": "Finbit Enhances Security Protocols",
+    "content_preview": "Finbit introduces advanced security measures designed to keep your investments, transactions, and personal information protected at every step. Our platform uses modern encryption technologies and secure authentication processes to safeguard your account against unauthorized access. Every transaction is handled with a strong focus on privacy, reliability, and trust, giving you greater confidence while managing your finances. With continuous security monitoring and industry-aligned protection standards, Finbit creates a safer environment where you can invest, track your portfolio, and grow with peace of mind.",
+    "body": null,
+    "quote": null,
+    "is_active": true,
+    "tags": []
+  }
+},
+{
+  "model": "core.newsitem",
+  "pk": 5,
+  "fields": {
+    "section": 1,
+    "category": 4,
+    "image": "news/bitcoinnews1_aTR9ntw.jpg",
+    "subheading": "Learn more about our expanding services and commitment to delivering excellence across all investment platforms.",
+    "author": "George Mitchell",
+    "date": "2023-08-24",
+    "content_title": "Finbit Partners with Global Institutions",
+    "content_preview": "Finbit unveils intelligent analytics tools designed to help investors make smarter financial decisions with confidence. By combining real-time market data, advanced insights, and user-friendly dashboards, our platform provides a clearer view of investment opportunities. Track market trends as they happen, monitor performance with greater accuracy, and gain valuable insights that support informed decision-making. Our analytics are built to simplify complex data, making it easier for both new and experienced investors to stay ahead. With Finbit, you can explore opportunities, identify patterns, and make more strategic moves with confidence in a fast-changing financial landscape.",
+    "body": "Building a Stronger Financial Future with Finbit\r\n\r\nIn today’s rapidly changing financial landscape, making informed decisions has become more important than ever. Successful financial growth is not simply about making investments; it is about understanding opportunities, managing risk, and developing a disciplined approach to long-term growth.\r\n\r\nAt Finbit, our goal is to make the journey toward financial growth clearer, smarter, and more accessible. We believe that every investment decision should be supported by knowledge, careful planning, and a clear understanding of your financial objectives.\r\n\r\nA disciplined investment strategy begins with understanding your goals. Whether you are looking to build long-term wealth, diversify your portfolio, or explore digital assets, having a clear direction can help you make better decisions and remain focused when market conditions change.\r\n\r\nRisk management is equally important. Every investment opportunity carries a level of risk, and responsible investors understand the importance of evaluating those risks before committing their funds. Diversification, careful research, and realistic expectations can all contribute to a more balanced approach.\r\n\r\nTechnology is also transforming the way people interact with financial markets. Modern platforms can provide access to valuable information, market insights, and tools that help investors monitor their strategies more effectively. Finbit is committed to using technology to create a more convenient and transparent financial experience.\r\n\r\nUltimately, financial growth is a journey rather than a single event. It requires patience, consistency, education, and responsible decision-making. By staying informed and maintaining a long-term perspective, investors can position themselves to take advantage of opportunities while remaining conscious of the risks involved.\r\n\r\nFinbit is committed to supporting this journey with a platform designed around simplicity, accessibility, and informed financial decision-making. As the financial world continues to evolve, our focus remains on helping our community navigate new opportunities with greater confidence and clarity.",
+    "quote": "At Finbit, we believe informed decisions today create stronger financial possibilities tomorrow",
+    "is_active": true,
+    "tags": [
+      1
+    ]
+  }
+},
+{
+  "model": "core.newsitem",
+  "pk": 6,
+  "fields": {
+    "section": 1,
+    "category": null,
+    "image": "news/btclogo.jpg",
+    "subheading": "Stay updated with our innovative solutions crafted to maximize investor success and long-term growth.",
+    "author": "Henry Foster",
+    "date": "2026-03-24",
+    "content_title": "Finbit Launches AI-Powered Analytics",
+    "content_preview": "Finbit introduces intelligent analytics tools that empower investors to make more informed decisions with confidence. Powered by real-time market data and predictive insights, our platform helps you identify trends, monitor performance, and uncover new opportunities as they emerge. With a seamless and intuitive experience, complex financial information becomes easier to understand, allowing both beginners and experienced investors to make strategic choices. Stay ahead of market movements, gain deeper visibility into your investments, and take the next step toward achieving your financial goals with smarter, data-driven insights from Finbit.",
+    "body": null,
+    "quote": null,
+    "is_active": true,
+    "tags": []
+  }
+},
+{
+  "model": "core.newscomment",
+  "pk": 1,
+  "fields": {
+    "news": 6,
+    "name": "Matt Orneil",
+    "email": "micholiver214@yahoo.com",
+    "image": "",
+    "comment": "thanks for the detailed explanation",
+    "created_at": "2026-08-25T20:27:15.893Z",
+    "approved": true
+  }
+},
+{
+  "model": "core.newscomment",
+  "pk": 2,
+  "fields": {
+    "news": 5,
+    "name": "Alex",
+    "email": "micholiver214@yahoo.com",
+    "image": "",
+    "comment": "This is very educative! thanks alot",
+    "created_at": "2026-08-25T21:18:44.043Z",
+    "approved": true
+  }
+},
+{
+  "model": "core.newscomment",
+  "pk": 3,
+  "fields": {
+    "news": 5,
+    "name": "Emily",
+    "email": "rmypeter23@gmail.com",
+    "image": "comments/gettyimages-1437816897-612x612.jpg",
+    "comment": "Awesome",
+    "created_at": "2026-08-25T21:24:35.070Z",
+    "approved": true
+  }
+}
+]

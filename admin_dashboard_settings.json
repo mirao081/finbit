@@ -1,0 +1,10 @@
+[
+{
+  "model": "control.admindashboardsettings",
+  "pk": 1,
+  "fields": {
+    "title": "Finbit Admin Dashboard",
+    "logo": "admindash/images/finbit_2.png"
+  }
+}
+]

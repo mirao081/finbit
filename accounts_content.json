@@ -1,0 +1,423 @@
+[
+{
+  "model": "accounts.supportpage",
+  "pk": 1,
+  "fields": {
+    "heading": "Support Center",
+    "intro_text": "Welcome to our Support Center. Whether you’re new to crypto or an experienced investor, we’re here to guide you through deposits, withdrawals, wallet management, and account security.",
+    "email_support": "support@finbit.com",
+    "phone_support": "08104684362",
+    "live_chat_available": true,
+    "articles_text": "We're currently preparing helpful guides and FAQs. Please check back soon.",
+    "account_help_text": "Our support team is here to help you with deposits, withdrawals, wallet settings, investments, verification, and other account-related questions.",
+    "last_updated": "2026-08-31T08:29:06.252Z"
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 1,
+  "fields": {
+    "title": "Dashboard",
+    "url_name": "dashboard",
+    "order": 1
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 2,
+  "fields": {
+    "title": "Wallets",
+    "url_name": "wallets",
+    "order": 2
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 3,
+  "fields": {
+    "title": "Deposits",
+    "url_name": "deposit",
+    "order": 3
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 4,
+  "fields": {
+    "title": "Withdraw",
+    "url_name": "withdraw",
+    "order": 4
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 5,
+  "fields": {
+    "title": "Transactions",
+    "url_name": "transactions",
+    "order": 5
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 6,
+  "fields": {
+    "title": "Profit History",
+    "url_name": "profit_history",
+    "order": 6
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 7,
+  "fields": {
+    "title": "Referrals",
+    "url_name": "referrals",
+    "order": 7
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 8,
+  "fields": {
+    "title": "Markets",
+    "url_name": "markets",
+    "order": 8
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 10,
+  "fields": {
+    "title": "Support",
+    "url_name": "support",
+    "order": 10
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 11,
+  "fields": {
+    "title": "Profile",
+    "url_name": "profile",
+    "order": 11
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 12,
+  "fields": {
+    "title": "Security Center",
+    "url_name": "security_center",
+    "order": 12
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 13,
+  "fields": {
+    "title": "Settings",
+    "url_name": "settings",
+    "order": 13
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 14,
+  "fields": {
+    "title": "Start Investment",
+    "url_name": "start_investment",
+    "order": 11
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 15,
+  "fields": {
+    "title": "Announcement",
+    "url_name": "announcements",
+    "order": 15
+  }
+},
+{
+  "model": "accounts.dashboardmenu",
+  "pk": 16,
+  "fields": {
+    "title": "Notifications",
+    "url_name": "notifications",
+    "order": 14
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "name": "Softboyvic",
+    "picture": "profile_pics/12_fRIMDkr.jpg",
+    "kyc_verified": true,
+    "total_balance": "340.00",
+    "investment_balance": "400.00",
+    "referral_code": "Softboyvic",
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "400.00",
+    "recovery_email": "chineduarize4@gmail.com",
+    "recovery_phone": "09130990859"
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": 1,
+    "name": "Finbit",
+    "picture": "profile_pics/13.jpeg",
+    "kyc_verified": true,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": "Finbit",
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 10,
+  "fields": {
+    "user": 11,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 11,
+  "fields": {
+    "user": 12,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 12,
+  "fields": {
+    "user": 13,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 13,
+  "fields": {
+    "user": 14,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.userprofile",
+  "pk": 14,
+  "fields": {
+    "user": 15,
+    "name": null,
+    "picture": "",
+    "kyc_verified": false,
+    "total_balance": "0.00",
+    "investment_balance": "0.00",
+    "referral_code": null,
+    "referrer": null,
+    "referral_earnings": "0.00",
+    "total_investment": "0.00",
+    "recovery_email": null,
+    "recovery_phone": null
+  }
+},
+{
+  "model": "accounts.quickaction",
+  "pk": 1,
+  "fields": {
+    "title": "Deposit",
+    "action_type": "deposit",
+    "url_name": "deposit",
+    "icon": "fa-solid fa-bolt"
+  }
+},
+{
+  "model": "accounts.quickaction",
+  "pk": 2,
+  "fields": {
+    "title": "Withdraw",
+    "action_type": "withdrawal",
+    "url_name": "withdraw",
+    "icon": "fa-solid fa-bolt"
+  }
+},
+{
+  "model": "accounts.quickaction",
+  "pk": 3,
+  "fields": {
+    "title": "Start Investment",
+    "action_type": "investment",
+    "url_name": "start_investment",
+    "icon": "fa-solid fa-bolt"
+  }
+},
+{
+  "model": "accounts.investmentpagecontent",
+  "pk": 1,
+  "fields": {
+    "hero_title": "Start Your Investment Journey",
+    "hero_subtitle": "Choose an investment plan that matches your goals and invest from your approved balance.",
+    "balance_label": "Available Balance",
+    "how_title": "How Your Investment Works",
+    "how_subtitle": "A simple, transparent process designed to make investing straightforward.",
+    "calculator_title": "Investment Calculator",
+    "calculator_subtitle": "Estimate your potential return before you invest.",
+    "security_title": "Built Around Security & Transparency",
+    "security_text": "Your account information and investment activity are handled through our secure platform.",
+    "terms_title": "Important Investment Information",
+    "terms_text": "Investment returns, durations and conditions vary by plan. Please review the details of each plan carefully before investing.",
+    "faq_title": "Frequently Asked Questions",
+    "support_title": "Need Help Before You Invest?",
+    "support_text": "Our support team is available to help you understand the investment process.",
+    "support_button_text": "Contact Support",
+    "updated_at": "2026-08-31T23:32:34.963Z"
+  }
+},
+{
+  "model": "accounts.investmenthowitworks",
+  "pk": 1,
+  "fields": {
+    "title": "Choose your prefered plan",
+    "description": "Browse our available investment plans and select the one that suits you best.",
+    "icon": "fa fa-list",
+    "order": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmenthowitworks",
+  "pk": 2,
+  "fields": {
+    "title": "Deposit Funds",
+    "description": "Add money to your account securely using your preferred payment method.",
+    "icon": "fa fa-credit-card",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmenthowitworks",
+  "pk": 3,
+  "fields": {
+    "title": "Watch Your Returns",
+    "description": "Track your investments and see your profits grow over time",
+    "icon": "fa fa-line-chart",
+    "order": 2,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmentfeature",
+  "pk": 1,
+  "fields": {
+    "title": "Deposit Funds",
+    "description": "Add money to your account securely using your preferred payment method.",
+    "icon": "fa fa-credit-card",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmentfaq",
+  "pk": 1,
+  "fields": {
+    "question": "When can I deposit/withdraw from my Investment account?",
+    "answer": "Deposit and withdrawal are available at any time. Be sure that your funds are not used in any ongoing trade before the withdrawal. The available amount is shown in your dashboard on the main page of the Investing platform.",
+    "order": 0,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmentfaq",
+  "pk": 2,
+  "fields": {
+    "question": "I forgot my password, what should I do?",
+    "answer": "Visit the password reset page, type in your email address and click the Reset button.",
+    "order": 1,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmentfaq",
+  "pk": 3,
+  "fields": {
+    "question": "How will I know that the withdrawal has been successful?",
+    "answer": "You will get an automatic notification once we send the funds and you can always check your transactions or account balance. Your chosen payment system dictates how long it will take for the funds to reach you.",
+    "order": 2,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmentfaq",
+  "pk": 4,
+  "fields": {
+    "question": "How much can I withdraw?",
+    "answer": "You can withdraw the full amount of your account balance minus the funds that are used currently for supporting opened positions but the minimum withdrawal is $6",
+    "order": 3,
+    "is_active": true
+  }
+},
+{
+  "model": "accounts.investmentfaq",
+  "pk": 5,
+  "fields": {
+    "question": "What is the referral bonus?",
+    "answer": "We value community growth. For every successful referral, you earn a bonus of 8.4%. This reward is automatically credited once your referral completes their first qualifying investment, allowing you to benefit while helping others discover Finbit.",
+    "order": 4,
+    "is_active": true
+  }
+}
+]

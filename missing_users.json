@@ -1,0 +1,110 @@
+[
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$5xaXyvu3dull2mZcpgPmNt$riuejjncAD7UHa2igUg4ld8VFvGkvcdvsQQokHgnaPE=",
+    "last_login": "2026-09-09T14:13:55.513Z",
+    "is_superuser": false,
+    "username": "Softboyvic",
+    "first_name": "",
+    "last_name": "",
+    "email": "micholiver214@yahoo.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-08-27T15:32:24Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$2eJqX4Xai0uSe1wRQhCwLU$7zlPFId2oGHh2beDRLMPiMa/gLGDFOKTVN9p3M0b/uc=",
+    "last_login": "2026-09-09T12:54:48.300Z",
+    "is_superuser": false,
+    "username": "NewSoft2",
+    "first_name": "",
+    "last_name": "",
+    "email": "chineduarize4@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-09T12:41:28.843Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$crwFYai6C1m0Siiiog62Tk$HnNeRtJxmEmc0YqGQ4kZDxsMChYu6EVZhUM77UEXcn4=",
+    "last_login": "2026-09-09T13:25:42.788Z",
+    "is_superuser": false,
+    "username": "Soft1",
+    "first_name": "",
+    "last_name": "",
+    "email": "chineduarize4@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-09T13:25:21.418Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 13,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$DnK7wywRESZXu7NlZWZHqE$SNVNQfXQ9/EhlQxSLVQIaRf9ccLoEESAFfH4Lmw4TJs=",
+    "last_login": "2026-09-09T13:58:47.423Z",
+    "is_superuser": false,
+    "username": "Chyboy",
+    "first_name": "",
+    "last_name": "",
+    "email": "chineduarize4@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-09T13:57:59.283Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 14,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$FVTrdS7pPGAV9jGtyNhnxQ$VeJ+UohSF67IgLne9PU3u8Z7t0acA4MZoGD94BkKPVg=",
+    "last_login": "2026-09-09T14:11:27.352Z",
+    "is_superuser": false,
+    "username": "test",
+    "first_name": "",
+    "last_name": "",
+    "email": "chineduarize4@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-09T14:10:59.039Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 15,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$xxrV1gJM3WTBUeOnnfvmE5$Hmk4sOIYw2UJcmwJiUMbhZSIxKE/EkJNoMmV1FHUtZU=",
+    "last_login": "2026-09-09T14:33:02.690Z",
+    "is_superuser": false,
+    "username": "TEST1",
+    "first_name": "",
+    "last_name": "",
+    "email": "chineduarize4@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-09-09T14:20:33.077Z",
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]

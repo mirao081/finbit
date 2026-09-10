@@ -1,0 +1,164 @@
+[
+  {
+    "id": 1,
+    "username": "NewSoft2",
+    "title": "Welcome to Finbit",
+    "message": "Your Finbit account has been created successfully. Welcome to Finbit. Your account is now ready to use.",
+    "notification_type": "signup",
+    "is_read": false,
+    "created_at": "2026-09-09T12:41:31.262479+00:00"
+  },
+  {
+    "id": 2,
+    "username": "Finbit",
+    "title": "Account Verified",
+    "message": "Your Finbit account has been successfully verified. You can now access the available account features.",
+    "notification_type": "verification",
+    "is_read": true,
+    "created_at": "2026-09-09T13:15:43.755316+00:00"
+  },
+  {
+    "id": 3,
+    "username": "Finbit",
+    "title": "Account Verified",
+    "message": "Your Finbit account has been successfully verified. You can now access the available account features.",
+    "notification_type": "verification",
+    "is_read": true,
+    "created_at": "2026-09-09T13:15:43.777041+00:00"
+  },
+  {
+    "id": 4,
+    "username": "Finbit",
+    "title": "Deposit Approved",
+    "message": "Your deposit of $200.00 using Bitcoin for the Infinity plan has been approved successfully and credited to your account.",
+    "notification_type": "deposit",
+    "is_read": false,
+    "created_at": "2026-09-09T13:19:22.292150+00:00"
+  },
+  {
+    "id": 5,
+    "username": "Finbit",
+    "title": "Deposit Approved",
+    "message": "Your deposit of $200.00 using Bitcoin for the Infinity plan has been approved successfully and credited to your account.",
+    "notification_type": "deposit",
+    "is_read": false,
+    "created_at": "2026-09-09T13:19:22.305099+00:00"
+  },
+  {
+    "id": 6,
+    "username": "Finbit",
+    "title": "Investment Started",
+    "message": "Your Finbit Starter investment of $200.00 started on September 09, 2026 at 01:20 PM. Your investment is scheduled to end on October 14, 2026 at 01:20 PM.",
+    "notification_type": "investment",
+    "is_read": false,
+    "created_at": "2026-09-09T13:20:49.885906+00:00"
+  },
+  {
+    "id": 7,
+    "username": "Finbit",
+    "title": "Withdrawal Approved",
+    "message": "Your withdrawal of $6.00 (0.000092307692 Bitcoin) has been approved successfully.",
+    "notification_type": "withdrawal",
+    "is_read": false,
+    "created_at": "2026-09-09T13:22:27.534114+00:00"
+  },
+  {
+    "id": 8,
+    "username": "Finbit",
+    "title": "Withdrawal Approved",
+    "message": "Your withdrawal of $6.00 (0.000092307692 Bitcoin) has been approved successfully.",
+    "notification_type": "withdrawal",
+    "is_read": false,
+    "created_at": "2026-09-09T13:22:27.551632+00:00"
+  },
+  {
+    "id": 9,
+    "username": "Soft1",
+    "title": "Welcome to Finbit",
+    "message": "Your Finbit account has been created successfully. Welcome to Finbit. Your account is now ready to use.",
+    "notification_type": "signup",
+    "is_read": false,
+    "created_at": "2026-09-09T13:25:24.087758+00:00"
+  },
+  {
+    "id": 10,
+    "username": "Chyboy",
+    "title": "Welcome to Finbit",
+    "message": "Your Finbit account has been created successfully. Welcome to Finbit. Your account is now ready to use.",
+    "notification_type": "signup",
+    "is_read": false,
+    "created_at": "2026-09-09T13:58:04.895226+00:00"
+  },
+  {
+    "id": 11,
+    "username": "test",
+    "title": "Welcome to Finbit",
+    "message": "Your Finbit account has been created successfully. Welcome to Finbit. Your account is now ready to use.",
+    "notification_type": "signup",
+    "is_read": false,
+    "created_at": "2026-09-09T14:11:04.469304+00:00"
+  },
+  {
+    "id": 12,
+    "username": "TEST1",
+    "title": "Welcome to Finbit",
+    "message": "Your Finbit account has been created successfully. Welcome to Finbit. Your account is now ready to use.",
+    "notification_type": "signup",
+    "is_read": false,
+    "created_at": "2026-09-09T14:20:38.670024+00:00"
+  },
+  {
+    "id": 13,
+    "username": "Finbit",
+    "title": "New Referral",
+    "message": "TEST1 has registered on Finbit using your referral link.",
+    "notification_type": "referral",
+    "is_read": false,
+    "created_at": "2026-09-09T14:20:38.701990+00:00"
+  },
+  {
+    "id": 14,
+    "username": "Finbit",
+    "title": "New Referral",
+    "message": "TEST1 has registered on Finbit using your referral link.",
+    "notification_type": "referral",
+    "is_read": false,
+    "created_at": "2026-09-09T14:20:38.748322+00:00"
+  },
+  {
+    "id": 15,
+    "username": "Finbit",
+    "title": "Referral Bonus Earned",
+    "message": "You earned a referral bonus of $16.80 from TEST1's approved deposit.",
+    "notification_type": "bonus",
+    "is_read": false,
+    "created_at": "2026-09-09T14:36:39.929413+00:00"
+  },
+  {
+    "id": 16,
+    "username": "TEST1",
+    "title": "Deposit Approved",
+    "message": "Your deposit of $200.00 using Bitcoin for the Finbit Starter plan has been approved successfully and credited to your account.",
+    "notification_type": "deposit",
+    "is_read": false,
+    "created_at": "2026-09-09T14:36:39.932359+00:00"
+  },
+  {
+    "id": 17,
+    "username": "TEST1",
+    "title": "Deposit Approved",
+    "message": "Your deposit of $200.00 using Bitcoin for the Finbit Starter plan has been approved successfully and credited to your account.",
+    "notification_type": "deposit",
+    "is_read": false,
+    "created_at": "2026-09-09T14:36:39.963413+00:00"
+  },
+  {
+    "id": 18,
+    "username": "Finbit",
+    "title": "Referral Bonus Earned",
+    "message": "You earned a referral bonus of $16.80 from TEST1's approved deposit.",
+    "notification_type": "bonus",
+    "is_read": false,
+    "created_at": "2026-09-09T14:36:39.981540+00:00"
+  }
+]

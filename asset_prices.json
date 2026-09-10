@@ -1,0 +1,38 @@
+[
+{
+  "model": "accounts.assetprice",
+  "pk": 1,
+  "fields": {
+    "currency": "BTC",
+    "usd_price": "65000.000000000000",
+    "updated_at": "2026-09-07T23:02:13.414Z"
+  }
+},
+{
+  "model": "accounts.assetprice",
+  "pk": 2,
+  "fields": {
+    "currency": "ETH",
+    "usd_price": "3500.000000000000",
+    "updated_at": "2026-09-07T23:02:13.427Z"
+  }
+},
+{
+  "model": "accounts.assetprice",
+  "pk": 3,
+  "fields": {
+    "currency": "USDT_TRC20",
+    "usd_price": "1.000000000000",
+    "updated_at": "2026-09-07T23:02:13.437Z"
+  }
+},
+{
+  "model": "accounts.assetprice",
+  "pk": 4,
+  "fields": {
+    "currency": "USDT_ERC20",
+    "usd_price": "1.000000000000",
+    "updated_at": "2026-09-07T23:02:13.449Z"
+  }
+}
+]

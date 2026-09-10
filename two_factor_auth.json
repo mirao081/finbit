@@ -1,0 +1,79 @@
+[
+{
+  "model": "accounts.twofactorauth",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "is_enabled": true,
+    "secret_key": "64NF6FTKKESNV4SFZVXITAFYBZRYRKMW",
+    "created_at": "2026-09-01T11:40:01.484Z",
+    "updated_at": "2026-09-01T14:02:59.709Z"
+  }
+},
+{
+  "model": "accounts.twofactorauth",
+  "pk": 2,
+  "fields": {
+    "user": 1,
+    "is_enabled": false,
+    "secret_key": null,
+    "created_at": "2026-09-01T17:47:56.487Z",
+    "updated_at": "2026-09-01T17:47:56.487Z"
+  }
+},
+{
+  "model": "accounts.twofactorauth",
+  "pk": 3,
+  "fields": {
+    "user": 11,
+    "is_enabled": false,
+    "secret_key": null,
+    "created_at": "2026-09-09T12:41:49.885Z",
+    "updated_at": "2026-09-09T12:41:49.885Z"
+  }
+},
+{
+  "model": "accounts.twofactorauth",
+  "pk": 4,
+  "fields": {
+    "user": 12,
+    "is_enabled": false,
+    "secret_key": null,
+    "created_at": "2026-09-09T13:25:42.768Z",
+    "updated_at": "2026-09-09T13:25:42.768Z"
+  }
+},
+{
+  "model": "accounts.twofactorauth",
+  "pk": 5,
+  "fields": {
+    "user": 13,
+    "is_enabled": false,
+    "secret_key": null,
+    "created_at": "2026-09-09T13:58:47.402Z",
+    "updated_at": "2026-09-09T13:58:47.403Z"
+  }
+},
+{
+  "model": "accounts.twofactorauth",
+  "pk": 6,
+  "fields": {
+    "user": 14,
+    "is_enabled": false,
+    "secret_key": null,
+    "created_at": "2026-09-09T14:11:27.336Z",
+    "updated_at": "2026-09-09T14:11:27.336Z"
+  }
+},
+{
+  "model": "accounts.twofactorauth",
+  "pk": 7,
+  "fields": {
+    "user": 15,
+    "is_enabled": false,
+    "secret_key": null,
+    "created_at": "2026-09-09T14:21:02.403Z",
+    "updated_at": "2026-09-09T14:21:02.403Z"
+  }
+}
+]
