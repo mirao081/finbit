@@ -1,3 +1,12 @@
+/* =========================================================
+   FINBIT LOGIN PAGE
+   Premium Dark / Gold Responsive Styling
+   ========================================================= */
+
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
 
 body {
     background: #121212;
@@ -6,157 +15,594 @@ body {
 }
 
 
+/* =========================================================
+   LOGIN PAGE
+   ========================================================= */
+
 .login-page {
+    width: 100%;
+    min-height: 100vh;
+
     display: flex;
     justify-content: center;
-    align-items: flex-start; 
-    min-height: 100vh;
-    padding-top: 6rem; 
+    align-items: flex-start;
+
+    padding: 6rem 20px 3rem;
+    box-sizing: border-box;
 }
 
 
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
 .login-card {
-    background: #1e1e2f;
-    padding: 2.5rem;
-    border-radius: 12px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-    max-width: 400px;
     width: 100%;
+    max-width: 400px;
+
+    padding: 2.5rem;
+
+    background: #1e1e2f;
+
+    border-radius: 12px;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.6);
+
     text-align: center;
+
+    box-sizing: border-box;
+
     animation: fadeInUp 0.8s ease-out;
 }
 
+
+/* =========================================================
+   LOGIN HEADING
+   ========================================================= */
+
 .login-card h2 {
-    margin-bottom: 0.5rem;
+    margin: 0 0 0.5rem;
+
     font-size: 1.8rem;
+    font-weight: 700;
+
     color: #fff;
 }
 
+
 .login-card .subtitle {
-    margin-bottom: 1.5rem;
+    margin: 0 0 1.5rem;
+
     font-size: 0.95rem;
+
     color: #aaa;
 }
 
 
-.login-form p {
-    margin-bottom: 1rem;
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.login-form {
+    width: 100%;
+    margin: 0;
 }
 
-.login-form input {
+
+.form-group {
     width: 100%;
+    margin-bottom: 1rem;
+
+    box-sizing: border-box;
+}
+
+
+.form-group ul.errorlist,
+.form-group .errorlist {
+    margin: 0 0 6px;
+    padding: 0;
+
+    list-style: none;
+
+    color: #ff6b6b;
+
+    font-size: 0.82rem;
+}
+
+
+/* =========================================================
+   INPUTS
+   ========================================================= */
+
+.login-form input {
+    display: block;
+
+    width: 100%;
+
+    min-width: 0;
+
     padding: 0.9rem;
+
     border: none;
     border-radius: 8px;
+
     background: #2a2a3d;
+
     color: #fff;
+
     font-size: 0.95rem;
-    transition: background 0.3s, box-shadow 0.3s;
+
+    box-sizing: border-box;
+
+    transition:
+        background 0.3s ease,
+        box-shadow 0.3s ease;
 }
+
 
 .login-form input::placeholder {
     color: #888;
 }
 
+
 .login-form input:focus {
     background: #33334d;
-    box-shadow: 0 0 6px rgba(199, 155, 66, 0.7);
+
+    box-shadow:
+        0 0 6px rgba(204, 160, 83, 0.7);
+
     outline: none;
 }
 
 
-.login-btn {
-    width: 100%;
-    padding: 1rem;
-    background: linear-gradient(135deg, #c79b42, #d7ad57);
-    border: none;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
+/* =========================================================
+   PASSWORD FIELD
+   ========================================================= */
 
-.login-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.4);
-}
-
-
-.signup-link {
-    margin-top: 1.5rem;
-    font-size: 0.9rem;
-    color: #bbb;
-}
-
-.signup-link a {
-    color: #c79b42;
-    font-weight: bold;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.signup-link a:hover {
-    color: #d7ad57;
-}
-
-
-@keyframes fadeInUp {
-    from { transform: translateY(30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-}
 .password-wrapper {
     position: relative;
+
     display: flex;
     align-items: center;
-}
 
-.password-wrapper input {
     width: 100%;
-    padding-right: 40px; 
+
     box-sizing: border-box;
 }
 
-.toggle-password {
-    position: absolute;
-    right: 12px;
-    cursor: pointer;
-    color: #aaa;
-    font-size: 1rem;
+
+.password-wrapper input {
+    width: 100%;
+
+    padding-right: 45px;
+
+    box-sizing: border-box;
 }
 
 
-@media (max-width: 600px) {
-    .login-card, .signup-card {
-        width: 90%;
-        margin: 0 auto;
-        padding: 20px;
+.toggle-password {
+    position: absolute;
+
+    right: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 25px;
+    height: 25px;
+
+    cursor: pointer;
+
+    color: #aaa;
+
+    font-size: 1rem;
+
+    transition:
+        color 0.3s ease,
+        transform 0.2s ease;
+}
+
+
+.toggle-password:hover {
+    color: #cca053;
+
+    transform: scale(1.08);
+}
+
+
+/* =========================================================
+   RECAPTCHA
+   ========================================================= */
+
+.recaptcha-container {
+    width: 304px;
+    max-width: 100%;
+
+    margin: 0 auto 1.25rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    box-sizing: border-box;
+
+    overflow: hidden;
+}
+
+
+/*
+   Google reCAPTCHA v2 normally renders at approximately
+   304px wide. This wrapper prevents it from escaping the
+   login card on narrow screens.
+*/
+
+.g-recaptcha {
+    width: 304px;
+    max-width: 304px;
+
+    min-width: 304px;
+
+    margin: 0 auto;
+
+    transform-origin: center center;
+}
+
+
+/* =========================================================
+   LOGIN BUTTON
+   ========================================================= */
+
+.login-btn {
+    display: block;
+
+    width: 100%;
+
+    padding: 1rem;
+
+    background:
+        linear-gradient(
+            135deg,
+            #cca053,
+            #e0b96e
+        );
+
+    border: none;
+    border-radius: 8px;
+
+    color: #fff;
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-sizing: border-box;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.login-btn:hover {
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 15px rgba(0, 0, 0, 0.4);
+}
+
+
+.login-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   FORGOT PASSWORD
+   ========================================================= */
+
+.forgot-link {
+    margin: 1rem 0 0;
+
+    font-size: 0.9rem;
+
+    text-align: center;
+}
+
+
+.forgot-link a {
+    color: #4caf50;
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    transition:
+        color 0.3s ease,
+        text-shadow 0.3s ease;
+}
+
+
+.forgot-link a:hover {
+    color: #66bb6a;
+
+    text-shadow:
+        0 0 6px rgba(102, 187, 106, 0.6);
+}
+
+
+/* =========================================================
+   SIGNUP LINK
+   ========================================================= */
+
+.signup-link {
+    margin: 1.5rem 0 0;
+
+    font-size: 0.9rem;
+
+    color: #bbb;
+}
+
+
+.signup-link a {
+    color: #cca053;
+
+    font-weight: 700;
+
+    text-decoration: none;
+
+    transition:
+        color 0.3s ease,
+        text-shadow 0.3s ease;
+}
+
+
+.signup-link a:hover {
+    color: #e0b96e;
+
+    text-shadow:
+        0 0 8px rgba(204, 160, 83, 0.35);
+}
+
+
+/* =========================================================
+   FORM ERRORS
+   ========================================================= */
+
+.form-errors {
+    width: 100%;
+
+    margin-bottom: 1rem;
+    padding: 10px 12px;
+
+    background: rgba(220, 53, 69, 0.12);
+
+    border: 1px solid rgba(220, 53, 69, 0.35);
+
+    border-radius: 8px;
+
+    color: #ff6b6b;
+
+    font-size: 0.85rem;
+
+    box-sizing: border-box;
+}
+
+
+.form-errors ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+@keyframes fadeInUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
     }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .login-page {
+        padding-top: 5rem;
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+
+    .login-card {
+        max-width: 400px;
+        padding: 2rem;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .login-page {
+        width: 100%;
+
+        min-height: 100vh;
+
+        padding:
+            4rem 12px 2.5rem;
+
+        box-sizing: border-box;
+    }
+
+
+    .login-card {
+        width: 100%;
+        max-width: 400px;
+
+        margin: 0 auto;
+
+        padding: 20px;
+
+        border-radius: 12px;
+
+        box-sizing: border-box;
+    }
+
+
+    .login-card h2 {
+        font-size: 1.6rem;
+    }
+
+
+    .login-card .subtitle {
+        font-size: 0.9rem;
+
+        margin-bottom: 1.25rem;
+    }
+
+
+    .login-form input {
+        font-size: 16px;
+    }
+
 
     .password-wrapper input {
         font-size: 16px;
     }
 
+
     .toggle-password {
+        right: 11px;
+
         font-size: 1.2rem;
+    }
+
+
+    /*
+       Scale the fixed-width Google reCAPTCHA so that
+       it remains completely inside the login card.
+    */
+
+    .recaptcha-container {
+        width: 100%;
+        max-width: 100%;
+
+        margin:
+            0 auto 1.25rem;
+
+        min-height: 70px;
+    }
+
+
+    .g-recaptcha {
+        transform: scale(0.90);
+
+        transform-origin: center center;
+    }
+
+
+    .signup-link {
+        font-size: 0.88rem;
+    }
+
+
+    .forgot-link {
+        font-size: 0.88rem;
     }
 }
 
-.forgot-link {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    text-align: center; 
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 360px) {
+
+    .login-page {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+
+    .login-card {
+        padding: 16px;
+
+        border-radius: 10px;
+    }
+
+
+    .login-card h2 {
+        font-size: 1.45rem;
+    }
+
+
+    .login-card .subtitle {
+        font-size: 0.85rem;
+    }
+
+
+
+    .g-recaptcha {
+        transform: scale(0.82);
+
+        transform-origin: center center;
+    }
+
+
+    .recaptcha-container {
+        min-height: 64px;
+
+        margin-bottom: 1rem;
+    }
+
+
+    .login-btn {
+        padding: 0.9rem;
+
+        font-size: 0.95rem;
+    }
+
+
+    .signup-link,
+    .forgot-link {
+        font-size: 0.84rem;
+    }
 }
 
-.forgot-link a {
-    color: #4caf50; 
-    font-weight: 600;
-    text-decoration: none;
-    transition: color 0.3s, text-shadow 0.3s;
-}
 
-.forgot-link a:hover {
-    color: #66bb6a; 
-    text-shadow: 0 0 6px rgba(102, 187, 106, 0.6);
+
+@media (max-width: 320px) {
+
+    .login-card {
+        padding: 14px;
+    }
+
+
+    .g-recaptcha {
+        transform: scale(0.78);
+
+        transform-origin: center center;
+    }
+
+
+    .recaptcha-container {
+        min-height: 61px;
+    }
 }

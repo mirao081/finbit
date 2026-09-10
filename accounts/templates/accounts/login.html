@@ -1,4 +1,4 @@
-{% extends "accounts/dashboard_base.html" %}
+﻿{% extends "accounts/dashboard_base.html" %}
 {% load static %}
 
 {% block extra_css %}
@@ -22,7 +22,7 @@
                 </div>
             {% endif %}
 
-            <p>
+            <div class="form-group">
                 {{ form.username.errors }}
 
                 <input
@@ -33,9 +33,9 @@
                     autocomplete="username"
                     required
                 >
-            </p>
+            </div>
 
-            <p>
+            <div class="form-group">
                 {{ form.password.errors }}
 
                 <div class="password-wrapper">
@@ -55,12 +55,15 @@
                         <i class="fa fa-eye"></i>
                     </span>
                 </div>
-            </p>
+            </div>
 
-            <div
-                class="g-recaptcha"
-                data-sitekey="{{ recaptcha_site_key }}"
-            ></div>
+            <!-- Responsive reCAPTCHA -->
+            <div class="recaptcha-container">
+                <div
+                    class="g-recaptcha"
+                    data-sitekey="{{ recaptcha_site_key }}"
+                ></div>
+            </div>
 
             <button
                 type="submit"
@@ -91,9 +94,10 @@
 
 {% block extra_js %}
 <script src="{% static 'accounts/js/password-toggle.js' %}"></script>
+
 <script
     src="https://www.google.com/recaptcha/api.js"
     async
-    defer
-></script>
+    defer>
+</script>
 {% endblock %}
