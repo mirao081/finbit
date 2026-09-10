@@ -2116,34 +2116,59 @@ body main > section:first-of-type {
   color: #8b6f23;
   text-decoration: none;
 }
-@media (max-width: 768px) {
-  .transactions-title {
-    font-size: 1.2rem; 
-    margin-top: 40px;  
+@media (max-width:768px){
+
+  .transactions-title{
+      font-size:1.4rem;
+      margin-top:40px;
   }
 
-  .transaction-buttons {
-    flex-direction: column; 
-    align-items: center;    
-    gap: 10px;
+  .transactions-subtitle{
+      width:90%;
+      margin:0 auto 20px;
+      font-size:.95rem;
   }
 
-  .btn {
-    width: 50%;        
-    text-align: center;
-    margin-bottom: 8px;
+  /* Buttons */
+  .transaction-buttons{
+      flex-direction:column;
+      align-items:center;
+      gap:12px;
+      width:90%;
+      margin:0 auto 25px;
   }
 
-  .transactions-table {
-    font-size: 0.9rem; 
-    margin: 0 auto;    
-    display: table;   
-    text-align: center;
+  .transaction-buttons .btn{
+      width:100%;
+      max-width:320px;
   }
 
-  .investor-info img {
-    width: 30px;
-    height: 30px;
+  /* Table wrapper */
+  .transactions-table-wrapper{
+      width:90%;
+      margin:0 auto;
+      overflow-x:auto;
+      -webkit-overflow-scrolling:touch;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+  }
+
+  /* Keep table usable */
+  .transactions-table{
+      min-width:700px;
+      width:100%;
+      font-size:.85rem;
+      white-space:nowrap;
+  }
+
+  .transactions-table th,
+  .transactions-table td{
+      padding:10px 8px;
+  }
+
+  .investor-info img{
+      width:30px;
+      height:30px;
   }
 }
 .investor-grid {
@@ -2875,5 +2900,28 @@ body main > section:first-of-type {
   .stat-card {
     padding-left: 16px;
     padding-right: 16px;
+  }
+}
+/* ---------- Mobile Layout Fix ---------- */
+@media (max-width:768px){
+
+  /* Main content width */
+  .container,
+  .home-container,
+  .about-container,
+  .plans-container,
+  .stats-container,
+  .calculator-box,
+  .faq-container,
+  .testimonials-container,
+  .team-container,
+  .transactions-table-wrapper,
+  .investor-grid,
+  .news-container,
+  .payment-container,
+  .get-started-container{
+      width:90%;
+      margin:0 auto;
+      max-width:none;
   }
 }
