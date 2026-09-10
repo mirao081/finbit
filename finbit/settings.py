@@ -26,8 +26,9 @@ DEBUG = True
 
 # Local development hosts.
 ALLOWED_HOSTS = [
-    "127.0.0.1",
+    "finbit.pythonanywhere.com",
     "localhost",
+    "127.0.0.1",
 ]
 
 # Application definition
