@@ -1,4 +1,4 @@
-{% extends 'core/base.html' %}
+﻿{% extends 'core/base.html' %}
 
 {% load static %}
 
@@ -1246,8 +1246,9 @@
                         
 
                         <td>
-                            ${{ transaction.amount|floatformat:"-2" }}
+                            ${{ transaction.usd_value|floatformat:"-2" }}
                         </td>
+
 
 
                         
