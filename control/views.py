@@ -2719,7 +2719,7 @@ def withdrawals_view(request):
 
     withdrawals_qs = (
         Withdrawal.objects
-        .all()
+        .exclude(source="live_trade")
         .order_by("-created_at")
     )
 
