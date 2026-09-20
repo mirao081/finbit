@@ -14,6 +14,7 @@
 
 <section class="approve-deposits-page">
 
+
     <div class="approve-deposits-container">
 
         <div class="approve-deposits-header">
@@ -32,6 +33,62 @@
 
         </div>
 
+
+        <!-- Gas Payments Management -->
+
+        <div class="gas-payments-card">
+
+            <div class="gas-payments-info">
+
+                <div class="gas-payments-icon">
+                    <i class="fas fa-gas-pump"></i>
+                </div>
+
+                <div class="gas-payments-text">
+
+                    <span class="gas-payments-label">
+                        Trade Payouts
+                    </span>
+
+                    <h2>
+                        Pending Gas Payments
+                    </h2>
+
+                    <p>
+                        Review and approve gas payments before releasing winning trade payouts.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="gas-payments-action">
+
+                <div class="gas-payments-count">
+                    <strong>
+                        {{ pending_gas_payments }}
+                    </strong>
+
+                    <span>
+                        Pending
+                    </span>
+                </div>
+
+                <a
+                    href="{% url 'trade_gas_payments' %}"
+                    class="gas-payments-btn"
+                >
+                    <i class="fas fa-arrow-right"></i>
+                    Manage Gas Payments
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Pending Trading Deposits -->
 
         <div class="deposits-table-wrapper">
 
@@ -140,6 +197,7 @@
                                     href="{% url 'approve_deposit' deposit.id %}"
                                     class="approve-btn"
                                 >
+                                    <i class="fas fa-check"></i>
                                     Approve & Execute Trade
                                 </a>
 
@@ -168,6 +226,7 @@
         </div>
 
     </div>
+
 
 </section>
 

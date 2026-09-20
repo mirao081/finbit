@@ -1,16 +1,25 @@
+
 {% extends "control/admin_base.html" %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/trade_gas_payments.css' %}">
+{% endblock %}
+
 {% block content %}
 
-<section class="approve-deposits-page">
+<section class="trade-gas-payments-page">
 
-    <div class="approve-deposits-container">
+    <div class="trade-gas-payments-container">
 
-        <div class="approve-deposits-header">
+        <div class="trade-gas-payments-header">
 
-            <span class="approve-badge">
-                Gas Payments
+            <div class="trade-gas-payments-icon">
+                <i class="fas fa-gas-pump"></i>
+            </div>
+
+            <span class="trade-gas-payments-badge">
+                Live Trading
             </span>
 
             <h1>
@@ -18,69 +27,173 @@
             </h1>
 
             <p>
-                Approve gas payments before releasing trade payouts.
+                Review and approve gas payments before releasing Live Trading payouts.
             </p>
 
         </div>
 
-        <div class="deposits-table-wrapper">
 
-            <table class="deposits-table">
+        <div class="trade-gas-payments-summary">
 
-                <thead>
+            <div class="trade-gas-summary-card">
 
-                    <tr>
+                <div class="trade-gas-summary-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
 
-                        <th>User</th>
-                        <th>Trade</th>
-                        <th>Plan</th>
-                        <th>Gas Fee</th>
-                        <th>Method</th>
-                        <th>Proof</th>
-                        <th>Action</th>
+                <div class="trade-gas-summary-content">
+                    <span>Pending Payments</span>
+                    <strong>{{ gas_payments|length }}</strong>
+                </div>
 
-                    </tr>
+            </div>
 
-                </thead>
+            <div class="trade-gas-summary-card">
 
-                <tbody>
+                <div class="trade-gas-summary-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
 
-                    {% for payment in gas_payments %}
+                <div class="trade-gas-summary-content">
+                    <span>Approval Required</span>
+                    <strong>Review</strong>
+                </div>
+
+            </div>
+
+            <div class="trade-gas-summary-card">
+
+                <div class="trade-gas-summary-icon">
+                    <i class="fas fa-wallet"></i>
+                </div>
+
+                <div class="trade-gas-summary-content">
+                    <span>Payout Status</span>
+                    <strong>Locked</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="trade-gas-payments-table-card">
+
+            <div class="trade-gas-table-header">
+
+                <div>
+                    <span class="trade-gas-table-label">
+                        Payment Queue
+                    </span>
+
+                    <h2>
+                        Gas Payment Requests
+                    </h2>
+                </div>
+
+                <div class="trade-gas-table-count">
+                    <i class="fas fa-list-check"></i>
+                    {{ gas_payments|length }} Pending
+                </div>
+
+            </div>
+
+
+            <div class="trade-gas-payments-table-wrapper">
+
+                <table class="trade-gas-payments-table">
+
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Trade</th>
+                            <th>Plan</th>
+                            <th>Gas Fee</th>
+                            <th>Method</th>
+                            <th>Proof</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for payment in gas_payments %}
 
                         <tr>
 
-                            <td>{{ payment.user.username }}</td>
+                            <td>
+                                <div class="trade-gas-user">
+                                    <span class="trade-gas-user-icon">
+                                        <i class="fas fa-user"></i>
+                                    </span>
 
-                            <td>#{{ payment.trade.id }}</td>
+                                    <span>
+                                        {{ payment.user.username }}
+                                    </span>
+                                </div>
+                            </td>
 
-                            <td>{{ payment.trade.plan_display_name }}</td>
 
-                            <td>${{ payment.amount_usd }}</td>
+                            <td>
+                                <span class="trade-gas-trade-id">
+                                    #{{ payment.trade.id }}
+                                </span>
+                            </td>
 
-                            <td>{{ payment.get_payment_method_display }}</td>
+
+                            <td>
+                                <span class="trade-gas-plan">
+                                    {{ payment.trade.plan_display_name }}
+                                </span>
+                            </td>
+
+
+                            <td>
+                                <span class="trade-gas-fee">
+                                    ${{ payment.amount_usd }}
+                                </span>
+                            </td>
+
+
+                            <td>
+                                <span class="trade-gas-method">
+                                    {{ payment.get_payment_method_display }}
+                                </span>
+                            </td>
+
 
                             <td>
 
                                 {% if payment.proof %}
 
-                                    <a href="{{ payment.proof.url }}" target="_blank">
+                                    <a
+                                        href="{{ payment.proof.url }}"
+                                        target="_blank"
+                                        class="trade-gas-proof-btn"
+                                    >
+                                        <i class="fas fa-file-image"></i>
                                         View Proof
                                     </a>
 
                                 {% else %}
 
-                                    No Proof
+                                    <span class="trade-gas-no-proof">
+                                        <i class="fas fa-circle-exclamation"></i>
+                                        No Proof
+                                    </span>
 
                                 {% endif %}
 
                             </td>
 
+
                             <td>
 
                                 <a
                                     href="{% url 'approve_trade_gas_payment' payment.id %}"
-                                    class="approve-btn"
+                                    class="trade-gas-approve-btn"
                                 >
+                                    <i class="fas fa-check"></i>
                                     Approve
                                 </a>
 
@@ -88,21 +201,38 @@
 
                         </tr>
 
-                    {% empty %}
+                        {% empty %}
 
                         <tr>
 
-                            <td colspan="7">
-                                No pending gas payments.
+                            <td
+                                colspan="7"
+                                class="trade-gas-empty"
+                            >
+
+                                <div class="trade-gas-empty-icon">
+                                    <i class="fas fa-gas-pump"></i>
+                                </div>
+
+                                <strong>
+                                    No Pending Gas Payments
+                                </strong>
+
+                                <span>
+                                    There are currently no Live Trading gas payments waiting for approval.
+                                </span>
+
                             </td>
 
                         </tr>
 
-                    {% endfor %}
+                        {% endfor %}
 
-                </tbody>
+                    </tbody>
 
-            </table>
+                </table>
+
+            </div>
 
         </div>
 
