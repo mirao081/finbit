@@ -1,471 +1,1009 @@
+/* =========================================================
+   FINBIT — LIVE TRADING WITHDRAWALS
+   Premium Admin Dashboard Styling
+   ========================================================= */
 
+:root {
+    --wd-primary: #c7a570;
+    --wd-primary-light: #e4c98f;
+    --wd-primary-dark: #9e7d45;
 
+    --wd-blue: #4da3ff;
+    --wd-blue-light: #8bc7ff;
 
+    --wd-bg: #070c17;
+    --wd-bg-deep: #040812;
+    --wd-surface: #0d1424;
+    --wd-surface-light: #111b2e;
+    --wd-surface-hover: #14213a;
 
-.withdrawals-page{
-    position:relative;
-    width:100%;
-    margin:0;
-    font-family:"Montserrat","Inter",sans-serif;
-    overflow-x:hidden;
+    --wd-border: rgba(199, 165, 112, 0.18);
+    --wd-border-strong: rgba(199, 165, 112, 0.35);
+
+    --wd-text: #f1f5fb;
+    --wd-text-soft: #aeb9c9;
+    --wd-text-muted: #738096;
+
+    --wd-success: #35d39a;
+    --wd-success-bg: rgba(53, 211, 154, 0.12);
+
+    --wd-warning: #f2bd55;
+    --wd-warning-bg: rgba(242, 189, 85, 0.12);
+
+    --wd-danger: #ff6577;
+    --wd-danger-bg: rgba(255, 101, 119, 0.12);
+
+    --wd-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.35);
+
+    --wd-radius: 18px;
 }
 
 
+/* =========================================================
+   PAGE
+   ========================================================= */
 
-.withdrawals-page h2{
-    margin:0;
-    text-align:center;
-    font-size:2rem;
-    font-weight:800;
-    letter-spacing:.3px;
-    background:linear-gradient(
-        90deg,
-        #b8ecff 0%,
-        #66cfff 20%,
-        #438cff 40%,
-        #8b6cff 62%,
-        #d9f5ff 82%,
-        #f2c66d 100%
-    );
-    background-size:220% auto;
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    animation:withdrawHeadingShimmer 8s ease-in-out infinite;
-}
-
-.withdrawals-subtitle{
-    margin:10px 0 28px;
-    text-align:center;
-    color:#8fa7c8;
-    font-size:.95rem;
-}
-
-@keyframes withdrawHeadingShimmer{
-    0%{background-position:0% center;}
-    50%{background-position:100% center;}
-    100%{background-position:0% center;}
+.withdrawals-page {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 30px;
+    box-sizing: border-box;
+    color: var(--wd-text);
+    position: relative;
 }
 
 
+/* =========================================================
+   PAGE HEADER
+   ========================================================= */
 
-.withdrawals-table-wrapper{
-    width:100%;
-    overflow-x:auto;
-    border-radius:22px;
-    scrollbar-width:thin;
-    scrollbar-color:rgba(77,232,255,.35) transparent;
+.withdrawals-page::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    margin-bottom: 26px;
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(199, 165, 112, 0.45),
+            rgba(77, 163, 255, 0.35),
+            transparent
+        );
 }
 
 
-
-.withdrawals-page table{
-    width:100%;
-    min-width:1100px;
-    border-collapse:separate;
-    border-spacing:0;
-    overflow:hidden;
-    border-radius:22px;
-    border:1px solid rgba(77,232,255,.13);
+.withdrawals-page h2 {
+    margin: 0;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 750;
+    letter-spacing: -0.7px;
+    line-height: 1.2;
 
     background:
-        radial-gradient(circle at 8% 0%,rgba(77,232,255,.07),transparent 30%),
-        radial-gradient(circle at 92% 100%,rgba(139,108,255,.07),transparent 35%),
         linear-gradient(
-            145deg,
-            rgba(20,45,78,.78),
-            rgba(10,30,57,.89) 40%,
-            rgba(5,16,33,.95) 75%,
-            rgba(2,8,19,.98)
+            90deg,
+            #ffffff 0%,
+            var(--wd-primary-light) 55%,
+            #ffffff 100%
         );
 
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    position: relative;
+}
+
+
+.withdrawals-page h2::after {
+    content: "";
+    display: block;
+    width: 58px;
+    height: 3px;
+    margin-top: 12px;
+    border-radius: 50px;
+
+    background:
+        linear-gradient(
+            90deg,
+            var(--wd-primary),
+            var(--wd-blue)
+        );
 
     box-shadow:
-        0 18px 45px rgba(0,0,0,.28),
-        0 0 30px rgba(67,140,255,.035),
-        inset 0 1px 0 rgba(255,255,255,.035);
-
-    transition:.3s;
+        0 0 14px rgba(199, 165, 112, 0.28);
 }
 
-.withdrawals-page table:hover{
-    border-color:rgba(77,232,255,.22);
+
+.withdrawals-subtitle {
+    margin: 14px 0 28px;
+    max-width: 780px;
+
+    color: var(--wd-text-soft);
+
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.withdrawals-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 27, 46, 0.98),
+            rgba(8, 14, 27, 0.98)
+        );
+
+    border: 1px solid var(--wd-border);
+    border-radius: var(--wd-radius);
+
     box-shadow:
-        0 22px 50px rgba(0,0,0,.34),
-        0 0 28px rgba(77,232,255,.05),
-        inset 0 1px 0 rgba(255,255,255,.05);
+        var(--wd-shadow),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+
+    position: relative;
 }
 
 
+.withdrawals-table-wrapper::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
 
-.withdrawals-page thead tr{
-    background:linear-gradient(
-        90deg,
-        rgba(77,232,255,.055),
-        rgba(67,140,255,.045),
-        rgba(139,108,255,.055)
-    );
-}
+    height: 2px;
 
-.withdrawals-page thead th{
-    padding:16px 15px;
-    text-align:center;
-    white-space:nowrap;
-    color:#b8ecff;
-    font-size:.76rem;
-    font-weight:800;
-    text-transform:uppercase;
-    letter-spacing:.8px;
-    border-bottom:1px solid rgba(77,232,255,.10);
-}
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--wd-primary),
+            var(--wd-blue),
+            transparent
+        );
 
-
-
-.withdrawals-page tbody tr{
-    transition:.25s;
-}
-
-.withdrawals-page tbody tr:hover{
-    background:linear-gradient(
-        90deg,
-        rgba(77,232,255,.045),
-        rgba(67,140,255,.035),
-        rgba(139,108,255,.045)
-    );
-}
-
-.withdrawals-page tbody td{
-    padding:16px 15px;
-    text-align:center;
-    vertical-align:middle;
-    white-space:nowrap;
-    color:#d9e7f5;
-    font-size:.87rem;
-    font-weight:600;
-    border-bottom:1px solid rgba(255,255,255,.045);
-    background:rgba(255,255,255,.012);
-}
-
-.withdrawals-page tbody tr:hover td{
-    color:#eef9ff;
-    background:linear-gradient(
-        90deg,
-        rgba(77,232,255,.035),
-        rgba(139,108,255,.035)
-    );
+    opacity: 0.75;
+    pointer-events: none;
 }
 
 
+/* =========================================================
+   TABLE
+   ========================================================= */
 
-.withdrawals-page tbody td:first-child{
-    color:#8ecff9;
-    font-weight:800;
-}
+.withdrawals-table-wrapper table {
+    width: 100%;
+    min-width: 1250px;
 
-.withdrawals-page tbody td:nth-child(2){
-    color:#d9f5ff;
-    font-weight:700;
-}
+    border-collapse: separate;
+    border-spacing: 0;
 
-.withdrawals-page tbody td:nth-child(3){
-    color:#8ce8ff;
-    font-weight:700;
-}
-
-.withdrawals-page tbody td:nth-child(4){
-    color:#f2c66d;
-    font-weight:800;
-}
-
-.withdrawals-page tbody td:nth-child(5){
-    max-width:230px;
-    overflow:hidden;
-    text-overflow:ellipsis;
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
 }
 
 
-
-.withdrawals-page tbody td:nth-child(6){
-    font-weight:700;
-}
-
-.withdrawals-page tbody td:nth-child(6)::before{
-    content:"";
-    display:inline-block;
-    width:8px;
-    height:8px;
-    border-radius:50%;
-    margin-right:8px;
-    vertical-align:middle;
-}
-
-.withdrawals-page tbody td:nth-child(6):has(span),
-.withdrawals-page tbody td:nth-child(6):has(.badge){
-    padding:12px;
+.withdrawals-table-wrapper thead {
+    background:
+        linear-gradient(
+            180deg,
+            rgba(199, 165, 112, 0.09),
+            rgba(199, 165, 112, 0.035)
+        );
 }
 
 
+.withdrawals-table-wrapper th {
+    padding: 17px 16px;
 
-.badge,
-.deposit-status{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:82px;
-    padding:6px 11px;
-    border-radius:9px;
-    font-size:.7rem;
-    font-weight:800;
-    text-transform:capitalize;
-    border:1px solid rgba(255,255,255,.1);
-}
+    color: var(--wd-primary-light);
 
-.badge-success{
-    background:rgba(34,197,94,.12);
-    color:#7fffb2;
-    border-color:rgba(34,197,94,.25);
-}
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
 
-.badge-danger{
-    background:rgba(239,68,68,.12);
-    color:#ffb1b1;
-    border-color:rgba(239,68,68,.25);
-}
+    text-align: left;
+    white-space: nowrap;
 
-.badge-secondary{
-    background:rgba(148,163,184,.12);
-    color:#cbd5e1;
-    border-color:rgba(148,163,184,.25);
+    border-bottom: 1px solid var(--wd-border-strong);
 }
 
 
-
-.btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:38px;
-    padding:8px 14px;
-    border-radius:11px;
-    text-decoration:none;
-    font-size:.72rem;
-    font-weight:800;
-    transition:.25s;
-    border:1px solid transparent;
-    margin:2px;
-}
-
-.btn-success{
-    color:#07111f;
-    background:linear-gradient(
-        135deg,
-        #8fffc0,
-        #22c55e
-    );
-    box-shadow:0 6px 18px rgba(34,197,94,.25);
-}
-
-.btn-success:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 22px rgba(34,197,94,.35);
-}
-
-.btn-danger{
-    color:white;
-    background:linear-gradient(
-        135deg,
-        #ff7a7a,
-        #ef4444
-    );
-    box-shadow:0 6px 18px rgba(239,68,68,.25);
-}
-
-.btn-danger:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 22px rgba(239,68,68,.35);
+.withdrawals-table-wrapper th:first-child,
+.withdrawals-table-wrapper td:first-child {
+    padding-left: 22px;
 }
 
 
-
-.empty-withdrawals{
-    padding:45px 20px;
-    color:#7f9fc3;
-    font-style:italic;
-}
-
-.empty-withdrawals i{
-    display:block;
-    font-size:2rem;
-    margin-bottom:12px;
-    color:#66cfff;
+.withdrawals-table-wrapper th:last-child,
+.withdrawals-table-wrapper td:last-child {
+    padding-right: 22px;
 }
 
 
+/* =========================================================
+   TABLE BODY
+   ========================================================= */
 
-.withdrawals-page .pagination{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-    margin-top:24px;
-    flex-wrap:wrap;
-}
-
-.withdrawals-page .pagination span{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:40px;
-    padding:9px 17px;
-    border-radius:12px;
-    color:#b8ecff;
-    background:linear-gradient(
-        135deg,
-        rgba(77,232,255,.055),
-        rgba(139,108,255,.055)
-    );
-    border:1px solid rgba(77,232,255,.12);
-    font-size:.76rem;
-    font-weight:700;
-}
-
-.withdrawals-page .pagination a{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:40px;
-    padding:9px 17px;
-    border-radius:12px;
-    text-decoration:none;
-    color:#07111f;
-    font-size:.75rem;
-    font-weight:800;
-    background:linear-gradient(
-        135deg,
-        #f1d9a5,
-        #f2c66d,
-        #c7a570
-    );
-    box-shadow:0 6px 18px rgba(199,165,112,.2);
-    transition:.25s;
-}
-
-.withdrawals-page .pagination a:hover{
-    transform:translateY(-2px);
-    box-shadow:0 10px 25px rgba(199,165,112,.35);
+.withdrawals-table-wrapper tbody tr {
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
 }
 
 
-
-.withdrawals-table-wrapper::-webkit-scrollbar{
-    height:6px;
-}
-
-.withdrawals-table-wrapper::-webkit-scrollbar-track{
-    background:transparent;
-}
-
-.withdrawals-table-wrapper::-webkit-scrollbar-thumb{
-    background:linear-gradient(
-        90deg,
-        rgba(77,232,255,.3),
-        rgba(139,108,255,.3),
-        rgba(242,198,109,.3)
-    );
-    border-radius:20px;
+.withdrawals-table-wrapper tbody tr:not(:last-child) td {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.045);
 }
 
 
-
-@media(max-width:768px){
-
-.withdrawals-page h2{
-    font-size:1.45rem;
-}
-
-.withdrawals-page table{
-    min-width:980px;
-}
-
-.withdrawals-page thead th{
-    font-size:.68rem;
-    padding:14px 12px;
-}
-
-.withdrawals-page tbody td{
-    font-size:.8rem;
-    padding:14px 12px;
-}
-
-.btn{
-    min-height:36px;
-    padding:7px 12px;
-    font-size:.68rem;
-}
-
-.withdrawals-page .pagination{
-    gap:8px;
-}
-
+.withdrawals-table-wrapper tbody tr:hover {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(199, 165, 112, 0.055),
+            rgba(77, 163, 255, 0.035)
+        );
 }
 
 
+.withdrawals-table-wrapper td {
+    padding: 18px 16px;
 
-@media(max-width:480px){
+    color: var(--wd-text-soft);
 
-.withdrawals-page h2{
-    font-size:1.15rem;
-}
+    font-size: 13px;
+    font-weight: 500;
 
-.withdrawals-page table{
-    min-width:920px;
-}
-
-.withdrawals-page thead th{
-    font-size:.62rem;
-    padding:12px 9px;
-}
-
-.withdrawals-page tbody td{
-    font-size:.73rem;
-    padding:12px 9px;
-}
-
-.btn{
-    min-height:34px;
-    padding:6px 10px;
-    font-size:.64rem;
-}
-
-.withdrawals-page .pagination{
-    gap:6px;
-}
-
-.withdrawals-page .pagination a,
-.withdrawals-page .pagination span{
-    min-height:35px;
-    padding:7px 11px;
-    font-size:.66rem;
-}
-
+    vertical-align: middle;
+    white-space: nowrap;
 }
 
 
-
-@media(prefers-reduced-motion:reduce){
-
-.withdrawals-page h2{
-    animation:none;
+.withdrawals-table-wrapper td:first-child {
+    color: var(--wd-text-muted);
+    font-weight: 700;
 }
 
-.withdrawals-page table,
-.withdrawals-page tbody tr,
-.withdrawals-page tbody td,
-.btn,
-.withdrawals-page .pagination a{
-    transition:none;
+
+/* =========================================================
+   USER
+   ========================================================= */
+
+.withdrawals-table-wrapper td:nth-child(2) {
+    color: #ffffff;
+    font-weight: 700;
 }
 
+
+.withdrawals-table-wrapper td:nth-child(3) {
+    color: var(--wd-blue-light);
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   PLAN
+   ========================================================= */
+
+.withdrawals-table-wrapper td:nth-child(4) {
+    color: var(--wd-primary-light);
+    font-weight: 650;
+}
+
+
+/* =========================================================
+   ASSET
+   ========================================================= */
+
+.withdrawals-table-wrapper td:nth-child(5) {
+    color: #dce7f6;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   ASSET AMOUNT
+   ========================================================= */
+
+.withdrawal-asset-amount {
+    display: inline-block;
+
+    color: #ffffff;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1px;
+}
+
+
+.withdrawals-table-wrapper td small {
+    margin-left: 5px;
+
+    color: var(--wd-blue-light);
+
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   USD VALUE
+   ========================================================= */
+
+.withdrawal-usd-value {
+    margin-top: 5px;
+
+    color: var(--wd-primary-light);
+
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* =========================================================
+   WALLET ADDRESS
+   ========================================================= */
+
+.wallet-address {
+    display: block;
+
+    max-width: 270px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    color: #a9cfff;
+
+    font-family:
+        "SFMono-Regular",
+        Consolas,
+        "Liberation Mono",
+        monospace;
+
+    font-size: 11px;
+    line-height: 1.5;
+
+    cursor: text;
+}
+
+
+.withdrawals-table-wrapper td:nth-child(7):hover .wallet-address {
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   STATUS BADGES
+   ========================================================= */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 78px;
+
+    padding: 6px 11px;
+
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.45px;
+    text-transform: uppercase;
+
+    border: 1px solid transparent;
+}
+
+
+.badge-warning {
+    color: var(--wd-warning);
+    background: var(--wd-warning-bg);
+    border-color: rgba(242, 189, 85, 0.25);
+
+    box-shadow:
+        0 0 14px rgba(242, 189, 85, 0.05);
+}
+
+
+.badge-success {
+    color: var(--wd-success);
+    background: var(--wd-success-bg);
+    border-color: rgba(53, 211, 154, 0.25);
+
+    box-shadow:
+        0 0 14px rgba(53, 211, 154, 0.05);
+}
+
+
+.badge-danger {
+    color: var(--wd-danger);
+    background: var(--wd-danger-bg);
+    border-color: rgba(255, 101, 119, 0.25);
+
+    box-shadow:
+        0 0 14px rgba(255, 101, 119, 0.05);
+}
+
+
+.badge-secondary {
+    color: var(--wd-text-soft);
+    background: rgba(174, 185, 201, 0.08);
+    border-color: rgba(174, 185, 201, 0.16);
+}
+
+
+/* =========================================================
+   ACTION BUTTONS
+   ========================================================= */
+
+.withdrawal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.withdrawal-action-form {
+    margin: 0;
+}
+
+
+.withdrawal-actions .btn {
+    min-width: 72px;
+
+    padding: 8px 13px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 11px;
+    font-weight: 750;
+
+    letter-spacing: 0.2px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+
+.withdrawal-actions .btn:hover {
+    transform: translateY(-2px);
+}
+
+
+.withdrawal-actions .btn:active {
+    transform: translateY(0);
+}
+
+
+/* Approve */
+
+.withdrawal-actions .btn-success {
+    color: #06150f;
+
+    background:
+        linear-gradient(
+            135deg,
+            #45dda4,
+            #27bd87
+        );
+
+    border-color: rgba(69, 221, 164, 0.5);
+
+    box-shadow:
+        0 7px 20px rgba(53, 211, 154, 0.14);
+}
+
+
+.withdrawal-actions .btn-success:hover {
+    box-shadow:
+        0 10px 28px rgba(53, 211, 154, 0.25);
+}
+
+
+/* Reject */
+
+.withdrawal-actions .btn-danger {
+    color: #ffffff;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ff6879,
+            #dc4357
+        );
+
+    border-color: rgba(255, 101, 119, 0.45);
+
+    box-shadow:
+        0 7px 20px rgba(255, 101, 119, 0.12);
+}
+
+
+.withdrawal-actions .btn-danger:hover {
+    box-shadow:
+        0 10px 28px rgba(255, 101, 119, 0.22);
+}
+
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.empty-withdrawals {
+    height: 230px;
+
+    text-align: center !important;
+    vertical-align: middle !important;
+
+    color: var(--wd-text-muted) !important;
+}
+
+
+.empty-withdrawals i {
+    display: block;
+
+    margin-bottom: 13px;
+
+    color: var(--wd-primary);
+
+    font-size: 30px;
+
+    opacity: 0.7;
+}
+
+
+.empty-withdrawals span {
+    display: block;
+
+    color: var(--wd-text-soft);
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =========================================================
+   PAGINATION
+   ========================================================= */
+
+.pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    margin-top: 25px;
+    padding: 4px;
+}
+
+
+.pagination a,
+.pagination span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 38px;
+    box-sizing: border-box;
+
+    padding: 0 15px;
+
+    border-radius: 10px;
+
+    font-family: "Inter", "Segoe UI", Arial, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+
+    text-decoration: none;
+}
+
+
+.pagination a {
+    color: var(--wd-primary-light);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(199, 165, 112, 0.12),
+            rgba(77, 163, 255, 0.07)
+        );
+
+    border: 1px solid var(--wd-border);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+.pagination a:hover {
+    transform: translateY(-2px);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(199, 165, 112, 0.2),
+            rgba(77, 163, 255, 0.11)
+        );
+
+    border-color: var(--wd-border-strong);
+
+    box-shadow:
+        0 8px 22px rgba(0, 0, 0, 0.2);
+}
+
+
+.pagination span {
+    color: var(--wd-text-muted);
+
+    background: rgba(255, 255, 255, 0.025);
+
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+
+/* =========================================================
+   TABLE SCROLLBAR
+   ========================================================= */
+
+.withdrawals-table-wrapper {
+    scrollbar-width: thin;
+    scrollbar-color:
+        rgba(199, 165, 112, 0.55)
+        rgba(255, 255, 255, 0.035);
+}
+
+
+.withdrawals-table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+
+.withdrawals-table-wrapper::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.035);
+    border-radius: 20px;
+}
+
+
+.withdrawals-table-wrapper::-webkit-scrollbar-thumb {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(199, 165, 112, 0.7),
+            rgba(77, 163, 255, 0.65)
+        );
+
+    border-radius: 20px;
+}
+
+
+.withdrawals-table-wrapper::-webkit-scrollbar-thumb:hover {
+    background:
+        linear-gradient(
+            90deg,
+            rgba(199, 165, 112, 0.9),
+            rgba(77, 163, 255, 0.85)
+        );
+}
+
+
+/* =========================================================
+   LARGE DESKTOP
+   ========================================================= */
+
+@media (min-width: 1500px) {
+
+    .withdrawals-page {
+        padding: 36px 40px;
+    }
+
+    .withdrawals-page h2 {
+        font-size: 32px;
+    }
+
+    .withdrawals-table-wrapper td {
+        padding-top: 19px;
+        padding-bottom: 19px;
+    }
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 1100px) {
+
+    .withdrawals-page {
+        padding: 25px 20px;
+    }
+
+    .withdrawals-page h2 {
+        font-size: 27px;
+    }
+
+    .withdrawals-subtitle {
+        margin-bottom: 22px;
+    }
+
+    .withdrawals-table-wrapper {
+        border-radius: 15px;
+    }
+
+    .withdrawals-table-wrapper th {
+        padding: 15px 13px;
+    }
+
+    .withdrawals-table-wrapper td {
+        padding: 16px 13px;
+    }
+
+    .wallet-address {
+        max-width: 220px;
+    }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .withdrawals-page {
+        width: 100%;
+        max-width: 100%;
+        margin: 0;
+        padding: 20px 12px;
+        overflow-x: hidden;
+    }
+
+
+    .withdrawals-page::before {
+        margin-bottom: 21px;
+    }
+
+
+    .withdrawals-page h2 {
+        font-size: 23px;
+        letter-spacing: -0.4px;
+    }
+
+
+    .withdrawals-page h2::after {
+        width: 48px;
+        height: 2px;
+        margin-top: 9px;
+    }
+
+
+    .withdrawals-subtitle {
+        margin-top: 11px;
+        margin-bottom: 20px;
+
+        font-size: 12px;
+        line-height: 1.65;
+    }
+
+
+    .withdrawals-table-wrapper {
+        width: 100%;
+        max-width: 100%;
+
+        border-radius: 13px;
+
+        -webkit-overflow-scrolling: touch;
+    }
+
+
+    /*
+       Important:
+       The PAGE itself does not scroll horizontally.
+       Only the table wrapper does.
+    */
+
+    .withdrawals-table-wrapper table {
+        min-width: 1120px;
+    }
+
+
+    .withdrawals-table-wrapper th {
+        padding: 14px 12px;
+        font-size: 9px;
+        letter-spacing: 0.55px;
+    }
+
+
+    .withdrawals-table-wrapper td {
+        padding: 15px 12px;
+        font-size: 11px;
+    }
+
+
+    .withdrawals-table-wrapper th:first-child,
+    .withdrawals-table-wrapper td:first-child {
+        padding-left: 15px;
+    }
+
+
+    .withdrawals-table-wrapper th:last-child,
+    .withdrawals-table-wrapper td:last-child {
+        padding-right: 15px;
+    }
+
+
+    .withdrawal-asset-amount {
+        font-size: 11px;
+    }
+
+
+    .withdrawal-usd-value {
+        font-size: 11px;
+    }
+
+
+    .wallet-address {
+        max-width: 190px;
+        font-size: 10px;
+    }
+
+
+    .badge {
+        min-width: 68px;
+        padding: 5px 9px;
+        font-size: 9px;
+    }
+
+
+    .withdrawal-actions {
+        gap: 6px;
+    }
+
+
+    .withdrawal-actions .btn {
+        min-width: 63px;
+        padding: 7px 9px;
+        font-size: 9px;
+    }
+
+
+    .pagination {
+        gap: 8px;
+        margin-top: 18px;
+    }
+
+
+    .pagination a,
+    .pagination span {
+        min-height: 35px;
+        padding: 0 11px;
+        font-size: 10px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 420px) {
+
+    .withdrawals-page {
+        padding: 17px 9px;
+    }
+
+
+    .withdrawals-page h2 {
+        font-size: 20px;
+    }
+
+
+    .withdrawals-subtitle {
+        font-size: 11px;
+    }
+
+
+    .withdrawals-table-wrapper {
+        border-radius: 11px;
+    }
+
+
+    .withdrawals-table-wrapper table {
+        min-width: 1060px;
+    }
+
+
+    .withdrawals-table-wrapper th {
+        padding: 12px 10px;
+        font-size: 8px;
+    }
+
+
+    .withdrawals-table-wrapper td {
+        padding: 13px 10px;
+        font-size: 10px;
+    }
+
+
+    .withdrawals-table-wrapper th:first-child,
+    .withdrawals-table-wrapper td:first-child {
+        padding-left: 12px;
+    }
+
+
+    .withdrawals-table-wrapper th:last-child,
+    .withdrawals-table-wrapper td:last-child {
+        padding-right: 12px;
+    }
+
+
+    .wallet-address {
+        max-width: 165px;
+        font-size: 9px;
+    }
+
+
+    .withdrawal-actions .btn {
+        min-width: 58px;
+        padding: 6px 8px;
+        font-size: 8px;
+    }
+
+
+    .badge {
+        min-width: 60px;
+        font-size: 8px;
+    }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .withdrawals-table-wrapper tbody tr,
+    .withdrawal-actions .btn,
+    .pagination a {
+        transition: none;
+    }
+
+    .withdrawal-actions .btn:hover,
+    .pagination a:hover {
+        transform: none;
+    }
 }
