@@ -6270,10 +6270,29 @@ def trading_page(request):
     trades = (
         Trade.objects
         .filter(user=request.user)
+        .select_related(
+            "deposit",
+            "plan",
+        )
         .order_by("-created_at")
     )
 
     latest_trade = trades.first()
+
+    withdrawals = (
+        Withdrawal.objects
+        .filter(
+            user=request.user,
+            source="live_trade",
+        )
+        .select_related(
+            "trade",
+            "wallet",
+        )
+        .order_by("-created_at")
+    )
+
+    latest_withdrawal = withdrawals.first()
 
     if request.method == "POST":
 
@@ -6302,6 +6321,8 @@ def trading_page(request):
                     "payment_methods": payment_methods,
                     "trades": trades,
                     "latest_trade": latest_trade,
+                    "withdrawals": withdrawals,
+                    "latest_withdrawal": latest_withdrawal,
                     "error": (
                         "Amount is below the minimum investment."
                     ),
@@ -6321,6 +6342,8 @@ def trading_page(request):
                     "payment_methods": payment_methods,
                     "trades": trades,
                     "latest_trade": latest_trade,
+                    "withdrawals": withdrawals,
+                    "latest_withdrawal": latest_withdrawal,
                     "error": (
                         "Amount exceeds the maximum investment."
                     ),
@@ -6357,9 +6380,10 @@ def trading_page(request):
             "payment_methods": payment_methods,
             "trades": trades,
             "latest_trade": latest_trade,
+            "withdrawals": withdrawals,
+            "latest_withdrawal": latest_withdrawal,
         },
     )
-
 
 @login_required
 def confirm_deposit(

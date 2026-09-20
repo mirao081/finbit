@@ -1,3 +1,4 @@
+
 {% extends "accounts/dashboard_base.html" %}
 {% load static %}
 
@@ -16,6 +17,10 @@
 
     <div class="trading-container">
 
+        <!-- ============================= -->
+        <!-- LIVE TRADING HEADER -->
+        <!-- ============================= -->
+
         <div class="trading-header">
 
             <span class="trading-badge">
@@ -27,20 +32,64 @@
             </h1>
 
             <p>
-                Select an investment plan, choose your payment method,
+                Select a trading plan, choose your payment method,
                 and submit your trading deposit.
             </p>
+
+            <div class="trading-notice">
+
+                <i class="fas fa-bolt"></i>
+
+                <div>
+                    <strong>
+                        Immediate Trade Results
+                    </strong>
+
+                    <span>
+                        Your Win/Lose result is generated immediately
+                        after your Live Trading deposit is approved.
+                    </span>
+                </div>
+
+            </div>
 
         </div>
 
 
+        <!-- ============================= -->
+        <!-- ERROR -->
+        <!-- ============================= -->
+
         {% if error %}
 
             <div class="trading-error">
+
+                <i class="fas fa-circle-exclamation"></i>
+
                 {{ error }}
+
             </div>
 
         {% endif %}
+
+
+        <!-- ============================= -->
+        <!-- AVAILABLE TRADING PLANS -->
+        <!-- ============================= -->
+
+        <div class="section-heading">
+
+            <div>
+                <span class="section-kicker">
+                    Available Plans
+                </span>
+
+                <h2>
+                    Choose Your Trading Plan
+                </h2>
+            </div>
+
+        </div>
 
 
         <div class="trading-plans">
@@ -51,9 +100,17 @@
 
                     <div class="plan-header">
 
-                        <h2>
-                            {{ plan.name }}
-                        </h2>
+                        <div>
+
+                            <span class="plan-label">
+                                Live Trading Plan
+                            </span>
+
+                            <h2>
+                                {{ plan.name }}
+                            </h2>
+
+                        </div>
 
                         <span class="plan-return">
                             {{ plan.return_rate }}
@@ -65,29 +122,58 @@
                     <div class="plan-details">
 
                         <div>
-                            <span>Duration</span>
+
+                            <span>
+                                Trading Result
+                            </span>
+
                             <strong>
-                                {{ plan.duration }}
+                                Immediate
                             </strong>
+
                         </div>
 
+
                         <div>
-                            <span>Minimum</span>
+
+                            <span>
+                                Minimum
+                            </span>
+
                             <strong>
                                 ${{ plan.minimum_investment }}
                             </strong>
+
                         </div>
+
 
                         {% if plan.maximum_investment %}
 
                             <div>
-                                <span>Maximum</span>
+
+                                <span>
+                                    Maximum
+                                </span>
+
                                 <strong>
                                     ${{ plan.maximum_investment }}
                                 </strong>
+
                             </div>
 
                         {% endif %}
+
+                    </div>
+
+
+                    <div class="plan-information">
+
+                        <i class="fas fa-circle-info"></i>
+
+                        <span>
+                            The displayed return applies to the result
+                            generated after admin approval.
+                        </span>
 
                     </div>
 
@@ -159,7 +245,11 @@
                             type="submit"
                             class="trade-submit-btn"
                         >
+
+                            <i class="fas fa-arrow-right"></i>
+
                             Continue to Deposit
+
                         </button>
 
                     </form>
@@ -169,6 +259,8 @@
             {% empty %}
 
                 <div class="trading-empty">
+
+                    <i class="fas fa-chart-line"></i>
 
                     <h2>
                         No Trading Plans Available
@@ -185,11 +277,421 @@
         </div>
 
 
-        <div class="trading-history-link">
+        <!-- ============================= -->
+        <!-- LATEST TRADE -->
+        <!-- ============================= -->
 
-            <a href="{% url 'trade_history' %}">
-                View My Trade History
+        {% if latest_trade %}
+
+            <div class="trading-section latest-trade-section">
+
+                <div class="section-heading">
+
+                    <div>
+
+                        <span class="section-kicker">
+                            Latest Activity
+                        </span>
+
+                        <h2>
+                            Latest Trade Result
+                        </h2>
+
+                    </div>
+
+                    <a
+                        href="{% url 'trade_history' %}"
+                        class="section-link"
+                    >
+                        View History
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+
+                </div>
+
+
+                <div class="latest-trade-card">
+
+                    <div class="latest-trade-main">
+
+                        <div class="latest-trade-icon">
+
+                            {% if latest_trade.result == "win" %}
+
+                                <i class="fas fa-trophy"></i>
+
+                            {% else %}
+
+                                <i class="fas fa-chart-line"></i>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <div class="latest-trade-info">
+
+                            <span>
+                                {{ latest_trade.created_at|date:"M d, Y H:i" }}
+                            </span>
+
+                            <h3>
+                                {{ latest_trade.plan_display_name }}
+                            </h3>
+
+                            {% if latest_trade.deposit %}
+
+                                <p>
+                                    Trade Amount:
+                                    <strong>
+                                        ${{ latest_trade.deposit.amount_usd }}
+                                    </strong>
+                                </p>
+
+                            {% endif %}
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="latest-trade-status">
+
+                        {% if latest_trade.result == "win" %}
+
+                            <span class="trade-status win">
+                                <i class="fas fa-circle-check"></i>
+                                Won
+                            </span>
+
+                        {% else %}
+
+                            <span class="trade-status lose">
+                                <i class="fas fa-circle-xmark"></i>
+                                Lost
+                            </span>
+
+                        {% endif %}
+
+
+                        <a
+                            href="{% url 'trade_result' latest_trade.id %}"
+                            class="view-result-button"
+                        >
+                            View Result
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <!-- ============================= -->
+        <!-- WITHDRAWALS -->
+        <!-- ============================= -->
+
+        <div class="trading-section withdrawals-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-kicker">
+                        Payouts
+                    </span>
+
+                    <h2>
+                        Live Trading Withdrawals
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            {% if withdrawals %}
+
+                <div class="withdrawals-list">
+
+                    {% for withdrawal in withdrawals %}
+
+                        <div class="withdrawal-card">
+
+                            <div class="withdrawal-icon">
+
+                                {% if withdrawal.status == "approved" %}
+
+                                    <i class="fas fa-circle-check"></i>
+
+                                {% elif withdrawal.status == "rejected" %}
+
+                                    <i class="fas fa-circle-xmark"></i>
+
+                                {% else %}
+
+                                    <i class="fas fa-clock"></i>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="withdrawal-info">
+
+                                <span>
+                                    {{ withdrawal.created_at|date:"M d, Y H:i" }}
+                                </span>
+
+                                {% if withdrawal.trade %}
+
+                                    <h3>
+                                        {{ withdrawal.trade.plan_display_name }}
+                                    </h3>
+
+                                {% else %}
+
+                                    <h3>
+                                        Live Trading Payout
+                                    </h3>
+
+                                {% endif %}
+
+                                <p>
+                                    Amount:
+                                    <strong>
+                                        ${{ withdrawal.amount_usd }}
+                                    </strong>
+                                </p>
+
+                            </div>
+
+
+                            <div class="withdrawal-status">
+
+                                {% if withdrawal.status == "approved" %}
+
+                                    <span class="withdrawal-badge approved">
+                                        Approved
+                                    </span>
+
+                                {% elif withdrawal.status == "rejected" %}
+
+                                    <span class="withdrawal-badge rejected">
+                                        Rejected
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="withdrawal-badge pending">
+                                        Pending
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% else %}
+
+                <div class="trading-empty small">
+
+                    <i class="fas fa-wallet"></i>
+
+                    <h3>
+                        No Live Trading Withdrawals
+                    </h3>
+
+                    <p>
+                        Released trading payouts will appear here
+                        when you submit a withdrawal request.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- TRADE HISTORY -->
+        <!-- ============================= -->
+
+        <div class="trading-section history-section">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <span class="section-kicker">
+                        Activity
+                    </span>
+
+                    <h2>
+                        Trade History
+                    </h2>
+
+                </div>
+
+                <a
+                    href="{% url 'trade_history' %}"
+                    class="section-link"
+                >
+                    View Full History
+                    <i class="fas fa-arrow-right"></i>
+                </a>
+
+            </div>
+
+
+            {% if trades %}
+
+                <div class="trade-history-list">
+
+                    {% for trade in trades|slice:":5" %}
+
+                        <div class="history-item">
+
+                            <div class="history-item-icon">
+
+                                {% if trade.result == "win" %}
+
+                                    <i class="fas fa-arrow-trend-up"></i>
+
+                                {% else %}
+
+                                    <i class="fas fa-arrow-trend-down"></i>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <div class="history-item-info">
+
+                                <h3>
+                                    {{ trade.plan_display_name }}
+                                </h3>
+
+                                <span>
+                                    {{ trade.created_at|date:"M d, Y H:i" }}
+                                </span>
+
+                            </div>
+
+
+                            <div class="history-item-result">
+
+                                {% if trade.deposit %}
+
+                                    <strong>
+                                        ${{ trade.deposit.amount_usd }}
+                                    </strong>
+
+                                {% endif %}
+
+
+                                {% if trade.result == "win" %}
+
+                                    <span class="history-result win">
+                                        Won
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="history-result lose">
+                                        Lost
+                                    </span>
+
+                                {% endif %}
+
+                            </div>
+
+
+                            <a
+                                href="{% url 'trade_result' trade.id %}"
+                                class="history-view"
+                                title="View Result"
+                            >
+
+                                <i class="fas fa-chevron-right"></i>
+
+                            </a>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <div class="trading-empty small">
+
+                    <i class="fas fa-clock-rotate-left"></i>
+
+                    <h3>
+                        No Trade History
+                    </h3>
+
+                    <p>
+                        Your completed Live Trading activity will
+                        appear here.
+                    </p>
+
+                </div>
+
+            {% endif %}
+
+        </div>
+
+
+        <!-- ============================= -->
+        <!-- QUICK ACTIONS -->
+        <!-- ============================= -->
+
+        <div class="trading-actions">
+
+            <a
+                href="{% url 'trade_history' %}"
+                class="trading-action-button secondary"
+            >
+
+                <i class="fas fa-clock-rotate-left"></i>
+
+                <span>
+                    Trade History
+                </span>
+
             </a>
+
+
+            {% if latest_trade %}
+
+                <a
+                    href="{% url 'trade_result' latest_trade.id %}"
+                    class="trading-action-button primary"
+                >
+
+                    <i class="fas fa-chart-line"></i>
+
+                    <span>
+                        Latest Result
+                    </span>
+
+                </a>
+
+            {% endif %}
 
         </div>
 
