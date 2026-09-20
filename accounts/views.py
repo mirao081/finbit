@@ -69,6 +69,7 @@ from .models import (
     AssetPrice,
     Notification,
     Trade,
+    TradeGasPayment,
 )
 
 from .forms import (
