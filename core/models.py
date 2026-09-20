@@ -234,7 +234,7 @@ class GetStartedSection(models.Model):
     title = models.CharField(max_length=255)
     subtitle = models.TextField()
     button_text = models.CharField(max_length=50, default="Join Us")
-    button_link = models.CharField(default="#")
+    button_link = models.CharField(max_length=255, default="#")
 
     def __str__(self):
         return self.title
