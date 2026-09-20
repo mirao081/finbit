@@ -1,4 +1,5 @@
 {% extends "control/admin_base.html" %}
+
 {% load static %}
 
 {% block extra_css %}
@@ -62,10 +63,10 @@
 
             </div>
 
-
             <div class="gas-payments-action">
 
                 <div class="gas-payments-count">
+
                     <strong>
                         {{ pending_gas_payments }}
                     </strong>
@@ -73,6 +74,7 @@
                     <span>
                         Pending
                     </span>
+
                 </div>
 
                 <a
@@ -81,6 +83,49 @@
                 >
                     <i class="fas fa-arrow-right"></i>
                     Manage Gas Payments
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Live Trading Withdrawals Management -->
+
+        <div class="gas-payments-card">
+
+            <div class="gas-payments-info">
+
+                <div class="gas-payments-icon">
+                    <i class="fas fa-money-check-dollar"></i>
+                </div>
+
+                <div class="gas-payments-text">
+
+                    <span class="gas-payments-label">
+                        Trade Withdrawals
+                    </span>
+
+                    <h2>
+                        Live Trading Withdrawals
+                    </h2>
+
+                    <p>
+                        Review and approve withdrawal requests from released Live Trading payouts.
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="gas-payments-action">
+
+                <a
+                    href="{% url 'live_trade_withdrawals' %}"
+                    class="gas-payments-btn"
+                >
+                    <i class="fas fa-arrow-right"></i>
+                    Manage Live Trading Withdrawals
                 </a>
 
             </div>
@@ -126,7 +171,6 @@
 
                 </thead>
 
-
                 <tbody>
 
                     {% for deposit in pending_deposits %}
@@ -145,27 +189,17 @@
 
                             </td>
 
-
                             <td data-label="Plan">
-
                                 {{ deposit.plan.name }}
-
                             </td>
-
 
                             <td data-label="Amount">
-
                                 ${{ deposit.amount_usd }}
-
                             </td>
-
 
                             <td data-label="Payment Method">
-
                                 {{ deposit.get_payment_method_display }}
-
                             </td>
-
 
                             <td data-label="Proof">
 
@@ -190,7 +224,6 @@
 
                             </td>
 
-
                             <td data-label="Action">
 
                                 <a
@@ -210,9 +243,7 @@
                         <tr class="empty-row">
 
                             <td colspan="6">
-
                                 No pending live trading deposits.
-
                             </td>
 
                         </tr>
