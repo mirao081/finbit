@@ -45,30 +45,30 @@ class DashboardMenu(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-                   
+
     name = models.CharField(max_length=100, blank=True, null=True)
     picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
 
-                    
+
     kyc_verified = models.BooleanField(default=False)
     total_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
     investment_balance = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
-                     
+
     referral_code = models.CharField(max_length=50, unique=True, blank=True, null=True)
     referrer = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
-        related_name="referred_users"                             
+        related_name="referred_users"
     )
     referral_earnings = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
 
-                      
+
     total_investment = models.DecimalField(max_digits=12, decimal_places=2, default=0)
 
-                      
+
     recovery_email = models.EmailField(blank=True, null=True)
     recovery_phone = models.CharField(max_length=20, blank=True, null=True)
 
@@ -83,7 +83,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
 
-                                           
+
         currencies = [
             "BTC",
             "ETH",
@@ -98,7 +98,7 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
             )
 
     else:
-                                             
+
         UserProfile.objects.get_or_create(
             user=instance
         )
@@ -125,7 +125,7 @@ class QuickAction(models.Model):
     title = models.CharField(max_length=50)
     action_type = models.CharField(max_length=20, choices=ACTION_CHOICES)
     url_name = models.CharField(max_length=50, help_text="Django URL name for this action")
-    icon = models.CharField(max_length=50, default="fa-solid fa-bolt")                    
+    icon = models.CharField(max_length=50, default="fa-solid fa-bolt")
 
     def __str__(self):
         return self.title
@@ -204,7 +204,7 @@ class Wallet(models.Model):
             f"{self.get_currency_display()}"
         )
 
-    
+
 
 class AssetPrice(models.Model):
     CURRENCY_CHOICES = [
@@ -232,7 +232,7 @@ class AssetPrice(models.Model):
 
     def __str__(self):
         return f"{self.get_currency_display()} - ${self.usd_price}"
-    
+
 
 class CompanyWallet(models.Model):
     CURRENCY_CHOICES = [
@@ -243,7 +243,7 @@ class CompanyWallet(models.Model):
     ]
     currency = models.CharField(max_length=20, choices=CURRENCY_CHOICES)
     address = models.CharField(max_length=255)
-    qr_code = models.ImageField(upload_to="company_wallets/", null=True, blank=True)               
+    qr_code = models.ImageField(upload_to="company_wallets/", null=True, blank=True)
 
     def __str__(self):
         return f"{self.get_currency_display()} Wallet"
@@ -279,19 +279,19 @@ class Deposit(models.Model):
         blank=True,
     )
 
-                                                        
+
     payment_method = models.CharField(
         max_length=20,
         choices=PAYMENT_CHOICES,
     )
 
-                                                    
+
     amount_usd = models.DecimalField(
         max_digits=18,
         decimal_places=2,
     )
 
-                                      
+
     asset_amount = models.DecimalField(
         max_digits=30,
         decimal_places=12,
@@ -299,7 +299,7 @@ class Deposit(models.Model):
         blank=True,
     )
 
-                                                       
+
     received_asset_amount = models.DecimalField(
         max_digits=30,
         decimal_places=12,
@@ -308,7 +308,7 @@ class Deposit(models.Model):
         help_text="Actual amount of cryptocurrency received and credited.",
     )
 
-                                                 
+
     exchange_rate = models.DecimalField(
         max_digits=30,
         decimal_places=12,
@@ -316,7 +316,7 @@ class Deposit(models.Model):
         blank=True,
     )
 
-                                        
+
     proof = models.ImageField(
         upload_to="deposits/proofs/",
         blank=True,
@@ -328,8 +328,11 @@ class Deposit(models.Model):
         choices=STATUS_CHOICES,
         default="pending",
     )
+    source = models.CharField(
+        max_length=30,
+        default="deposit",
+    )
 
-                                                        
     credited_to_wallet = models.BooleanField(
         default=False,
     )
@@ -338,7 +341,7 @@ class Deposit(models.Model):
         auto_now_add=True,
     )
 
-                                                
+
     approved_at = models.DateTimeField(
         null=True,
         blank=True,
@@ -350,8 +353,8 @@ class Deposit(models.Model):
             f"${self.amount_usd} - "
             f"{self.get_payment_method_display()}"
         )
-    
-    
+
+
 class Withdrawal(models.Model):
 
     STATUS_CHOICES = [
@@ -373,7 +376,13 @@ class Withdrawal(models.Model):
         null=True,
         blank=True,
     )
-                                     
+    trade = models.OneToOneField(
+        "Trade",
+        on_delete=models.PROTECT,
+        related_name="withdrawal",
+        null=True,
+        blank=True,
+    )
     amount_usd = models.DecimalField(
         max_digits=18,
         decimal_places=2,
@@ -402,7 +411,10 @@ class Withdrawal(models.Model):
         choices=STATUS_CHOICES,
         default="pending",
     )
-
+    source = models.CharField(
+        max_length=30,
+        default="withdrawal",
+    )
     created_at = models.DateTimeField(
         auto_now_add=True,
     )
@@ -413,17 +425,17 @@ class Withdrawal(models.Model):
     )
 
     def __str__(self):
-        currency = self.wallet.currency if self.wallet else "—"
+        currency = self.wallet.currency if self.wallet else "â€”"
 
         return (
             f"{self.user.username} - "
             f"{currency} - "
             f"${self.amount_usd} - "
-            f"{self.asset_amount or '—'} "
+            f"{self.asset_amount or 'â€”'} "
             f"({self.status})"
         )
 
-    
+
 class Investment(models.Model):
 
     STATUS_CHOICES = [
@@ -595,7 +607,7 @@ class Investment(models.Model):
 
         super().save(*args, **kwargs)
 
-        
+
     @property
     def currency(self):
         return self.wallet.currency if self.wallet else None
@@ -605,14 +617,14 @@ class Investment(models.Model):
         return (
             self.wallet.get_currency_display()
             if self.wallet
-            else "—"
+            else "â€”"
         )
 
     def __str__(self):
         currency = (
             self.wallet.currency
             if self.wallet
-            else "—"
+            else "â€”"
         )
 
         return (
@@ -621,8 +633,8 @@ class Investment(models.Model):
             f"${self.amount_usd} "
             f"({currency})"
         )
-    
-    
+
+
 class Profit(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
@@ -821,7 +833,7 @@ class InvestmentFeature(models.Model):
 
     icon = models.CharField(
         max_length=50,
-        default="✓"
+        default="âœ“"
     )
 
     order = models.PositiveIntegerField(default=0)
@@ -984,7 +996,7 @@ class RecoveryOTP(models.Model):
             f"{self.channel.upper()} OTP - "
             f"{self.user.username}"
         )
-    
+
 
 class Announcement(models.Model):
     title = models.CharField(max_length=200)
@@ -1059,3 +1071,179 @@ class Notification(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.title}"
 
+
+class Trade(models.Model):
+
+    RESULT_CHOICES = [
+        ("win", "Win"),
+        ("lose", "Lose"),
+    ]
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+    )
+
+    plan = models.ForeignKey(
+        "core.InvestmentPlan",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+
+    historical_plan_name = models.CharField(
+        max_length=100,
+        null=True,
+        blank=True,
+    )
+
+    deposit = models.OneToOneField(
+        "Deposit",
+        on_delete=models.CASCADE,
+        related_name="trade",
+        null=True,
+        blank=True,
+    )
+
+    result = models.CharField(
+        max_length=10,
+        choices=RESULT_CHOICES,
+    )
+
+    gas_fee = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+    profit_amount = models.DecimalField(
+        max_digits=18,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+
+    payout_amount = models.DecimalField(
+        max_digits=18,
+        decimal_places=2,
+        null=True,
+        blank=True,
+    )
+
+    gas_payment_status = models.CharField(
+        max_length=20,
+        default="not_required",
+    )
+
+    payout_released = models.BooleanField(
+        default=False,
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    def save(self, *args, **kwargs):
+
+        if (
+            self.plan
+            and not self.historical_plan_name
+        ):
+            self.historical_plan_name = self.plan.name
+
+        super().save(*args, **kwargs)
+
+    @property
+    def plan_display_name(self):
+
+        if self.plan:
+            return self.plan.name
+
+        return self.historical_plan_name or "Unknown Plan"
+
+    def __str__(self):
+
+        return (
+            f"{self.user.username} - "
+            f"{self.plan_display_name} - "
+            f"{self.result}"
+        )
+
+
+class TradeGasPayment(models.Model):
+
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("approved", "Approved"),
+        ("rejected", "Rejected"),
+    ]
+
+    PAYMENT_CHOICES = [
+        ("BTC", "Bitcoin"),
+        ("ETH", "Ethereum"),
+        ("USDT_TRC20", "USDT TRC20"),
+        ("USDT_ERC20", "USDT ERC20"),
+    ]
+
+    trade = models.OneToOneField(
+        "Trade",
+        on_delete=models.CASCADE,
+        related_name="gas_payment",
+    )
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="trade_gas_payments",
+    )
+
+    payment_method = models.CharField(
+        max_length=20,
+        choices=PAYMENT_CHOICES,
+    )
+
+    amount_usd = models.DecimalField(
+        max_digits=18,
+        decimal_places=2,
+    )
+
+    asset_amount = models.DecimalField(
+        max_digits=30,
+        decimal_places=12,
+        null=True,
+        blank=True,
+    )
+
+    exchange_rate = models.DecimalField(
+        max_digits=30,
+        decimal_places=12,
+        null=True,
+        blank=True,
+    )
+
+    proof = models.ImageField(
+        upload_to="trade_gas/proofs/",
+        blank=True,
+        null=True,
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="pending",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    approved_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    def __str__(self):
+        return (
+            f"{self.user.username} - "
+            f"Trade #{self.trade.id} - "
+            f"${self.amount_usd}"
+        )

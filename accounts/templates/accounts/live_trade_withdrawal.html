@@ -1,0 +1,167 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block content %}
+
+<section class="live-trade-withdrawal-page">
+
+    <div class="live-trade-withdrawal-container">
+
+        <div class="live-trade-withdrawal-header">
+
+            <div class="live-trade-withdrawal-icon">
+                <i class="fas fa-money-bill-transfer"></i>
+            </div>
+
+            <div>
+                <span class="live-trade-withdrawal-badge">
+                    Live Trading
+                </span>
+
+                <h1>
+                    Withdraw Trading Payout
+                </h1>
+
+                <p>
+                    Withdraw the released payout from your winning trade.
+                </p>
+            </div>
+
+        </div>
+
+
+        <div class="live-trade-withdrawal-card">
+
+            <div class="trade-summary">
+
+                <div class="trade-summary-item">
+                    <span>Trade</span>
+                    <strong>#{{ trade.id }}</strong>
+                </div>
+
+                <div class="trade-summary-item">
+                    <span>Plan</span>
+                    <strong>
+                        {{ trade.plan_display_name }}
+                    </strong>
+                </div>
+
+                <div class="trade-summary-item">
+                    <span>Trade Payout</span>
+                    <strong>
+                        ${{ transaction.usd_value }}
+                    </strong>
+                </div>
+
+                <div class="trade-summary-item">
+                    <span>Wallet</span>
+                    <strong>
+                        {{ wallet.get_currency_display }}
+                    </strong>
+                </div>
+
+                <div class="trade-summary-item">
+                    <span>Available Asset</span>
+                    <strong>
+                        {{ transaction.asset_amount }}
+                    </strong>
+                </div>
+
+            </div>
+
+
+            <div class="withdrawal-notice">
+
+                <i class="fas fa-circle-info"></i>
+
+                <p>
+                    This withdrawal is specifically for your released
+                    Live Trading payout. It is separate from your normal
+                    wallet withdrawal request.
+                </p>
+
+            </div>
+
+
+            <form
+                method="post"
+                class="live-trade-withdrawal-form"
+            >
+
+                {% csrf_token %}
+
+                <div class="form-group">
+
+                    <label for="destination_wallet">
+                        Destination Wallet Address
+                    </label>
+
+                    <input
+                        type="text"
+                        id="destination_wallet"
+                        name="destination_wallet"
+                        placeholder="Enter your wallet address"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="withdrawal-details">
+
+                    <div>
+                        <span>Amount</span>
+                        <strong>
+                            ${{ transaction.usd_value }}
+                        </strong>
+                    </div>
+
+                    <div>
+                        <span>Asset Amount</span>
+                        <strong>
+                            {{ transaction.asset_amount }}
+                            {{ wallet.get_currency_display }}
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="live-trade-withdrawal-button"
+                >
+                    <i class="fas fa-paper-plane"></i>
+                    Submit Withdrawal
+                </button>
+
+            </form>
+
+
+            <div class="live-trade-withdrawal-actions">
+
+                <a
+                    href="{% url 'trade_result' trade.id %}"
+                    class="secondary-button"
+                >
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Trade
+                </a>
+
+                <a
+                    href="{% url 'trade_history' %}"
+                    class="secondary-button"
+                >
+                    <i class="fas fa-clock-rotate-left"></i>
+                    Trade History
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -18,6 +18,8 @@ from .models import (
     SecurityCenterContent,
     Announcement,
     Withdrawal,
+    Trade,
+    TradeGasPayment,
 )
 
 
@@ -458,4 +460,69 @@ class WithdrawalAdmin(admin.ModelAdmin):
         "approved_at",
         "asset_amount",
         "exchange_rate",
+    )
+
+@admin.register(Trade)
+class TradeAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "plan_display_name",
+        "result",
+        "gas_fee",
+        "created_at",
+    )
+
+    list_filter = (
+        "result",
+        "created_at",
+    )
+
+    search_fields = (
+        "user__username",
+        "user__email",
+        "historical_plan_name",
+    )
+
+    readonly_fields = (
+        "created_at",
+    )
+
+    ordering = (
+        "-created_at",
+    )
+
+
+@admin.register(TradeGasPayment)
+class TradeGasPaymentAdmin(admin.ModelAdmin):
+
+    list_display = (
+        "user",
+        "trade",
+        "payment_method",
+        "amount_usd",
+        "status",
+        "created_at",
+        "approved_at",
+    )
+
+    list_filter = (
+        "status",
+        "payment_method",
+        "created_at",
+    )
+
+    search_fields = (
+        "user__username",
+        "user__email",
+        "trade__id",
+    )
+
+    readonly_fields = (
+        "created_at",
+        "approved_at",
+    )
+
+    ordering = (
+        "-created_at",
     )

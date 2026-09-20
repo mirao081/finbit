@@ -1,0 +1,175 @@
+﻿{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'control/css/trade_detail.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="trade-detail-page">
+
+    <div class="trade-detail-container">
+
+        <div class="trade-detail-header">
+
+            <span class="trade-detail-badge">
+                Live Trading
+            </span>
+
+            <h1>
+                Trade Details
+            </h1>
+
+            <p>
+                Review the result of this live trading transaction.
+            </p>
+
+        </div>
+
+
+        <div class="trade-detail-card">
+
+            <div class="trade-detail-row">
+
+                <span>
+                    User
+                </span>
+
+                <strong>
+                    {{ trade.user.username }}
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Email
+                </span>
+
+                <strong>
+                    {{ trade.user.email }}
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Plan
+                </span>
+
+                <strong>
+                    {{ trade.plan_display_name }}
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Amount
+                </span>
+
+                <strong>
+
+                    {% if trade.deposit %}
+
+                        ${{ trade.deposit.amount_usd }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Result
+                </span>
+
+                <strong
+                    class="
+                        trade-result
+                        {% if trade.result == 'win' %}
+                            win
+                        {% else %}
+                            lose
+                        {% endif %}
+                    "
+                >
+                    {{ trade.get_result_display }}
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Gas Fee
+                </span>
+
+                <strong>
+
+                    {% if trade.result == "win" and trade.gas_fee %}
+
+                        ${{ trade.gas_fee }}
+
+                    {% else %}
+
+                        -
+
+                    {% endif %}
+
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Created
+                </span>
+
+                <strong>
+                    {{ trade.created_at|date:"M d, Y H:i" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="trade-detail-actions">
+
+            <a
+                href="{% url 'approve_deposits' %}"
+                class="back-btn"
+            >
+                Back to Pending Trades
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

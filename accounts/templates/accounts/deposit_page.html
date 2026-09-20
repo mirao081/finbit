@@ -1,0 +1,161 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'accounts/css/deposit_page.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="deposit-section">
+
+    <div class="deposit-card">
+
+        <span class="deposit-badge">
+            Deposit Required
+        </span>
+
+
+        <h1>
+            Fund Your Trading Account
+        </h1>
+
+
+        <p class="deposit-intro">
+
+            To start trading with
+            <strong>{{ deposit.plan.name }}</strong>,
+            please deposit the required amount into the company wallet.
+
+        </p>
+
+
+        <div class="deposit-info">
+
+            <div class="deposit-info-row">
+
+                <span>
+                    Amount
+                </span>
+
+                <strong>
+                    ${{ deposit.amount_usd }}
+                </strong>
+
+            </div>
+
+
+            <div class="deposit-info-row">
+
+                <span>
+                    Payment Method
+                </span>
+
+                <strong>
+                    {{ deposit.get_payment_method_display }}
+                </strong>
+
+            </div>
+
+
+            <div class="deposit-info-row wallet-row">
+
+                <span>
+                    Company Wallet
+                </span>
+
+                {% if wallet %}
+
+                    <strong class="wallet-address">
+                        {{ wallet.address }}
+                    </strong>
+
+                {% else %}
+
+                    <strong class="wallet-unavailable">
+                        Wallet unavailable
+                    </strong>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+
+        {% if wallet and wallet.qr_code %}
+
+            <div class="qr-section">
+
+                <span>
+                    Scan Payment QR Code
+                </span>
+
+                <div class="qr-code">
+
+                    <img
+                        src="{{ wallet.qr_code.url }}"
+                        alt="{{ wallet.get_currency_display }} QR Code"
+                    >
+
+                </div>
+
+            </div>
+
+        {% endif %}
+
+
+        <form
+            method="post"
+            enctype="multipart/form-data"
+            action="{% url 'confirm_deposit' deposit.id %}"
+            class="deposit-form"
+        >
+
+            {% csrf_token %}
+
+
+            <div class="form-group">
+
+                <label for="proof">
+                    Upload Payment Proof
+                </label>
+
+                <input
+                    id="proof"
+                    type="file"
+                    name="proof"
+                    accept="image/*,.pdf"
+                    required
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="btn-deposit"
+            >
+                I Have Paid
+            </button>
+
+        </form>
+
+
+        <a
+            href="{% url 'trade' %}"
+            class="btn-cancel"
+        >
+            Back to Trading
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

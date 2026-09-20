@@ -1,0 +1,324 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'accounts/css/trade_result.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="trade-result">
+
+    <div class="trade-result-card">
+
+        <span
+            class="result-badge {% if trade.result == 'win' %}win{% else %}lose{% endif %}"
+        >
+
+            {% if trade.result == "win" %}
+                Trade Won
+            {% else %}
+                Trade Lost
+            {% endif %}
+
+        </span>
+
+
+        <h1>
+            Trade Result
+        </h1>
+
+
+        <p class="trade-plan">
+
+            Plan:
+
+            <strong>
+                {{ trade.plan_display_name }}
+            </strong>
+
+        </p>
+
+
+        <div class="trade-details">
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Amount
+                </span>
+
+                <strong>
+                    ${{ trade.deposit.amount_usd }}
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Result
+                </span>
+
+                <strong>
+                    {{ trade.get_result_display }}
+                </strong>
+
+            </div>
+
+
+            <div class="trade-detail-row">
+
+                <span>
+                    Date
+                </span>
+
+                <strong>
+                    {{ trade.created_at|date:"M d, Y H:i" }}
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        {% if trade.result == "win" %}
+
+            <div class="result-box success">
+
+                <h2>
+                    Congratulations!
+                </h2>
+
+                <p>
+                    Your trade was successful.
+                </p>
+
+
+                <div class="trade-summary">
+
+                    <div class="trade-summary-row">
+
+                        <span>
+                            Profit
+                        </span>
+
+                        <strong>
+                            ${{ trade.profit_amount }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="trade-summary-row">
+
+                        <span>
+                            Total Payout
+                        </span>
+
+                        <strong>
+                            ${{ trade.payout_amount }}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="trade-summary-row">
+
+                        <span>
+                            Gas Fee Required
+                        </span>
+
+                        <strong>
+                            ${{ trade.gas_fee }}
+                        </strong>
+
+                    </div>
+
+                </div>
+
+
+                {% if trade.payout_released %}
+
+                    <div class="payment-status success">
+
+                        <i class="fas fa-circle-check"></i>
+
+                        Your payout has been released and is now available for withdrawal.
+
+                    </div>
+
+
+                    {% if trade.withdrawal %}
+
+                        <div class="payment-status pending">
+
+                            <i class="fas fa-clock"></i>
+
+                            Your Live Trading withdrawal has already been submitted
+                            and is awaiting admin approval.
+
+                        </div>
+
+                    {% else %}
+
+                        <a
+                            href="{% url 'live_trade_withdrawal' trade.id %}"
+                            class="trade-withdraw-button"
+                        >
+
+                            <i class="fas fa-money-bill-transfer"></i>
+
+                            Withdraw Payout
+
+                        </a>
+
+                    {% endif %}
+
+
+                {% elif trade.gas_payment_status == "paid" %}
+
+                    <div class="payment-status success">
+
+                        <i class="fas fa-circle-check"></i>
+
+                        Gas payment approved. Your payout is being released.
+
+                    </div>
+
+
+                {% elif trade.gas_payment %}
+
+                    <div class="payment-status pending">
+
+                        <i class="fas fa-clock"></i>
+
+                        Gas payment submitted. Waiting for admin approval.
+
+                    </div>
+
+
+                {% else %}
+
+                    <form
+                        method="post"
+                        enctype="multipart/form-data"
+                        class="gas-payment-form"
+                    >
+
+                        {% csrf_token %}
+
+
+                        <label>
+                            Payment Method
+                        </label>
+
+
+                        <select
+                            name="payment_method"
+                            required
+                        >
+
+                            <option value="">
+                                Select payment method
+                            </option>
+
+
+                            {% for value, label in payment_methods %}
+
+                                <option value="{{ value }}">
+                                    {{ label }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+
+                        <label>
+                            Upload Payment Proof
+                        </label>
+
+
+                        <input
+                            type="file"
+                            name="proof"
+                            accept="image/*"
+                            required
+                        >
+
+
+                        <button
+                            type="submit"
+                            class="pay-gas-btn"
+                        >
+
+                            <i class="fas fa-paper-plane"></i>
+
+                            Submit Gas Payment
+
+                        </button>
+
+                    </form>
+
+                {% endif %}
+
+            </div>
+
+
+        {% else %}
+
+            <div class="result-box failed">
+
+                <h2>
+                    Trade Unsuccessful
+                </h2>
+
+                <p>
+                    This trade did not result in a profit.
+                </p>
+
+            </div>
+
+        {% endif %}
+
+
+        <div class="trade-result-actions">
+
+            <a
+                href="{% url 'trade' %}"
+                class="btn-back"
+            >
+
+                <i class="fas fa-arrow-left"></i>
+
+                Back to Trading
+
+            </a>
+
+
+            <a
+                href="{% url 'trade_history' %}"
+                class="btn-history"
+            >
+
+                <i class="fas fa-clock-rotate-left"></i>
+
+                View Trade History
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+{% endblock %}

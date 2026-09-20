@@ -32,12 +32,14 @@ from accounts.models import (
     Announcement,
     AnnouncementReply,
     AssetPrice,
+    Trade,
+    TradeGasPayment,
 )
 
 from core.models import InvestmentPlan, Investor, Transaction
 from accounts.forms import DepositApprovalForm
 from control.models import AdminDashboardSettings, AdminMenu
-
+from accounts.views import execute_trade
 
 admin_required = user_passes_test(
     lambda user: user.is_authenticated and user.is_staff,
@@ -60,15 +62,15 @@ def dashboard_view(request):
     menus = AdminMenu.objects.all()
     total_referrals = Referral.objects.count()
 
-                                                               
-                 
-                                                               
+
+
+
 
     total_users = User.objects.count()
 
-                                                               
-                             
-                                                               
+
+
+
 
     total_deposits = (
         Deposit.objects
@@ -83,9 +85,9 @@ def dashboard_view(request):
         Decimal("0.01")
     )
 
-                                                               
-                       
-                                                               
+
+
+
 
     total_investments = (
         Investment.objects
@@ -105,9 +107,9 @@ def dashboard_view(request):
         Decimal("0.01")
     )
 
-                                                               
-                              
-                                                               
+
+
+
 
     active_investments = (
         Investment.objects
@@ -115,9 +117,9 @@ def dashboard_view(request):
         .count()
     )
 
-                                                               
-                                
-                                                               
+
+
+
 
     total_withdrawals = (
         Withdrawal.objects
@@ -132,9 +134,9 @@ def dashboard_view(request):
         Decimal("0.01")
     )
 
-                                                               
-                            
-                                                               
+
+
+
 
     investments_qs = (
         Investment.objects
@@ -159,9 +161,9 @@ def dashboard_view(request):
         request.GET.get("investments_page")
     )
 
-                                                               
-                      
-                                                               
+
+
+
 
     users_qs = (
         User.objects
@@ -175,9 +177,9 @@ def dashboard_view(request):
         request.GET.get("users_page")
     )
 
-                                                               
-                                 
-                                                               
+
+
+
 
     all_users_qs = (
         User.objects
@@ -189,7 +191,7 @@ def dashboard_view(request):
 
     for user in all_users_qs:
 
-                                 
+
         referral = (
             Referral.objects
             .filter(referred_user=user)
@@ -243,9 +245,9 @@ def dashboard_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                                 
-                                                               
+
+
+
 
         investment_total = (
             Investment.objects
@@ -263,9 +265,9 @@ def dashboard_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                              
-                                                               
+
+
+
 
         total_balance = wallet_balance
 
@@ -277,7 +279,7 @@ def dashboard_view(request):
             "investment_total": investment_total,
             "total_balance": total_balance,
     })
-        
+
     all_users_page = Paginator(
         all_users_data,
         5,
@@ -285,9 +287,9 @@ def dashboard_view(request):
         request.GET.get("all_users_page")
     )
 
-                                                               
-                       
-                                                               
+
+
+
 
     search_query = request.GET.get(
         "search",
@@ -334,15 +336,15 @@ def dashboard_view(request):
         request.GET.get("referral_page")
     )
 
-                                                               
-                     
-                                                               
+
+
+
 
     activity_logs = []
 
-                                                               
-              
-                                                               
+
+
+
 
     for deposit in (
         Deposit.objects
@@ -366,9 +368,9 @@ def dashboard_view(request):
             "created_at": deposit.created_at,
         })
 
-                                                               
-                 
-                                                               
+
+
+
 
     for withdrawal in (
         Withdrawal.objects
@@ -387,15 +389,15 @@ def dashboard_view(request):
             "asset_code": (
                 withdrawal.wallet.currency
                 if withdrawal.wallet
-                else "—"
+                else "â€”"
             ),
             "status": withdrawal.status,
             "created_at": withdrawal.created_at,
         })
 
-                                                               
-                 
-                                                               
+
+
+
 
     for investment in (
         Investment.objects
@@ -415,15 +417,15 @@ def dashboard_view(request):
             "asset_code": (
                 investment.wallet.currency
                 if investment.wallet
-                else "—"
+                else "â€”"
             ),
             "status": investment.status,
             "created_at": investment.created_at,
         })
 
-                                                               
-                          
-                                                               
+
+
+
 
     activity_logs = sorted(
         activity_logs,
@@ -436,9 +438,9 @@ def dashboard_view(request):
         5,
     ).get_page(
         request.GET.get("activity_page")
-    )                                                               
-                       
-                                                               
+    )
+
+
 
     deposits_total = total_deposits
     withdrawals_total = total_withdrawals
@@ -450,9 +452,9 @@ def dashboard_view(request):
         Decimal("0.01")
     )
 
-                                                               
-                   
-                                                               
+
+
+
 
     top_investors_qs = (
         User.objects
@@ -482,9 +484,9 @@ def dashboard_view(request):
         request.GET.get("investors_page")
     )
 
-                                                               
-                                 
-                                                               
+
+
+
 
     unread_replies_count = (
         AnnouncementReply.objects
@@ -494,42 +496,42 @@ def dashboard_view(request):
         .count()
     )
 
-                                                               
-             
-                                                               
+
+
+
 
     context = {
         "settings": settings,
         "menus": menus,
 
-                              
+
         "total_users": total_users,
         "total_deposits": total_deposits,
         "total_investments": total_investments,
         "active_investments": active_investments,
         "total_withdrawals": total_withdrawals,
 
-                    
+
         "investments_page": investments_page,
         "users_page": users_page,
         "all_users_page": all_users_page,
 
-                   
+
         "referral_page": referral_page,
         "search_query": search_query,
 
-                  
+
         "activity_page": activity_page,
 
-                           
+
         "deposits_total": deposits_total,
         "withdrawals_total": withdrawals_total,
         "net_balance": net_balance,
 
-                       
+
         "top_investors_page": top_investors_page,
 
-                             
+
         "unread_replies_count": unread_replies_count,
         "total_referrals": total_referrals,
     }
@@ -744,19 +746,12 @@ def deposits_view(request):
     )
 
 
-
-
-
 @login_required
 @admin_required
 def deposit_detail_view(request, deposit_id):
 
     settings = AdminDashboardSettings.objects.first()
     menus = AdminMenu.objects.all()
-
-                                                               
-                  
-                                                               
 
     deposit = (
         Deposit.objects
@@ -775,9 +770,14 @@ def deposit_detail_view(request, deposit_id):
         )
         return redirect("deposits")
 
-                                                               
-                 
-                                                               
+    # Live Trading deposits must only be processed
+    # through the dedicated Live Trading admin flow.
+    if deposit.source == "live_trade":
+        messages.warning(
+            request,
+            "Live Trading deposits must be processed from Live Trading.",
+        )
+        return redirect("approve_deposits")
 
     if request.method == "GET":
 
@@ -796,28 +796,14 @@ def deposit_detail_view(request, deposit_id):
             },
         )
 
-                                                               
-                  
-                                                               
-
     if request.method == "POST":
 
-                                                          
-                                
         referral = None
         referral_commission = Decimal("0.00")
         asset_amount = Decimal("0")
         wallet = None
 
-                                                               
-                                  
-                                                               
-
         with transaction.atomic():
-
-                                                               
-                          
-                                                               
 
             deposit = (
                 Deposit.objects
@@ -837,9 +823,14 @@ def deposit_detail_view(request, deposit_id):
                 )
                 return redirect("deposits")
 
-                                                               
-                                          
-                                                               
+            # Defensive protection in case the deposit changed
+            # after the initial lookup.
+            if deposit.source == "live_trade":
+                messages.warning(
+                    request,
+                    "Live Trading deposits must be processed from Live Trading.",
+                )
+                return redirect("approve_deposits")
 
             if (
                 deposit.status != "pending"
@@ -850,10 +841,6 @@ def deposit_detail_view(request, deposit_id):
                     "This deposit has already been processed.",
                 )
                 return redirect("deposits")
-
-                                                               
-                          
-                                                               
 
             form = DepositApprovalForm(
                 request.POST,
@@ -875,10 +862,6 @@ def deposit_detail_view(request, deposit_id):
 
             new_status = form.cleaned_data.get("status")
 
-                                                               
-                            
-                                                               
-
             if new_status == "rejected":
 
                 deposit.status = "rejected"
@@ -896,10 +879,6 @@ def deposit_detail_view(request, deposit_id):
 
                 return redirect("deposits")
 
-                                                               
-                             
-                                                               
-
             if new_status != "approved":
 
                 messages.error(
@@ -908,10 +887,6 @@ def deposit_detail_view(request, deposit_id):
                 )
 
                 return redirect("deposits")
-
-                                                               
-                                 
-                                                               
 
             amount_usd = deposit.amount_usd
 
@@ -925,10 +900,6 @@ def deposit_detail_view(request, deposit_id):
                     "The deposit USD amount is invalid.",
                 )
                 return redirect("deposits")
-
-                                                               
-                              
-                                                               
 
             wallet = (
                 Wallet.objects
@@ -954,10 +925,6 @@ def deposit_detail_view(request, deposit_id):
 
                 return redirect("deposits")
 
-                                                               
-                                     
-                                                               
-
             asset_price = (
                 AssetPrice.objects
                 .filter(
@@ -980,10 +947,6 @@ def deposit_detail_view(request, deposit_id):
 
             exchange_rate = asset_price.usd_price
 
-                                                               
-                                    
-                                                               
-
             if (
                 exchange_rate is None
                 or not exchange_rate.is_finite()
@@ -997,29 +960,11 @@ def deposit_detail_view(request, deposit_id):
 
                 return redirect("deposits")
 
-                                                               
-                                     
-                                                               
-             
-                                                  
-             
-                      
-             
-                            
-             
-                                  
-             
-                                                               
-
             asset_amount = (
                 amount_usd / exchange_rate
             ).quantize(
                 Decimal("0.000000000001")
             )
-
-                                                               
-                                        
-                                                               
 
             if (
                 not asset_amount.is_finite()
@@ -1030,36 +975,19 @@ def deposit_detail_view(request, deposit_id):
                     request,
                     "The calculated asset amount is invalid.",
                 )
-
                 return redirect("deposits")
-
-                                                               
-                                 
-                                                               
-
             usd_value = (
                 asset_amount * exchange_rate
             ).quantize(
                 Decimal("0.01")
             )
-
-                                                               
-                                
-                                                               
-
             wallet.balance += asset_amount
-
             wallet.save(
                 update_fields=[
                     "balance",
                     "updated_at",
                 ],
             )
-
-                                                               
-                                   
-                                                               
-
             investor, _ = (
                 Investor.objects
                 .get_or_create(
@@ -1069,11 +997,6 @@ def deposit_detail_view(request, deposit_id):
                     },
                 )
             )
-
-                                                               
-                                
-                                                               
-
             Transaction.objects.create(
                 investor=investor,
                 wallet=wallet,
@@ -1088,23 +1011,6 @@ def deposit_detail_view(request, deposit_id):
                     f"{wallet.get_currency_display()} wallet"
                 ),
             )
-
-                                                               
-                                           
-                                                               
-             
-                                                       
-                                                
-             
-                            
-                                    
-             
-                                  
-                                  
-             
-                                        
-             
-                                                               
 
             referral = (
                 Referral.objects
@@ -1137,10 +1043,6 @@ def deposit_detail_view(request, deposit_id):
                         ],
                     )
 
-                                                               
-                            
-                                                               
-
             deposit.asset_amount = asset_amount
             deposit.received_asset_amount = asset_amount
             deposit.exchange_rate = exchange_rate
@@ -1159,27 +1061,6 @@ def deposit_detail_view(request, deposit_id):
                 ],
             )
 
-                                                               
-                            
-                                                               
-         
-                                                               
-         
-                                                         
-                                                                
-                                                                 
-                                  
-         
-                                   
-                                    
-                                   
-         
-                                 
-                                    
-                                   
-         
-                                                               
-
         notify_deposit_approved(
             deposit
         )
@@ -1193,10 +1074,6 @@ def deposit_detail_view(request, deposit_id):
                 referral,
                 referral_commission,
             )
-
-                                                               
-                         
-                                                               
 
         if (
             referral
@@ -1229,10 +1106,6 @@ def deposit_detail_view(request, deposit_id):
             )
 
         return redirect("deposits")
-
-                                                               
-                    
-                                                               
 
     messages.error(
         request,
@@ -1334,9 +1207,9 @@ def approve_kyc(request, submission_id):
 
     with transaction.atomic():
 
-                                                               
-                                      
-                                                               
+
+
+
 
         submission = (
             KYCSubmission.objects
@@ -1357,9 +1230,9 @@ def approve_kyc(request, submission_id):
                 "user_verifications"
             )
 
-                                                               
-                                   
-                                                               
+
+
+
 
         profile, created = (
             UserProfile.objects
@@ -1368,12 +1241,12 @@ def approve_kyc(request, submission_id):
             )
         )
 
-                                                          
+
         was_verified = profile.kyc_verified
 
-                                                               
-                     
-                                                               
+
+
+
 
         submission.approved = True
 
@@ -1383,9 +1256,9 @@ def approve_kyc(request, submission_id):
             ]
         )
 
-                                                               
-                             
-                                                               
+
+
+
 
         profile.kyc_verified = True
 
@@ -1395,17 +1268,17 @@ def approve_kyc(request, submission_id):
             ]
         )
 
-                                                               
-                                                        
-                          
-                                                               
+
+
+
+
 
         if not was_verified:
             notification_needed = True
 
-                                                               
-                                                          
-                                                               
+
+
+
 
     if notification_needed:
 
@@ -1413,9 +1286,9 @@ def approve_kyc(request, submission_id):
             submission.user
         )
 
-                                                               
-                           
-                                                               
+
+
+
 
     messages.success(
         request,
@@ -1524,9 +1397,9 @@ def user_wallets_view(request):
     wallet_data = []
 
     for u in users_qs:
-                                                                   
-                      
-                                                                   
+
+
+
 
         wallets = (
             Wallet.objects
@@ -1534,14 +1407,14 @@ def user_wallets_view(request):
             .order_by("currency")
         )
 
-                                                                   
-                                             
-                                                                   
-         
-                                                           
-                                                      
-                                                 
-                                                                   
+
+
+
+
+
+
+
+
 
         wallet_balance = Decimal("0.00")
 
@@ -1580,14 +1453,14 @@ def user_wallets_view(request):
             Decimal("0.01")
         )
 
-                                                                   
-                                
-                                                                   
-         
-                                                              
-                                                            
-                            
-                                                                   
+
+
+
+
+
+
+
+
 
         wallet = wallets.first()
 
@@ -1597,9 +1470,9 @@ def user_wallets_view(request):
             else "N/A"
         )
 
-                                                                   
-                           
-                                                                   
+
+
+
 
         deposits_total = (
             Deposit.objects
@@ -1617,9 +1490,9 @@ def user_wallets_view(request):
             Decimal("0.01")
         )
 
-                                                                   
-                              
-                                                                   
+
+
+
 
         withdrawals_total = (
             Withdrawal.objects
@@ -1637,9 +1510,9 @@ def user_wallets_view(request):
             Decimal("0.01")
         )
 
-                                                                   
-                     
-                                                                   
+
+
+
 
         investments_total = (
             Investment.objects
@@ -1654,9 +1527,9 @@ def user_wallets_view(request):
             Decimal("0.01")
         )
 
-                                                                   
-                          
-                                                                   
+
+
+
 
         profits_total = (
             Profit.objects
@@ -1674,9 +1547,9 @@ def user_wallets_view(request):
             Decimal("0.01")
         )
 
-                                                                   
-                          
-                                                                   
+
+
+
 
         bonuses_total = (
             Bonus.objects
@@ -1694,23 +1567,23 @@ def user_wallets_view(request):
             Decimal("0.01")
         )
 
-                                                                   
-                               
-                                                                   
-         
-                                                                
-                              
-         
-                                                               
-                                                                
-                                                         
-                                                                   
+
+
+
+
+
+
+
+
+
+
+
 
         net_balance = wallet_balance
 
-                                                                   
-                         
-                                                                   
+
+
+
 
         recent_deposits = (
             Deposit.objects
@@ -1719,9 +1592,9 @@ def user_wallets_view(request):
             .order_by("-created_at")[:5]
         )
 
-                                                                   
-                            
-                                                                   
+
+
+
 
         recent_withdrawals = (
             Withdrawal.objects
@@ -1730,9 +1603,9 @@ def user_wallets_view(request):
             .order_by("-created_at")[:5]
         )
 
-                                                                   
-                     
-                                                                   
+
+
+
 
         wallet_data.append({
             "user": u,
@@ -1759,9 +1632,9 @@ def user_wallets_view(request):
             "recent_withdrawals": recent_withdrawals,
         })
 
-                                                                   
-                
-                                                                   
+
+
+
 
     page_obj = Paginator(
         wallet_data,
@@ -1770,9 +1643,9 @@ def user_wallets_view(request):
         request.GET.get("page")
     )
 
-                                                                   
-             
-                                                                   
+
+
+
 
     context = {
         "settings": settings,
@@ -2000,9 +1873,9 @@ def admin_announcement_detail_view(request, announcement_id):
 @admin_required
 def settings_view(request):
 
-                                                               
-                          
-                                                               
+
+
+
     if request.method == "POST":
         action = request.POST.get("action")
         user_id = request.POST.get("user_id")
@@ -2014,9 +1887,9 @@ def settings_view(request):
                 id=user_id,
             )
 
-                                                               
-                    
-                                                               
+
+
+
             try:
                 amount_usd = Decimal(
                     request.POST.get("amount") or "0"
@@ -2037,17 +1910,17 @@ def settings_view(request):
                     f"/admin/settings/?page={current_page}"
                 )
 
-                                                               
-                     
-                                                               
+
+
+
             message = request.POST.get(
                 "message",
                 "",
             ).strip()
 
-                                                               
-                                   
-                                                               
+
+
+
             if amount_usd < Decimal("0"):
                 messages.error(
                     request,
@@ -2061,9 +1934,9 @@ def settings_view(request):
                 Decimal("0.01")
             )
 
-                                                               
-                        
-                                                               
+
+
+
             if action == "fund":
 
                 if amount_usd <= Decimal("0"):
@@ -2116,9 +1989,9 @@ def settings_view(request):
                             f"/admin/settings/?page={current_page}"
                         )
 
-                                                               
-                                   
-                                                               
+
+
+
                     asset_price = (
                         AssetPrice.objects
                         .filter(
@@ -2154,9 +2027,9 @@ def settings_view(request):
                             f"/admin/settings/?page={current_page}"
                         )
 
-                                                               
-                                                 
-                                                               
+
+
+
                     asset_amount = (
                         amount_usd / exchange_rate
                     ).quantize(
@@ -2172,9 +2045,9 @@ def settings_view(request):
                             f"/admin/settings/?page={current_page}"
                         )
 
-                                                               
-                                   
-                                                               
+
+
+
                     wallet.balance += asset_amount
 
                     wallet.save(
@@ -2184,9 +2057,9 @@ def settings_view(request):
                         ]
                     )
 
-                                                               
-                                           
-                                                               
+
+
+
                     investor, _ = (
                         Investor.objects
                         .get_or_create(
@@ -2197,9 +2070,9 @@ def settings_view(request):
                         )
                     )
 
-                                                               
-                                        
-                                                               
+
+
+
                     Transaction.objects.create(
                         investor=investor,
                         wallet=wallet,
@@ -2225,9 +2098,9 @@ def settings_view(request):
                     ),
                 )
 
-                                                               
-                          
-                                                               
+
+
+
             elif action == "deduct":
 
                 if amount_usd <= Decimal("0"):
@@ -2280,9 +2153,9 @@ def settings_view(request):
                             f"/admin/settings/?page={current_page}"
                         )
 
-                                                               
-                                   
-                                                               
+
+
+
                     asset_price = (
                         AssetPrice.objects
                         .filter(
@@ -2318,18 +2191,18 @@ def settings_view(request):
                             f"/admin/settings/?page={current_page}"
                         )
 
-                                                               
-                                          
-                                                               
+
+
+
                     asset_amount = (
                         amount_usd / exchange_rate
                     ).quantize(
                         Decimal("0.000000000001")
                     )
 
-                                                               
-                                              
-                                                               
+
+
+
                     available_wallet_asset = (
                         wallet.balance
                         - wallet.reserved_balance
@@ -2338,9 +2211,9 @@ def settings_view(request):
                     if available_wallet_asset < Decimal("0"):
                         available_wallet_asset = Decimal("0")
 
-                                                               
-                                              
-                                                               
+
+
+
                     if asset_amount > available_wallet_asset:
 
                         available_usd = (
@@ -2364,9 +2237,9 @@ def settings_view(request):
                             f"/admin/settings/?page={current_page}"
                         )
 
-                                                               
-                                        
-                                                               
+
+
+
                     wallet.balance -= asset_amount
 
                     wallet.save(
@@ -2376,9 +2249,9 @@ def settings_view(request):
                         ]
                     )
 
-                                                               
-                                           
-                                                               
+
+
+
                     investor, _ = (
                         Investor.objects
                         .get_or_create(
@@ -2389,9 +2262,9 @@ def settings_view(request):
                         )
                     )
 
-                                                               
-                                        
-                                                               
+
+
+
                     Transaction.objects.create(
                         investor=investor,
                         wallet=wallet,
@@ -2417,9 +2290,9 @@ def settings_view(request):
                     ),
                 )
 
-                                                               
-                        
-                                                               
+
+
+
             elif action == "add_profit":
 
                 if amount_usd <= Decimal("0"):
@@ -2447,9 +2320,9 @@ def settings_view(request):
                     id=plan_id,
                 )
 
-                                                               
-                                                            
-                                                               
+
+
+
                 has_investment = Investment.objects.filter(
                     user=target_user,
                     plan=selected_plan,
@@ -2469,9 +2342,9 @@ def settings_view(request):
                         f"/admin/settings/?page={current_page}"
                     )
 
-                                                               
-                                        
-                                                               
+
+
+
                 Profit.objects.create(
                     user=target_user,
                     plan=selected_plan,
@@ -2488,9 +2361,9 @@ def settings_view(request):
                     ),
                 )
 
-                                                               
-                              
-                                                               
+
+
+
             elif action == "referral_bonus":
 
                 if amount_usd <= Decimal("0"):
@@ -2502,14 +2375,14 @@ def settings_view(request):
                         f"/admin/settings/?page={current_page}"
                     )
 
-                                                                   
-                                                             
-                             
-                 
-                                                               
-                                                                
-                              
-                                                                   
+
+
+
+
+
+
+
+
                 Bonus.objects.create(
                     user=target_user,
                     amount=amount_usd,
@@ -2526,9 +2399,9 @@ def settings_view(request):
                     ),
                 )
 
-                                                               
-                        
-                                                               
+
+
+
             elif action == "send_email":
 
                 if message and target_user.email:
@@ -2555,17 +2428,17 @@ def settings_view(request):
                         "Please provide a message and make sure the user has an email address.",
                     )
 
-                                                               
-                           
-                                                               
+
+
+
             elif action == "login_as_user":
 
-                                                           
+
                 request.session["admin_user_id"] = (
                     request.user.id
                 )
 
-                                             
+
                 login(
                     request,
                     target_user,
@@ -2576,9 +2449,9 @@ def settings_view(request):
 
                 return redirect("dashboard")
 
-                                                               
-                         
-                                                               
+
+
+
             elif action == "delete_user":
 
                 if target_user.id == request.user.id:
@@ -2597,9 +2470,9 @@ def settings_view(request):
                     "User deleted successfully.",
                 )
 
-                                                               
-                            
-                                                               
+
+
+
             else:
 
                 messages.error(
@@ -2611,27 +2484,27 @@ def settings_view(request):
                 f"{reverse('admin_settings')}?page={current_page}"
             )
 
-                                                               
-                         
-                                                               
+
+
+
     dashboard_settings = (
         AdminDashboardSettings.objects.first()
     )
 
     menus = AdminMenu.objects.all()
 
-                                                               
-           
-                                                               
+
+
+
     users = (
         User.objects
         .all()
         .order_by("-date_joined")
     )
 
-                                                               
-                
-                                                               
+
+
+
     paginator = Paginator(
         users,
         6,
@@ -2641,36 +2514,36 @@ def settings_view(request):
         request.GET.get("page", 1)
     )
 
-                                                               
-               
-                                                               
+
+
+
     user_data = []
 
     for user in page_obj.object_list:
 
-                                                               
-                      
-                                                               
+
+
+
         wallets = (
             Wallet.objects
             .filter(user=user)
             .order_by("currency")
         )
 
-                                                               
-                               
-         
-                                                          
-                                                               
+
+
+
+
+
         investment_plans = (
             InvestmentPlan.objects
             .all()
             .order_by("name")
         )
 
-                                                               
-                                               
-                                                               
+
+
+
         wallet_balance = Decimal("0.00")
 
         for wallet in wallets:
@@ -2683,9 +2556,9 @@ def settings_view(request):
             if available_asset < Decimal("0"):
                 available_asset = Decimal("0")
 
-                                                             
-                                 
-                                                             
+
+
+
             asset_price = (
                 AssetPrice.objects
                 .filter(
@@ -2706,9 +2579,9 @@ def settings_view(request):
             ):
                 continue
 
-                                                             
-                                  
-                                                             
+
+
+
             wallet_usd_value = (
                 available_asset
                 * exchange_rate
@@ -2720,14 +2593,14 @@ def settings_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                           
-                                                               
+
+
+
         available_balance = wallet_balance
 
-                                                               
-                            
-                                                               
+
+
+
         active_investments = (
             Investment.objects
             .filter(
@@ -2744,9 +2617,9 @@ def settings_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                          
-                                                               
+
+
+
         profit_total = (
             Profit.objects
             .filter(
@@ -2763,9 +2636,9 @@ def settings_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                          
-                                                               
+
+
+
         bonus_total = (
             Bonus.objects
             .filter(
@@ -2782,9 +2655,9 @@ def settings_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                      
-                                                               
+
+
+
         total_earned = (
             profit_total
             + bonus_total
@@ -2792,11 +2665,11 @@ def settings_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                               
-         
-                                            
-                                                               
+
+
+
+
+
         total_portfolio = (
             wallet_balance
             + active_investments
@@ -2806,9 +2679,9 @@ def settings_view(request):
             Decimal("0.01")
         )
 
-                                                               
-                         
-                                                               
+
+
+
         user_data.append({
             "user": user,
             "wallets": wallets,
@@ -2824,9 +2697,9 @@ def settings_view(request):
             "total_portfolio": total_portfolio,
         })
 
-                                                               
-                           
-                                                               
+
+
+
     return render(
         request,
         "control/admin_settings.html",
@@ -2869,15 +2742,465 @@ def withdrawals_view(request):
         },
     )
 
+@login_required
+@admin_required
+def live_trade_withdrawals_view(request):
+
+    settings = AdminDashboardSettings.objects.first()
+    menus = AdminMenu.objects.all()
+
+    withdrawals_qs = (
+        Withdrawal.objects
+        .filter(
+            source="live_trade",
+        )
+        .select_related(
+            "user",
+            "wallet",
+            "trade",
+            "trade__plan",
+        )
+        .order_by("-created_at")
+    )
+
+    paginator = Paginator(
+        withdrawals_qs,
+        5,
+    )
+
+    withdrawals_page = paginator.get_page(
+        request.GET.get("page")
+    )
+
+    return render(
+        request,
+        "control/live_trade_withdrawals.html",
+        {
+            "settings": settings,
+            "menus": menus,
+            "withdrawals_page": withdrawals_page,
+        },
+    )
+
+@login_required
+@admin_required
+@require_POST
+def approve_live_trade_withdrawal(
+    request,
+    withdrawal_id,
+):
+
+    with transaction.atomic():
+
+        withdrawal = (
+            Withdrawal.objects
+            .select_for_update()
+            .select_related(
+                "user",
+                "wallet",
+                "trade",
+                "trade__plan",
+            )
+            .filter(
+                id=withdrawal_id,
+                source="live_trade",
+                status="pending",
+            )
+            .first()
+        )
+
+        if withdrawal is None:
+
+            messages.error(
+                request,
+                (
+                    "Live Trading withdrawal was not found "
+                    "or has already been processed."
+                ),
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        trade = withdrawal.trade
+
+        if trade is None:
+
+            messages.error(
+                request,
+                (
+                    "This Live Trading withdrawal is not "
+                    "linked to a trade."
+                ),
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        if trade.result != "win":
+
+            messages.error(
+                request,
+                (
+                    "Only winning Live Trading trades "
+                    "can be withdrawn."
+                ),
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        if not trade.payout_released:
+
+            messages.error(
+                request,
+                (
+                    "The Live Trading payout has not "
+                    "been released."
+                ),
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        wallet = (
+            Wallet.objects
+            .select_for_update()
+            .filter(
+                id=withdrawal.wallet_id,
+                user=withdrawal.user,
+            )
+            .first()
+        )
+
+        if wallet is None:
+
+            messages.error(
+                request,
+                "The wallet for this withdrawal was not found.",
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        asset_amount = withdrawal.asset_amount
+        amount_usd = withdrawal.amount_usd
+        exchange_rate = withdrawal.exchange_rate
+
+        if (
+            asset_amount is None
+            or not asset_amount.is_finite()
+            or asset_amount <= Decimal("0")
+        ):
+
+            messages.error(
+                request,
+                "The Live Trading withdrawal asset amount is invalid.",
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        if (
+            amount_usd is None
+            or not amount_usd.is_finite()
+            or amount_usd <= Decimal("0")
+        ):
+
+            messages.error(
+                request,
+                "The Live Trading withdrawal USD amount is invalid.",
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        if (
+            exchange_rate is None
+            or not exchange_rate.is_finite()
+            or exchange_rate <= Decimal("0")
+        ):
+
+            asset_price = (
+                AssetPrice.objects
+                .filter(
+                    currency=wallet.currency,
+                )
+                .first()
+            )
+
+            if asset_price is None:
+
+                messages.error(
+                    request,
+                    (
+                        f"No exchange rate is available "
+                        f"for {wallet.get_currency_display()}."
+                    ),
+                )
+
+                return redirect(
+                    "live_trade_withdrawals"
+                )
+
+            exchange_rate = asset_price.usd_price
+
+        wallet_balance = (
+            wallet.balance
+            or Decimal("0")
+        )
+
+        reserved_balance = (
+            wallet.reserved_balance
+            or Decimal("0")
+        )
+
+        if wallet_balance < Decimal("0"):
+            wallet_balance = Decimal("0")
+
+        if reserved_balance < Decimal("0"):
+            reserved_balance = Decimal("0")
+
+        available_balance = (
+            wallet_balance
+            - reserved_balance
+        )
+
+        if available_balance < Decimal("0"):
+            available_balance = Decimal("0")
+
+        if asset_amount > available_balance:
+
+            available_usd = (
+                available_balance * exchange_rate
+            ).quantize(
+                Decimal("0.01")
+            )
+
+            messages.error(
+                request,
+                (
+                    f"Insufficient available "
+                    f"{wallet.get_currency_display()} balance. "
+                    f"The Live Trading withdrawal requires "
+                    f"{asset_amount} {wallet.currency}, "
+                    f"worth ${amount_usd}, but only "
+                    f"{available_balance} {wallet.currency}, "
+                    f"worth ${available_usd}, is available."
+                ),
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        wallet.balance = (
+            wallet_balance
+            - asset_amount
+        )
+
+        if reserved_balance >= asset_amount:
+
+            wallet.reserved_balance = (
+                reserved_balance
+                - asset_amount
+            )
+
+        else:
+
+            wallet.reserved_balance = Decimal("0")
+
+        wallet.save(
+            update_fields=[
+                "balance",
+                "reserved_balance",
+                "updated_at",
+            ]
+        )
+
+        withdrawal.exchange_rate = exchange_rate
+        withdrawal.status = "approved"
+        withdrawal.approved_at = timezone.now()
+
+        withdrawal.save(
+            update_fields=[
+                "exchange_rate",
+                "status",
+                "approved_at",
+            ]
+        )
+
+        investor, _ = (
+            Investor.objects
+            .get_or_create(
+                user=withdrawal.user,
+                defaults={
+                    "name": withdrawal.user.username,
+                },
+            )
+        )
+
+        Transaction.objects.create(
+            investor=investor,
+            wallet=wallet,
+            transaction_type="withdrawal",
+            direction="debit",
+            asset_amount=asset_amount,
+            usd_value=amount_usd,
+            exchange_rate=exchange_rate,
+            reference=f"LIVE-TRADE-WDR-{withdrawal.id}",
+            description=(
+                f"Live Trading withdrawal for "
+                f"Trade #{trade.id} to "
+                f"{withdrawal.destination_wallet}"
+            ),
+        )
+
+    messages.success(
+        request,
+        (
+            "Live Trading withdrawal approved "
+            "and the payout has been deducted from the user's wallet."
+        ),
+    )
+
+    return redirect(
+        "live_trade_withdrawals"
+    )
+
+
+@login_required
+@admin_required
+@require_POST
+def reject_live_trade_withdrawal(
+    request,
+    withdrawal_id,
+):
+
+    with transaction.atomic():
+
+        withdrawal = (
+            Withdrawal.objects
+            .select_for_update()
+            .select_related(
+                "user",
+                "wallet",
+                "trade",
+                "trade__plan",
+            )
+            .filter(
+                id=withdrawal_id,
+                source="live_trade",
+                status="pending",
+            )
+            .first()
+        )
+
+        if withdrawal is None:
+
+            messages.error(
+                request,
+                (
+                    "Live Trading withdrawal was not found "
+                    "or has already been processed."
+                ),
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        wallet = (
+            Wallet.objects
+            .select_for_update()
+            .filter(
+                id=withdrawal.wallet_id,
+                user=withdrawal.user,
+            )
+            .first()
+        )
+
+        if wallet is None:
+
+            messages.error(
+                request,
+                "The wallet for this withdrawal was not found.",
+            )
+
+            return redirect(
+                "live_trade_withdrawals"
+            )
+
+        asset_amount = (
+            withdrawal.asset_amount
+            or Decimal("0")
+        )
+
+        if (
+            asset_amount.is_finite()
+            and asset_amount > Decimal("0")
+        ):
+
+            reserved_balance = (
+                wallet.reserved_balance
+                or Decimal("0")
+            )
+
+            if reserved_balance < Decimal("0"):
+                reserved_balance = Decimal("0")
+
+            if reserved_balance >= asset_amount:
+
+                wallet.reserved_balance = (
+                    reserved_balance - asset_amount
+                )
+
+            else:
+
+                wallet.reserved_balance = Decimal("0")
+
+            wallet.save(
+                update_fields=[
+                    "reserved_balance",
+                    "updated_at",
+                ],
+            )
+
+        withdrawal.status = "rejected"
+        withdrawal.approved_at = None
+
+        withdrawal.save(
+            update_fields=[
+                "status",
+                "approved_at",
+            ],
+        )
+
+    messages.success(
+        request,
+        "Live Trading withdrawal rejected successfully.",
+    )
+
+    return redirect(
+        "live_trade_withdrawals"
+    )
+
 
 @login_required
 @admin_required
 @require_POST
 def approve_withdrawal(request, withdrawal_id):
 
-                                                               
-                        
-                                                               
+
+
+
 
     with transaction.atomic():
 
@@ -2895,9 +3218,9 @@ def approve_withdrawal(request, withdrawal_id):
             .first()
         )
 
-                                                               
-                          
-                                                               
+
+
+
 
         if withdrawal is None:
 
@@ -2910,9 +3233,9 @@ def approve_withdrawal(request, withdrawal_id):
                 "withdrawals"
             )
 
-                                                               
-                             
-                                                               
+
+
+
 
         amount_usd = withdrawal.amount_usd
 
@@ -2931,9 +3254,9 @@ def approve_withdrawal(request, withdrawal_id):
                 "withdrawals"
             )
 
-                                                               
-                          
-                                                               
+
+
+
 
         wallet = (
             Wallet.objects
@@ -2956,9 +3279,9 @@ def approve_withdrawal(request, withdrawal_id):
                 "withdrawals"
             )
 
-                                                               
-                                     
-                                                               
+
+
+
 
         destination = (
             withdrawal.destination_wallet or ""
@@ -3000,16 +3323,16 @@ def approve_withdrawal(request, withdrawal_id):
                 "withdrawals"
             )
 
-                                                               
-                                                   
-                                                               
+
+
+
 
         asset_amount = withdrawal.asset_amount
         exchange_rate = withdrawal.exchange_rate
 
-                                                               
-                                                      
-                                                               
+
+
+
 
         if (
             asset_amount is None
@@ -3075,9 +3398,9 @@ def approve_withdrawal(request, withdrawal_id):
 
         else:
 
-                                                               
-                                              
-                                                               
+
+
+
 
             if (
                 exchange_rate is None
@@ -3091,9 +3414,9 @@ def approve_withdrawal(request, withdrawal_id):
                     Decimal("0.000000000001")
                 )
 
-                                                               
-                             
-                                                               
+
+
+
 
         wallet_balance = (
             wallet.balance
@@ -3119,9 +3442,9 @@ def approve_withdrawal(request, withdrawal_id):
         if available_balance < Decimal("0"):
             available_balance = Decimal("0")
 
-                                                               
-                                 
-                                                               
+
+
+
 
         if asset_amount > available_balance:
 
@@ -3148,18 +3471,18 @@ def approve_withdrawal(request, withdrawal_id):
                 "withdrawals"
             )
 
-                                                               
-                                  
-                                                               
+
+
+
 
         wallet.balance = (
             wallet_balance
             - asset_amount
         )
 
-                                                               
-                                 
-                                                               
+
+
+
 
         if reserved_balance >= asset_amount:
 
@@ -3180,9 +3503,9 @@ def approve_withdrawal(request, withdrawal_id):
             ]
         )
 
-                                                               
-                           
-                                                               
+
+
+
 
         withdrawal.asset_amount = asset_amount
         withdrawal.exchange_rate = exchange_rate
@@ -3198,9 +3521,9 @@ def approve_withdrawal(request, withdrawal_id):
             ]
         )
 
-                                                               
-                               
-                                                               
+
+
+
 
         investor, _ = (
             Investor.objects
@@ -3212,9 +3535,9 @@ def approve_withdrawal(request, withdrawal_id):
             )
         )
 
-                                                               
-                            
-                                                               
+
+
+
 
         Transaction.objects.create(
             investor=investor,
@@ -3230,28 +3553,28 @@ def approve_withdrawal(request, withdrawal_id):
             ),
         )
 
-                                                               
-                                           
-                                                               
-     
-                                                              
-                                                           
-                                                      
-     
-                 
-     
-                            
-                           
-     
-                                                               
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     notify_withdrawal_approved(
         withdrawal
     )
 
-                                                               
-                           
-                                                               
+
+
+
 
     messages.success(
         request,
@@ -3519,4 +3842,395 @@ def platform_management(request):
     return render(
         request,
         "control/platform_management.html",
+    )
+
+@admin_required
+def approve_deposits(request):
+
+    settings = AdminDashboardSettings.objects.first()
+
+    menus = list(
+        AdminMenu.objects.all()
+    )
+
+    pending_deposits = (
+        Deposit.objects
+        .filter(
+            status="pending",
+            source="live_trade",
+        )
+        .select_related(
+            "user",
+            "plan",
+        )
+        .order_by("-id")
+    )
+
+    return render(
+        request,
+        "control/approve_deposits.html",
+        {
+            "settings": settings,
+            "menus": menus,
+            "pending_deposits": pending_deposits,
+        },
+    )
+
+
+@admin_required
+def approve_deposit(request, deposit_id):
+
+    with transaction.atomic():
+
+        deposit = (
+            Deposit.objects
+            .select_for_update()
+            .select_related(
+                "user",
+                "plan",
+            )
+            .filter(
+                id=deposit_id,
+                source="live_trade",
+            )
+            .first()
+        )
+
+        if not deposit:
+
+            messages.error(
+                request,
+                "Live Trading deposit was not found.",
+            )
+
+            return redirect(
+                "approve_deposits"
+            )
+
+        if deposit.status != "pending":
+
+            trade = getattr(
+                deposit,
+                "trade",
+                None,
+            )
+
+            if trade:
+                return redirect(
+                    "trade_detail",
+                    trade_id=trade.id,
+                )
+
+            messages.warning(
+                request,
+                "This Live Trading deposit has already been processed.",
+            )
+
+            return redirect(
+                "approve_deposits"
+            )
+
+        asset_price = (
+            AssetPrice.objects
+            .filter(
+                currency=deposit.payment_method,
+            )
+            .first()
+        )
+
+        if (
+            not asset_price
+            or asset_price.usd_price <= 0
+        ):
+
+            messages.error(
+                request,
+                (
+                    f"No valid exchange rate is available "
+                    f"for {deposit.get_payment_method_display()}."
+                ),
+            )
+
+            return redirect(
+                "approve_deposits"
+            )
+
+        asset_amount = (
+            deposit.amount_usd
+            / asset_price.usd_price
+        )
+
+        deposit.exchange_rate = (
+            asset_price.usd_price
+        )
+
+        deposit.asset_amount = asset_amount
+
+        deposit.received_asset_amount = (
+            asset_amount
+        )
+
+        deposit.status = "approved"
+
+        deposit.approved_at = timezone.now()
+
+        deposit.save(
+            update_fields=[
+                "exchange_rate",
+                "asset_amount",
+                "received_asset_amount",
+                "status",
+                "approved_at",
+            ],
+        )
+
+        trade = execute_trade(
+            deposit
+        )
+
+    return redirect(
+        "trade_detail",
+        trade_id=trade.id,
+    )
+
+@login_required
+@admin_required
+def trade_detail(request, trade_id):
+
+    settings = AdminDashboardSettings.objects.first()
+    menus = list(AdminMenu.objects.all())
+
+    trade = get_object_or_404(
+        Trade.objects.select_related(
+            "user",
+            "plan",
+            "deposit",
+        ),
+        id=trade_id,
+    )
+
+    return render(
+        request,
+        "control/trade_detail.html",
+        {
+            "settings": settings,
+            "menus": menus,
+            "trade": trade,
+        },
+    )
+
+
+@login_required
+@admin_required
+def trade_gas_payments(request):
+
+    settings = AdminDashboardSettings.objects.first()
+    menus = AdminMenu.objects.all()
+
+    gas_payments = (
+        TradeGasPayment.objects
+        .filter(status="pending")
+        .select_related(
+            "user",
+            "trade",
+            "trade__plan",
+        )
+        .order_by("-created_at")
+    )
+
+    return render(
+        request,
+        "control/trade_gas_payments.html",
+        {
+            "settings": settings,
+            "menus": menus,
+            "gas_payments": gas_payments,
+        },
+    )
+
+
+@login_required
+@admin_required
+def approve_trade_gas_payment(request, payment_id):
+
+    with transaction.atomic():
+
+        payment = (
+            TradeGasPayment.objects
+            .select_for_update()
+            .select_related(
+                "user",
+                "trade",
+                "trade__deposit",
+            )
+            .filter(
+                id=payment_id,
+                status="pending",
+            )
+            .first()
+        )
+
+        if not payment:
+            messages.error(
+                request,
+                "Gas payment was not found.",
+            )
+            return redirect(
+                "trade_gas_payments"
+            )
+
+        trade = payment.trade
+
+        if trade.result != "win":
+            messages.error(
+                request,
+                "Only winning trades can receive payouts.",
+            )
+            return redirect(
+                "trade_gas_payments"
+            )
+
+        if trade.payout_released:
+            messages.warning(
+                request,
+                "This trade payout has already been released.",
+            )
+            return redirect(
+                "trade_detail",
+                trade_id=trade.id,
+            )
+
+        if not trade.payout_amount:
+            messages.error(
+                request,
+                "This trade does not have a valid payout amount.",
+            )
+            return redirect(
+                "trade_gas_payments"
+            )
+
+        deposit = trade.deposit
+
+        if not deposit:
+            messages.error(
+                request,
+                "The trade deposit could not be found.",
+            )
+            return redirect(
+                "trade_gas_payments"
+            )
+
+        payment_currency = deposit.payment_method
+
+        asset_price = (
+            AssetPrice.objects
+            .select_for_update()
+            .filter(
+                currency=payment_currency,
+            )
+            .first()
+        )
+
+        if (
+            not asset_price
+            or asset_price.usd_price <= 0
+        ):
+            messages.error(
+                request,
+                (
+                    f"No valid exchange rate is available "
+                    f"for {deposit.get_payment_method_display()}."
+                ),
+            )
+            return redirect(
+                "trade_gas_payments"
+            )
+
+        payout_asset_amount = (
+            trade.payout_amount
+            / asset_price.usd_price
+        ).quantize(
+            Decimal("0.000000000001")
+        )
+
+        wallet = (
+            Wallet.objects
+            .select_for_update()
+            .filter(
+                user=trade.user,
+                currency=payment_currency,
+            )
+            .first()
+        )
+
+        if not wallet:
+            wallet = Wallet.objects.create(
+                user=trade.user,
+                currency=payment_currency,
+                balance=Decimal("0"),
+                reserved_balance=Decimal("0"),
+            )
+
+        wallet.balance += payout_asset_amount
+
+        wallet.save(
+            update_fields=[
+                "balance",
+                "updated_at",
+            ]
+        )
+
+        investor, _ = (
+            Investor.objects
+            .get_or_create(
+                user=trade.user,
+                defaults={
+                    "name": trade.user.username,
+                },
+            )
+        )
+
+        Transaction.objects.create(
+            investor=investor,
+            wallet=wallet,
+            transaction_type="profit",
+            direction="credit",
+            asset_amount=payout_asset_amount,
+            usd_value=trade.payout_amount,
+            exchange_rate=asset_price.usd_price,
+            reference=f"TRADE-PAYOUT-{trade.id}",
+            description=(
+                f"Live Trading payout for "
+                f"Trade #{trade.id}"
+            ),
+        )
+
+        payment.status = "approved"
+        payment.approved_at = timezone.now()
+
+        payment.save(
+            update_fields=[
+                "status",
+                "approved_at",
+            ]
+        )
+
+        trade.gas_payment_status = "paid"
+        trade.payout_released = True
+
+        trade.save(
+            update_fields=[
+                "gas_payment_status",
+                "payout_released",
+            ]
+        )
+
+    messages.success(
+        request,
+        "Gas payment approved and trade payout released successfully.",
+    )
+
+    return redirect(
+        "trade_detail",
+        trade_id=trade.id,
     )

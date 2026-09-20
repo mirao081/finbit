@@ -1,0 +1,200 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'accounts/css/trading_page.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="trading-page">
+
+    <div class="trading-container">
+
+        <div class="trading-header">
+
+            <span class="trading-badge">
+                Live Trading
+            </span>
+
+            <h1>
+                Start Live Trading
+            </h1>
+
+            <p>
+                Select an investment plan, choose your payment method,
+                and submit your trading deposit.
+            </p>
+
+        </div>
+
+
+        {% if error %}
+
+            <div class="trading-error">
+                {{ error }}
+            </div>
+
+        {% endif %}
+
+
+        <div class="trading-plans">
+
+            {% for plan in plans %}
+
+                <div class="trading-plan-card">
+
+                    <div class="plan-header">
+
+                        <h2>
+                            {{ plan.name }}
+                        </h2>
+
+                        <span class="plan-return">
+                            {{ plan.return_rate }}
+                        </span>
+
+                    </div>
+
+
+                    <div class="plan-details">
+
+                        <div>
+                            <span>Duration</span>
+                            <strong>
+                                {{ plan.duration }}
+                            </strong>
+                        </div>
+
+                        <div>
+                            <span>Minimum</span>
+                            <strong>
+                                ${{ plan.minimum_investment }}
+                            </strong>
+                        </div>
+
+                        {% if plan.maximum_investment %}
+
+                            <div>
+                                <span>Maximum</span>
+                                <strong>
+                                    ${{ plan.maximum_investment }}
+                                </strong>
+                            </div>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <form
+                        method="post"
+                        class="trading-form"
+                    >
+
+                        {% csrf_token %}
+
+                        <input
+                            type="hidden"
+                            name="plan_id"
+                            value="{{ plan.id }}"
+                        >
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Investment Amount
+                            </label>
+
+                            <input
+                                type="number"
+                                name="amount"
+                                min="{{ plan.minimum_investment }}"
+                                {% if plan.maximum_investment %}
+                                max="{{ plan.maximum_investment }}"
+                                {% endif %}
+                                step="0.01"
+                                placeholder="Enter amount"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label>
+                                Payment Method
+                            </label>
+
+                            <select
+                                name="payment_method"
+                                required
+                            >
+
+                                <option value="">
+                                    Select payment method
+                                </option>
+
+                                {% for value, label in payment_methods %}
+
+                                    <option value="{{ value }}">
+                                        {{ label }}
+                                    </option>
+
+                                {% endfor %}
+
+                            </select>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="trade-submit-btn"
+                        >
+                            Continue to Deposit
+                        </button>
+
+                    </form>
+
+                </div>
+
+            {% empty %}
+
+                <div class="trading-empty">
+
+                    <h2>
+                        No Trading Plans Available
+                    </h2>
+
+                    <p>
+                        There are currently no active trading plans.
+                    </p>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <div class="trading-history-link">
+
+            <a href="{% url 'trade_history' %}">
+                View My Trade History
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

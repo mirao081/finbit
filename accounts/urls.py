@@ -273,4 +273,32 @@ urlpatterns = [
         views.mark_all_notifications_read,
         name="mark_all_notifications_read",
     ),
+        path(
+        "trade/",
+        views.trading_page,
+        name="trade",
+    ),
+
+    path(
+        "deposit/<int:deposit_id>/confirm/",
+        views.confirm_deposit,
+        name="confirm_deposit",
+    ),
+
+    path(
+        "trade/result/<int:trade_id>/",
+        views.trade_result,
+        name="trade_result",
+    ),
+
+    path(
+        "trade/history/",
+        views.trade_history,
+        name="trade_history",
+    ),
+    path(
+        "live-trade/withdraw/<int:trade_id>/",
+        views.live_trade_withdrawal,
+        name="live_trade_withdrawal",
+    ),
 ]

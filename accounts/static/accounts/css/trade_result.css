@@ -1,0 +1,376 @@
+/* =========================================================
+   TRADE RESULT
+   Premium Finbit Dashboard Styling
+   ========================================================= */
+
+.trade-result-section {
+    width: 100%;
+    min-height: calc(100vh - 72px);
+    padding: 40px 20px;
+    background: #0b1120;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.trade-result-card {
+    width: 100%;
+    max-width: 680px;
+    margin: 20px auto;
+    padding: 42px 38px;
+    background: #0d1424;
+    border: 1px solid rgba(199, 165, 112, 0.35);
+    border-radius: 18px;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+    text-align: center;
+    box-sizing: border-box;
+}
+
+/* Header */
+
+.trade-result-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(199, 165, 112, 0.35);
+    border-radius: 999px;
+    background: rgba(199, 165, 112, 0.08);
+    color: #c7a570;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.trade-result-card h1 {
+    margin: 0 0 12px;
+    color: #ffffff;
+    font-size: 30px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.trade-result-intro {
+    max-width: 540px;
+    margin: 0 auto 30px;
+    color: #aeb8c8;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* Result indicator */
+
+.trade-result-status {
+    width: 100%;
+    margin: 0 auto 28px;
+    padding: 24px 20px;
+    border-radius: 14px;
+    box-sizing: border-box;
+}
+
+.trade-result-status.win {
+    background: rgba(42, 180, 108, 0.08);
+    border: 1px solid rgba(42, 180, 108, 0.3);
+}
+
+.trade-result-status.lose {
+    background: rgba(220, 80, 80, 0.08);
+    border: 1px solid rgba(220, 80, 80, 0.3);
+}
+
+.trade-result-status i {
+    display: block;
+    margin-bottom: 12px;
+    font-size: 38px;
+}
+
+.trade-result-status.win i {
+    color: #48c78e;
+}
+
+.trade-result-status.lose i {
+    color: #e46d6d;
+}
+
+.trade-result-status h2 {
+    margin: 0 0 6px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.trade-result-status.win h2 {
+    color: #48c78e;
+}
+
+.trade-result-status.lose h2 {
+    color: #e46d6d;
+}
+
+.trade-result-status p {
+    margin: 0;
+    color: #aeb8c8;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* Details */
+
+.trade-result-details {
+    width: 100%;
+    margin: 0 auto 28px;
+    padding: 5px 20px;
+    background: #0a101d;
+    border: 1px solid rgba(199, 165, 112, 0.18);
+    border-radius: 14px;
+    box-sizing: border-box;
+    text-align: left;
+}
+
+.trade-result-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.trade-result-row:last-child {
+    border-bottom: none;
+}
+
+.trade-result-row span {
+    color: #8995a8;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.trade-result-row strong {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+}
+
+.trade-result-row .win {
+    color: #48c78e;
+}
+
+.trade-result-row .lose {
+    color: #e46d6d;
+}
+
+.trade-result-gas {
+    color: #c7a570 !important;
+}
+
+/* Actions */
+
+.trade-result-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.trade-result-actions a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 700;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease,
+        box-shadow 0.25s ease;
+    box-sizing: border-box;
+}
+
+.trade-history-btn {
+    background: #c7a570;
+    border: 1px solid #c7a570;
+    color: #0b1120;
+}
+
+.trade-history-btn:hover {
+    background: #d8ba83;
+    border-color: #d8ba83;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px rgba(199, 165, 112, 0.2);
+}
+
+.trade-back-btn {
+    background: transparent;
+    border: 1px solid rgba(199, 165, 112, 0.65);
+    color: #c7a570;
+}
+
+.trade-back-btn:hover {
+    background: rgba(199, 165, 112, 0.1);
+    border-color: #c7a570;
+    transform: translateY(-2px);
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .trade-result-section {
+        min-height: calc(100vh - 64px);
+        padding: 28px 16px;
+    }
+
+    .trade-result-card {
+        margin: 10px auto;
+        padding: 34px 24px;
+        border-radius: 16px;
+    }
+
+    .trade-result-card h1 {
+        font-size: 26px;
+    }
+
+    .trade-result-intro {
+        font-size: 14px;
+    }
+
+    .trade-result-status {
+        padding: 22px 18px;
+    }
+
+    .trade-result-details {
+        padding: 4px 16px;
+    }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+    .trade-result-section {
+        width: 100%;
+        padding: 20px 12px;
+    }
+
+    .trade-result-card {
+        width: 100%;
+        margin: 6px auto;
+        padding: 28px 16px;
+        border-radius: 14px;
+    }
+
+    .trade-result-badge {
+        padding: 7px 13px;
+        margin-bottom: 16px;
+        font-size: 10px;
+        letter-spacing: 0.9px;
+    }
+
+    .trade-result-card h1 {
+        font-size: 22px;
+    }
+
+    .trade-result-intro {
+        margin-bottom: 22px;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .trade-result-status {
+        margin-bottom: 22px;
+        padding: 20px 14px;
+    }
+
+    .trade-result-status i {
+        font-size: 32px;
+    }
+
+    .trade-result-status h2 {
+        font-size: 21px;
+    }
+
+    .trade-result-status p {
+        font-size: 12px;
+    }
+
+    .trade-result-details {
+        margin-bottom: 22px;
+        padding: 3px 14px;
+        border-radius: 12px;
+    }
+
+    .trade-result-row {
+        gap: 12px;
+        padding: 13px 0;
+    }
+
+    .trade-result-row span {
+        font-size: 12px;
+    }
+
+    .trade-result-row strong {
+        max-width: 58%;
+        font-size: 12px;
+        word-break: break-word;
+    }
+
+    .trade-result-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .trade-result-actions a {
+        width: 100%;
+        min-height: 44px;
+        padding: 0 18px;
+        font-size: 13px;
+    }
+}
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 360px) {
+    .trade-result-section {
+        padding: 16px 8px;
+    }
+
+    .trade-result-card {
+        padding: 24px 12px;
+    }
+
+    .trade-result-card h1 {
+        font-size: 20px;
+    }
+
+    .trade-result-details {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .trade-result-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .trade-result-row strong {
+        max-width: 100%;
+        text-align: left;
+    }
+}

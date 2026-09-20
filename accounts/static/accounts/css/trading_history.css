@@ -1,0 +1,438 @@
+/* =========================================================
+   TRADING HISTORY
+   Premium Finbit Dashboard Styling
+   ========================================================= */
+
+.trading-history-page {
+    width: 100%;
+    min-height: calc(100vh - 72px);
+    padding: 40px 20px;
+    background: #0b1120;
+    box-sizing: border-box;
+}
+
+.trading-history-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.trading-history-header {
+    margin-bottom: 30px;
+}
+
+.trading-history-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(199, 165, 112, 0.35);
+    border-radius: 999px;
+    background: rgba(199, 165, 112, 0.08);
+    color: #c7a570;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.1px;
+    text-transform: uppercase;
+}
+
+.trading-history-header h1 {
+    margin: 0 0 10px;
+    color: #ffffff;
+    font-size: 30px;
+    line-height: 1.25;
+    font-weight: 700;
+}
+
+.trading-history-header p {
+    max-width: 700px;
+    margin: 0;
+    color: #9da8ba;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   TABLE CARD
+   ========================================================= */
+
+.trading-history-card {
+    width: 100%;
+    overflow: hidden;
+    background: #0d1424;
+    border: 1px solid rgba(199, 165, 112, 0.25);
+    border-radius: 16px;
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.02);
+}
+
+.trading-history-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.trading-history-table {
+    width: 100%;
+    min-width: 760px;
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.trading-history-table thead {
+    background: #09101d;
+}
+
+.trading-history-table th {
+    padding: 17px 18px;
+    border-bottom: 1px solid rgba(199, 165, 112, 0.2);
+    color: #c7a570;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.7px;
+    text-align: left;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.trading-history-table td {
+    padding: 17px 18px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+    color: #d8deea;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+.trading-history-table tbody tr {
+    transition: background 0.2s ease;
+}
+
+.trading-history-table tbody tr:hover {
+    background: rgba(199, 165, 112, 0.035);
+}
+
+.trading-history-table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* =========================================================
+   TABLE CONTENT
+   ========================================================= */
+
+.trade-date {
+    color: #aeb8c8;
+    white-space: nowrap;
+}
+
+.trade-plan {
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.trade-amount {
+    color: #ffffff;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.trade-gas {
+    color: #c7a570;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.trade-gas-muted {
+    color: #68758a;
+}
+
+/* =========================================================
+   RESULT BADGES
+   ========================================================= */
+
+.trade-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 68px;
+    padding: 6px 11px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.trade-status.win {
+    background: rgba(72, 199, 142, 0.1);
+    border: 1px solid rgba(72, 199, 142, 0.25);
+    color: #48c78e;
+}
+
+.trade-status.lose {
+    background: rgba(228, 109, 109, 0.1);
+    border: 1px solid rgba(228, 109, 109, 0.25);
+    color: #e46d6d;
+}
+
+/* =========================================================
+   VIEW BUTTON
+   ========================================================= */
+
+.trade-view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid rgba(199, 165, 112, 0.55);
+    border-radius: 8px;
+    background: transparent;
+    color: #c7a570;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 700;
+    transition:
+        background 0.25s ease,
+        color 0.25s ease,
+        border-color 0.25s ease,
+        transform 0.25s ease;
+    white-space: nowrap;
+}
+
+.trade-view-btn:hover {
+    background: #c7a570;
+    border-color: #c7a570;
+    color: #0b1120;
+    transform: translateY(-1px);
+}
+
+.trade-view-btn i {
+    margin-right: 6px;
+}
+
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
+
+.trading-history-empty {
+    padding: 70px 25px;
+    text-align: center;
+}
+
+.trading-history-empty i {
+    display: block;
+    margin-bottom: 18px;
+    color: #c7a570;
+    font-size: 38px;
+    opacity: 0.8;
+}
+
+.trading-history-empty h3 {
+    margin: 0 0 8px;
+    color: #ffffff;
+    font-size: 19px;
+}
+
+.trading-history-empty p {
+    max-width: 500px;
+    margin: 0 auto;
+    color: #8995a8;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 768px) {
+    .trading-history-page {
+        min-height: calc(100vh - 64px);
+        padding: 28px 16px;
+    }
+
+    .trading-history-header {
+        margin-bottom: 24px;
+    }
+
+    .trading-history-header h1 {
+        font-size: 26px;
+    }
+
+    .trading-history-card {
+        border-radius: 14px;
+    }
+
+    .trading-history-table {
+        min-width: 700px;
+    }
+
+    .trading-history-table th,
+    .trading-history-table td {
+        padding: 14px;
+    }
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+    .trading-history-page {
+        width: 100%;
+        padding: 22px 12px;
+        box-sizing: border-box;
+    }
+
+    .trading-history-header {
+        margin-bottom: 20px;
+    }
+
+    .trading-history-badge {
+        padding: 7px 12px;
+        margin-bottom: 13px;
+        font-size: 10px;
+    }
+
+    .trading-history-header h1 {
+        font-size: 23px;
+    }
+
+    .trading-history-header p {
+        font-size: 13px;
+    }
+
+    /*
+       On small screens the table becomes stacked cards.
+       This prevents horizontal overflow.
+    */
+
+    .trading-history-table-wrapper {
+        overflow: visible;
+    }
+
+    .trading-history-table {
+        width: 100%;
+        min-width: 0;
+        border-collapse: separate;
+        border-spacing: 0 12px;
+    }
+
+    .trading-history-table thead {
+        display: none;
+    }
+
+    .trading-history-table tbody {
+        display: block;
+        width: 100%;
+    }
+
+    .trading-history-table tbody tr {
+        display: block;
+        width: 100%;
+        padding: 8px 16px;
+        margin-bottom: 12px;
+        background: #0a101d;
+        border: 1px solid rgba(199, 165, 112, 0.18);
+        border-radius: 12px;
+        box-sizing: border-box;
+    }
+
+    .trading-history-table tbody tr:hover {
+        background: #0a101d;
+    }
+
+    .trading-history-table td {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        width: 100%;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.055);
+        box-sizing: border-box;
+        text-align: right;
+    }
+
+    .trading-history-table td:last-child {
+        border-bottom: none;
+    }
+
+    .trading-history-table td::before {
+        content: attr(data-label);
+        flex: 0 0 auto;
+        color: #7f8b9e;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: left;
+    }
+
+    .trading-history-table td > * {
+        max-width: 65%;
+    }
+
+    .trade-plan {
+        font-size: 13px;
+    }
+
+    .trade-date,
+    .trade-amount,
+    .trade-gas {
+        font-size: 12px;
+    }
+
+    .trade-view-btn {
+        min-height: 34px;
+        padding: 0 12px;
+    }
+
+    .trading-history-empty {
+        padding: 50px 18px;
+    }
+}
+
+/* =========================================================
+   VERY SMALL SCREENS
+   ========================================================= */
+
+@media (max-width: 360px) {
+    .trading-history-page {
+        padding: 18px 8px;
+    }
+
+    .trading-history-header h1 {
+        font-size: 21px;
+    }
+
+    .trading-history-table tbody tr {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .trading-history-table td {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+        text-align: left;
+    }
+
+    .trading-history-table td::before {
+        font-size: 10px;
+    }
+
+    .trading-history-table td > * {
+        max-width: 100%;
+        text-align: left;
+    }
+
+    .trade-view-btn {
+        width: 100%;
+    }
+}

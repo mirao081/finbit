@@ -1,0 +1,272 @@
+{% extends "control/admin_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'control/css/withdrawals.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<div class="withdrawals-page">
+
+    <h2>
+        Live Trading Withdrawals
+    </h2>
+
+    <p class="withdrawals-subtitle">
+        Review and approve withdrawals created from released Live Trading payouts.
+    </p>
+
+    <div class="withdrawals-table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>S/N</th>
+                    <th>User</th>
+                    <th>Trade</th>
+                    <th>Plan</th>
+                    <th>Asset</th>
+                    <th>Amount</th>
+                    <th>Destination Wallet</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for wd in withdrawals_page %}
+
+                <tr>
+
+                    <td>
+                        {{ forloop.counter }}
+                    </td>
+
+                    <td>
+                        {{ wd.user.username }}
+                    </td>
+
+                    <td>
+                        #{{ wd.trade.id }}
+                    </td>
+
+                    <td>
+                        {{ wd.trade.plan_display_name }}
+                    </td>
+
+                    <td>
+
+                        {% if wd.wallet %}
+                            {{ wd.wallet.currency }}
+                        {% else %}
+                            —
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        {% if wd.asset_amount %}
+
+                            <span class="withdrawal-asset-amount">
+                                {{ wd.asset_amount|floatformat:12 }}
+                            </span>
+
+                            {% if wd.wallet %}
+
+                                <small>
+                                    {{ wd.wallet.currency }}
+                                </small>
+
+                            {% endif %}
+
+                            <div class="withdrawal-usd-value">
+                                ${{ wd.amount_usd|floatformat:2 }}
+                            </div>
+
+                        {% else %}
+
+                            <span class="withdrawal-usd-value">
+                                ${{ wd.amount_usd|floatformat:2 }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+
+                        <span class="wallet-address">
+                            {{ wd.destination_wallet }}
+                        </span>
+
+                    </td>
+
+                    <td>
+
+                        {% if wd.status == "pending" %}
+
+                            <span class="badge badge-warning">
+                                Pending
+                            </span>
+
+                        {% elif wd.status == "approved" %}
+
+                            <span class="badge badge-success">
+                                Approved
+                            </span>
+
+                        {% elif wd.status == "rejected" %}
+
+                            <span class="badge badge-danger">
+                                Rejected
+                            </span>
+
+                        {% else %}
+
+                            <span class="badge badge-secondary">
+                                {{ wd.status|title }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                    <td>
+                        {{ wd.created_at|date:"M d, Y H:i" }}
+                    </td>
+
+                    <td>
+
+                        {% if wd.status == "pending" %}
+
+                            <div class="withdrawal-actions">
+
+                                <form
+                                    method="post"
+                                    action="{% url 'approve_live_trade_withdrawal' wd.id %}"
+                                    class="withdrawal-action-form"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-success btn-sm"
+                                    >
+                                        Approve
+                                    </button>
+
+                                </form>
+
+                                <form
+                                    method="post"
+                                    action="{% url 'reject_live_trade_withdrawal' wd.id %}"
+                                    class="withdrawal-action-form"
+                                >
+
+                                    {% csrf_token %}
+
+                                    <button
+                                        type="submit"
+                                        class="btn btn-danger btn-sm"
+                                    >
+                                        Reject
+                                    </button>
+
+                                </form>
+
+                            </div>
+
+                        {% else %}
+
+                            <span class="badge badge-secondary">
+                                {{ wd.status|title }}
+                            </span>
+
+                        {% endif %}
+
+                    </td>
+
+                </tr>
+
+                {% empty %}
+
+                <tr>
+
+                    <td
+                        colspan="10"
+                        class="empty-withdrawals"
+                    >
+
+                        <i class="fas fa-money-bill-wave"></i>
+
+                        <span>
+                            No Live Trading withdrawals found.
+                        </span>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% if withdrawals_page.paginator.num_pages > 1 %}
+
+        <div class="pagination">
+
+            {% if withdrawals_page.has_previous %}
+
+                <a
+                    href="?page={{ withdrawals_page.previous_page_number }}"
+                >
+                    Previous
+                </a>
+
+            {% endif %}
+
+            <span>
+
+                Page {{ withdrawals_page.number }}
+                of
+                {{ withdrawals_page.paginator.num_pages }}
+
+            </span>
+
+            {% if withdrawals_page.has_next %}
+
+                <a
+                    href="?page={{ withdrawals_page.next_page_number }}"
+                >
+                    Next
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

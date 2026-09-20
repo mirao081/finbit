@@ -1,0 +1,174 @@
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'control/css/approve_deposits.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="approve-deposits-page">
+
+    <div class="approve-deposits-container">
+
+        <div class="approve-deposits-header">
+
+            <span class="approve-badge">
+                Live Trading
+            </span>
+
+            <h1>
+                Pending Trading Deposits
+            </h1>
+
+            <p>
+                Review payment proofs and approve pending live trades.
+            </p>
+
+        </div>
+
+
+        <div class="deposits-table-wrapper">
+
+            <table class="deposits-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            User
+                        </th>
+
+                        <th>
+                            Plan
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Payment Method
+                        </th>
+
+                        <th>
+                            Proof
+                        </th>
+
+                        <th>
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for deposit in pending_deposits %}
+
+                        <tr>
+
+                            <td data-label="User">
+
+                                <strong>
+                                    {{ deposit.user.username }}
+                                </strong>
+
+                                <small>
+                                    {{ deposit.user.email }}
+                                </small>
+
+                            </td>
+
+
+                            <td data-label="Plan">
+
+                                {{ deposit.plan.name }}
+
+                            </td>
+
+
+                            <td data-label="Amount">
+
+                                ${{ deposit.amount_usd }}
+
+                            </td>
+
+
+                            <td data-label="Payment Method">
+
+                                {{ deposit.get_payment_method_display }}
+
+                            </td>
+
+
+                            <td data-label="Proof">
+
+                                {% if deposit.proof %}
+
+                                    <a
+                                        href="{{ deposit.proof.url }}"
+                                        target="_blank"
+                                        rel="noopener"
+                                        class="proof-link"
+                                    >
+                                        View Proof
+                                    </a>
+
+                                {% else %}
+
+                                    <span class="no-proof">
+                                        No Proof
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td data-label="Action">
+
+                                <a
+                                    href="{% url 'approve_deposit' deposit.id %}"
+                                    class="approve-btn"
+                                >
+                                    Approve & Execute Trade
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr class="empty-row">
+
+                            <td colspan="6">
+
+                                No pending live trading deposits.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}

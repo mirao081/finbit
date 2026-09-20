@@ -7,6 +7,7 @@ import base64
 import csv
 import json
 import secrets
+import random
 from datetime import timedelta
 from django.core.mail import send_mail
 from django.utils import timezone
@@ -67,6 +68,7 @@ from .models import (
     AnnouncementReply,
     AssetPrice,
     Notification,
+    Trade,
 )
 
 from .forms import (
@@ -2859,6 +2861,170 @@ def withdrawal_confirmation_success(request, withdrawal_id):
             ),
             "menus": DashboardMenu.objects.all(),
             "withdrawal": withdrawal,
+        },
+    )
+
+@login_required
+def live_trade_withdrawal(request, trade_id):
+
+    trade = get_object_or_404(
+        Trade.objects.select_related(
+            "deposit",
+            "plan",
+        ),
+        id=trade_id,
+        user=request.user,
+    )
+
+    if trade.result != "win":
+        messages.error(
+            request,
+            "Only winning Live Trading trades can be withdrawn.",
+        )
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    if not trade.payout_released:
+        messages.error(
+            request,
+            "This trade payout has not been released yet.",
+        )
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    if hasattr(trade, "withdrawal"):
+        messages.warning(
+            request,
+            "This Live Trading payout has already been submitted for withdrawal.",
+        )
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    payout_transaction = (
+        Transaction.objects
+        .filter(
+            investor__user=request.user,
+            transaction_type="profit",
+            direction="credit",
+            reference=f"TRADE-PAYOUT-{trade.id}",
+        )
+        .select_related("wallet")
+        .first()
+    )
+
+    if not payout_transaction:
+        messages.error(
+            request,
+            "The released Live Trading payout could not be found.",
+        )
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    if not payout_transaction.wallet:
+        messages.error(
+            request,
+            "The payout wallet could not be found.",
+        )
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    wallet = payout_transaction.wallet
+
+    available_balance = wallet.available_balance
+
+    if (
+        not payout_transaction.asset_amount
+        or payout_transaction.asset_amount <= 0
+    ):
+        messages.error(
+            request,
+            "The Live Trading payout amount is invalid.",
+        )
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    if payout_transaction.asset_amount > available_balance:
+        messages.error(
+            request,
+            "The Live Trading payout is no longer available in the wallet.",
+        )
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    if request.method == "POST":
+
+        destination_wallet = request.POST.get(
+            "destination_wallet",
+            "",
+        ).strip()
+
+        if not destination_wallet:
+            messages.error(
+                request,
+                "Enter the destination wallet address.",
+            )
+            return render(
+                request,
+                "accounts/live_trade_withdrawal.html",
+                {
+                    "trade": trade,
+                    "transaction": payout_transaction,
+                    "wallet": wallet,
+                },
+            )
+
+        withdrawal = Withdrawal.objects.create(
+            user=request.user,
+            wallet=wallet,
+            trade=trade,
+            amount_usd=payout_transaction.usd_value,
+            asset_amount=payout_transaction.asset_amount,
+            exchange_rate=payout_transaction.exchange_rate,
+            destination_wallet=destination_wallet,
+            status="pending",
+            source="live_trade",
+        )
+
+        wallet.reserved_balance += payout_transaction.asset_amount
+
+        wallet.save(
+            update_fields=[
+                "reserved_balance",
+                "updated_at",
+            ],
+        )
+
+        messages.success(
+            request,
+            "Your Live Trading withdrawal request has been submitted for admin approval.",
+        )
+
+        return redirect(
+            "withdrawal_confirmation_success",
+            withdrawal_id=withdrawal.id,
+        )
+
+    return render(
+        request,
+        "accounts/live_trade_withdrawal.html",
+        {
+            "trade": trade,
+            "transaction": payout_transaction,
+            "wallet": wallet,
         },
     )
 
@@ -5978,3 +6144,371 @@ def download_account_data(request):
     )
 
     return response
+
+
+def calculate_gas_fee(plan_name, amount):
+
+    if plan_name == "Finbit Starter":
+        return 50
+
+    elif plan_name == "Infinity":
+        return 100
+
+    elif plan_name == "Finbit Titan":
+        return 300
+
+    elif plan_name == "Finbit Nova":
+        return 400
+
+    elif plan_name == "Elephant Wealth Plan":
+        return 900
+
+    elif plan_name == "Cobra Premium Plan":
+        return 4500
+
+    elif plan_name == "Lion Legacy Plan":
+        return 450
+
+    elif plan_name == "Tiger Legacy Plan":
+        return 450
+
+    return 0
+
+
+def execute_trade(deposit):
+    existing_trade = Trade.objects.filter(
+        deposit=deposit
+    ).first()
+
+    if existing_trade:
+        return existing_trade
+
+    result = (
+        "win"
+        if random.randint(1, 100) == 1
+        else "lose"
+    )
+
+    gas_fee = None
+    profit_amount = None
+    payout_amount = None
+    gas_payment_status = "not_required"
+
+    if result == "win":
+        plan_name = deposit.plan.name
+        return_rate = str(
+            deposit.plan.return_rate
+        ).strip()
+
+        amount = Decimal(
+            str(deposit.amount_usd)
+        )
+
+        normalized_rate = (
+            return_rate
+            .replace("Return", "")
+            .replace("return", "")
+            .strip()
+        )
+
+        if normalized_rate.endswith("%"):
+            percentage = Decimal(
+                normalized_rate.rstrip("%").strip()
+            )
+
+            profit_amount = (
+                amount * percentage / Decimal("100")
+            )
+
+        elif normalized_rate.upper().endswith("USD"):
+            fixed_profit = (
+                normalized_rate[:-3].strip()
+            )
+
+            profit_amount = Decimal(
+                fixed_profit
+            )
+
+        else:
+            profit_amount = Decimal("0")
+
+        payout_amount = (
+            amount + profit_amount
+        )
+
+        gas_fee = Decimal(
+            str(
+                calculate_gas_fee(
+                    plan_name,
+                    float(amount),
+                )
+            )
+        )
+
+        gas_payment_status = "pending"
+
+    trade = Trade.objects.create(
+        deposit=deposit,
+        user=deposit.user,
+        plan=deposit.plan,
+        result=result,
+        gas_fee=gas_fee,
+        profit_amount=profit_amount,
+        payout_amount=payout_amount,
+        gas_payment_status=gas_payment_status,
+    )
+
+    return trade
+
+@login_required
+def trading_page(request):
+
+    plans = InvestmentPlan.objects.all()
+
+    payment_methods = Deposit.PAYMENT_CHOICES
+
+    trades = (
+        Trade.objects
+        .filter(user=request.user)
+        .order_by("-created_at")
+    )
+
+    latest_trade = trades.first()
+
+    if request.method == "POST":
+
+        plan_id = request.POST.get("plan_id")
+
+        payment_method = request.POST.get(
+            "payment_method"
+        )
+
+        amount = Decimal(
+            request.POST.get("amount", "0")
+        )
+
+        plan = get_object_or_404(
+            InvestmentPlan,
+            id=plan_id,
+        )
+
+        if amount < plan.minimum_investment:
+
+            return render(
+                request,
+                "accounts/trading_page.html",
+                {
+                    "plans": plans,
+                    "payment_methods": payment_methods,
+                    "trades": trades,
+                    "latest_trade": latest_trade,
+                    "error": (
+                        "Amount is below the minimum investment."
+                    ),
+                },
+            )
+
+        if (
+            plan.maximum_investment
+            and amount > plan.maximum_investment
+        ):
+
+            return render(
+                request,
+                "accounts/trading_page.html",
+                {
+                    "plans": plans,
+                    "payment_methods": payment_methods,
+                    "trades": trades,
+                    "latest_trade": latest_trade,
+                    "error": (
+                        "Amount exceeds the maximum investment."
+                    ),
+                },
+            )
+
+        deposit = Deposit.objects.create(
+            user=request.user,
+            plan=plan,
+            payment_method=payment_method,
+            amount_usd=amount,
+            status="pending",
+            source="live_trade",
+        )
+
+        wallet = CompanyWallet.objects.filter(
+            currency=payment_method,
+        ).first()
+
+        return render(
+            request,
+            "accounts/deposit_page.html",
+            {
+                "deposit": deposit,
+                "wallet": wallet,
+            },
+        )
+
+    return render(
+        request,
+        "accounts/trading_page.html",
+        {
+            "plans": plans,
+            "payment_methods": payment_methods,
+            "trades": trades,
+            "latest_trade": latest_trade,
+        },
+    )
+
+
+@login_required
+def confirm_deposit(
+    request,
+    deposit_id,
+):
+
+    deposit = get_object_or_404(
+        Deposit,
+        id=deposit_id,
+        user=request.user,
+    )
+
+    if request.method == "POST":
+
+        deposit.proof = request.FILES.get(
+            "proof"
+        )
+
+        deposit.status = "pending"
+
+        deposit.save()
+
+        return render(
+            request,
+            "accounts/waiting_for_admin.html",
+            {
+                "deposit": deposit,
+            },
+        )
+
+    return redirect("trade")
+
+
+@login_required
+def trade_result(request, trade_id):
+
+    trade = get_object_or_404(
+        Trade.objects.select_related(
+            "deposit",
+            "plan",
+        ),
+        id=trade_id,
+        user=request.user,
+    )
+
+    payment_methods = Deposit.PAYMENT_CHOICES
+
+    if (
+        request.method == "POST"
+        and trade.result == "win"
+        and trade.gas_payment_status == "pending"
+        and not hasattr(trade, "gas_payment")
+    ):
+
+        payment_method = request.POST.get(
+            "payment_method"
+        )
+
+        proof = request.FILES.get(
+            "proof"
+        )
+
+        if payment_method not in dict(
+            Deposit.PAYMENT_CHOICES
+        ):
+
+            messages.error(
+                request,
+                "Select a valid payment method.",
+            )
+
+            return redirect(
+                "trade_result",
+                trade_id=trade.id,
+            )
+
+        asset_price = (
+            AssetPrice.objects
+            .filter(
+                currency=payment_method,
+            )
+            .first()
+        )
+
+        if (
+            not asset_price
+            or asset_price.usd_price <= 0
+        ):
+
+            messages.error(
+                request,
+                "Exchange rate is unavailable.",
+            )
+
+            return redirect(
+                "trade_result",
+                trade_id=trade.id,
+            )
+
+        asset_amount = (
+            Decimal(str(trade.gas_fee))
+            / asset_price.usd_price
+        ).quantize(
+            Decimal("0.000000000001")
+        )
+
+        TradeGasPayment.objects.create(
+            trade=trade,
+            user=request.user,
+            payment_method=payment_method,
+            amount_usd=trade.gas_fee,
+            asset_amount=asset_amount,
+            exchange_rate=asset_price.usd_price,
+            proof=proof,
+        )
+
+        messages.success(
+            request,
+            "Gas payment submitted successfully. It is awaiting admin approval.",
+        )
+
+        return redirect(
+            "trade_result",
+            trade_id=trade.id,
+        )
+
+    return render(
+        request,
+        "accounts/trade_result.html",
+        {
+            "trade": trade,
+            "payment_methods": payment_methods,
+        },
+    )
+
+@login_required
+def trade_history(request):
+
+    trades = (
+        Trade.objects
+        .filter(user=request.user)
+        .order_by("-created_at")
+    )
+
+    return render(
+        request,
+        "accounts/trade_history.html",
+        {
+            "trades": trades,
+        },
+    )

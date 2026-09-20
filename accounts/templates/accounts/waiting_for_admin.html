@@ -1,0 +1,107 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'accounts/css/waiting_for_admin.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="waiting-section">
+
+    <div class="waiting-card">
+
+        <span class="waiting-badge">
+            Deposit Pending
+        </span>
+
+
+        <h1>
+            Deposit Submitted
+        </h1>
+
+
+        <p class="waiting-intro">
+
+            Your deposit for
+            <strong>{{ deposit.plan.name }}</strong>
+            has been submitted successfully.
+
+        </p>
+
+
+        <div class="waiting-info">
+
+            <div class="waiting-info-row">
+
+                <span>
+                    Amount
+                </span>
+
+                <strong>
+                    ${{ deposit.amount_usd }}
+                </strong>
+
+            </div>
+
+
+            <div class="waiting-info-row">
+
+                <span>
+                    Payment Method
+                </span>
+
+                <strong>
+                    {{ deposit.get_payment_method_display }}
+                </strong>
+
+            </div>
+
+
+            <div class="waiting-info-row">
+
+                <span>
+                    Status
+                </span>
+
+                <strong class="pending-status">
+                    Pending Review
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="waiting-message">
+
+            <h3>
+                Payment Under Review
+            </h3>
+
+            <p>
+                Please wait while our admin reviews your payment proof.
+                Once your deposit is approved, your live trade will be
+                executed automatically.
+            </p>
+
+        </div>
+
+
+        <a
+            href="{% url 'trade' %}"
+            class="btn-back"
+        >
+            Back to Trading
+        </a>
+
+    </div>
+
+</section>
+
+{% endblock %}

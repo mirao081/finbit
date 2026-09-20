@@ -1,0 +1,195 @@
+{% extends "accounts/dashboard_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+<link
+    rel="stylesheet"
+    href="{% static 'accounts/css/trading_history.css' %}"
+>
+
+{% endblock %}
+
+{% block content %}
+
+<section class="trade-history">
+
+    <div class="trade-history-card">
+
+        <div class="trade-history-header">
+
+            <span class="history-badge">
+                Trading Activity
+            </span>
+
+            <h1>
+                My Trade History
+            </h1>
+
+            <p>
+                Review your previous trading activity,
+                results, and gas fees.
+            </p>
+
+        </div>
+
+
+        <div class="trade-table-wrapper">
+
+            <table class="trade-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Plan
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Result
+                        </th>
+
+                        <th>
+                            Gas Fee
+                        </th>
+
+                        <th>
+                            View
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for trade in trades %}
+
+                        <tr>
+
+                            <td data-label="Date">
+
+                                {{ trade.created_at|date:"Y-m-d H:i" }}
+
+                            </td>
+
+
+                            <td data-label="Plan">
+
+                                {{ trade.plan_display_name }}
+
+                            </td>
+
+
+                            <td data-label="Amount">
+
+                                {% if trade.deposit %}
+
+                                    ${{ trade.deposit.amount_usd }}
+
+                                {% else %}
+
+                                    —
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td data-label="Result">
+
+                                <span
+                                    class="badge
+                                    {% if trade.result == 'win' %}
+                                        win
+                                    {% else %}
+                                        lose
+                                    {% endif %}"
+                                >
+
+                                    {{ trade.get_result_display }}
+
+                                </span>
+
+                            </td>
+
+
+                            <td data-label="Gas Fee">
+
+                                {% if trade.result == "win" and trade.gas_fee %}
+
+                                    <span class="fee-badge">
+                                        ${{ trade.gas_fee }}
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="fee-badge none">
+                                        —
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+
+                            <td data-label="View">
+
+                                <a
+                                    href="{% url 'trade_result' trade.id %}"
+                                    class="view-result"
+                                >
+                                    View Result
+                                </a>
+
+                            </td>
+
+                        </tr>
+
+                    {% empty %}
+
+                        <tr class="empty-row">
+
+                            <td colspan="6">
+
+                                No trades yet.
+
+                            </td>
+
+                        </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="trade-history-footer">
+
+            <a
+                href="{% url 'trade' %}"
+                class="back-to-trading"
+            >
+                Start a New Trade
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+{% endblock %}
