@@ -6,7 +6,14 @@ from decimal import Decimal
 
 from .models import ( UserProfile, Deposit, Withdrawal, Referral, )
 
-from .notifications import ( notify_account_verified, notify_deposit_approved, notify_withdrawal_approved, notify_new_referral, notify_referral_bonus, )
+from .notifications import (
+    notify_signup,
+    notify_account_verified,
+    notify_deposit_approved,
+    notify_withdrawal_approved,
+    notify_new_referral,
+    notify_referral_bonus,
+)
 
 @receiver(post_save, sender=User)
 def create_default_wallets(sender, instance, created, **kwargs):
@@ -25,6 +32,8 @@ def create_default_wallets(sender, instance, created, **kwargs):
             user=instance,
             currency=currency,
         )
+
+    notify_signup(instance)
 
 @receiver(pre_save, sender=UserProfile)
 def user_profile_before_save(sender, instance, **kwargs):

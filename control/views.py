@@ -751,6 +751,7 @@ def deposits_view(request):
 def deposit_detail_view(request, deposit_id):
 
     settings = AdminDashboardSettings.objects.first()
+
     menus = AdminMenu.objects.all()
 
     deposit = (
@@ -848,7 +849,6 @@ def deposit_detail_view(request, deposit_id):
             )
 
             if not form.is_valid():
-
                 return render(
                     request,
                     "control/deposit_detail.html",
@@ -952,12 +952,10 @@ def deposit_detail_view(request, deposit_id):
                 or not exchange_rate.is_finite()
                 or exchange_rate <= Decimal("0")
             ):
-
                 messages.error(
                     request,
                     "The asset exchange rate is invalid.",
                 )
-
                 return redirect("deposits")
 
             asset_amount = (
@@ -970,24 +968,27 @@ def deposit_detail_view(request, deposit_id):
                 not asset_amount.is_finite()
                 or asset_amount <= Decimal("0")
             ):
-
                 messages.error(
                     request,
                     "The calculated asset amount is invalid.",
                 )
                 return redirect("deposits")
+
             usd_value = (
                 asset_amount * exchange_rate
             ).quantize(
                 Decimal("0.01")
             )
+
             wallet.balance += asset_amount
+
             wallet.save(
                 update_fields=[
                     "balance",
                     "updated_at",
                 ],
             )
+
             investor, _ = (
                 Investor.objects
                 .get_or_create(
@@ -997,6 +998,7 @@ def deposit_detail_view(request, deposit_id):
                     },
                 )
             )
+
             Transaction.objects.create(
                 investor=investor,
                 wallet=wallet,
@@ -1061,19 +1063,13 @@ def deposit_detail_view(request, deposit_id):
                 ],
             )
 
-        notify_deposit_approved(
-            deposit
-        )
-
-        if (
-            referral
-            and referral_commission > Decimal("0")
-        ):
-
-            notify_referral_bonus(
-                referral,
-                referral_commission,
-            )
+        # Notifications are handled by accounts.signals.py.
+        #
+        # Deposit approval:
+        # Deposit post_save -> notify_deposit_approved()
+        #
+        # Referral bonus:
+        # Referral post_save -> notify_referral_bonus()
 
         if (
             referral
@@ -1199,17 +1195,12 @@ def user_verifications_view(request):
     )
 
 
+
 @admin_required
 @require_POST
 def approve_kyc(request, submission_id):
 
-    notification_needed = False
-
     with transaction.atomic():
-
-
-
-
 
         submission = (
             KYCSubmission.objects
@@ -1220,7 +1211,6 @@ def approve_kyc(request, submission_id):
         )
 
         if not submission:
-
             messages.error(
                 request,
                 "KYC submission was not found.",
@@ -1230,23 +1220,12 @@ def approve_kyc(request, submission_id):
                 "user_verifications"
             )
 
-
-
-
-
         profile, created = (
             UserProfile.objects
             .get_or_create(
                 user=submission.user,
             )
         )
-
-
-        was_verified = profile.kyc_verified
-
-
-
-
 
         submission.approved = True
 
@@ -1256,10 +1235,6 @@ def approve_kyc(request, submission_id):
             ]
         )
 
-
-
-
-
         profile.kyc_verified = True
 
         profile.save(
@@ -1268,27 +1243,11 @@ def approve_kyc(request, submission_id):
             ]
         )
 
-
-
-
-
-
-        if not was_verified:
-            notification_needed = True
-
-
-
-
-
-    if notification_needed:
-
-        notify_account_verified(
-            submission.user
-        )
-
-
-
-
+    # Verification notification is handled automatically
+    # by the UserProfile post_save signal.
+    #
+    # When kyc_verified changes from False to True:
+    # notify_account_verified() is called once by accounts.signals.py.
 
     messages.success(
         request,
@@ -1298,6 +1257,7 @@ def approve_kyc(request, submission_id):
     return redirect(
         "user_verifications"
     )
+
 
 @admin_required
 @require_POST

@@ -327,3 +327,17 @@ def notify_manual_referral_bonus(
         ),
         notification_type="bonus",
     )
+
+def notify_profit_paid(profit):
+    amount = profit.amount or Decimal("0.00")
+    plan_name = profit.plan.name
+
+    return create_notification(
+        user=profit.user,
+        title="Investment Profit Credited",
+        message=(
+            f"A profit of ${amount:,.2f} has been credited "
+            f"to your {plan_name} investment."
+        ),
+        notification_type="investment",
+    )

@@ -341,11 +341,8 @@ class UserLoginView(LoginView):
     
 
 
-def signup(request):
 
-                                                               
-                                      
-                                                               
+def signup(request):
 
     referrer_username = (
         request.GET.get("ref")
@@ -373,14 +370,9 @@ def signup(request):
                 )
 
         if referrer:
-                                                
             request.session["referrer_username"] = (
                 referrer.username
             )
-
-                                                               
-            
-                                                               
 
     if request.method == "POST":
 
@@ -441,21 +433,10 @@ def signup(request):
 
                 elif form.is_valid():
 
-                                                                       
-                                 
-                                                                       
-
                     user = form.save()
 
-                                                                       
-                                         
-                                                                       
-
-                    notify_signup(user)
-
-                                                                       
-                                     
-                                                                       
+                    # Signup notification is handled automatically
+                    # by the User post_save signal.
 
                     if (
                         referrer
@@ -477,22 +458,13 @@ def signup(request):
                                 referrer=referrer
                             )
 
-                            notify_new_referral(
-                                referral
-                            )
-
-                                                                       
-                                                  
-                                                                       
+                            # New-referral notification is handled
+                            # automatically by the Referral post_save signal.
 
                     request.session.pop(
                         "referrer_username",
                         None,
                     )
-
-                                                                       
-                                
-                                                                       
 
                     login(
                         request,
@@ -504,10 +476,6 @@ def signup(request):
     else:
 
         form = SignupForm()
-
-                                                               
-                        
-                                                               
 
     return render(
         request,

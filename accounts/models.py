@@ -642,15 +642,63 @@ class Profit(models.Model):
         ("rejected", "Rejected"),
     ]
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="profits")
-    plan = models.ForeignKey(InvestmentPlan, on_delete=models.CASCADE, related_name="profits")
-    amount = models.DecimalField(max_digits=18, decimal_places=2)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-    created_at = models.DateTimeField(auto_now_add=True)
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="profits",
+    )
+
+    investment = models.ForeignKey(
+        "Investment",
+        on_delete=models.CASCADE,
+        related_name="profits",
+        null=True,
+        blank=True,
+    )
+
+    plan = models.ForeignKey(
+        InvestmentPlan,
+        on_delete=models.CASCADE,
+        related_name="profits",
+    )
+
+    amount = models.DecimalField(
+        max_digits=18,
+        decimal_places=2,
+    )
+
+    payout_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    status = models.CharField(
+        max_length=20,
+        choices=STATUS_CHOICES,
+        default="approved",
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["investment", "payout_at"],
+                name="unique_investment_payout",
+            ),
+        ]
+        ordering = ["-payout_at"]
 
     def __str__(self):
-        return f"{self.user.username} - {self.plan.name} - ${self.amount} ({self.status})"
-
+        return (
+            f"{self.user.username} - "
+            f"{self.plan.name} - "
+            f"${self.amount} "
+            f"({self.status})"
+        )
+    
 class Bonus(models.Model):
     BONUS_TYPE_CHOICES = [
         ("welcome", "Welcome Bonus"),
