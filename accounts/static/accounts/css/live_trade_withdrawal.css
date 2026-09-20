@@ -1,0 +1,711 @@
+/* =========================================================
+   LIVE TRADING — WITHDRAWAL
+   Premium dark / blue / gold design
+   ========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+.live-trade-withdrawal-page {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+
+    padding: 42px 24px 70px;
+
+    background:
+        radial-gradient(
+            circle at 12% 0%,
+            rgba(77, 163, 255, 0.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 15%,
+            rgba(212, 175, 90, 0.08),
+            transparent 30%
+        );
+
+    overflow-x: hidden;
+}
+
+.live-trade-withdrawal-container {
+    width: min(900px, 100%);
+    margin: 0 auto;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.live-trade-withdrawal-header {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+.live-trade-withdrawal-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 62px;
+
+    width: 62px;
+    height: 62px;
+
+    border: 1px solid rgba(212, 175, 90, 0.30);
+    border-radius: 17px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(212, 175, 90, 0.16),
+            rgba(77, 163, 255, 0.07)
+        );
+
+    color: #e5c878;
+
+    font-size: 1.45rem;
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.20);
+}
+
+.live-trade-withdrawal-badge {
+    display: inline-flex;
+
+    padding: 6px 12px;
+
+    border: 1px solid rgba(77, 163, 255, 0.25);
+    border-radius: 999px;
+
+    background: rgba(77, 163, 255, 0.07);
+
+    color: #9ec1ff;
+
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+}
+
+.live-trade-withdrawal-header h1 {
+    margin: 9px 0 5px;
+
+    color: #f4f7ff;
+
+    font-size: clamp(1.7rem, 4vw, 2.35rem);
+    line-height: 1.15;
+    font-weight: 850;
+    letter-spacing: -0.03em;
+}
+
+.live-trade-withdrawal-header p {
+    margin: 0;
+
+    color: #8294ad;
+
+    font-size: 0.88rem;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   MAIN CARD
+   ========================================================= */
+
+.live-trade-withdrawal-card {
+    position: relative;
+
+    width: 100%;
+
+    padding: 32px;
+
+    border: 1px solid rgba(103, 147, 227, 0.24);
+    border-radius: 23px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13, 25, 48, 0.98),
+            rgba(5, 12, 25, 0.98)
+        );
+
+    box-shadow:
+        0 25px 75px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+    overflow: hidden;
+}
+
+.live-trade-withdrawal-card::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #6793e3,
+            #d4af5a,
+            #6793e3,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   TRADE SUMMARY
+   ========================================================= */
+
+.trade-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-bottom: 22px;
+}
+
+.trade-summary-item {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    min-height: 78px;
+
+    padding: 15px 16px;
+
+    border: 1px solid rgba(103, 147, 227, 0.14);
+    border-radius: 13px;
+
+    background: rgba(3, 10, 22, 0.45);
+}
+
+.trade-summary-item span {
+    margin-bottom: 6px;
+
+    color: #71839d;
+
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+.trade-summary-item strong {
+    color: #e7eefb;
+
+    font-size: 0.88rem;
+
+    word-break: break-word;
+}
+
+.trade-summary-item:nth-child(3) strong {
+    color: #6ee7a5;
+}
+
+.trade-summary-item:nth-child(4) strong {
+    color: #9ec1ff;
+}
+
+.trade-summary-item:nth-child(5) strong {
+    color: #e5c878;
+}
+
+
+/* =========================================================
+   NOTICE
+   ========================================================= */
+
+.withdrawal-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+
+    margin-bottom: 25px;
+
+    padding: 16px 17px;
+
+    border: 1px solid rgba(212, 175, 90, 0.20);
+    border-radius: 13px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(212, 175, 90, 0.08),
+            rgba(212, 175, 90, 0.035)
+        );
+
+    color: #d9bd70;
+}
+
+.withdrawal-notice i {
+    flex-shrink: 0;
+
+    margin-top: 2px;
+
+    font-size: 0.95rem;
+}
+
+.withdrawal-notice p {
+    margin: 0;
+
+    color: #a99d7e;
+
+    font-size: 0.79rem;
+    line-height: 1.65;
+}
+
+
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.live-trade-withdrawal-form {
+    display: flex;
+    flex-direction: column;
+
+    padding: 21px;
+
+    border: 1px solid rgba(103, 147, 227, 0.15);
+    border-radius: 15px;
+
+    background: rgba(2, 9, 20, 0.48);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 9px;
+
+    color: #9eb0c9;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.form-group input {
+    width: 100%;
+    min-width: 0;
+
+    min-height: 49px;
+
+    padding: 0 14px;
+
+    border: 1px solid rgba(103, 147, 227, 0.20);
+    border-radius: 10px;
+
+    background: #081222;
+
+    color: #eef4ff;
+
+    font-family: inherit;
+    font-size: 0.84rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+.form-group input::placeholder {
+    color: #53657d;
+}
+
+.form-group input:focus {
+    border-color: rgba(77, 163, 255, 0.65);
+
+    background: #091527;
+
+    box-shadow:
+        0 0 0 3px rgba(77, 163, 255, 0.08);
+}
+
+
+/* =========================================================
+   WITHDRAWAL DETAILS
+   ========================================================= */
+
+.withdrawal-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-top: 16px;
+}
+
+.withdrawal-details > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    min-height: 52px;
+
+    padding: 0 14px;
+
+    border: 1px solid rgba(255, 255, 255, 0.055);
+    border-radius: 10px;
+
+    background: rgba(255, 255, 255, 0.018);
+}
+
+.withdrawal-details span {
+    color: #7789a2;
+
+    font-size: 0.74rem;
+}
+
+.withdrawal-details strong {
+    color: #e9effa;
+
+    font-size: 0.80rem;
+
+    text-align: right;
+
+    word-break: break-word;
+}
+
+.withdrawal-details > div:first-child strong {
+    color: #6ee7a5;
+}
+
+.withdrawal-details > div:last-child strong {
+    color: #e5c878;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+   ========================================================= */
+
+.live-trade-withdrawal-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    width: 100%;
+
+    min-height: 50px;
+
+    margin-top: 18px;
+
+    padding: 0 18px;
+
+    border: 1px solid rgba(212, 175, 90, 0.48);
+    border-radius: 10px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #9a7930,
+            #c7a44f,
+            #9a7930
+        );
+
+    color: #10151d;
+
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 900;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 10px 30px rgba(212, 175, 90, 0.12);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        filter 0.2s ease;
+}
+
+.live-trade-withdrawal-button:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.08);
+
+    box-shadow:
+        0 15px 35px rgba(212, 175, 90, 0.18);
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.live-trade-withdrawal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 11px;
+
+    margin-top: 20px;
+}
+
+.secondary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 45px;
+
+    padding: 0 14px;
+
+    border: 1px solid rgba(103, 147, 227, 0.22);
+    border-radius: 10px;
+
+    background: rgba(103, 147, 227, 0.06);
+
+    color: #9ec1ff;
+
+    text-decoration: none;
+
+    font-size: 0.76rem;
+    font-weight: 800;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.secondary-button:last-child {
+    color: #e5c878;
+
+    border-color: rgba(212, 175, 90, 0.22);
+
+    background: rgba(212, 175, 90, 0.055);
+}
+
+.secondary-button:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(103, 147, 227, 0.48);
+
+    background: rgba(103, 147, 227, 0.12);
+}
+
+.secondary-button:last-child:hover {
+    border-color: rgba(212, 175, 90, 0.48);
+
+    background: rgba(212, 175, 90, 0.11);
+}
+
+
+/* =========================================================
+   TABLET
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+    .live-trade-withdrawal-page {
+        padding: 28px 16px 55px;
+    }
+
+    .live-trade-withdrawal-card {
+        padding: 25px 20px;
+        border-radius: 19px;
+    }
+
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .live-trade-withdrawal-page {
+        padding: 20px 11px 45px;
+    }
+
+    .live-trade-withdrawal-header {
+        align-items: flex-start;
+        gap: 13px;
+
+        margin-bottom: 18px;
+    }
+
+    .live-trade-withdrawal-icon {
+        flex-basis: 49px;
+
+        width: 49px;
+        height: 49px;
+
+        border-radius: 13px;
+
+        font-size: 1.1rem;
+    }
+
+    .live-trade-withdrawal-badge {
+        padding: 5px 9px;
+        font-size: 0.61rem;
+    }
+
+    .live-trade-withdrawal-header h1 {
+        margin-top: 7px;
+        font-size: 1.45rem;
+    }
+
+    .live-trade-withdrawal-header p {
+        font-size: 0.76rem;
+    }
+
+    .live-trade-withdrawal-card {
+        width: 100%;
+        padding: 21px 13px;
+        border-radius: 16px;
+    }
+
+    .trade-summary {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .trade-summary-item {
+        min-height: 67px;
+        padding: 12px 13px;
+    }
+
+    .trade-summary-item span {
+        font-size: 0.62rem;
+    }
+
+    .trade-summary-item strong {
+        font-size: 0.80rem;
+    }
+
+    .withdrawal-notice {
+        padding: 13px;
+        gap: 9px;
+    }
+
+    .withdrawal-notice p {
+        font-size: 0.73rem;
+    }
+
+    .live-trade-withdrawal-form {
+        padding: 14px;
+    }
+
+    .form-group input {
+        min-height: 46px;
+        font-size: 0.79rem;
+    }
+
+    .withdrawal-details {
+        grid-template-columns: 1fr;
+    }
+
+    .withdrawal-details > div {
+        min-height: 49px;
+    }
+
+    .withdrawal-details span,
+    .withdrawal-details strong {
+        font-size: 0.71rem;
+    }
+
+    .live-trade-withdrawal-button {
+        min-height: 48px;
+        font-size: 0.77rem;
+    }
+
+    .live-trade-withdrawal-actions {
+        grid-template-columns: 1fr;
+    }
+
+    .secondary-button {
+        width: 100%;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 380px) {
+
+    .live-trade-withdrawal-page {
+        padding-left: 7px;
+        padding-right: 7px;
+    }
+
+    .live-trade-withdrawal-header {
+        gap: 9px;
+    }
+
+    .live-trade-withdrawal-icon {
+        flex-basis: 43px;
+
+        width: 43px;
+        height: 43px;
+
+        font-size: 0.95rem;
+    }
+
+    .live-trade-withdrawal-header h1 {
+        font-size: 1.28rem;
+    }
+
+    .live-trade-withdrawal-header p {
+        font-size: 0.71rem;
+    }
+
+    .live-trade-withdrawal-card {
+        padding: 19px 10px;
+    }
+
+}
+
+
+/* =========================================================
+   TOUCH
+   ========================================================= */
+
+@media (hover: none) {
+
+    .live-trade-withdrawal-button:hover,
+    .secondary-button:hover {
+        transform: none;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .form-group input,
+    .live-trade-withdrawal-button,
+    .secondary-button {
+        transition: none;
+    }
+
+}

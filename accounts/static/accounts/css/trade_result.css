@@ -1,376 +1,761 @@
 /* =========================================================
-   TRADE RESULT
-   Premium Finbit Dashboard Styling
+   LIVE TRADING — TRADE RESULT
+   Premium dark / blue / gold design
    ========================================================= */
 
-.trade-result-section {
-    width: 100%;
-    min-height: calc(100vh - 72px);
-    padding: 40px 20px;
-    background: #0b1120;
+* {
     box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
+}
+
+.trade-result {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+
+    padding: 42px 24px 70px;
+
+    background:
+        radial-gradient(
+            circle at 15% 0%,
+            rgba(77, 163, 255, 0.11),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at 90% 20%,
+            rgba(212, 175, 90, 0.08),
+            transparent 30%
+        );
+
+    overflow-x: hidden;
 }
 
 .trade-result-card {
-    width: 100%;
-    max-width: 680px;
-    margin: 20px auto;
-    padding: 42px 38px;
-    background: #0d1424;
-    border: 1px solid rgba(199, 165, 112, 0.35);
-    border-radius: 18px;
+    width: min(850px, 100%);
+
+    margin: 0 auto;
+
+    padding: 42px;
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13, 25, 48, 0.98),
+            rgba(5, 12, 25, 0.98)
+        );
+
+    border: 1px solid rgba(103, 147, 227, 0.25);
+    border-radius: 25px;
+
     box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.35),
-        inset 0 1px 0 rgba(255, 255, 255, 0.025);
+        0 25px 80px rgba(0, 0, 0, 0.42),
+        inset 0 1px 0 rgba(255, 255, 255, 0.035);
+
+    overflow: hidden;
+
     text-align: center;
-    box-sizing: border-box;
 }
 
-/* Header */
+.trade-result-card::before {
+    content: "";
 
-.trade-result-badge {
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #6793e3,
+            #d4af5a,
+            #6793e3,
+            transparent
+        );
+}
+
+
+/* =========================================================
+   RESULT BADGE
+   ========================================================= */
+
+.result-badge {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 8px 16px;
-    margin-bottom: 20px;
-    border: 1px solid rgba(199, 165, 112, 0.35);
+
+    padding: 9px 17px;
+
     border-radius: 999px;
-    background: rgba(199, 165, 112, 0.08);
-    color: #c7a570;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1.2px;
+
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
 }
 
-.trade-result-card h1 {
-    margin: 0 0 12px;
-    color: #ffffff;
-    font-size: 30px;
-    line-height: 1.25;
-    font-weight: 700;
+.result-badge.win {
+    color: #6ee7a5;
+
+    background: rgba(54, 211, 128, 0.10);
+
+    border: 1px solid rgba(54, 211, 128, 0.30);
+
+    box-shadow:
+        0 0 25px rgba(54, 211, 128, 0.06);
 }
 
-.trade-result-intro {
-    max-width: 540px;
-    margin: 0 auto 30px;
-    color: #aeb8c8;
-    font-size: 15px;
-    line-height: 1.7;
+.result-badge.lose {
+    color: #ff8585;
+
+    background: rgba(255, 87, 87, 0.09);
+
+    border: 1px solid rgba(255, 87, 87, 0.26);
 }
 
-/* Result indicator */
 
-.trade-result-status {
+/* =========================================================
+   HEADING
+   ========================================================= */
+
+.trade-result-card > h1 {
+    margin: 18px 0 8px;
+
+    color: #f4f7ff;
+
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+}
+
+.trade-plan {
+    margin: 0 0 32px;
+
+    color: #8799b4;
+
+    font-size: 0.92rem;
+}
+
+.trade-plan strong {
+    color: #9ec1ff;
+}
+
+
+/* =========================================================
+   TRADE DETAILS
+   ========================================================= */
+
+.trade-details {
     width: 100%;
-    margin: 0 auto 28px;
-    padding: 24px 20px;
-    border-radius: 14px;
-    box-sizing: border-box;
-}
 
-.trade-result-status.win {
-    background: rgba(42, 180, 108, 0.08);
-    border: 1px solid rgba(42, 180, 108, 0.3);
-}
+    margin-bottom: 26px;
 
-.trade-result-status.lose {
-    background: rgba(220, 80, 80, 0.08);
-    border: 1px solid rgba(220, 80, 80, 0.3);
-}
+    padding: 5px 18px;
 
-.trade-result-status i {
-    display: block;
-    margin-bottom: 12px;
-    font-size: 38px;
-}
+    border: 1px solid rgba(103, 147, 227, 0.17);
+    border-radius: 16px;
 
-.trade-result-status.win i {
-    color: #48c78e;
-}
+    background: rgba(3, 10, 22, 0.48);
 
-.trade-result-status.lose i {
-    color: #e46d6d;
-}
-
-.trade-result-status h2 {
-    margin: 0 0 6px;
-    font-size: 24px;
-    font-weight: 700;
-}
-
-.trade-result-status.win h2 {
-    color: #48c78e;
-}
-
-.trade-result-status.lose h2 {
-    color: #e46d6d;
-}
-
-.trade-result-status p {
-    margin: 0;
-    color: #aeb8c8;
-    font-size: 13px;
-    line-height: 1.6;
-}
-
-/* Details */
-
-.trade-result-details {
-    width: 100%;
-    margin: 0 auto 28px;
-    padding: 5px 20px;
-    background: #0a101d;
-    border: 1px solid rgba(199, 165, 112, 0.18);
-    border-radius: 14px;
-    box-sizing: border-box;
     text-align: left;
 }
 
-.trade-result-row {
+.trade-detail-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 20px;
-    padding: 16px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    min-height: 56px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.055);
 }
 
-.trade-result-row:last-child {
+.trade-detail-row:last-child {
     border-bottom: none;
 }
 
-.trade-result-row span {
-    color: #8995a8;
-    font-size: 13px;
-    font-weight: 500;
+.trade-detail-row span {
+    color: #7f91ab;
+
+    font-size: 0.82rem;
 }
 
-.trade-result-row strong {
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 600;
+.trade-detail-row strong {
+    color: #e8effc;
+
+    font-size: 0.88rem;
+
     text-align: right;
 }
 
-.trade-result-row .win {
-    color: #48c78e;
+
+/* =========================================================
+   RESULT BOX
+   ========================================================= */
+
+.result-box {
+    padding: 27px;
+
+    border-radius: 18px;
+
+    text-align: left;
 }
 
-.trade-result-row .lose {
-    color: #e46d6d;
+.result-box.success {
+    border: 1px solid rgba(54, 211, 128, 0.20);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(54, 211, 128, 0.075),
+            rgba(4, 20, 20, 0.35)
+        );
 }
 
-.trade-result-gas {
-    color: #c7a570 !important;
+.result-box.failed {
+    border: 1px solid rgba(255, 87, 87, 0.20);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 87, 87, 0.075),
+            rgba(30, 7, 12, 0.35)
+        );
 }
 
-/* Actions */
+.result-box h2 {
+    margin: 0 0 7px;
 
-.trade-result-actions {
+    color: #edf3ff;
+
+    font-size: 1.2rem;
+}
+
+.result-box.success h2 {
+    color: #6ee7a5;
+}
+
+.result-box.failed h2 {
+    color: #ff8585;
+}
+
+.result-box > p {
+    margin: 0 0 22px;
+
+    color: #91a1b9;
+
+    font-size: 0.87rem;
+    line-height: 1.6;
+}
+
+
+/* =========================================================
+   TRADE SUMMARY
+   ========================================================= */
+
+.trade-summary {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+    flex-direction: column;
+
+    border: 1px solid rgba(255, 255, 255, 0.055);
+
+    border-radius: 14px;
+
+    background: rgba(3, 10, 22, 0.42);
+
+    overflow: hidden;
 }
 
-.trade-result-actions a {
+.trade-summary-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+
+    min-height: 54px;
+
+    padding: 0 16px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.trade-summary-row:last-child {
+    border-bottom: none;
+}
+
+.trade-summary-row span {
+    color: #8192aa;
+
+    font-size: 0.82rem;
+}
+
+.trade-summary-row strong {
+    color: #e7eefb;
+
+    font-size: 0.88rem;
+
+    text-align: right;
+}
+
+.trade-summary-row:nth-child(1) strong {
+    color: #6ee7a5;
+}
+
+.trade-summary-row:nth-child(2) strong {
+    color: #9ec1ff;
+}
+
+.trade-summary-row:nth-child(3) strong {
+    color: #e5c878;
+}
+
+
+/* =========================================================
+   PAYMENT STATUS
+   ========================================================= */
+
+.payment-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+
+    margin-top: 18px;
+
+    padding: 14px 15px;
+
+    border-radius: 11px;
+
+    font-size: 0.81rem;
+    line-height: 1.55;
+}
+
+.payment-status i {
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+.payment-status.success {
+    color: #78e5aa;
+
+    background: rgba(54, 211, 128, 0.08);
+
+    border: 1px solid rgba(54, 211, 128, 0.20);
+}
+
+.payment-status.pending {
+    color: #f0cf76;
+
+    background: rgba(212, 175, 90, 0.08);
+
+    border: 1px solid rgba(212, 175, 90, 0.20);
+}
+
+
+/* =========================================================
+   GAS PAYMENT FORM
+   ========================================================= */
+
+.gas-payment-form {
+    display: flex;
+    flex-direction: column;
+
+    margin-top: 22px;
+
+    padding: 20px;
+
+    border: 1px solid rgba(103, 147, 227, 0.15);
+
+    border-radius: 14px;
+
+    background: rgba(2, 9, 20, 0.45);
+}
+
+.gas-payment-form label {
+    margin-bottom: 8px;
+
+    color: #9eb0c9;
+
+    font-size: 0.76rem;
+    font-weight: 700;
+}
+
+.gas-payment-form select,
+.gas-payment-form input[type="file"] {
+    width: 100%;
+
+    min-height: 46px;
+
+    margin-bottom: 18px;
+
+    padding: 10px 13px;
+
+    border: 1px solid rgba(103, 147, 227, 0.20);
+    border-radius: 9px;
+
+    background: #081222;
+
+    color: #e6edf9;
+
+    font-family: inherit;
+    font-size: 0.84rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.gas-payment-form select:focus,
+.gas-payment-form input[type="file"]:focus {
+    border-color: rgba(77, 163, 255, 0.65);
+
+    box-shadow:
+        0 0 0 3px rgba(77, 163, 255, 0.08);
+}
+
+.gas-payment-form select option {
+    background: #081222;
+    color: #ffffff;
+}
+
+.gas-payment-form input[type="file"] {
+    padding: 10px;
+    color: #8da0ba;
+}
+
+
+/* =========================================================
+   BUTTONS
+   ========================================================= */
+
+.pay-gas-btn,
+.trade-withdraw-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 46px;
-    padding: 0 22px;
+    gap: 9px;
+
+    width: 100%;
+
+    min-height: 48px;
+
+    padding: 0 18px;
+
     border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 800;
+
+    cursor: pointer;
+
     text-decoration: none;
-    font-size: 14px;
-    font-weight: 700;
+
     transition:
-        background 0.25s ease,
-        color 0.25s ease,
-        border-color 0.25s ease,
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-    box-sizing: border-box;
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
 }
 
-.trade-history-btn {
-    background: #c7a570;
-    border: 1px solid #c7a570;
-    color: #0b1120;
+.pay-gas-btn {
+    border: 1px solid rgba(77, 163, 255, 0.55);
+
+    background:
+        linear-gradient(
+            135deg,
+            #1857a7,
+            #0b3d91
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 10px 25px rgba(11, 61, 145, 0.22);
 }
 
-.trade-history-btn:hover {
-    background: #d8ba83;
-    border-color: #d8ba83;
+.pay-gas-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 22px rgba(199, 165, 112, 0.2);
+
+    box-shadow:
+        0 14px 32px rgba(11, 61, 145, 0.30);
 }
 
-.trade-back-btn {
-    background: transparent;
-    border: 1px solid rgba(199, 165, 112, 0.65);
-    color: #c7a570;
+.trade-withdraw-button {
+    margin-top: 18px;
+
+    border: 1px solid rgba(212, 175, 90, 0.42);
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(212, 175, 90, 0.19),
+            rgba(212, 175, 90, 0.08)
+        );
+
+    color: #f0d17c;
 }
 
-.trade-back-btn:hover {
-    background: rgba(199, 165, 112, 0.1);
-    border-color: #c7a570;
+.trade-withdraw-button:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(212, 175, 90, 0.70);
+
+    background: rgba(212, 175, 90, 0.18);
+}
+
+
+/* =========================================================
+   BOTTOM ACTIONS
+   ========================================================= */
+
+.trade-result-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    gap: 13px;
+
+    margin-top: 30px;
+}
+
+.btn-back,
+.btn-history {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    min-height: 46px;
+
+    padding: 0 15px;
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    font-size: 0.78rem;
+    font-weight: 800;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.btn-back {
+    border: 1px solid rgba(103, 147, 227, 0.25);
+
+    background: rgba(103, 147, 227, 0.07);
+
+    color: #9ec1ff;
+}
+
+.btn-history {
+    border: 1px solid rgba(212, 175, 90, 0.28);
+
+    background: rgba(212, 175, 90, 0.07);
+
+    color: #e5c878;
+}
+
+.btn-back:hover,
+.btn-history:hover {
     transform: translateY(-2px);
 }
+
+.btn-back:hover {
+    background: rgba(103, 147, 227, 0.14);
+    border-color: rgba(103, 147, 227, 0.50);
+}
+
+.btn-history:hover {
+    background: rgba(212, 175, 90, 0.13);
+    border-color: rgba(212, 175, 90, 0.50);
+}
+
 
 /* =========================================================
    TABLET
    ========================================================= */
 
-@media (max-width: 768px) {
-    .trade-result-section {
-        min-height: calc(100vh - 64px);
-        padding: 28px 16px;
+@media (max-width: 700px) {
+
+    .trade-result {
+        padding: 28px 16px 55px;
     }
 
     .trade-result-card {
-        margin: 10px auto;
-        padding: 34px 24px;
-        border-radius: 16px;
+        padding: 30px 22px;
+        border-radius: 20px;
     }
 
-    .trade-result-card h1 {
-        font-size: 26px;
-    }
-
-    .trade-result-intro {
-        font-size: 14px;
-    }
-
-    .trade-result-status {
-        padding: 22px 18px;
-    }
-
-    .trade-result-details {
-        padding: 4px 16px;
-    }
 }
+
 
 /* =========================================================
    MOBILE
    ========================================================= */
 
-@media (max-width: 480px) {
-    .trade-result-section {
-        width: 100%;
-        padding: 20px 12px;
+@media (max-width: 600px) {
+
+    .trade-result {
+        padding: 20px 11px 45px;
     }
 
     .trade-result-card {
         width: 100%;
-        margin: 6px auto;
-        padding: 28px 16px;
+        padding: 25px 14px;
+
+        border-radius: 17px;
+    }
+
+    .result-badge {
+        padding: 8px 13px;
+        font-size: 0.66rem;
+    }
+
+    .trade-result-card > h1 {
+        margin-top: 15px;
+        font-size: 1.8rem;
+    }
+
+    .trade-plan {
+        font-size: 0.82rem;
+        margin-bottom: 24px;
+    }
+
+    .trade-details {
+        padding: 2px 13px;
+        border-radius: 13px;
+    }
+
+    .trade-detail-row {
+        min-height: 52px;
+        gap: 12px;
+    }
+
+    .trade-detail-row span,
+    .trade-detail-row strong {
+        font-size: 0.76rem;
+    }
+
+    .result-box {
+        padding: 18px 14px;
         border-radius: 14px;
     }
 
-    .trade-result-badge {
-        padding: 7px 13px;
-        margin-bottom: 16px;
-        font-size: 10px;
-        letter-spacing: 0.9px;
+    .result-box h2 {
+        font-size: 1.08rem;
     }
 
-    .trade-result-card h1 {
-        font-size: 22px;
+    .result-box > p {
+        font-size: 0.79rem;
     }
 
-    .trade-result-intro {
-        margin-bottom: 22px;
-        font-size: 13px;
-        line-height: 1.6;
-    }
-
-    .trade-result-status {
-        margin-bottom: 22px;
-        padding: 20px 14px;
-    }
-
-    .trade-result-status i {
-        font-size: 32px;
-    }
-
-    .trade-result-status h2 {
-        font-size: 21px;
-    }
-
-    .trade-result-status p {
-        font-size: 12px;
-    }
-
-    .trade-result-details {
-        margin-bottom: 22px;
-        padding: 3px 14px;
-        border-radius: 12px;
-    }
-
-    .trade-result-row {
+    .trade-summary-row {
+        min-height: 51px;
         gap: 12px;
-        padding: 13px 0;
+        padding: 0 12px;
     }
 
-    .trade-result-row span {
-        font-size: 12px;
+    .trade-summary-row span,
+    .trade-summary-row strong {
+        font-size: 0.75rem;
     }
 
-    .trade-result-row strong {
-        max-width: 58%;
-        font-size: 12px;
-        word-break: break-word;
+    .payment-status {
+        font-size: 0.75rem;
+    }
+
+    .gas-payment-form {
+        padding: 15px;
     }
 
     .trade-result-actions {
-        width: 100%;
-        flex-direction: column;
+        grid-template-columns: 1fr;
+        gap: 9px;
     }
 
-    .trade-result-actions a {
+    .btn-back,
+    .btn-history {
         width: 100%;
-        min-height: 44px;
-        padding: 0 18px;
-        font-size: 13px;
     }
+
 }
 
+
 /* =========================================================
-   VERY SMALL SCREENS
+   SMALL MOBILE
    ========================================================= */
 
-@media (max-width: 360px) {
-    .trade-result-section {
-        padding: 16px 8px;
+@media (max-width: 380px) {
+
+    .trade-result {
+        padding-left: 7px;
+        padding-right: 7px;
     }
 
     .trade-result-card {
-        padding: 24px 12px;
+        padding: 22px 11px;
     }
 
-    .trade-result-card h1 {
-        font-size: 20px;
+    .trade-result-card > h1 {
+        font-size: 1.55rem;
     }
 
-    .trade-result-details {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .trade-result-row {
+    .trade-detail-row {
         flex-direction: column;
         align-items: flex-start;
-        gap: 5px;
+        justify-content: center;
+
+        gap: 3px;
+
+        padding: 10px 0;
     }
 
-    .trade-result-row strong {
-        max-width: 100%;
+    .trade-detail-row strong {
         text-align: left;
     }
+
+}
+
+
+/* =========================================================
+   TOUCH
+   ========================================================= */
+
+@media (hover: none) {
+
+    .pay-gas-btn:hover,
+    .trade-withdraw-button:hover,
+    .btn-back:hover,
+    .btn-history:hover {
+        transform: none;
+    }
+
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .pay-gas-btn,
+    .trade-withdraw-button,
+    .btn-back,
+    .btn-history,
+    .gas-payment-form select,
+    .gas-payment-form input {
+        transition: none;
+    }
+
 }
