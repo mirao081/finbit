@@ -1773,6 +1773,29 @@ def admin_announcements_view(request):
     settings = AdminDashboardSettings.objects.first()
     menus = AdminMenu.objects.all()
 
+    if request.method == "POST":
+        title = request.POST.get("title", "").strip()
+        message = request.POST.get("message", "").strip()
+
+        if title and message:
+            Announcement.objects.create(
+                title=title,
+                message=message,
+                is_active=True,
+            )
+
+            messages.success(
+                request,
+                "Announcement created successfully and is now visible to users.",
+            )
+
+            return redirect("admin_announcements")
+
+        messages.error(
+            request,
+            "Please enter both an announcement title and message.",
+        )
+
     announcements_list = (
         Announcement.objects
         .order_by("-created_at")
@@ -1797,41 +1820,74 @@ def admin_announcements_view(request):
         },
     )
 
-
 @admin_required
-@require_POST
 def admin_announcement_detail_view(request, announcement_id):
     announcement = get_object_or_404(
         Announcement,
         id=announcement_id,
     )
 
-    message = request.POST.get(
-        "message",
-        "",
-    ).strip()
+    if request.method == "POST":
+        message = request.POST.get(
+            "message",
+            "",
+        ).strip()
 
-    if message:
-        users = User.objects.all()
+        if message:
+            users = User.objects.all()
 
-        AnnouncementReply.objects.bulk_create([
-            AnnouncementReply(
-                announcement=announcement,
-                user=target_user,
-                message=message,
-                is_read_by_user=False,
-                is_read_by_admin=True,
+            AnnouncementReply.objects.bulk_create([
+                AnnouncementReply(
+                    announcement=announcement,
+                    user=target_user,
+                    message=message,
+                    is_read_by_user=False,
+                    is_read_by_admin=True,
+                )
+                for target_user in users
+            ])
+
+            messages.success(
+                request,
+                "Your reply has been sent to the users.",
             )
-            for target_user in users
-        ])
 
-    return redirect(
-        "admin_announcement_detail",
-        announcement_id=announcement.id,
+        return redirect(
+            "admin_announcement_detail",
+            announcement_id=announcement.id,
+        )
+
+    replies_list = (
+        AnnouncementReply.objects
+        .filter(
+            announcement=announcement,
+        )
+        .select_related("user")
+        .order_by("-created_at")
     )
 
+    paginator = Paginator(
+        replies_list,
+        10,
+    )
 
+    replies = paginator.get_page(
+        request.GET.get("page")
+    )
 
+    settings = AdminDashboardSettings.objects.first()
+    menus = AdminMenu.objects.all()
+
+    return render(
+        request,
+        "control/admin_announcement_detail.html",
+        {
+            "settings": settings,
+            "menus": menus,
+            "announcement": announcement,
+            "replies": replies,
+        },
+    )
 
 @login_required
 @admin_required
