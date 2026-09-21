@@ -1,5 +1,3 @@
-
-
 *,
 *::before,
 *::after {
@@ -43,7 +41,9 @@ select {
 }
 
 
-
+/* =========================================================
+   DASHBOARD HEADER
+   ========================================================= */
 
 .dashboard-header {
     width: 100%;
@@ -65,7 +65,6 @@ select {
 
     color: #fff;
 
-    
     position: fixed;
     top: 0;
     left: 0;
@@ -77,7 +76,9 @@ select {
 }
 
 
-
+/* =========================================================
+   LOGO
+   ========================================================= */
 
 .logo {
     display: flex;
@@ -97,7 +98,9 @@ select {
 }
 
 
-
+/* =========================================================
+   TOP NAVIGATION
+   ========================================================= */
 
 .top-nav {
     display: flex;
@@ -110,7 +113,9 @@ select {
 }
 
 
-
+/* =========================================================
+   LOGOUT ICON
+   ========================================================= */
 
 .logout-icon {
     display: inline-flex;
@@ -143,7 +148,9 @@ select {
 }
 
 
-
+/* =========================================================
+   HAMBURGER
+   ========================================================= */
 
 .hamburger {
     display: inline-flex;
@@ -184,7 +191,9 @@ select {
 }
 
 
-
+/* =========================================================
+   SIDEBAR OVERLAY
+   ========================================================= */
 
 .sidebar-overlay {
     position: fixed;
@@ -216,30 +225,50 @@ select {
 }
 
 
-
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
 
 .sidebar {
     width: 280px;
     max-width: 85vw;
 
     background:
-        radial-gradient(circle at 15% 5%, rgba(212, 175, 90, 0.10), transparent 30%),
-        radial-gradient(circle at 90% 35%, rgba(37, 99, 235, 0.12), transparent 32%),
-        linear-gradient(165deg, #111827 0%, #0b111b 48%, #080c13 100%);
+        radial-gradient(
+            circle at 15% 5%,
+            rgba(212, 175, 90, 0.10),
+            transparent 30%
+        ),
+        radial-gradient(
+            circle at 90% 35%,
+            rgba(37, 99, 235, 0.12),
+            transparent 32%
+        ),
+        linear-gradient(
+            165deg,
+            #111827 0%,
+            #0b111b 48%,
+            #080c13 100%
+        );
 
     color: #fff;
 
     position: fixed;
+
     top: 60px;
     left: -300px;
 
     height: calc(100vh - 60px);
 
-    /* CHANGE THIS */
-    padding: 24px 24px 70px;
+    /*
+        Extra bottom padding ensures the final menu item
+        can always be reached on short screens.
+    */
+    padding: 24px 24px 80px;
 
     overflow-x: hidden;
     overflow-y: auto;
+
     -webkit-overflow-scrolling: touch;
 
     box-sizing: border-box;
@@ -249,23 +278,22 @@ select {
         inset -1px 0 rgba(212, 175, 90, 0.12);
 
     z-index: 999;
-    border-right: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-right:
+        1px solid rgba(255, 255, 255, 0.08);
 
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
 
-    transition: left 0.4s ease, box-shadow 0.4s ease;
-}
-/* Ensure the last menu item is always reachable */
-.menu-list {
-    padding-bottom: 24px;
-}
-
-.menu-list li:last-child {
-    margin-bottom: 28px;
+    transition:
+        left 0.4s ease,
+        box-shadow 0.4s ease;
 }
 
 
+/* =========================================================
+   SIDEBAR DECORATIVE EDGE
+   ========================================================= */
 
 .sidebar::before {
     content: "";
@@ -293,7 +321,9 @@ select {
 }
 
 
-
+/* =========================================================
+   ACTIVE SIDEBAR
+   ========================================================= */
 
 .sidebar.active {
     left: 0;
@@ -304,7 +334,9 @@ select {
 }
 
 
-
+/* =========================================================
+   SIDEBAR TOP SECTION
+   ========================================================= */
 
 .top-section {
     width: 100%;
@@ -313,7 +345,6 @@ select {
 
     margin-bottom: 30px;
 
-    
     padding-top: 28px;
 
     animation:
@@ -321,7 +352,9 @@ select {
 }
 
 
-
+/* =========================================================
+   USERNAME
+   ========================================================= */
 
 .username {
     width: 100%;
@@ -368,7 +401,9 @@ select {
 }
 
 
-
+/* =========================================================
+   KYC STATUS
+   ========================================================= */
 
 .status.unverified-text {
     color: #ff5c6c;
@@ -382,9 +417,6 @@ select {
     text-shadow:
         0 0 10px rgba(255, 92, 108, 0.35);
 }
-
-
-
 
 .status.verified-text {
     color: #42d982;
@@ -400,7 +432,9 @@ select {
 }
 
 
-
+/* =========================================================
+   KYC SEPARATOR
+   ========================================================= */
 
 .kyc-separator {
     border: none;
@@ -424,7 +458,9 @@ select {
 }
 
 
-
+/* =========================================================
+   KYC HEADINGS
+   ========================================================= */
 
 .top-section h3.unverified-text {
     color: #ff5c6c;
@@ -443,7 +479,9 @@ select {
 }
 
 
-
+/* =========================================================
+   KYC PREVIEW
+   ========================================================= */
 
 .kyc-preview {
     position: relative;
@@ -454,7 +492,9 @@ select {
 }
 
 
-
+/* =========================================================
+   DOCUMENT BADGE
+   ========================================================= */
 
 .document-badge {
     position: absolute;
@@ -490,7 +530,9 @@ select {
 }
 
 
-
+/* =========================================================
+   KYC IMAGE
+   ========================================================= */
 
 .kyc-image {
     display: block;
@@ -533,7 +575,9 @@ select {
 }
 
 
-
+/* =========================================================
+   APPROVED KYC IMAGE
+   ========================================================= */
 
 .kyc-image.approved {
     border-radius: 50%;
@@ -547,7 +591,9 @@ select {
 }
 
 
-
+/* =========================================================
+   KYC BUTTON
+   ========================================================= */
 
 .kyc-btn {
     display: inline-flex;
@@ -602,7 +648,9 @@ select {
 }
 
 
-
+/* =========================================================
+   UPLOAD HINT
+   ========================================================= */
 
 .upload-hint {
     display: block;
@@ -621,7 +669,9 @@ select {
 }
 
 
-
+/* =========================================================
+   SIDEBAR NAVIGATION
+   ========================================================= */
 
 .sidebar-navigation {
     width: 100%;
@@ -630,14 +680,21 @@ select {
 }
 
 
-
+/* =========================================================
+   MENU LIST
+   ========================================================= */
 
 .menu-list {
     width: 100%;
 
     list-style: none;
 
-    padding: 0;
+    /*
+        Bottom padding creates additional scroll space
+        beneath the final menu item.
+    */
+    padding: 0 0 30px;
+
     margin: 0;
 
     text-align: left;
@@ -652,8 +709,14 @@ select {
         fadeInUp 0.6s ease both;
 }
 
+.menu-list li:last-child {
+    margin-bottom: 30px;
+}
 
 
+/* =========================================================
+   MENU LINK
+   ========================================================= */
 
 .menu-link {
     position: relative;
@@ -692,7 +755,9 @@ select {
 }
 
 
-
+/* =========================================================
+   MENU LINK LEFT ACCENT
+   ========================================================= */
 
 .menu-link::before {
     content: "";
@@ -722,7 +787,9 @@ select {
 }
 
 
-
+/* =========================================================
+   MENU LINK GLOW
+   ========================================================= */
 
 .menu-link::after {
     content: "";
@@ -748,7 +815,9 @@ select {
 }
 
 
-
+/* =========================================================
+   MENU HOVER
+   ========================================================= */
 
 .menu-link:hover {
     color: #f8fafc;
@@ -776,7 +845,9 @@ select {
 }
 
 
-
+/* =========================================================
+   MENU ICON
+   ========================================================= */
 
 .menu-icon {
     width: 24px;
@@ -810,7 +881,9 @@ select {
 }
 
 
-
+/* =========================================================
+   MENU TITLE
+   ========================================================= */
 
 .menu-title {
     flex: 1;
@@ -835,7 +908,9 @@ select {
 }
 
 
-
+/* =========================================================
+   MENU ARROW
+   ========================================================= */
 
 .menu-arrow {
     flex-shrink: 0;
@@ -856,12 +931,15 @@ select {
 }
 
 
-
+/* =========================================================
+   DASHBOARD MAIN
+   ========================================================= */
 
 .dashboard-main {
     flex: 1;
 
     width: 90%;
+
     max-width: 1500px;
 
     min-width: 0;
@@ -869,7 +947,6 @@ select {
     margin-left: auto;
     margin-right: auto;
 
-    
     padding:
         84px
         24px
@@ -883,7 +960,9 @@ select {
 }
 
 
-
+/* =========================================================
+   DASHBOARD FOOTER
+   ========================================================= */
 
 .dashboard-footer {
     width: 100%;
@@ -912,10 +991,11 @@ select {
 }
 
 
-
+/* =========================================================
+   ANIMATIONS
+   ========================================================= */
 
 @keyframes fadeInDown {
-
     from {
         opacity: 0;
         transform: translateY(-20px);
@@ -925,11 +1005,9 @@ select {
         opacity: 1;
         transform: translateY(0);
     }
-
 }
 
 @keyframes fadeInUp {
-
     from {
         opacity: 0;
         transform: translateY(20px);
@@ -939,11 +1017,9 @@ select {
         opacity: 1;
         transform: translateY(0);
     }
-
 }
 
 @keyframes usernameShimmer {
-
     0% {
         background-position: 250% center;
     }
@@ -951,11 +1027,12 @@ select {
     100% {
         background-position: -250% center;
     }
-
 }
 
 
-
+/* =========================================================
+   SIDEBAR SCROLLBAR
+   ========================================================= */
 
 .sidebar {
     scrollbar-width: thin;
@@ -985,7 +1062,9 @@ select {
 }
 
 
-
+/* =========================================================
+   SIDEBAR CLOSE BUTTON
+   ========================================================= */
 
 .sidebar-close {
     position: absolute;
@@ -1045,18 +1124,286 @@ select {
 }
 
 
-
+/* =========================================================
+   BODY WHEN SIDEBAR IS OPEN
+   ========================================================= */
 
 .sidebar-open {
     overflow: hidden;
 }
 
 
+/* =========================================================
+   GOOGLE TRANSLATE
+   ========================================================= */
 
+.google-translate {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    position: relative;
+
+    z-index: 9999;
+}
+
+.google-translate .fa-globe {
+    color: #d4a94f;
+
+    font-size: 15px;
+
+    flex-shrink: 0;
+}
+
+#google_translate_element {
+    display: flex;
+
+    align-items: center;
+}
+
+.goog-te-gadget {
+    font-size: 0 !important;
+
+    color: transparent !important;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif !important;
+}
+
+.goog-te-gadget span {
+    display: none !important;
+}
+
+.goog-te-gadget img {
+    display: none !important;
+}
+
+.goog-te-gadget .goog-logo-link {
+    display: none !important;
+}
+
+.goog-te-gadget .goog-te-gadget-icon {
+    display: none !important;
+}
+
+
+/* =========================================================
+   GOOGLE TRANSLATE SELECT
+   ========================================================= */
+
+.goog-te-combo {
+    appearance: none;
+    -webkit-appearance: none;
+
+    width: 150px;
+    height: 40px;
+
+    padding:
+        0
+        35px
+        0
+        12px;
+
+    border:
+        1px solid rgba(212, 169, 79, 0.35);
+
+    border-radius: 10px;
+
+    background-color: #111;
+
+    color: #fff;
+
+    font-size: 13px;
+
+    font-weight: 500;
+
+    cursor: pointer;
+
+    outline: none;
+
+    transition:
+        border-color 0.25s ease,
+        background-color 0.25s ease,
+        box-shadow 0.25s ease;
+
+    background-image:
+        linear-gradient(
+            45deg,
+            transparent 50%,
+            #d4a94f 50%
+        ),
+        linear-gradient(
+            135deg,
+            #d4a94f 50%,
+            transparent 50%
+        );
+
+    background-position:
+        calc(100% - 16px) 17px,
+        calc(100% - 11px) 17px;
+
+    background-size:
+        5px 5px,
+        5px 5px;
+
+    background-repeat: no-repeat;
+}
+
+.goog-te-combo:hover {
+    border-color: #d4a94f;
+
+    background-color: #171717;
+}
+
+.goog-te-combo:focus {
+    border-color: #d4a94f;
+
+    box-shadow:
+        0 0 0 3px rgba(212, 169, 79, 0.15);
+}
+
+.goog-te-combo option {
+    background: #111;
+
+    color: #fff;
+}
+
+.goog-te-menu-frame {
+    z-index: 999999 !important;
+}
+
+
+/* =========================================================
+   GOOGLE TRANSLATE BANNER REMOVAL
+   ========================================================= */
+
+.goog-te-banner-frame,
+.goog-te-banner-frame.skiptranslate,
+iframe.goog-te-banner-frame {
+    display: none !important;
+
+    visibility: hidden !important;
+
+    height: 0 !important;
+}
+
+html {
+    margin-top: 0 !important;
+}
+
+body {
+    top: 0 !important;
+
+    margin-top: 0 !important;
+}
+
+.goog-tooltip,
+.goog-tooltip:hover,
+.goog-te-balloon-frame {
+    display: none !important;
+}
+
+
+/* =========================================================
+   NOTIFICATION BUTTON
+   ========================================================= */
+
+.notification-btn {
+    position: relative;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    border:
+        1px solid rgba(212, 175, 55, 0.15);
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, 0.04);
+
+    color: #D4AF37;
+
+    cursor: pointer;
+
+    transition:
+        all 0.25s ease;
+}
+
+.notification-btn i {
+    font-size: 0.95rem;
+}
+
+.notification-btn:hover {
+    background:
+        rgba(212, 175, 55, 0.12);
+
+    border-color:
+        rgba(212, 175, 55, 0.35);
+
+    color: #F4D03F;
+
+    transform:
+        translateY(-1px);
+}
+
+.notification-btn:active {
+    transform:
+        scale(0.96);
+}
+
+.notification-btn:focus-visible {
+    outline: none;
+
+    box-shadow:
+        0 0 0 3px rgba(212, 175, 55, 0.2);
+}
+
+
+/* =========================================================
+   NOTIFICATION BADGE
+   ========================================================= */
+
+.notification-badge {
+    position: absolute;
+
+    top: -4px;
+    right: -4px;
+
+    background: #FF4D4F;
+
+    color: #fff;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    border-radius: 50%;
+
+    padding: 2px 5px;
+
+    min-width: 16px;
+
+    text-align: center;
+
+    line-height: 1;
+}
+
+
+/* =========================================================
+   TABLET / MOBILE
+   ========================================================= */
 
 @media screen and (max-width: 768px) {
-
-    
 
     .dashboard-header {
         height: 58px;
@@ -1069,6 +1416,7 @@ select {
 
     .logo img {
         height: 38px;
+
         max-width: 150px;
     }
 
@@ -1086,7 +1434,7 @@ select {
     }
 
 
-    
+    /* SIDEBAR OVERLAY */
 
     .sidebar-overlay {
         top: 58px;
@@ -1096,7 +1444,7 @@ select {
     }
 
 
-    
+    /* SIDEBAR */
 
     .sidebar {
         top: 58px;
@@ -1110,7 +1458,13 @@ select {
         left:
             calc(-1 * min(280px, 82vw));
 
-        padding: 20px;
+        /*
+            Keep generous bottom space on mobile.
+        */
+        padding:
+            20px
+            20px
+            80px;
     }
 
     .sidebar.active {
@@ -1118,14 +1472,25 @@ select {
     }
 
 
-    
+    /* TOP SECTION */
 
     .top-section {
         margin-bottom: 24px;
     }
 
+
+    /* MENU */
+
+    .menu-list {
+        padding-bottom: 30px;
+    }
+
     .menu-list li {
         margin-bottom: 7px;
+    }
+
+    .menu-list li:last-child {
+        margin-bottom: 30px;
     }
 
     .menu-link {
@@ -1133,12 +1498,11 @@ select {
     }
 
 
-    
+    /* MAIN */
 
     .dashboard-main {
         width: 90%;
 
-        
         padding:
             78px
             12px
@@ -1146,7 +1510,7 @@ select {
     }
 
 
-    
+    /* FOOTER */
 
     .dashboard-footer {
         padding:
@@ -1156,14 +1520,32 @@ select {
         font-size: 0.82rem;
     }
 
+
+    /* GOOGLE TRANSLATE */
+
+    .google-translate {
+        gap: 5px;
+    }
+
+    .google-translate .fa-globe {
+        font-size: 13px;
+    }
+
+    .goog-te-combo {
+        width: 120px;
+
+        height: 36px;
+
+        font-size: 12px;
+    }
 }
 
 
-
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media screen and (max-width: 480px) {
-
-    
 
     .dashboard-header {
         height: 56px;
@@ -1176,6 +1558,7 @@ select {
 
     .logo img {
         height: 34px;
+
         max-width: 125px;
     }
 
@@ -1197,7 +1580,7 @@ select {
     }
 
 
-    
+    /* SIDEBAR OVERLAY */
 
     .sidebar-overlay {
         top: 56px;
@@ -1207,7 +1590,7 @@ select {
     }
 
 
-    
+    /* SIDEBAR */
 
     .sidebar {
         top: 56px;
@@ -1223,7 +1606,8 @@ select {
 
         padding:
             18px
-            15px;
+            15px
+            80px;
     }
 
     .sidebar.active {
@@ -1231,14 +1615,14 @@ select {
     }
 
 
-    
+    /* TOP SECTION */
 
     .username {
         font-size: 1.05rem;
     }
 
 
-    
+    /* KYC */
 
     .kyc-image {
         width: 80px;
@@ -1267,7 +1651,19 @@ select {
     }
 
 
-    
+    /* MENU */
+
+    .menu-list {
+        padding-bottom: 30px;
+    }
+
+    .menu-list li {
+        margin-bottom: 7px;
+    }
+
+    .menu-list li:last-child {
+        margin-bottom: 30px;
+    }
 
     .menu-link {
         padding:
@@ -1281,6 +1677,7 @@ select {
 
     .menu-icon {
         width: 22px;
+
         min-width: 22px;
     }
 
@@ -1289,12 +1686,11 @@ select {
     }
 
 
-    
+    /* MAIN */
 
     .dashboard-main {
         width: 90%;
 
-        
         padding:
             76px
             8px
@@ -1305,7 +1701,7 @@ select {
     }
 
 
-    
+    /* FOOTER */
 
     .dashboard-footer {
         padding:
@@ -1315,14 +1711,32 @@ select {
         font-size: 0.75rem;
     }
 
+
+    /* GOOGLE TRANSLATE */
+
+    .google-translate .fa-globe {
+        display: none;
+    }
+
+    .goog-te-combo {
+        width: 100px;
+
+        height: 34px;
+
+        font-size: 11px;
+
+        padding-left: 8px;
+
+        padding-right: 25px;
+    }
 }
 
 
-
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
 @media screen and (max-width: 360px) {
-
-    
 
     .dashboard-header {
         height: 54px;
@@ -1336,6 +1750,7 @@ select {
 
     .logo img {
         height: 31px;
+
         max-width: 110px;
     }
 
@@ -1345,13 +1760,14 @@ select {
 
     .hamburger {
         width: 36px;
+
         height: 36px;
 
         font-size: 1.45rem;
     }
 
 
-    
+    /* SIDEBAR OVERLAY */
 
     .sidebar-overlay {
         top: 54px;
@@ -1361,7 +1777,7 @@ select {
     }
 
 
-    
+    /* SIDEBAR */
 
     .sidebar {
         top: 54px;
@@ -1375,7 +1791,8 @@ select {
 
         padding:
             16px
-            12px;
+            12px
+            80px;
     }
 
     .sidebar.active {
@@ -1383,7 +1800,7 @@ select {
     }
 
 
-    
+    /* MAIN */
 
     .dashboard-main {
         width: 92%;
@@ -1395,7 +1812,19 @@ select {
     }
 
 
-    
+    /* MENU */
+
+    .menu-list {
+        padding-bottom: 30px;
+    }
+
+    .menu-list li {
+        margin-bottom: 7px;
+    }
+
+    .menu-list li:last-child {
+        margin-bottom: 30px;
+    }
 
     .menu-link {
         padding:
@@ -1407,21 +1836,24 @@ select {
 
     .menu-icon {
         width: 20px;
+
         min-width: 20px;
     }
 
 
-    
+    /* KYC */
 
     .kyc-image {
         width: 72px;
+
         height: 72px;
     }
-
 }
 
 
-
+/* =========================================================
+   TOUCH DEVICES
+   ========================================================= */
 
 @media (hover: none) and (pointer: coarse) {
 
@@ -1445,11 +1877,12 @@ select {
     .hamburger:hover {
         transform: none;
     }
-
 }
 
 
-
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
 
@@ -1464,328 +1897,4 @@ select {
 
         scroll-behavior: auto !important;
     }
-
 }
-
-
-.google-translate {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-    z-index: 9999;
-}
-
-
-
-
-.google-translate .fa-globe {
-    color: #d4a94f;
-    font-size: 15px;
-    flex-shrink: 0;
-}
-
-
-
-
-#google_translate_element {
-    display: flex;
-    align-items: center;
-}
-
-
-
-
-.goog-te-gadget {
-    font-size: 0 !important;
-    color: transparent !important;
-    font-family: Arial, Helvetica, sans-serif !important;
-}
-
-
-
-
-.goog-te-gadget span {
-    display: none !important;
-}
-
-
-
-
-.goog-te-gadget img {
-    display: none !important;
-}
-
-
-
-
-.goog-te-gadget .goog-logo-link {
-    display: none !important;
-}
-
-
-
-
-.goog-te-gadget .goog-te-gadget-icon {
-    display: none !important;
-}
-
-
-
-
-.goog-te-combo {
-    appearance: none;
-    -webkit-appearance: none;
-
-    width: 150px;
-    height: 40px;
-
-    padding: 0 35px 0 12px;
-
-    border: 1px solid rgba(212, 169, 79, 0.35);
-
-    border-radius: 10px;
-
-    background-color: #111;
-
-    color: #fff;
-
-    font-size: 13px;
-    font-weight: 500;
-
-    cursor: pointer;
-
-    outline: none;
-
-    transition:
-        border-color 0.25s ease,
-        background-color 0.25s ease,
-        box-shadow 0.25s ease;
-
-
-    
-
-    background-image:
-
-        linear-gradient(
-            45deg,
-            transparent 50%,
-            #d4a94f 50%
-        ),
-
-        linear-gradient(
-            135deg,
-            #d4a94f 50%,
-            transparent 50%
-        );
-
-    background-position:
-
-        calc(100% - 16px) 17px,
-        calc(100% - 11px) 17px;
-
-    background-size:
-        5px 5px,
-        5px 5px;
-
-    background-repeat: no-repeat;
-}
-
-
-
-
-.goog-te-combo:hover {
-
-    border-color: #d4a94f;
-
-    background-color: #171717;
-
-}
-
-
-
-
-.goog-te-combo:focus {
-
-    border-color: #d4a94f;
-
-    box-shadow:
-        0 0 0 3px rgba(212, 169, 79, 0.15);
-
-}
-
-
-
-
-.goog-te-combo option {
-
-    background: #111;
-
-    color: #fff;
-
-}
-
-
-
-
-.goog-te-menu-frame {
-
-    z-index: 999999 !important;
-
-}
-
-
-
-
-.goog-te-banner-frame,
-.goog-te-banner-frame.skiptranslate,
-iframe.goog-te-banner-frame {
-
-    display: none !important;
-
-    visibility: hidden !important;
-
-    height: 0 !important;
-
-}
-
-
-
-
-html {
-
-    margin-top: 0 !important;
-
-}
-
-
-body {
-
-    top: 0 !important;
-
-    margin-top: 0 !important;
-
-}
-
-
-
-
-.goog-tooltip,
-.goog-tooltip:hover,
-.goog-te-balloon-frame {
-
-    display: none !important;
-
-}
-
-
-
-
-@media (max-width: 768px) {
-
-    .google-translate {
-
-        gap: 5px;
-
-    }
-
-
-    .google-translate .fa-globe {
-
-        font-size: 13px;
-
-    }
-
-
-    .goog-te-combo {
-
-        width: 120px;
-
-        height: 36px;
-
-        font-size: 12px;
-
-    }
-
-}
-
-
-
-
-@media (max-width: 480px) {
-
-    .google-translate .fa-globe {
-
-        display: none;
-
-    }
-
-
-    .goog-te-combo {
-
-        width: 100px;
-
-        height: 34px;
-
-        font-size: 11px;
-
-        padding-left: 8px;
-
-        padding-right: 25px;
-
-    }
-
-}
-
-.notification-btn {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    border: 1px solid rgba(212, 175, 55, 0.15);
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.04);
-    color: #D4AF37; 
-    cursor: pointer;
-    transition: all 0.25s ease;
-}
-
-.notification-btn i {
-    font-size: 0.95rem;
-}
-
-
-.notification-btn:hover {
-    background: rgba(212, 175, 55, 0.12);
-    border-color: rgba(212, 175, 55, 0.35);
-    color: #F4D03F;
-    transform: translateY(-1px);
-}
-
-
-.notification-btn:active {
-    transform: scale(0.96);
-}
-
-
-.notification-btn:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
-}
-.notification-badge {
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    background: #FF4D4F;
-    color: #fff;
-    font-size: 10px;
-    font-weight: bold;
-    border-radius: 50%;
-    padding: 2px 5px;
-    min-width: 16px;
-    text-align: center;
-    line-height: 1;
-}
-
