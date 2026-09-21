@@ -206,5 +206,20 @@ urlpatterns = [
         views.reject_live_trade_withdrawal,
         name="reject_live_trade_withdrawal",
     ),
+    path(
+        "security-settings/",
+        views.security_settings_view,
+        name="security_settings",
+    ),
+    path(
+        "security-settings/qr-code/",
+        views.security_qr_code_view,
+        name="security_qr_code",
+    ),
+    path(
+        "security-settings/enable-2fa/",
+        views.enable_two_factor_view,
+        name="enable_two_factor",
+    ),
 
 ]

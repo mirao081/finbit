@@ -984,6 +984,47 @@ class TwoFactorAuth(models.Model):
 
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_secret(self):
+        """
+        Return the user's TOTP secret.
+        Generate one if it does not exist yet.
+        """
+        if not self.secret_key:
+            self.secret_key = pyotp.random_base32()
+            self.save(update_fields=["secret_key"])
+
+        return self.secret_key
+
+    def get_totp(self):
+        """
+        Return the TOTP generator for this account.
+        """
+        return pyotp.TOTP(self.get_secret())
+
+    def provisioning_uri(self):
+        """
+        Generate the URI used to configure an authenticator app.
+        """
+        return self.get_totp().provisioning_uri(
+            name=self.user.email or self.user.username,
+            issuer_name="Finbit",
+        )
+
+    def verify_token(self, token):
+        """
+        Verify a TOTP token.
+
+        valid_window=1 allows the immediately previous or next
+        30-second time window to account for small clock differences.
+        """
+        if not token:
+            return False
+
+        return self.get_totp().verify(
+            token,
+            valid_window=1,
+        )
+
     def __str__(self):
         return f"2FA - {self.user.username}"
 
@@ -1295,3 +1336,5 @@ class TradeGasPayment(models.Model):
             f"Trade #{self.trade.id} - "
             f"${self.amount_usd}"
         )
+
+

@@ -1,0 +1,387 @@
+{% extends "control/admin_base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+
+<link rel="stylesheet" href="{% static 'control/css/security_settings.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="security-settings-page">
+
+    <!-- PAGE HEADER -->
+
+    <div class="page-header">
+
+        <div class="page-header-content">
+
+            <span class="page-eyebrow">
+                ACCOUNT SECURITY
+            </span>
+
+            <h1>
+                Security Settings
+            </h1>
+
+            <p>
+                Strengthen your administrator account with advanced
+                authentication, verification, and recovery controls.
+            </p>
+
+        </div>
+
+        <div class="page-header-icon">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+
+    </div>
+
+
+    <!-- TWO-FACTOR STATUS -->
+
+    <div class="security-status-card">
+
+        <div class="status-icon">
+
+            {% if two_factor.is_enabled %}
+                <i class="fas fa-shield-check"></i>
+            {% else %}
+                <i class="fas fa-shield-halved"></i>
+            {% endif %}
+
+        </div>
+
+
+        <div class="status-content">
+
+            <span class="status-label">
+                TWO-FACTOR SECURITY
+            </span>
+
+
+            {% if two_factor.is_enabled %}
+
+                <h2>
+                    Two-Factor Authentication Is Active
+                </h2>
+
+                <p>
+                    Your administrator account is secured with
+                    an authenticator-based verification layer.
+                </p>
+
+                <span class="security-badge enabled">
+                    <i class="fas fa-circle-check"></i>
+                    Security Active
+                </span>
+
+            {% else %}
+
+                <h2>
+                    Two-Factor Authentication Is Not Active
+                </h2>
+
+                <p>
+                    Add an authenticator to your administrator account
+                    for stronger protection against unauthorized access.
+                </p>
+
+                <span class="security-badge disabled">
+                    <i class="fas fa-circle-exclamation"></i>
+                    Setup Required
+                </span>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+
+    <!-- TWO-FACTOR SETUP -->
+
+    {% if not two_factor.is_enabled %}
+
+    <div class="security-section">
+
+        <div class="security-section-header">
+
+            <div class="security-section-icon">
+                <i class="fas fa-mobile-screen-button"></i>
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    AUTHENTICATOR VERIFICATION
+                </span>
+
+                <h2>
+                    Connect Your Authenticator
+                </h2>
+
+                <p>
+                    Link an authenticator application to your account
+                    by scanning the secure QR code below.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="two-factor-setup">
+
+
+            <!-- QR CODE -->
+
+            <div class="qr-code-area">
+
+                <div class="qr-code-wrapper">
+
+                    <img
+                        src="{% url 'security_qr_code' %}"
+                        alt="Authenticator setup QR code"
+                    >
+
+                </div>
+
+                <span class="qr-code-label">
+                    Scan to connect your authenticator
+                </span>
+
+            </div>
+
+
+            <!-- SETUP INSTRUCTIONS -->
+
+            <div class="two-factor-instructions">
+
+                <h3>
+                    Complete the setup
+                </h3>
+
+                <ol>
+
+                    <li>
+                        Open your preferred authenticator application.
+                    </li>
+
+                    <li>
+                        Choose the option to add a new account.
+                    </li>
+
+                    <li>
+                        Scan the QR code displayed on this page.
+                    </li>
+
+                    <li>
+                        Your authenticator will generate a temporary
+                        6-digit security code.
+                    </li>
+
+                    <li>
+                        Enter the generated code to verify and
+                        activate two-factor security.
+                    </li>
+
+                </ol>
+
+
+                <!-- MANUAL SECRET -->
+
+                <div class="secret-key-box">
+
+                    <span class="secret-key-label">
+                        Manual configuration key
+                    </span>
+
+                    <code>
+                        {{ secret_key }}
+                    </code>
+
+                    <p>
+                        If you are unable to scan the QR code,
+                        enter this configuration key manually
+                        in your authenticator application.
+                    </p>
+
+                </div>
+                <form
+                    method="post"
+                    action="{% url 'enable_two_factor' %}"
+                    class="two-factor-verification-form"
+                >
+                    {% csrf_token %}
+
+                    <div class="verification-form-header">
+
+                        <span class="verification-eyebrow">
+                            FINAL VERIFICATION
+                        </span>
+
+                        <h3>
+                            Verify Your Authenticator
+                        </h3>
+
+                        <p>
+                            Enter the 6-digit code currently displayed
+                            in your authenticator application to complete
+                            the security setup.
+                        </p>
+
+                    </div>
+
+                    <div class="verification-input-group">
+
+                        <label for="two-factor-token">
+                            Authentication Code
+                        </label>
+
+                        <input
+                            type="text"
+                            id="two-factor-token"
+                            name="token"
+                            inputmode="numeric"
+                            pattern="[0-9]{6}"
+                            maxlength="6"
+                            minlength="6"
+                            autocomplete="one-time-code"
+                            placeholder="000000"
+                            required
+                        >
+
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="security-action-button"
+                    >
+                        <i class="fas fa-shield-check"></i>
+                        Verify & Activate
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- SECURITY INFORMATION -->
+
+    <div class="security-section security-information">
+
+        <div class="security-section-header">
+
+            <div class="security-section-icon">
+                <i class="fas fa-lock"></i>
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    PROTECTION OVERVIEW
+                </span>
+
+                <h2>
+                    Account Protection
+                </h2>
+
+                <p>
+                    Additional authentication controls help protect
+                    your administrator account and sensitive operations.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="security-info-grid">
+
+
+            <div class="security-info-item">
+
+                <div class="info-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Authenticator Verification
+                    </h3>
+
+                    <p>
+                        A temporary verification code from your
+                        authenticator can provide an additional
+                        authentication layer for your account.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-info-item">
+
+                <div class="info-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Temporary Security Codes
+                    </h3>
+
+                    <p>
+                        Your authenticator generates time-sensitive
+                        verification codes that automatically change
+                        at regular intervals.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-info-item">
+
+                <div class="info-icon">
+                    <i class="fas fa-shield"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Enhanced Account Security
+                    </h3>
+
+                    <p>
+                        Two-factor authentication adds another
+                        verification step beyond your administrator
+                        password.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+{% endblock %}

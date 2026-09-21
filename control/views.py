@@ -15,6 +15,8 @@ from django.views.decorators.http import require_POST
 from django.core.mail import send_mail
 from django.conf import settings as django_settings
 import requests
+import io
+import qrcode
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
 from django.core.cache import cache
@@ -34,6 +36,7 @@ from accounts.models import (
     AssetPrice,
     Trade,
     TradeGasPayment,
+    TwoFactorAuth
 )
 
 from core.models import InvestmentPlan, Investor, Transaction
@@ -4193,4 +4196,97 @@ def approve_trade_gas_payment(request, payment_id):
     return redirect(
         "trade_detail",
         trade_id=trade.id,
+    )
+
+
+@admin_required
+def security_settings_view(request):
+    settings = AdminDashboardSettings.objects.first()
+    menus = AdminMenu.objects.all()
+
+    two_factor, created = TwoFactorAuth.objects.get_or_create(
+        user=request.user
+    )
+
+    secret_key = None
+    provisioning_uri = None
+
+    if not two_factor.is_enabled:
+        secret_key = two_factor.get_secret()
+        provisioning_uri = two_factor.provisioning_uri()
+
+    return render(
+        request,
+        "control/security_settings.html",
+        {
+            "settings": settings,
+            "menus": menus,
+            "two_factor": two_factor,
+            "secret_key": secret_key,
+            "provisioning_uri": provisioning_uri,
+        },
+    )
+
+
+@admin_required
+def enable_two_factor_view(request):
+    if request.method != "POST":
+        return redirect("security_settings")
+
+    two_factor, created = TwoFactorAuth.objects.get_or_create(
+        user=request.user
+    )
+
+    if two_factor.is_enabled:
+        return redirect("security_settings")
+
+    token = request.POST.get("token", "").strip()
+
+    if two_factor.verify_token(token):
+        two_factor.is_enabled = True
+        two_factor.save(update_fields=["is_enabled", "updated_at"])
+
+        messages.success(
+            request,
+            "Two-factor authentication has been enabled successfully.",
+        )
+
+        return redirect("security_settings")
+
+    messages.error(
+        request,
+        "The verification code is invalid or has expired. Please try again.",
+    )
+
+    return redirect("security_settings")
+
+@admin_required
+def security_qr_code_view(request):
+    two_factor, created = TwoFactorAuth.objects.get_or_create(
+        user=request.user
+    )
+
+    if two_factor.is_enabled:
+        return HttpResponse(status=404)
+
+    provisioning_uri = two_factor.provisioning_uri()
+
+    qr = qrcode.QRCode(
+        version=1,
+        error_correction=qrcode.constants.ERROR_CORRECT_M,
+        box_size=10,
+        border=4,
+    )
+
+    qr.add_data(provisioning_uri)
+    qr.make(fit=True)
+
+    image = qr.make_image()
+
+    buffer = io.BytesIO()
+    image.save(buffer, format="PNG")
+
+    return HttpResponse(
+        buffer.getvalue(),
+        content_type="image/png",
     )
