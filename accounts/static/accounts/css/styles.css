@@ -254,22 +254,19 @@ select {
     color: #fff;
 
     position: fixed;
-
     top: 60px;
     left: -300px;
 
     height: calc(100vh - 60px);
+    max-height: calc(100vh - 60px);
 
-    /*
-        Extra bottom padding ensures the final menu item
-        can always be reached on short screens.
-    */
-    padding: 24px 24px 80px;
+    padding: 24px 24px 100px;
 
     overflow-x: hidden;
     overflow-y: auto;
 
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
 
     box-sizing: border-box;
 
@@ -289,7 +286,6 @@ select {
         left 0.4s ease,
         box-shadow 0.4s ease;
 }
-
 
 /* =========================================================
    SIDEBAR DECORATIVE EDGE
