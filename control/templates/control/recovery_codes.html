@@ -1,0 +1,83 @@
+{% extends "control/admin_base.html" %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'control/css/recovery_codes.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="recovery-codes-page">
+
+    <div class="recovery-codes-card">
+
+        <div class="recovery-codes-icon">
+            <i class="fas fa-shield-halved"></i>
+        </div>
+
+        <h1>Recovery Codes</h1>
+
+        <p class="recovery-codes-intro">
+            Your recovery codes have been generated successfully.
+            Store these codes somewhere safe. Each code can only be used once
+            to access your account if you cannot use your authenticator.
+        </p>
+
+        <div class="recovery-codes-warning">
+            <i class="fas fa-triangle-exclamation"></i>
+
+            <div>
+                <strong>Important</strong>
+
+                <p>
+                    These codes are sensitive. Do not share them with anyone.
+                    Anyone with access to a recovery code may be able to bypass
+                    your authenticator.
+                </p>
+            </div>
+        </div>
+
+        <div class="recovery-codes-list">
+            {% for code in recovery_codes %}
+                <div class="recovery-code">
+                    <span>{{ code }}</span>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="recovery-codes-actions">
+
+            <button type="button"
+                    class="btn-copy-codes"
+                    onclick="copyRecoveryCodes()">
+                <i class="fas fa-copy"></i>
+                Copy Codes
+            </button>
+
+            <button type="button"
+                    class="btn-print-codes"
+                    onclick="window.print()">
+                <i class="fas fa-print"></i>
+                Print
+            </button>
+
+            <a href="{% url 'security_settings' %}"
+               class="btn-done">
+                <i class="fas fa-check"></i>
+                Done
+            </a>
+
+        </div>
+
+        <textarea id="recoveryCodesText" aria-hidden="true">{% for code in recovery_codes %}{{ code }}{% if not forloop.last %}
+{% endif %}{% endfor %}</textarea>
+
+    </div>
+
+</div>
+
+{% block extra_js %}
+<script src="{% static 'control/js/recovery_codes.js' %}"></script>
+{% endblock %}
+
+{% endblock %}
