@@ -69,6 +69,7 @@ from .models import (
     SecurityCenterContent,
     TwoFactorAuth,
     RecoveryOTP,
+     RecoveryCode,
     Announcement,
     AnnouncementRead,
     AnnouncementReply,
