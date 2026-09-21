@@ -36,9 +36,10 @@ from accounts.models import (
     AssetPrice,
     Trade,
     TradeGasPayment,
-    TwoFactorAuth
+    TwoFactorAuth,RecoveryCode
+	
 )
-
+from accounts.utils import generate_recovery_codes
 from core.models import InvestmentPlan, Investor, Transaction
 from accounts.forms import DepositApprovalForm
 from control.models import AdminDashboardSettings, AdminMenu
@@ -3700,6 +3701,7 @@ def admin_login_view(request):
             )
 
             recaptcha_result.raise_for_status()
+
             recaptcha_data = recaptcha_result.json()
 
         except (
@@ -3740,14 +3742,53 @@ def admin_login_view(request):
         )
 
         if user is not None and user.is_staff and user.is_active:
-            cache.delete(rate_limit_key)
+
+            cache.delete(
+                rate_limit_key
+            )
+
+            two_factor, _ = TwoFactorAuth.objects.get_or_create(
+                user=user
+            )
+
+            if (
+                two_factor.is_enabled
+                and two_factor.secret_key
+            ):
+                import time
+
+                request.session[
+                    "pending_2fa_user_id"
+                ] = user.id
+
+                request.session[
+                    "pending_2fa_started_at"
+                ] = time.time()
+
+                request.session[
+                    "pending_2fa_authenticated_at"
+                ] = request.session.get(
+                    "_auth_user_id"
+                )
+
+                request.session[
+                    "pending_2fa_login_type"
+                ] = "admin"
+
+                request.session.modified = True
+
+                return redirect(
+                    "two_factor_login"
+                )
 
             login(
                 request,
                 user,
             )
 
-            return redirect("admin_dashboard")
+            return redirect(
+                "admin_dashboard"
+            )
 
         attempts += 1
 
@@ -3769,6 +3810,7 @@ def admin_login_view(request):
             "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
         },
     )
+
 
 
 def admin_logout_view(request):
@@ -4261,6 +4303,65 @@ def enable_two_factor_view(request):
     return redirect("security_settings")
 
 @admin_required
+def disable_two_factor_view(request):
+    if request.method != "POST":
+        return redirect("security_settings")
+
+    two_factor = (
+        TwoFactorAuth.objects
+        .filter(user=request.user)
+        .first()
+    )
+
+    if not two_factor or not two_factor.is_enabled:
+        messages.info(
+            request,
+            "Two-factor authentication is already disabled.",
+        )
+
+        return redirect("security_settings")
+
+    token = request.POST.get(
+        "token",
+        "",
+    ).strip()
+
+    if not token.isdigit() or len(token) != 6:
+        messages.error(
+            request,
+            "Please enter the current 6-digit authenticator code.",
+        )
+
+        return redirect("security_settings")
+
+    if not two_factor.verify_token(token):
+        messages.error(
+            request,
+            "The authenticator code is incorrect. Two-factor authentication remains enabled.",
+        )
+
+        return redirect("security_settings")
+
+    two_factor.is_enabled = False
+
+    two_factor.save(
+        update_fields=[
+            "is_enabled",
+            "updated_at",
+        ]
+    )
+
+    request.user.recovery_codes.all().delete()
+
+    messages.success(
+        request,
+        "Two-factor authentication has been disabled and all recovery codes have been invalidated.",
+    )
+
+    return redirect("security_settings")
+
+
+@admin_required
 def security_qr_code_view(request):
     two_factor, created = TwoFactorAuth.objects.get_or_create(
         user=request.user
@@ -4289,4 +4390,33 @@ def security_qr_code_view(request):
     return HttpResponse(
         buffer.getvalue(),
         content_type="image/png",
+    )
+
+@admin_required
+def generate_recovery_codes_view(request):
+    if request.method != "POST":
+        return redirect("security_settings")
+
+    two_factor, created = TwoFactorAuth.objects.get_or_create(
+        user=request.user
+    )
+
+    if not two_factor.is_enabled:
+        messages.error(
+            request,
+            "Please enable two-factor authentication before generating recovery codes.",
+        )
+
+        return redirect("security_settings")
+
+    recovery_codes = generate_recovery_codes(
+        request.user
+    )
+
+    return render(
+        request,
+        "control/recovery_codes.html",
+        {
+            "recovery_codes": recovery_codes,
+        },
     )

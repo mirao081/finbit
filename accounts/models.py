@@ -1,4 +1,7 @@
 import pyotp
+import secrets
+
+from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
@@ -1086,6 +1089,67 @@ class RecoveryOTP(models.Model):
             f"{self.channel.upper()} OTP - "
             f"{self.user.username}"
         )
+
+
+class RecoveryCode(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="recovery_codes",
+    )
+
+    code_hash = models.CharField(
+        max_length=128,
+    )
+
+    used_at = models.DateTimeField(
+        null=True,
+        blank=True,
+    )
+
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+
+    class Meta:
+        ordering = ["created_at"]
+
+    @property
+    def is_used(self):
+        return self.used_at is not None
+
+    @staticmethod
+    def generate_plain_code():
+        return (
+            f"{secrets.token_hex(2).upper()}-"
+            f"{secrets.token_hex(2).upper()}-"
+            f"{secrets.token_hex(2).upper()}"
+        )
+
+    @classmethod
+    def create_code(cls, user, plain_code):
+        return cls.objects.create(
+            user=user,
+            code_hash=make_password(plain_code),
+        )
+
+    def verify_code(self, plain_code):
+        if self.is_used:
+            return False
+
+        return check_password(
+            plain_code,
+            self.code_hash,
+        )
+
+    def mark_used(self):
+        self.used_at = timezone.now()
+        self.save(
+            update_fields=["used_at"]
+        )
+
+    def __str__(self):
+        return f"Recovery Code - {self.user.username}"
 
 
 class Announcement(models.Model):

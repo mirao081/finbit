@@ -47,9 +47,13 @@
         <div class="status-icon">
 
             {% if two_factor.is_enabled %}
+
                 <i class="fas fa-shield-check"></i>
+
             {% else %}
+
                 <i class="fas fa-shield-halved"></i>
+
             {% endif %}
 
         </div>
@@ -210,11 +214,16 @@
                     </p>
 
                 </div>
+
+
+                <!-- TWO-FACTOR ACTIVATION -->
+
                 <form
                     method="post"
                     action="{% url 'enable_two_factor' %}"
                     class="two-factor-verification-form"
                 >
+
                     {% csrf_token %}
 
                     <div class="verification-form-header">
@@ -234,6 +243,7 @@
                         </p>
 
                     </div>
+
 
                     <div class="verification-input-group">
 
@@ -256,17 +266,263 @@
 
                     </div>
 
+
                     <button
                         type="submit"
                         class="security-action-button"
                     >
+
                         <i class="fas fa-shield-check"></i>
+
                         Verify & Activate
+
                     </button>
 
                 </form>
 
             </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- RECOVERY CODES -->
+
+    {% if two_factor.is_enabled %}
+
+    <div class="security-section recovery-codes-section">
+
+        <div class="security-section-header">
+
+            <div class="security-section-icon">
+                <i class="fas fa-key"></i>
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    ACCOUNT RECOVERY
+                </span>
+
+                <h2>
+                    Recovery Codes
+                </h2>
+
+                <p>
+                    Generate one-time recovery codes that can be used
+                    to access your account if you lose access to your
+                    authenticator.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="recovery-codes-content">
+
+
+            <div class="recovery-codes-info">
+
+                <div class="recovery-info-icon">
+                    <i class="fas fa-shield-keyhole"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Protect Your Account
+                    </h3>
+
+                    <p>
+                        You can generate a new set of 10 recovery codes.
+                        Each code can only be used once.
+                    </p>
+
+                    <p>
+                        Generating a new set will immediately invalidate
+                        any previously generated recovery codes.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="recovery-warning">
+
+                <i class="fas fa-triangle-exclamation"></i>
+
+                <div>
+
+                    <strong>
+                        Keep your recovery codes secure.
+                    </strong>
+
+                    <p>
+                        The codes are displayed only when they are generated.
+                        Store them somewhere safe before leaving this page.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="post"
+                action="{% url 'generate_recovery_codes' %}"
+                class="recovery-codes-form"
+            >
+
+                {% csrf_token %}
+
+                <button
+                    type="submit"
+                    class="security-action-button recovery-generate-button"
+                >
+
+                    <i class="fas fa-key"></i>
+
+                    Generate 10 Recovery Codes
+
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+
+    <!-- DISABLE TWO-FACTOR AUTHENTICATION -->
+
+    {% if two_factor.is_enabled %}
+
+    <div class="security-section disable-2fa-section">
+
+        <div class="security-section-header">
+
+            <div class="security-section-icon">
+                <i class="fas fa-shield-xmark"></i>
+            </div>
+
+            <div>
+
+                <span class="section-eyebrow">
+                    SECURITY MANAGEMENT
+                </span>
+
+                <h2>
+                    Disable Two-Factor Authentication
+                </h2>
+
+                <p>
+                    Turn off authenticator-based verification for your
+                    administrator account.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="disable-2fa-content">
+
+
+            <div class="recovery-warning">
+
+                <i class="fas fa-triangle-exclamation"></i>
+
+                <div>
+
+                    <strong>
+                        Security confirmation required
+                    </strong>
+
+                    <p>
+                        Disabling two-factor authentication will remove
+                        the additional verification step from your
+                        administrator login.
+                    </p>
+
+                    <p>
+                        Your current authenticator code is required
+                        to confirm this action. Existing recovery codes
+                        will also be invalidated.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="post"
+                action="{% url 'disable_two_factor' %}"
+                class="two-factor-verification-form"
+            >
+
+                {% csrf_token %}
+
+
+                <div class="verification-form-header">
+
+                    <span class="verification-eyebrow">
+                        CONFIRM DISABLE REQUEST
+                    </span>
+
+                    <h3>
+                        Verify Your Authenticator
+                    </h3>
+
+                    <p>
+                        Enter the current 6-digit code from your
+                        authenticator application.
+                    </p>
+
+                </div>
+
+
+                <div class="verification-input-group">
+
+                    <label for="disable-two-factor-token">
+                        Authentication Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="disable-two-factor-token"
+                        name="token"
+                        inputmode="numeric"
+                        pattern="[0-9]{6}"
+                        maxlength="6"
+                        minlength="6"
+                        autocomplete="one-time-code"
+                        placeholder="000000"
+                        required
+                    >
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="security-action-button disable-2fa-button"
+                >
+
+                    <i class="fas fa-shield-xmark"></i>
+
+                    Disable Two-Factor Authentication
+
+                </button>
+
+            </form>
 
         </div>
 
@@ -370,6 +626,29 @@
                         Two-factor authentication adds another
                         verification step beyond your administrator
                         password.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="security-info-item">
+
+                <div class="info-icon">
+                    <i class="fas fa-key"></i>
+                </div>
+
+                <div>
+
+                    <h3>
+                        Recovery Protection
+                    </h3>
+
+                    <p>
+                        One-time recovery codes provide an alternative
+                        verification method when your authenticator
+                        is unavailable.
                     </p>
 
                 </div>

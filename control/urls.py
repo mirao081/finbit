@@ -221,5 +221,20 @@ urlpatterns = [
         views.enable_two_factor_view,
         name="enable_two_factor",
     ),
+    path(
+        "security-settings/recovery-codes/",
+        views.generate_recovery_codes_view,
+        name="generate_recovery_codes",
+    ),
+    path(
+        "security-settings/enable-2fa/",
+        views.enable_two_factor_view,
+        name="enable_two_factor",
+    ),
+    path(
+        "security-settings/disable-2fa/",
+        views.disable_two_factor_view,
+        name="disable_two_factor",
+    ),
 
 ]

@@ -35,6 +35,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_POST
 from django.conf import settings
+from .utils import verify_recovery_code
 from core.models import (
     SiteSettings,
     MenuItem,
@@ -179,9 +180,6 @@ class UserLoginView(LoginView):
 
     def form_valid(self, form):
 
-                                                       
-                          
-                                                       
         if self.is_rate_limited():
 
             messages.error(
@@ -192,9 +190,6 @@ class UserLoginView(LoginView):
 
             return super().form_invalid(form)
 
-                                                       
-                         
-                                                       
         recaptcha_response = self.request.POST.get(
             "g-recaptcha-response",
             "",
@@ -209,9 +204,6 @@ class UserLoginView(LoginView):
 
             return super().form_invalid(form)
 
-                                                       
-                                      
-                                                       
         try:
 
             recaptcha_result = requests.post(
@@ -254,9 +246,6 @@ class UserLoginView(LoginView):
 
             return super().form_invalid(form)
 
-                                                       
-                                
-                                                       
         user = form.get_user()
 
         if user is None:
@@ -270,9 +259,6 @@ class UserLoginView(LoginView):
 
             return super().form_invalid(form)
 
-                                                       
-                              
-                                                       
         if not user.is_active:
 
             self.record_failed_attempt()
@@ -284,14 +270,8 @@ class UserLoginView(LoginView):
 
             return super().form_invalid(form)
 
-                                                       
-                                     
-                                                       
         self.clear_failed_attempts()
 
-                                                       
-                                   
-                                                       
         two_factor, _ = TwoFactorAuth.objects.get_or_create(
             user=user
         )
@@ -317,15 +297,16 @@ class UserLoginView(LoginView):
                 "_auth_user_id"
             )
 
+            self.request.session[
+                "pending_2fa_login_type"
+            ] = "user"
+
             self.request.session.modified = True
 
             return redirect(
                 "two_factor_login"
             )
 
-                                                       
-                      
-                                                       
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -333,6 +314,7 @@ class UserLoginView(LoginView):
         user = self.request.user
 
         if user.is_superuser or user.is_staff:
+
             return redirect(
                 "admin_dashboard"
             ).url
@@ -340,8 +322,6 @@ class UserLoginView(LoginView):
         return redirect(
             "dashboard"
         ).url
-    
-
 
 
 def signup(request):
@@ -3731,55 +3711,25 @@ def two_factor_setup(request):
 
 
 def two_factor_login(request):
-    user_id = request.session.get(
+    import time
+
+    pending_user_id = request.session.get(
         "pending_2fa_user_id"
     )
 
-    if not user_id:
-        return redirect("login")
-
-    pending_started = request.session.get(
+    pending_started_at = request.session.get(
         "pending_2fa_started_at"
     )
 
-    if pending_started:
-        try:
-            pending_started = float(
-                pending_started
-            )
-        except (TypeError, ValueError):
-            pending_started = None
-
-    if pending_started:
-        if time.time() - pending_started > 10 * 60:
-            request.session.pop(
-                "pending_2fa_user_id",
-                None,
-            )
-
-            request.session.pop(
-                "pending_2fa_started_at",
-                None,
-            )
-
-            request.session.pop(
-                "pending_2fa_authenticated_at",
-                None,
-            )
-
-            messages.error(
-                request,
-                "Your 2FA verification session has expired. Please log in again.",
-            )
-
-            return redirect("login")
-
-    try:
-        user = User.objects.get(
-            id=user_id,
-            is_active=True,
+    if not pending_user_id or not pending_started_at:
+        messages.error(
+            request,
+            "Your two-factor authentication session has expired. Please log in again.",
         )
-    except User.DoesNotExist:
+
+        return redirect("login")
+
+    if time.time() - pending_started_at > 10 * 60:
         request.session.pop(
             "pending_2fa_user_id",
             None,
@@ -3793,6 +3743,53 @@ def two_factor_login(request):
         request.session.pop(
             "pending_2fa_authenticated_at",
             None,
+        )
+
+        request.session.pop(
+            "pending_2fa_login_type",
+            None,
+        )
+
+        request.session.modified = True
+
+        messages.error(
+            request,
+            "Your two-factor authentication session has expired. Please log in again.",
+        )
+
+        return redirect("login")
+
+    user = User.objects.filter(
+        id=pending_user_id,
+        is_active=True,
+    ).first()
+
+    if not user:
+        request.session.pop(
+            "pending_2fa_user_id",
+            None,
+        )
+
+        request.session.pop(
+            "pending_2fa_started_at",
+            None,
+        )
+
+        request.session.pop(
+            "pending_2fa_authenticated_at",
+            None,
+        )
+
+        request.session.pop(
+            "pending_2fa_login_type",
+            None,
+        )
+
+        request.session.modified = True
+
+        messages.error(
+            request,
+            "Unable to verify your account. Please log in again.",
         )
 
         return redirect("login")
@@ -3806,10 +3803,7 @@ def two_factor_login(request):
         .first()
     )
 
-    if (
-        not two_factor
-        or not two_factor.secret_key
-    ):
+    if not two_factor or not two_factor.secret_key:
         request.session.pop(
             "pending_2fa_user_id",
             None,
@@ -3825,10 +3819,24 @@ def two_factor_login(request):
             None,
         )
 
+        request.session.pop(
+            "pending_2fa_login_type",
+            None,
+        )
+
+        request.session.modified = True
+
+        messages.error(
+            request,
+            "Two-factor authentication is not properly configured for this account.",
+        )
+
         return redirect("login")
 
     rate_limit_key = (
-        f"2fa_attempts:{user.id}:{request.META.get('REMOTE_ADDR', 'unknown')}"
+        f"2fa_attempts:"
+        f"{user.id}:"
+        f"{request.META.get('REMOTE_ADDR', 'unknown')}"
     )
 
     attempts = cache.get(
@@ -3839,7 +3847,7 @@ def two_factor_login(request):
     if attempts >= 5:
         messages.error(
             request,
-            "Too many incorrect verification attempts. Please log in again later.",
+            "Too many verification attempts. Please try again later.",
         )
 
         return render(
@@ -3848,18 +3856,16 @@ def two_factor_login(request):
         )
 
     if request.method == "POST":
+
         code = request.POST.get(
             "code",
             "",
         ).strip()
 
-        if (
-            not code.isdigit()
-            or len(code) != 6
-        ):
+        if not code:
             messages.error(
                 request,
-                "Please enter the 6-digit verification code.",
+                "Please enter your authenticator code or recovery code.",
             )
 
             return render(
@@ -3867,64 +3873,124 @@ def two_factor_login(request):
                 "accounts/two_factor_login.html",
             )
 
-        totp = pyotp.TOTP(
-            two_factor.secret_key
-        )
+        verified = False
 
-        if totp.verify(
-            code,
-            valid_window=1,
-        ):
-            cache.delete(
-                rate_limit_key
-            )
+        # ---------------------------------------------------------
+        # FIRST: TRY THE AUTHENTICATOR APP CODE
+        # ---------------------------------------------------------
 
-            request.session.pop(
-                "pending_2fa_user_id",
-                None,
-            )
+        if code.isdigit() and len(code) == 6:
 
-            request.session.pop(
-                "pending_2fa_started_at",
-                None,
-            )
-
-            request.session.pop(
-                "pending_2fa_authenticated_at",
-                None,
-            )
-
-            login(
-                request,
-                user,
-                backend="django.contrib.auth.backends.ModelBackend",
-            )
-
-            messages.success(
-                request,
-                "Two-Factor Authentication verified successfully.",
-            )
-
-            if user.is_staff or user.is_superuser:
-                return redirect(
-                    "admin_dashboard"
+            try:
+                totp = pyotp.TOTP(
+                    two_factor.secret_key
                 )
 
-            return redirect(
-                "dashboard"
+                verified = totp.verify(
+                    code,
+                    valid_window=1,
+                )
+
+            except (
+                ValueError,
+                TypeError,
+            ):
+                verified = False
+
+        # ---------------------------------------------------------
+        # SECOND: TRY A RECOVERY CODE
+        # ---------------------------------------------------------
+
+        if not verified:
+
+            verified = verify_recovery_code(
+                user,
+                code,
             )
 
-        attempts += 1
+        # ---------------------------------------------------------
+        # INVALID CODE
+        # ---------------------------------------------------------
 
-        cache.set(
-            rate_limit_key,
-            attempts,
-            5 * 7 * 24 * 60 * 60,
+        if not verified:
+
+            attempts += 1
+
+            cache.set(
+                rate_limit_key,
+                attempts,
+                5 * 60,
+            )
+
+            messages.error(
+                request,
+                "The authenticator or recovery code is invalid.",
+            )
+
+            return render(
+                request,
+                "accounts/two_factor_login.html",
+            )
+
+        # ---------------------------------------------------------
+        # SUCCESS
+        # ---------------------------------------------------------
+
+        cache.delete(
+            rate_limit_key
         )
 
-        messages.error(
+        login_type = request.session.get(
+            "pending_2fa_login_type",
+            "user",
+        )
+
+        request.session.pop(
+            "pending_2fa_user_id",
+            None,
+        )
+
+        request.session.pop(
+            "pending_2fa_started_at",
+            None,
+        )
+
+        request.session.pop(
+            "pending_2fa_authenticated_at",
+            None,
+        )
+
+        request.session.pop(
+            "pending_2fa_login_type",
+            None,
+        )
+
+        request.session.modified = True
+
+        login(
             request,
-            "The verification code is incorrect. Please try again.",
+            user,
+            backend="django.contrib.auth.backends.ModelBackend",
+        )
+
+        if (
+            login_type == "admin"
+            and (
+                user.is_staff
+                or user.is_superuser
+            )
+        ):
+            return redirect(
+                "admin_dashboard"
+            )
+
+        if user.is_staff or user.is_superuser:
+            return redirect(
+                "admin_dashboard"
+            )
+
+        return redirect(
+            "dashboard"
         )
 
     return render(
