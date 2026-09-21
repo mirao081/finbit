@@ -1596,3 +1596,374 @@
         transition: none;
     }
 }
+
+/* =========================================================
+   CREATE ANNOUNCEMENT SECTION
+   ========================================================= */
+
+.create-announcement-card {
+    width: 100%;
+    margin: 0 0 32px;
+    padding: 28px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 29, 49, 0.98),
+            rgba(7, 15, 28, 0.98)
+        );
+    border: 1px solid rgba(77, 163, 255, 0.18);
+    border-radius: 20px;
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    position: relative;
+    overflow: hidden;
+}
+
+.create-announcement-card::before {
+    content: "";
+    position: absolute;
+    top: -100px;
+    right: -80px;
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(
+        circle,
+        rgba(77, 163, 255, 0.14),
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+.create-announcement-card::after {
+    content: "";
+    position: absolute;
+    bottom: -100px;
+    left: -80px;
+    width: 220px;
+    height: 220px;
+    background: radial-gradient(
+        circle,
+        rgba(217, 181, 111, 0.08),
+        transparent 70%
+    );
+    pointer-events: none;
+}
+
+
+/* ---------------------------------------------------------
+   HEADER
+   --------------------------------------------------------- */
+
+.create-announcement-heading {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 28px;
+    position: relative;
+    z-index: 1;
+}
+
+.create-announcement-icon {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(77, 163, 255, 0.20),
+            rgba(11, 61, 145, 0.30)
+        );
+    border: 1px solid rgba(77, 163, 255, 0.28);
+    color: #8bc7ff;
+    font-size: 20px;
+    box-shadow:
+        0 8px 25px rgba(11, 61, 145, 0.22);
+}
+
+.create-announcement-kicker {
+    display: block;
+    margin-bottom: 5px;
+    color: #d9b56f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.create-announcement-heading h2 {
+    margin: 0;
+    color: #ffffff;
+    font-size: 23px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.create-announcement-heading p {
+    margin: 7px 0 0;
+    color: rgba(255, 255, 255, 0.58);
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+
+/* ---------------------------------------------------------
+   FORM
+   --------------------------------------------------------- */
+
+.announcement-form {
+    position: relative;
+    z-index: 1;
+}
+
+.announcement-form .form-group {
+    margin-bottom: 22px;
+}
+
+.announcement-form .form-group:last-of-type {
+    margin-bottom: 0;
+}
+
+.announcement-form .form-group label {
+    display: block;
+    margin-bottom: 9px;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.announcement-form input[type="text"],
+.announcement-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    display: block;
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    border-radius: 12px;
+    background: rgba(3, 10, 22, 0.72);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
+}
+
+.announcement-form input[type="text"] {
+    height: 50px;
+    padding: 0 15px;
+}
+
+.announcement-form textarea {
+    min-height: 145px;
+    padding: 14px 15px;
+    resize: vertical;
+    line-height: 1.6;
+}
+
+.announcement-form input[type="text"]::placeholder,
+.announcement-form textarea::placeholder {
+    color: rgba(255, 255, 255, 0.34);
+}
+
+.announcement-form input[type="text"]:hover,
+.announcement-form textarea:hover {
+    border-color: rgba(77, 163, 255, 0.25);
+}
+
+.announcement-form input[type="text"]:focus,
+.announcement-form textarea:focus {
+    border-color: rgba(77, 163, 255, 0.65);
+    background: rgba(4, 14, 30, 0.90);
+    box-shadow:
+        0 0 0 3px rgba(77, 163, 255, 0.08),
+        0 8px 25px rgba(0, 0, 0, 0.18);
+}
+
+
+/* ---------------------------------------------------------
+   FORM FOOTER
+   --------------------------------------------------------- */
+
+.announcement-form-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 24px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.announcement-secure-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.52);
+    font-size: 12px;
+}
+
+.announcement-secure-note i {
+    color: #8bc7ff;
+    font-size: 13px;
+}
+
+
+/* ---------------------------------------------------------
+   PUBLISH BUTTON
+   --------------------------------------------------------- */
+
+.create-announcement-btn {
+    min-height: 46px;
+    padding: 0 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    border: 1px solid rgba(217, 181, 111, 0.35);
+    border-radius: 11px;
+    background:
+        linear-gradient(
+            135deg,
+            #d9b56f,
+            #b9904b
+        );
+    color: #07101d;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow:
+        0 10px 25px rgba(217, 181, 111, 0.15);
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+.create-announcement-btn i {
+    font-size: 13px;
+}
+
+.create-announcement-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.08);
+    box-shadow:
+        0 14px 32px rgba(217, 181, 111, 0.24);
+}
+
+.create-announcement-btn:active {
+    transform: translateY(0);
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .create-announcement-card {
+        padding: 22px 18px;
+        margin-bottom: 25px;
+        border-radius: 16px;
+    }
+
+    .create-announcement-heading {
+        align-items: flex-start;
+        gap: 13px;
+        margin-bottom: 22px;
+    }
+
+    .create-announcement-icon {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+        border-radius: 12px;
+        font-size: 17px;
+    }
+
+    .create-announcement-kicker {
+        font-size: 10px;
+        letter-spacing: 1.2px;
+    }
+
+    .create-announcement-heading h2 {
+        font-size: 19px;
+    }
+
+    .create-announcement-heading p {
+        font-size: 12px;
+        margin-top: 5px;
+    }
+
+    .announcement-form input[type="text"] {
+        height: 47px;
+    }
+
+    .announcement-form textarea {
+        min-height: 130px;
+    }
+
+    .announcement-form-footer {
+        align-items: stretch;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .announcement-secure-note {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .create-announcement-btn {
+        width: 100%;
+        min-height: 48px;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .create-announcement-card {
+        padding: 18px 15px;
+        border-radius: 14px;
+    }
+
+    .create-announcement-heading {
+        gap: 11px;
+    }
+
+    .create-announcement-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        font-size: 16px;
+    }
+
+    .create-announcement-heading h2 {
+        font-size: 17px;
+    }
+
+    .announcement-form .form-group {
+        margin-bottom: 18px;
+    }
+
+    .announcement-form .form-group label {
+        font-size: 12px;
+    }
+
+    .announcement-form input[type="text"],
+    .announcement-form textarea {
+        font-size: 13px;
+    }
+
+    .announcement-form textarea {
+        min-height: 120px;
+    }
+}
