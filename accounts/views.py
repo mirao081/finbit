@@ -35,7 +35,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.safestring import mark_safe
 from django.views.decorators.http import require_POST
 from django.conf import settings
-from .utils import verify_recovery_code
+from .utils import (
+    generate_recovery_codes,
+    verify_recovery_code,
+)
 from core.models import (
     SiteSettings,
     MenuItem,
@@ -3616,7 +3619,108 @@ def two_factor_setup(request):
         )
     )
 
+    # ---------------------------------------------------------
+    # 2FA IS ENABLED
+    # ---------------------------------------------------------
     if two_factor.is_enabled:
+
+        if request.method == "POST":
+
+            action = request.POST.get(
+                "action",
+                ""
+            ).strip()
+
+            # -------------------------------------------------
+            # GENERATE RECOVERY CODES
+            # -------------------------------------------------
+            if action == "generate_recovery_codes":
+
+                recovery_codes = generate_recovery_codes(
+                    request.user
+                )
+
+                return render(
+                    request,
+                    "accounts/two_factor_setup.html",
+                    {
+                        "two_factor_enabled": True,
+                        "recovery_codes": recovery_codes,
+                        "recovery_codes_generated": True,
+                    },
+                )
+
+            # -------------------------------------------------
+            # DISABLE 2FA
+            # -------------------------------------------------
+            if action == "disable_2fa":
+
+                code = request.POST.get(
+                    "disable_code",
+                    ""
+                ).strip()
+
+                if (
+                    not code.isdigit()
+                    or len(code) != 6
+                ):
+
+                    messages.error(
+                        request,
+                        "Please enter the current 6-digit authenticator code."
+                    )
+
+                    return render(
+                        request,
+                        "accounts/two_factor_setup.html",
+                        {
+                            "two_factor_enabled": True,
+                        },
+                    )
+
+                totp = pyotp.TOTP(
+                    two_factor.secret_key
+                )
+
+                if not totp.verify(
+                    code,
+                    valid_window=1,
+                ):
+
+                    messages.error(
+                        request,
+                        "The authenticator code is incorrect. 2FA has not been disabled."
+                    )
+
+                    return render(
+                        request,
+                        "accounts/two_factor_setup.html",
+                        {
+                            "two_factor_enabled": True,
+                        },
+                    )
+
+                # Disable 2FA
+                two_factor.is_enabled = False
+
+                two_factor.save(
+                    update_fields=["is_enabled"]
+                )
+
+                # Invalidate all recovery codes
+                RecoveryCode.objects.filter(
+                    user=request.user
+                ).delete()
+
+                messages.success(
+                    request,
+                    "Two-Factor Authentication has been disabled successfully."
+                )
+
+                return redirect(
+                    "security_center"
+                )
+
         return render(
             request,
             "accounts/two_factor_setup.html",
@@ -3625,7 +3729,12 @@ def two_factor_setup(request):
             },
         )
 
+    # ---------------------------------------------------------
+    # 2FA IS NOT ENABLED
+    # ---------------------------------------------------------
+
     if not two_factor.secret_key:
+
         two_factor.secret_key = pyotp.random_base32()
 
         two_factor.save(
@@ -3660,24 +3769,27 @@ def two_factor_setup(request):
     ).decode()
 
     if request.method == "POST":
+
         code = request.POST.get(
             "code",
-            "",
+            ""
         ).strip()
 
         if (
             not code.isdigit()
             or len(code) != 6
         ):
+
             messages.error(
                 request,
-                "Please enter the 6-digit verification code.",
+                "Please enter the 6-digit verification code."
             )
 
         elif totp.verify(
             code,
             valid_window=1,
         ):
+
             two_factor.is_enabled = True
 
             two_factor.save(
@@ -3686,7 +3798,7 @@ def two_factor_setup(request):
 
             messages.success(
                 request,
-                "Two-Factor Authentication has been enabled successfully.",
+                "Two-Factor Authentication has been enabled successfully."
             )
 
             return redirect(
@@ -3694,9 +3806,10 @@ def two_factor_setup(request):
             )
 
         else:
+
             messages.error(
                 request,
-                "The verification code is incorrect. Please try again.",
+                "The verification code is incorrect. Please try again."
             )
 
     return render(

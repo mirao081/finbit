@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block extra_css %}
+
 <link rel="stylesheet" href="{% static 'accounts/css/two_factor_setup.css' %}">
 {% endblock %}
 
@@ -10,185 +11,427 @@
 
 <section class="two-factor-page">
 
-    <div class="two-factor-card">
 
-        <div class="two-factor-header">
+<div class="two-factor-card">
 
-            <div class="two-factor-icon">
-                🔐
-            </div>
+    <div class="two-factor-header">
 
-            <h2>Two-Factor Authentication</h2>
-
-            {% if two_factor_enabled %}
-
-                <p>
-                    Two-Factor Authentication is currently enabled
-                    on your account.
-                </p>
-
-            {% else %}
-
-                <p>
-                    Add an additional layer of protection when signing
-                    in to your Finbit account.
-                </p>
-
-            {% endif %}
-
+        <div class="two-factor-icon">
+            🔐
         </div>
 
+        <h2>Two-Factor Authentication</h2>
 
         {% if two_factor_enabled %}
 
-            <div class="two-factor-status enabled">
-
-                <span class="status-dot"></span>
-
-                <div>
-                    <strong>2FA is enabled</strong>
-
-                    <p>
-                        Your account is protected with
-                        Two-Factor Authentication.
-                    </p>
-                </div>
-
-            </div>
-
-            <a
-                href="{% url 'security_center' %}"
-                class="two-factor-btn secondary"
-            >
-                Back to Security Center
-            </a>
-
+            <p>
+                Two-Factor Authentication is currently enabled
+                on your account.
+            </p>
 
         {% else %}
 
-            <div class="two-factor-step">
-
-                <div class="step-number">
-                    1
-                </div>
-
-                <div class="step-content">
-
-                    <h3>Install an authenticator app</h3>
-
-                    <p>
-                        Install Google Authenticator, Microsoft Authenticator,
-                        or another compatible authenticator app on your phone.
-                    </p>
-
-                </div>
-
-            </div>
-
-
-            <div class="two-factor-step">
-
-                <div class="step-number">
-                    2
-                </div>
-
-                <div class="step-content">
-
-                    <h3>Scan the QR code</h3>
-
-                    <p>
-                        Open your authenticator app and scan the QR code below.
-                    </p>
-
-                    <div class="qr-container">
-
-                        <img
-                            src="data:image/png;base64,{{ qr_code }}"
-                            alt="Two-Factor Authentication QR Code"
-                        >
-
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div class="manual-secret">
-
-                <span>
-                    Can't scan the QR code?
-                </span>
-
-                <strong>
-                    {{ secret_key }}
-                </strong>
-
-            </div>
-
-
-            <div class="two-factor-step">
-
-                <div class="step-number">
-                    3
-                </div>
-
-                <div class="step-content">
-
-                    <h3>Enter your verification code</h3>
-
-                    <p>
-                        Enter the 6-digit code currently displayed
-                        in your authenticator app.
-                    </p>
-
-                    <form method="post" class="two-factor-form">
-
-                        {% csrf_token %}
-
-                        <label for="code">
-                            Verification Code
-                        </label>
-
-                        <input
-                            type="text"
-                            id="code"
-                            name="code"
-                            maxlength="6"
-                            minlength="6"
-                            inputmode="numeric"
-                            autocomplete="one-time-code"
-                            placeholder="000000"
-                            required
-                        >
-
-                        <button
-                            type="submit"
-                            class="two-factor-btn primary"
-                        >
-                            Verify & Enable 2FA
-                        </button>
-
-                    </form>
-
-                </div>
-
-            </div>
-
-
-            <a
-                href="{% url 'security_center' %}"
-                class="cancel-link"
-            >
-                Cancel
-            </a>
+            <p>
+                Add an additional layer of protection when signing
+                in to your Finbit account.
+            </p>
 
         {% endif %}
 
     </div>
 
+
+    {% if two_factor_enabled %}
+
+        <!-- ==========================================
+             2FA ENABLED
+             ========================================== -->
+
+        <div class="two-factor-status enabled">
+
+            <span class="status-dot"></span>
+
+            <div>
+                <strong>2FA is enabled</strong>
+
+                <p>
+                    Your account is protected with
+                    Two-Factor Authentication.
+                </p>
+            </div>
+
+        </div>
+
+
+        {% if recovery_codes_generated %}
+
+            <!-- ==========================================
+                 RECOVERY CODES
+                 ========================================== -->
+
+            <div class="recovery-codes-section">
+
+                <div class="recovery-codes-header">
+
+                    <div class="recovery-codes-icon">
+                        🔑
+                    </div>
+
+                    <div>
+
+                        <h3>
+                            Your Recovery Codes
+                        </h3>
+
+                        <p>
+                            Save these codes somewhere secure.
+                            Each code can only be used once.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="recovery-warning">
+
+                    <strong>
+                        Important
+                    </strong>
+
+                    <span>
+                        These codes will only be shown now.
+                        Store them securely before leaving this page.
+                    </span>
+
+                </div>
+
+
+                <div class="recovery-codes-list">
+
+                    {% for code in recovery_codes %}
+
+                        <div class="recovery-code">
+                            <code>{{ code }}</code>
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="recovery-actions">
+
+                    <button
+                        type="button"
+                        class="two-factor-btn secondary"
+                        onclick="copyRecoveryCodes()"
+                    >
+                        <i class="fas fa-copy"></i>
+                        Copy All Codes
+                    </button>
+
+                    <button
+                        type="button"
+                        class="two-factor-btn secondary"
+                        onclick="window.print()"
+                    >
+                        <i class="fas fa-print"></i>
+                        Print Codes
+                    </button>
+
+                </div>
+
+            </div>
+
+        {% else %}
+
+            <!-- ==========================================
+                 RECOVERY CODE GENERATION
+                 ========================================== -->
+
+            <div class="security-action-card">
+
+                <div class="security-action-icon">
+                    🔑
+                </div>
+
+                <div class="security-action-content">
+
+                    <h3>
+                        Recovery Codes
+                    </h3>
+
+                    <p>
+                        Recovery codes can be used to access your
+                        account if you lose access to your
+                        authenticator app.
+                    </p>
+
+                    <p class="security-action-note">
+                        Generating a new set will invalidate
+                        all previously generated recovery codes.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="post"
+                class="security-action-form"
+            >
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="generate_recovery_codes"
+                >
+
+                <button
+                    type="submit"
+                    class="two-factor-btn primary"
+                >
+                    <i class="fas fa-key"></i>
+                    Generate Recovery Codes
+                </button>
+
+            </form>
+
+        {% endif %}
+
+
+        <!-- ==========================================
+             DISABLE 2FA
+             ========================================== -->
+
+        <div class="danger-zone">
+
+            <div class="danger-zone-header">
+
+                <div class="danger-icon">
+                    ⚠
+                </div>
+
+                <div>
+
+                    <h3>
+                        Disable Two-Factor Authentication
+                    </h3>
+
+                    <p>
+                        Disabling 2FA will remove this additional
+                        security layer from your account and
+                        invalidate all recovery codes.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <form
+                method="post"
+                class="disable-2fa-form"
+            >
+
+                {% csrf_token %}
+
+                <input
+                    type="hidden"
+                    name="action"
+                    value="disable_2fa"
+                >
+
+                <label for="disable_code">
+                    Current Authenticator Code
+                </label>
+
+                <input
+                    type="text"
+                    id="disable_code"
+                    name="disable_code"
+                    maxlength="6"
+                    minlength="6"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                    placeholder="000000"
+                    required
+                >
+
+                <p class="form-help">
+                    Enter the current 6-digit code from your
+                    authenticator app to confirm that you want
+                    to disable 2FA.
+                </p>
+
+                <button
+                    type="submit"
+                    class="two-factor-btn danger"
+                >
+                    <i class="fas fa-shield-alt"></i>
+                    Disable 2FA
+                </button>
+
+            </form>
+
+        </div>
+
+
+        <a
+            href="{% url 'security_center' %}"
+            class="cancel-link"
+        >
+            Back to Security Center
+        </a>
+
+
+    {% else %}
+
+        <!-- ==========================================
+             2FA SETUP
+             ========================================== -->
+
+        <div class="two-factor-step">
+
+            <div class="step-number">
+                1
+            </div>
+
+            <div class="step-content">
+
+                <h3>
+                    Install an authenticator app
+                </h3>
+
+                <p>
+                    Install Google Authenticator, Microsoft Authenticator,
+                    or another compatible authenticator app on your phone.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="two-factor-step">
+
+            <div class="step-number">
+                2
+            </div>
+
+            <div class="step-content">
+
+                <h3>
+                    Scan the QR code
+                </h3>
+
+                <p>
+                    Open your authenticator app and scan the QR code below.
+                </p>
+
+                <div class="qr-container">
+
+                    <img
+                        src="data:image/png;base64,{{ qr_code }}"
+                        alt="Two-Factor Authentication QR Code"
+                    >
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="manual-secret">
+
+            <span>
+                Can't scan the QR code?
+            </span>
+
+            <strong>
+                {{ secret_key }}
+            </strong>
+
+        </div>
+
+
+        <div class="two-factor-step">
+
+            <div class="step-number">
+                3
+            </div>
+
+            <div class="step-content">
+
+                <h3>
+                    Enter your verification code
+                </h3>
+
+                <p>
+                    Enter the 6-digit code currently displayed
+                    in your authenticator app.
+                </p>
+
+                <form
+                    method="post"
+                    class="two-factor-form"
+                >
+
+                    {% csrf_token %}
+
+                    <label for="code">
+                        Verification Code
+                    </label>
+
+                    <input
+                        type="text"
+                        id="code"
+                        name="code"
+                        maxlength="6"
+                        minlength="6"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        placeholder="000000"
+                        required
+                    >
+
+                    <button
+                        type="submit"
+                        class="two-factor-btn primary"
+                    >
+                        Verify & Enable 2FA
+                    </button>
+
+                </form>
+
+            </div>
+
+        </div>
+
+
+        <a
+            href="{% url 'security_center' %}"
+            class="cancel-link"
+        >
+            Cancel
+        </a>
+
+    {% endif %}
+
+</div>
+
+
 </section>
 
 {% endblock %}
 
+{% block extra_js %}
 
+<script src="{% static 'accounts/js/two_factor_setup.js' %}"></script>
+
+{% endblock %}

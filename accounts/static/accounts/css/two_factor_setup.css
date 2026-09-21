@@ -549,3 +549,486 @@
     }
 }
 
+/* =========================================================
+   RECOVERY CODES
+   ========================================================= */
+
+.recovery-codes-section {
+    margin-top: 24px;
+    padding: 24px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(212, 175, 90, .08),
+            rgba(8, 13, 21, .96)
+        );
+
+    border: 1px solid rgba(212, 175, 90, .22);
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, .30),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+.recovery-codes-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 14px;
+
+    margin-bottom: 20px;
+}
+
+.recovery-codes-icon {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(212, 175, 90, .12);
+
+    border: 1px solid rgba(212, 175, 90, .25);
+
+    font-size: 1.2rem;
+}
+
+.recovery-codes-header h3 {
+    margin: 0 0 6px;
+
+    color: #fff;
+
+    font-size: 1.1rem;
+}
+
+.recovery-codes-header p {
+    margin: 0;
+
+    color: #8f9bad;
+
+    line-height: 1.6;
+
+    font-size: .9rem;
+}
+
+.recovery-warning {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+
+    margin-bottom: 18px;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(212, 175, 90, .07);
+
+    border: 1px solid rgba(212, 175, 90, .16);
+}
+
+.recovery-warning strong {
+    color: #f0d47f;
+
+    font-size: .9rem;
+}
+
+.recovery-warning span {
+    color: #aeb8c7;
+
+    font-size: .85rem;
+
+    line-height: 1.55;
+}
+
+.recovery-codes-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.recovery-code {
+    padding: 13px 12px;
+
+    border-radius: 10px;
+
+    background:
+        rgba(255, 255, 255, .035);
+
+    border: 1px solid rgba(103, 147, 227, .16);
+
+    text-align: center;
+
+    transition:
+        border-color .25s ease,
+        background .25s ease,
+        transform .25s ease;
+}
+
+.recovery-code:hover {
+    transform: translateY(-2px);
+
+    border-color: rgba(212, 175, 90, .35);
+
+    background:
+        rgba(212, 175, 90, .06);
+}
+
+.recovery-code code {
+    color: #f0d47f;
+
+    font-family: "Courier New", monospace;
+
+    font-size: .95rem;
+
+    font-weight: 700;
+
+    letter-spacing: .08em;
+
+    user-select: all;
+}
+
+.recovery-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+
+    margin-top: 18px;
+}
+
+.recovery-actions .two-factor-btn {
+    margin-top: 0;
+
+    flex: 1 1 180px;
+}
+
+
+/* =========================================================
+   SECURITY ACTION
+   ========================================================= */
+
+.security-action-card {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 16px;
+
+    margin-top: 24px;
+
+    padding: 22px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(22, 31, 45, .96),
+            rgba(8, 13, 21, .98)
+        );
+
+    border: 1px solid rgba(103, 147, 227, .16);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, .25),
+        inset 0 1px 0 rgba(255, 255, 255, .04);
+}
+
+.security-action-icon {
+    width: 46px;
+    height: 46px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 13px;
+
+    background:
+        rgba(103, 147, 227, .10);
+
+    border: 1px solid rgba(103, 147, 227, .20);
+
+    font-size: 1.2rem;
+}
+
+.security-action-content {
+    flex: 1;
+}
+
+.security-action-content h3 {
+    margin: 2px 0 7px;
+
+    color: #fff;
+
+    font-size: 1.05rem;
+}
+
+.security-action-content p {
+    margin: 0;
+
+    color: #8f9bad;
+
+    line-height: 1.6;
+
+    font-size: .9rem;
+}
+
+.security-action-note {
+    margin-top: 8px !important;
+
+    color: #d4af5a !important;
+
+    font-size: .82rem !important;
+}
+
+.security-action-form {
+    margin-top: 4px;
+}
+
+.security-action-form .two-factor-btn {
+    margin-top: 12px;
+}
+
+
+/* =========================================================
+   DANGER ZONE
+   ========================================================= */
+
+.danger-zone {
+    margin-top: 32px;
+
+    padding: 24px;
+
+    border-radius: 18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(120, 35, 45, .10),
+            rgba(8, 13, 21, .98)
+        );
+
+    border: 1px solid rgba(220, 80, 95, .22);
+
+    box-shadow:
+        0 15px 35px rgba(0, 0, 0, .25),
+        inset 0 1px 0 rgba(255, 255, 255, .03);
+}
+
+.danger-zone-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 15px;
+
+    margin-bottom: 20px;
+}
+
+.danger-icon {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background:
+        rgba(220, 80, 95, .10);
+
+    border: 1px solid rgba(220, 80, 95, .22);
+
+    color: #f08b98;
+
+    font-size: 1.15rem;
+}
+
+.danger-zone-header h3 {
+    margin: 2px 0 7px;
+
+    color: #fff;
+
+    font-size: 1.05rem;
+}
+
+.danger-zone-header p {
+    margin: 0;
+
+    color: #8f9bad;
+
+    line-height: 1.6;
+
+    font-size: .9rem;
+}
+
+.disable-2fa-form {
+    padding-top: 18px;
+
+    border-top:
+        1px solid rgba(220, 80, 95, .12);
+}
+
+.disable-2fa-form label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #fff;
+
+    font-size: .9rem;
+
+    font-weight: 600;
+}
+
+.disable-2fa-form input {
+    width: 100%;
+
+    padding: 14px 16px;
+
+    border-radius: 12px;
+
+    border: 1px solid rgba(220, 80, 95, .20);
+
+    outline: none;
+
+    background:
+        rgba(255, 255, 255, .04);
+
+    color: #fff;
+
+    font-size: 1.1rem;
+
+    letter-spacing: .3em;
+
+    text-align: center;
+
+    transition:
+        border-color .25s ease,
+        box-shadow .25s ease;
+}
+
+.disable-2fa-form input:focus {
+    border-color: rgba(240, 139, 152, .65);
+
+    box-shadow:
+        0 0 0 3px rgba(220, 80, 95, .08),
+        0 0 20px rgba(220, 80, 95, .06);
+}
+
+.form-help {
+    margin: 8px 0 0;
+
+    color: #7f8999;
+
+    font-size: .8rem;
+
+    line-height: 1.5;
+}
+
+.two-factor-btn.danger {
+    width: 100%;
+
+    border: 1px solid rgba(220, 80, 95, .28);
+
+    color: #fff;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(160, 45, 60, .92),
+            rgba(112, 30, 42, .96)
+        );
+
+    box-shadow:
+        0 10px 25px rgba(120, 35, 45, .18);
+}
+
+.two-factor-btn.danger:hover {
+    transform: translateY(-2px);
+
+    filter: brightness(1.08);
+
+    box-shadow:
+        0 14px 32px rgba(120, 35, 45, .30);
+}
+
+
+/* =========================================================
+   RESPONSIVE RECOVERY / SECURITY CONTROLS
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .recovery-codes-section,
+    .security-action-card,
+    .danger-zone {
+        padding: 18px;
+    }
+
+    .recovery-codes-list {
+        grid-template-columns: 1fr;
+    }
+
+    .recovery-actions {
+        flex-direction: column;
+    }
+
+    .recovery-actions .two-factor-btn {
+        width: 100%;
+        flex: none;
+    }
+
+    .security-action-card,
+    .danger-zone-header {
+        gap: 12px;
+    }
+
+    .security-action-icon,
+    .danger-icon,
+    .recovery-codes-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .recovery-code code {
+        font-size: .9rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .recovery-code {
+        transition: none;
+    }
+
+    .two-factor-btn.danger {
+        transition: none;
+    }
+}
