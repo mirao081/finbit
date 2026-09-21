@@ -1454,3 +1454,448 @@
     }
 
 }
+/* =========================================================
+   RECOVERY CODES
+   ========================================================= */
+
+.recovery-codes-section {
+    border-color: rgba(139, 199, 255, .14);
+}
+
+.recovery-codes-section .security-section-icon {
+    color: #f2d596;
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            rgba(242, 198, 109, .12),
+            transparent 70%
+        ),
+        rgba(217, 181, 111, .06);
+    border-color: rgba(217, 181, 111, .15);
+}
+
+.recovery-codes-content {
+    width: 100%;
+    padding: 28px 25px;
+    box-sizing: border-box;
+}
+
+.recovery-codes-info {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 19px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    border-radius: 16px;
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(77, 163, 255, .08),
+            transparent 55%
+        ),
+        rgba(3, 14, 29, .58);
+    border: 1px solid rgba(77, 163, 255, .11);
+}
+
+.recovery-info-icon {
+    width: 43px;
+    height: 43px;
+    flex: 0 0 43px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    color: #8ecfff;
+    background: rgba(77, 163, 255, .07);
+    border: 1px solid rgba(77, 163, 255, .12);
+}
+
+.recovery-info-icon i {
+    font-size: .9rem;
+}
+
+.recovery-codes-info h3 {
+    margin: 0 0 6px;
+    color: #eaf5ff;
+    font-size: .82rem;
+    font-weight: 800;
+}
+
+.recovery-codes-info p {
+    margin: 4px 0;
+    color: #7f98ba;
+    font-size: .68rem;
+    line-height: 1.65;
+}
+
+.recovery-warning {
+    width: 100%;
+    max-width: 760px;
+    margin: 16px auto 0;
+    padding: 16px 18px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
+    border-radius: 15px;
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(242, 198, 109, .07),
+            transparent 55%
+        ),
+        rgba(40, 29, 11, .30);
+    border: 1px solid rgba(217, 181, 111, .15);
+}
+
+.recovery-warning > i {
+    flex: 0 0 auto;
+    margin-top: 2px;
+    color: #f2c66d;
+    font-size: .9rem;
+}
+
+.recovery-warning strong {
+    display: block;
+    margin-bottom: 4px;
+    color: #f2d596;
+    font-size: .72rem;
+    font-weight: 800;
+}
+
+.recovery-warning p {
+    margin: 3px 0;
+    color: #7f92ad;
+    font-size: .66rem;
+    line-height: 1.6;
+}
+
+.recovery-codes-form {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-top: 19px;
+}
+
+.recovery-generate-button {
+    margin-top: 0;
+    background:
+        linear-gradient(
+            135deg,
+            #f2d596,
+            #c7a15d
+        );
+    border-color: rgba(242, 213, 150, .28);
+    box-shadow:
+        0 8px 22px rgba(199, 165, 112, .15);
+}
+
+.recovery-generate-button:hover {
+    box-shadow:
+        0 12px 28px rgba(199, 165, 112, .24);
+}
+
+
+/* =========================================================
+   DISABLE TWO-FACTOR AUTHENTICATION
+   ========================================================= */
+
+.disable-2fa-section {
+    border-color: rgba(255, 107, 107, .11);
+}
+
+.disable-2fa-section .security-section-icon {
+    color: #ff9090;
+    background:
+        radial-gradient(
+            circle at 30% 20%,
+            rgba(255, 107, 107, .10),
+            transparent 70%
+        ),
+        rgba(255, 107, 107, .045);
+    border-color: rgba(255, 107, 107, .13);
+}
+
+.disable-2fa-content {
+    width: 100%;
+    padding: 28px 25px;
+    box-sizing: border-box;
+}
+
+.disable-2fa-content .recovery-warning {
+    border-color: rgba(255, 107, 107, .14);
+    background:
+        radial-gradient(
+            circle at 0% 0%,
+            rgba(255, 107, 107, .06),
+            transparent 55%
+        ),
+        rgba(40, 12, 18, .24);
+}
+
+.disable-2fa-content .recovery-warning > i {
+    color: #ff8585;
+}
+
+.disable-2fa-content .recovery-warning strong {
+    color: #ffb0b0;
+}
+
+.disable-2fa-content .two-factor-verification-form {
+    width: 100%;
+    max-width: 620px;
+    margin: 20px auto 0;
+    padding: 24px;
+    border: 1px solid rgba(255, 107, 107, .10);
+    border-radius: 17px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(31, 20, 31, .42),
+            rgba(3, 12, 26, .55)
+        );
+}
+
+.disable-2fa-button {
+    color: #ffffff;
+    background:
+        linear-gradient(
+            135deg,
+            #c95d67,
+            #963e49
+        );
+    border-color: rgba(255, 125, 125, .20);
+    box-shadow:
+        0 8px 22px rgba(255, 75, 90, .12);
+}
+
+.disable-2fa-button:hover {
+    box-shadow:
+        0 12px 28px rgba(255, 75, 90, .20);
+    filter: brightness(1.06);
+}
+
+
+/* =========================================================
+   RECOVERY CODE GENERATION PAGE
+   Supports recovery_codes.html
+   ========================================================= */
+
+.recovery-codes-page {
+    position: relative;
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 25px 20px 40px;
+    box-sizing: border-box;
+    color: #dcecff;
+    font-family: "Montserrat", "Inter", sans-serif;
+}
+
+.recovery-codes-page .recovery-codes-card {
+    width: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+    border-radius: 22px;
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(77, 163, 255, .08),
+            transparent 40%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(18, 45, 78, .80),
+            rgba(5, 19, 39, .96)
+        );
+    border: 1px solid rgba(77, 163, 255, .13);
+    box-shadow:
+        0 20px 55px rgba(0, 0, 0, .30),
+        inset 0 1px 0 rgba(255, 255, 255, .035);
+}
+
+.recovery-codes-page .recovery-code-grid {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.recovery-codes-page .recovery-code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 52px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(13, 38, 67, .88),
+            rgba(3, 14, 29, .94)
+        );
+    border: 1px solid rgba(77, 163, 255, .13);
+    color: #dff3ff;
+    font-family: "Courier New", monospace;
+    font-size: .92rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, .025);
+    transition:
+        transform .2s ease,
+        border-color .2s ease,
+        background .2s ease;
+}
+
+.recovery-codes-page .recovery-code:hover {
+    transform: translateY(-2px);
+    border-color: rgba(77, 163, 255, .27);
+    background:
+        linear-gradient(
+            145deg,
+            rgba(17, 48, 82, .94),
+            rgba(3, 14, 29, .98)
+        );
+}
+
+.recovery-codes-page .recovery-code-warning {
+    margin-top: 20px;
+}
+
+
+/* =========================================================
+   RESPONSIVE — RECOVERY + DISABLE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .recovery-codes-content,
+    .disable-2fa-content {
+        padding: 23px 17px;
+    }
+
+    .recovery-codes-info,
+    .recovery-warning {
+        max-width: 600px;
+    }
+
+    .recovery-codes-page {
+        padding:
+            18px 12px 30px;
+    }
+
+    .recovery-codes-page .recovery-codes-card {
+        padding: 23px 17px;
+    }
+
+    .recovery-codes-page .recovery-code-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+@media (max-width: 480px) {
+
+    .recovery-codes-content,
+    .disable-2fa-content {
+        padding: 20px 13px;
+    }
+
+    .recovery-codes-info {
+        padding: 15px;
+        gap: 11px;
+    }
+
+    .recovery-info-icon {
+        width: 38px;
+        height: 38px;
+        flex-basis: 38px;
+    }
+
+    .recovery-codes-info h3 {
+        font-size: .76rem;
+    }
+
+    .recovery-codes-info p {
+        font-size: .62rem;
+    }
+
+    .recovery-warning {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .recovery-warning strong {
+        font-size: .66rem;
+    }
+
+    .recovery-warning p {
+        font-size: .60rem;
+    }
+
+    .recovery-codes-form {
+        margin-top: 16px;
+    }
+
+    .recovery-generate-button {
+        width: 100%;
+        max-width: 330px;
+    }
+
+    .disable-2fa-content .two-factor-verification-form {
+        padding: 19px 13px;
+    }
+
+    .recovery-codes-page {
+        padding:
+            12px 8px 25px;
+    }
+
+    .recovery-codes-page .recovery-codes-card {
+        padding: 20px 13px;
+        border-radius: 18px;
+    }
+
+    .recovery-codes-page .recovery-code-grid {
+        gap: 9px;
+        margin-top: 20px;
+    }
+
+    .recovery-codes-page .recovery-code {
+        min-height: 46px;
+        font-size: .76rem;
+        letter-spacing: 1.5px;
+    }
+}
+
+
+/* =========================================================
+   ACCESSIBILITY
+   ========================================================= */
+
+.security-settings-page button:focus-visible,
+.security-settings-page input:focus-visible,
+.recovery-codes-page button:focus-visible {
+    outline: 2px solid #8ecfff;
+    outline-offset: 3px;
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .recovery-generate-button,
+    .disable-2fa-button,
+    .recovery-codes-page .recovery-code {
+        transition: none;
+    }
+}
