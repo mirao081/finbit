@@ -4413,10 +4413,18 @@ def generate_recovery_codes_view(request):
         request.user
     )
 
+    settings = AdminDashboardSettings.objects.first()
+    menus = AdminMenu.objects.all()
+    
+
+  
+
     return render(
         request,
         "control/recovery_codes.html",
         {
             "recovery_codes": recovery_codes,
+            "settings": settings,
+            "menus": menus,
         },
     )
