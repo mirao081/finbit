@@ -3488,7 +3488,7 @@ def admin_login_view(request):
 
             messages.error(
                 request,
-                "Too many failed login attempts. Please try again later."
+                "Too many failed login attempts. Please try again later.",
             )
 
             return render(
@@ -3642,6 +3642,13 @@ def admin_login_view(request):
             },
         )
 
+    return render(
+        request,
+        "control/admin_login.html",
+        {
+            "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
+        },
+    )
 
 def admin_logout_view(request):
 
