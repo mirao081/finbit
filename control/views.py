@@ -1579,7 +1579,6 @@ def admin_user_detail_view(request, user_id):
 
 
 @admin_required
-@require_POST
 def admin_adjust_wallet_view(request, user_id):
 
     user = get_object_or_404(
@@ -1587,16 +1586,52 @@ def admin_adjust_wallet_view(request, user_id):
         id=user_id,
     )
 
+    wallet = (
+        Wallet.objects
+        .filter(user=user)
+        .first()
+    )
+
+    if not wallet:
+
+        messages.error(
+            request,
+            "User wallet was not found.",
+        )
+
+        return redirect("user_wallets")
+
+    if request.method == "GET":
+
+        return render(
+            request,
+            "control/adjust_wallet.html",
+            {
+                "user": user,
+                "wallet": wallet,
+            },
+        )
+
+    if request.method != "POST":
+
+        return HttpResponseNotAllowed(
+            ["GET", "POST"]
+        )
+
     amount_raw = request.POST.get(
         "amount",
         "0.00",
     )
 
-    action = request.POST.get("action")
+    action = request.POST.get(
+        "action"
+    )
 
     try:
 
-        amount = Decimal(amount_raw)
+        amount = Decimal(
+            amount_raw
+        )
 
     except (
         InvalidOperation,
@@ -1609,7 +1644,10 @@ def admin_adjust_wallet_view(request, user_id):
             "Invalid amount.",
         )
 
-        return redirect("user_wallets")
+        return redirect(
+            "admin_adjust_wallet",
+            user_id=user.id,
+        )
 
     if not amount.is_finite():
 
@@ -1618,7 +1656,10 @@ def admin_adjust_wallet_view(request, user_id):
             "Invalid amount.",
         )
 
-        return redirect("user_wallets")
+        return redirect(
+            "admin_adjust_wallet",
+            user_id=user.id,
+        )
 
     if amount <= Decimal("0.00"):
 
@@ -1627,25 +1668,20 @@ def admin_adjust_wallet_view(request, user_id):
             "Amount must be greater than zero.",
         )
 
-        return redirect("user_wallets")
+        return redirect(
+            "admin_adjust_wallet",
+            user_id=user.id,
+        )
 
     with transaction.atomic():
 
         wallet = (
             Wallet.objects
             .select_for_update()
-            .filter(user=user)
-            .first()
-        )
-
-        if not wallet:
-
-            messages.error(
-                request,
-                "User wallet was not found.",
+            .get(
+                id=wallet.id
             )
-
-            return redirect("user_wallets")
+        )
 
         if action == "credit":
 
@@ -1660,7 +1696,10 @@ def admin_adjust_wallet_view(request, user_id):
                     "Insufficient wallet balance.",
                 )
 
-                return redirect("user_wallets")
+                return redirect(
+                    "admin_adjust_wallet",
+                    user_id=user.id,
+                )
 
             wallet.balance -= amount
 
@@ -1671,10 +1710,15 @@ def admin_adjust_wallet_view(request, user_id):
                 "Invalid wallet action.",
             )
 
-            return redirect("user_wallets")
+            return redirect(
+                "admin_adjust_wallet",
+                user_id=user.id,
+            )
 
         wallet.save(
-            update_fields=["balance"]
+            update_fields=[
+                "balance"
+            ]
         )
 
     messages.success(
@@ -1682,8 +1726,9 @@ def admin_adjust_wallet_view(request, user_id):
         f"Wallet updated for {user.username}.",
     )
 
-    return redirect("user_wallets")
-
+    return redirect(
+        "user_wallets"
+    )
 
 @admin_required
 def admin_announcements_view(request):
