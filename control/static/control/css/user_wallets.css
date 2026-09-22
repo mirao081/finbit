@@ -374,11 +374,17 @@
 .deposit-amount {
     color: #7fffb2 !important;
     font-weight: 800 !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
 }
 
 .withdrawal-amount {
     color: #ffb4b4 !important;
     font-weight: 800 !important;
+    white-space: nowrap !important;
+    word-break: normal !important;
+    overflow-wrap: normal !important;
 }
 
 .status-badge {
@@ -1167,8 +1173,26 @@
         content: "Status";
     }
 
-    .transaction-inner-table > tbody > tr > td.empty-transaction {
+    .transaction-inner-table > tbody > tr > td.deposit-amount,
+    .transaction-inner-table > tbody > tr > td.withdrawal-amount {
+        display: grid !important;
+        grid-template-columns: minmax(78px, 34%) minmax(0, 1fr);
+        align-items: center;
+        white-space: nowrap !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+        text-align: right !important;
+    }
+
+    .transaction-inner-table > tbody > tr > td.deposit-amount::before,
+    .transaction-inner-table > tbody > tr > td.withdrawal-amount::before {
         display: block;
+        white-space: normal;
+        text-align: left;
+    }
+
+    .transaction-inner-table > tbody > tr > td.empty-transaction {
+        display: block !important;
         min-height: auto;
         padding: 14px 10px !important;
         text-align: center !important;
@@ -1176,14 +1200,21 @@
         font-size: .65rem !important;
         font-style: italic;
         border-bottom: none !important;
+        white-space: normal !important;
     }
 
     .transaction-inner-table > tbody > tr > td.empty-transaction::before {
         display: none;
     }
 
-    .deposit-amount,
+    .deposit-amount {
+        color: #7fffb2 !important;
+        font-size: .69rem !important;
+        font-weight: 800 !important;
+    }
+
     .withdrawal-amount {
+        color: #ffb4b4 !important;
         font-size: .69rem !important;
         font-weight: 800 !important;
     }
@@ -1367,6 +1398,15 @@
         font-size: .62rem;
     }
 
+    .transaction-inner-table > tbody > tr > td.deposit-amount,
+    .transaction-inner-table > tbody > tr > td.withdrawal-amount {
+        grid-template-columns: minmax(70px, 33%) minmax(0, 1fr);
+        white-space: nowrap !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+        font-size: .64rem !important;
+    }
+
     .transaction-inner-table > tbody > tr > td::before {
         font-size: .52rem;
     }
@@ -1374,6 +1414,9 @@
     .deposit-amount,
     .withdrawal-amount {
         font-size: .64rem !important;
+        white-space: nowrap !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
     }
 
     .status-badge {
@@ -1505,6 +1548,15 @@
         font-size: .58rem;
     }
 
+    .transaction-inner-table > tbody > tr > td.deposit-amount,
+    .transaction-inner-table > tbody > tr > td.withdrawal-amount {
+        grid-template-columns: minmax(62px, 34%) minmax(0, 1fr);
+        white-space: nowrap !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
+        font-size: .6rem !important;
+    }
+
     .transaction-inner-table > tbody > tr > td::before {
         font-size: .48rem;
     }
@@ -1512,6 +1564,9 @@
     .deposit-amount,
     .withdrawal-amount {
         font-size: .6rem !important;
+        white-space: nowrap !important;
+        word-break: normal !important;
+        overflow-wrap: normal !important;
     }
 
     .status-badge {
