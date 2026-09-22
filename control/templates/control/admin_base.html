@@ -11,22 +11,22 @@
 
 <title>{{ settings.title }}</title>
 
-<!-- Control Admin CSS -->
+
 <link rel="stylesheet" href="{% static 'control/css/admin.css' %}">
 
-<!-- Core CSS -->
+
 <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
 
-<!-- Page-Specific CSS -->
+
 {% block extra_css %}{% endblock %}
 
-<!-- Font Awesome -->
+
 <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 >
 
-<!-- Google Fonts -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
@@ -40,16 +40,14 @@
 
 <body>
 
-<!-- =========================================================
-     ADMIN NAVBAR
-========================================================= -->
+
 
 <header class="navbar">
 
 
 <div class="navbar-left">
 
-    <!-- Sidebar Toggle -->
+    
     <button
         id="menu-toggle"
         class="icon-btn menu-toggle"
@@ -60,7 +58,7 @@
     </button>
 
 
-    <!-- Brand -->
+    
     <a
         href="{% url 'admin_dashboard' %}"
         class="brand"
@@ -99,10 +97,10 @@
 </div>
 
 
-<!-- Navigation Actions -->
+
 <div class="nav-actions">
 
-    <!-- Notifications -->
+    
     <a
         href="{% url 'admin_announcements' %}"
         class="icon-btn notification-btn"
@@ -122,11 +120,11 @@
     </a>
 
 
-    <!-- Divider -->
+    
     <span class="nav-divider"></span>
 
 
-    <!-- Logout -->
+    
     <a
         href="{% url 'admin_logout' %}"
         class="logout-btn"
@@ -148,18 +146,14 @@
 
 </header>
 
-<!-- =========================================================
-     SIDEBAR OVERLAY
-========================================================= -->
+
 
 <div
     id="sidebar-overlay"
     class="sidebar-overlay"
 ></div>
 
-<!-- =========================================================
-     SIDEBAR
-========================================================= -->
+
 
 <aside
     id="sidebar"
@@ -170,7 +164,7 @@
 <div class="sidebar-inner">
 
 
-    <!-- Sidebar Header -->
+    
     <div class="sidebar-header">
 
         <span class="sidebar-label">
@@ -180,7 +174,7 @@
     </div>
 
 
-    <!-- Sidebar Navigation -->
+    
     <nav class="sidebar-nav">
 
         <ul>
@@ -217,7 +211,7 @@
     </nav>
 
 
-    <!-- Sidebar Footer -->
+    
     <div class="sidebar-footer">
 
         <div class="sidebar-status">
@@ -239,20 +233,18 @@
 
 </aside>
 
-<!-- =========================================================
-     MAIN CONTENT
-========================================================= -->
+
 
 <main class="content">
 
 
-<!-- Ambient Background Glow -->
+
 <div class="content-glow content-glow-one"></div>
 
 <div class="content-glow content-glow-two"></div>
 
 
-<!-- Page Content -->
+
 <div class="content-inner">
 
     {% block content %}{% endblock %}
@@ -262,9 +254,7 @@
 
 </main>
 
-<!-- =========================================================
-     ADMIN FOOTER
-========================================================= -->
+
 
 <footer class="admin-footer">
 
@@ -280,9 +270,7 @@
 
 </footer>
 
-<!-- =========================================================
-     GLOBAL ADMIN JAVASCRIPT
-========================================================= -->
+
 
 {% block scripts %}
 

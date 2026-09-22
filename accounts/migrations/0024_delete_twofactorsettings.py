@@ -1,16 +1,16 @@
-                                             
-
-from django.db import migrations
 
 
-class Migration(migrations.Migration):
+fromdjango.dbimportmigrations
 
-    dependencies = [
-        ('accounts', '0023_twofactorsettings'),
-    ]
 
-    operations = [
-        migrations.DeleteModel(
-            name='TwoFactorSettings',
-        ),
-    ]
+classMigration(migrations.Migration):
+
+    dependencies=[
+('accounts','0023_twofactorsettings'),
+]
+
+operations=[
+migrations.DeleteModel(
+name='TwoFactorSettings',
+),
+]

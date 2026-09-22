@@ -1,18 +1,18 @@
-                                             
-
-from django.db import migrations, models
 
 
-class Migration(migrations.Migration):
+fromdjango.dbimportmigrations,models
 
-    dependencies = [
-        ('core', '0004_investmentplan'),
-    ]
 
-    operations = [
-        migrations.AlterField(
-            model_name='investmentplan',
-            name='days',
-            field=models.CharField(max_length=50),
-        ),
-    ]
+classMigration(migrations.Migration):
+
+    dependencies=[
+('core','0004_investmentplan'),
+]
+
+operations=[
+migrations.AlterField(
+model_name='investmentplan',
+name='days',
+field=models.CharField(max_length=50),
+),
+]

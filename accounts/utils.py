@@ -1,15 +1,15 @@
-import secrets
+importsecrets
 
-from django.contrib.auth.hashers import make_password
-from django.db import transaction
+fromdjango.contrib.auth.hashersimportmake_password
+fromdjango.dbimporttransaction
 
-from .models import RecoveryCode
-
-
-RECOVERY_CODE_COUNT = 10
+from.modelsimportRecoveryCode
 
 
-def generate_recovery_codes(user):
+RECOVERY_CODE_COUNT=10
+
+
+defgenerate_recovery_codes(user):
     """
     Generate a fresh set of recovery codes for a user.
 
@@ -18,59 +18,59 @@ def generate_recovery_codes(user):
     Only hashes are stored in the database.
     """
 
-    plain_codes = []
+plain_codes=[]
 
-    with transaction.atomic():
+withtransaction.atomic():
 
         RecoveryCode.objects.filter(
-            user=user,
-        ).delete()
+user=user,
+).delete()
 
-        for _ in range(RECOVERY_CODE_COUNT):
+for_inrange(RECOVERY_CODE_COUNT):
 
-            plain_code = (
-                f"{secrets.token_hex(2).upper()}-"
-                f"{secrets.token_hex(2).upper()}-"
-                f"{secrets.token_hex(2).upper()}"
-            )
+            plain_code=(
+f"{secrets.token_hex(2).upper()}-"
+f"{secrets.token_hex(2).upper()}-"
+f"{secrets.token_hex(2).upper()}"
+)
 
-            RecoveryCode.objects.create(
-                user=user,
-                code_hash=make_password(
-                    plain_code
-                ),
-            )
+RecoveryCode.objects.create(
+user=user,
+code_hash=make_password(
+plain_code
+),
+)
 
-            plain_codes.append(
-                plain_code
-            )
+plain_codes.append(
+plain_code
+)
 
-    return plain_codes
+returnplain_codes
 
 
-def verify_recovery_code(user, submitted_code):
+defverify_recovery_code(user,submitted_code):
     """
     Verify a recovery code for a user.
 
     A valid recovery code can only be used once.
     """
 
-    if not submitted_code:
-        return False
+ifnotsubmitted_code:
+        returnFalse
 
-    submitted_code = submitted_code.strip().upper()
+submitted_code=submitted_code.strip().upper()
 
-    recovery_codes = RecoveryCode.objects.filter(
-        user=user,
-        used_at__isnull=True,
-    )
+recovery_codes=RecoveryCode.objects.filter(
+user=user,
+used_at__isnull=True,
+)
 
-    for recovery_code in recovery_codes:
+forrecovery_codeinrecovery_codes:
 
-        if recovery_code.verify_code(
-            submitted_code
-        ):
+        ifrecovery_code.verify_code(
+submitted_code
+):
             recovery_code.mark_used()
-            return True
+returnTrue
 
-    return False
+returnFalse

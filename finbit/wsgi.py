@@ -7,10 +7,10 @@ For more information on this file, see
 https://docs.djangoproject.com/en/6.1/howto/deployment/wsgi/
 """
 
-import os
+importos
 
-from django.core.wsgi import get_wsgi_application
+fromdjango.core.wsgiimportget_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'finbit.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE','finbit.settings')
 
-application = get_wsgi_application()
+application=get_wsgi_application()

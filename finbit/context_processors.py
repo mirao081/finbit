@@ -1,7 +1,7 @@
-from core.models import SiteFooter
+fromcore.modelsimportSiteFooter
 
 
-def site_footer(request):
-    return {
-        "site_footer": SiteFooter.objects.first()
-    }
+defsite_footer(request):
+    return{
+"site_footer":SiteFooter.objects.first()
+}

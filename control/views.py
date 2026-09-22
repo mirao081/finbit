@@ -1,1377 +1,1375 @@
-from decimal import Decimal, InvalidOperation
-from django.conf import settings
-from django.contrib.auth import authenticate, login, logout
-from django import forms
-from django.contrib import messages
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.models import User
-from django.core.paginator import Paginator
-from django.db import transaction
-from django.db.models import Sum, Count, Q
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import timezone
-from django.views.decorators.http import require_POST
-from django.core.mail import send_mail
-from django.conf import settings as django_settings
-import requests
-import io
-import qrcode
-from django.urls import reverse
-from django.contrib.auth.decorators import login_required
-from django.core.cache import cache
-from accounts.models import (
-    UserProfile,
-    Wallet,
-    Deposit,
-    Withdrawal,
-    Investment,
-    Profit,
-    Bonus,
-    Referral,
-    CompanyWallet,
-    KYCSubmission,
-    Announcement,
-    AnnouncementReply,
-    AssetPrice,
-    Trade,
-    TradeGasPayment,
-    TwoFactorAuth,RecoveryCode
-	
-)
-from accounts.utils import generate_recovery_codes
-from core.models import InvestmentPlan, Investor, Transaction
-from accounts.forms import DepositApprovalForm
-from control.models import AdminDashboardSettings, AdminMenu
-from accounts.views import execute_trade
+fromdecimalimportDecimal,InvalidOperation
+fromdjango.confimportsettings
+fromdjango.contrib.authimportauthenticate,login,logout
+fromdjangoimportforms
+fromdjango.contribimportmessages
+fromdjango.contrib.auth.decoratorsimportuser_passes_test
+fromdjango.contrib.auth.modelsimportUser
+fromdjango.core.paginatorimportPaginator
+fromdjango.dbimporttransaction
+fromdjango.db.modelsimportSum,Count,Q
+fromdjango.httpimportHttpResponse
+fromdjango.shortcutsimportrender,get_object_or_404,redirect
+fromdjango.utilsimporttimezone
+fromdjango.views.decorators.httpimportrequire_POST
+fromdjango.core.mailimportsend_mail
+fromdjango.confimportsettingsasdjango_settings
+importrequests
+importio
+importqrcode
+fromdjango.urlsimportreverse
+fromdjango.contrib.auth.decoratorsimportlogin_required
+fromdjango.core.cacheimportcache
+fromaccounts.modelsimport(
+UserProfile,
+Wallet,
+Deposit,
+Withdrawal,
+Investment,
+Profit,
+Bonus,
+Referral,
+CompanyWallet,
+KYCSubmission,
+Announcement,
+AnnouncementReply,
+AssetPrice,
+Trade,
+TradeGasPayment,
+TwoFactorAuth,RecoveryCode
 
-admin_required = user_passes_test(
-    lambda user: user.is_authenticated and user.is_staff,
-    login_url="admin_login",
+)
+fromaccounts.utilsimportgenerate_recovery_codes
+fromcore.modelsimportInvestmentPlan,Investor,Transaction
+fromaccounts.formsimportDepositApprovalForm
+fromcontrol.modelsimportAdminDashboardSettings,AdminMenu
+fromaccounts.viewsimportexecute_trade
+
+admin_required=user_passes_test(
+lambdauser:user.is_authenticatedanduser.is_staff,
+login_url="admin_login",
 )
 
-from accounts.notifications import (
-    notify_account_verified,
-    notify_deposit_approved,
-    notify_withdrawal_approved,
-    notify_referral_bonus,
-    notify_manual_referral_bonus,
+fromaccounts.notificationsimport(
+notify_account_verified,
+notify_deposit_approved,
+notify_withdrawal_approved,
+notify_referral_bonus,
+notify_manual_referral_bonus,
 )
 
 @login_required
 @admin_required
-def dashboard_view(request):
+defdashboard_view(request):
 
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
-    total_referrals = Referral.objects.count()
-
-
-
-
-
-    total_users = User.objects.count()
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
+total_referrals=Referral.objects.count()
 
 
 
 
 
-    total_deposits = (
-        Deposit.objects
-        .filter(status="approved")
-        .aggregate(
-            total=Sum("amount_usd")
-        )["total"]
-        or Decimal("0.00")
-    )
-
-    total_deposits = total_deposits.quantize(
-        Decimal("0.01")
-    )
+total_users=User.objects.count()
 
 
 
 
 
-    total_investments = (
-        Investment.objects
-        .filter(
-            status__in=[
-                "active",
-                "completed",
-            ]
-        )
-        .aggregate(
-            total=Sum("amount_usd")
-        )["total"]
-        or Decimal("0.00")
-    )
+total_deposits=(
+Deposit.objects
+.filter(status="approved")
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
 
-    total_investments = total_investments.quantize(
-        Decimal("0.01")
-    )
+total_deposits=total_deposits.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-    active_investments = (
-        Investment.objects
-        .filter(status="active")
-        .count()
-    )
+total_investments=(
+Investment.objects
+.filter(
+status__in=[
+"active",
+"completed",
+]
+)
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
+
+total_investments=total_investments.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-    total_withdrawals = (
-        Withdrawal.objects
-        .filter(status="approved")
-        .aggregate(
-            total=Sum("amount_usd")
-        )["total"]
-        or Decimal("0.00")
-    )
-
-    total_withdrawals = total_withdrawals.quantize(
-        Decimal("0.01")
-    )
+active_investments=(
+Investment.objects
+.filter(status="active")
+.count()
+)
 
 
 
 
 
-    investments_qs = (
-        Investment.objects
-        .filter(
-            status__in=[
-                "active",
-                "completed",
-            ]
-        )
-        .select_related(
-            "user",
-            "plan",
-            "wallet",
-        )
-        .order_by("-created_at")
-    )
+total_withdrawals=(
+Withdrawal.objects
+.filter(status="approved")
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
 
-    investments_page = Paginator(
-        investments_qs,
-        5,
-    ).get_page(
-        request.GET.get("investments_page")
-    )
+total_withdrawals=total_withdrawals.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-    users_qs = (
-        User.objects
-        .order_by("-date_joined")
-    )
+investments_qs=(
+Investment.objects
+.filter(
+status__in=[
+"active",
+"completed",
+]
+)
+.select_related(
+"user",
+"plan",
+"wallet",
+)
+.order_by("-created_at")
+)
 
-    users_page = Paginator(
-        users_qs,
-        5,
-    ).get_page(
-        request.GET.get("users_page")
-    )
-
-
-
-
-
-    all_users_qs = (
-        User.objects
-        .select_related("userprofile")
-        .order_by("-date_joined")
-    )
-
-    all_users_data = []
-
-    for user in all_users_qs:
+investments_page=Paginator(
+investments_qs,
+5,
+).get_page(
+request.GET.get("investments_page")
+)
 
 
-        referral = (
-            Referral.objects
-            .filter(referred_user=user)
-            .select_related("user")
-            .first()
-        )
-
-        wallets = (
-            Wallet.objects
-            .filter(user=user)
-            .order_by("currency")
-        )
 
 
-        wallet_balance = Decimal("0.00")
 
-        for wallet in wallets:
+users_qs=(
+User.objects
+.order_by("-date_joined")
+)
 
-            available_asset = (
-                wallet.balance
-                - wallet.reserved_balance
-            )
+users_page=Paginator(
+users_qs,
+5,
+).get_page(
+request.GET.get("users_page")
+)
 
-            if available_asset < Decimal("0"):
-                available_asset = Decimal("0")
 
-            asset_price = (
-                AssetPrice.objects
-                .filter(currency=wallet.currency)
-                .first()
-            )
 
-            if not asset_price:
+
+
+all_users_qs=(
+User.objects
+.select_related("userprofile")
+.order_by("-date_joined")
+)
+
+all_users_data=[]
+
+foruserinall_users_qs:
+
+
+        referral=(
+Referral.objects
+.filter(referred_user=user)
+.select_related("user")
+.first()
+)
+
+wallets=(
+Wallet.objects
+.filter(user=user)
+.order_by("currency")
+)
+
+
+wallet_balance=Decimal("0.00")
+
+forwalletinwallets:
+
+            available_asset=(
+wallet.balance
+-wallet.reserved_balance
+)
+
+ifavailable_asset<Decimal("0"):
+                available_asset=Decimal("0")
+
+asset_price=(
+AssetPrice.objects
+.filter(currency=wallet.currency)
+.first()
+)
+
+ifnotasset_price:
                 continue
 
-            exchange_rate = asset_price.usd_price
+exchange_rate=asset_price.usd_price
 
-            if (
-                exchange_rate is None
-                or not exchange_rate.is_finite()
-                or exchange_rate <= Decimal("0")
-            ):
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
                 continue
 
-            wallet_balance += (
-                available_asset
-                * exchange_rate
-            )
+wallet_balance+=(
+available_asset
+*exchange_rate
+)
 
-        wallet_balance = wallet_balance.quantize(
-            Decimal("0.01")
-        )
-
-
-
-
-
-        investment_total = (
-            Investment.objects
-            .filter(
-                user=user,
-                status="active",
-            )
-            .aggregate(
-                total=Sum("amount_usd")
-            )["total"]
-            or Decimal("0.00")
-        )
-
-        investment_total = investment_total.quantize(
-            Decimal("0.01")
-        )
+wallet_balance=wallet_balance.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-        total_balance = wallet_balance
+investment_total=(
+Investment.objects
+.filter(
+user=user,
+status="active",
+)
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
 
-        all_users_data.append({
-            "user": user,
-            "profile": getattr(user, "userprofile", None),
-            "referrer": referral.user if referral else None,
-            "wallet_balance": wallet_balance,
-            "investment_total": investment_total,
-            "total_balance": total_balance,
-    })
-
-    all_users_page = Paginator(
-        all_users_data,
-        5,
-    ).get_page(
-        request.GET.get("all_users_page")
-    )
+investment_total=investment_total.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-    search_query = request.GET.get(
-        "search",
-        "",
-    ).strip()
+total_balance=wallet_balance
 
-    referral_queryset = (
-        Referral.objects
-        .select_related(
-            "user",
-            "referred_user",
-        )
-        .annotate(
-            referrer_count=Count(
-                "user__referrals",
-                distinct=True,
-            )
-        )
-        .order_by("-created_at")
-    )
+all_users_data.append({
+"user":user,
+"profile":getattr(user,"userprofile",None),
+"referrer":referral.userifreferralelseNone,
+"wallet_balance":wallet_balance,
+"investment_total":investment_total,
+"total_balance":total_balance,
+})
 
-    if search_query:
-        referral_queryset = referral_queryset.filter(
-            Q(
-                user__username__icontains=search_query
-            )
-            | Q(
-                referred_user__username__icontains=search_query
-            )
-            | Q(
-                user__email__icontains=search_query
-            )
-            | Q(
-                referred_user__email__icontains=search_query
-            )
-        )
-
-    referral_paginator = Paginator(
-        referral_queryset,
-        10,
-    )
-
-    referral_page = referral_paginator.get_page(
-        request.GET.get("referral_page")
-    )
+all_users_page=Paginator(
+all_users_data,
+5,
+).get_page(
+request.GET.get("all_users_page")
+)
 
 
 
 
 
-    activity_logs = []
+search_query=request.GET.get(
+"search",
+"",
+).strip()
+
+referral_queryset=(
+Referral.objects
+.select_related(
+"user",
+"referred_user",
+)
+.annotate(
+referrer_count=Count(
+"user__referrals",
+distinct=True,
+)
+)
+.order_by("-created_at")
+)
+
+ifsearch_query:
+        referral_queryset=referral_queryset.filter(
+Q(
+user__username__icontains=search_query
+)
+|Q(
+referred_user__username__icontains=search_query
+)
+|Q(
+user__email__icontains=search_query
+)
+|Q(
+referred_user__email__icontains=search_query
+)
+)
+
+referral_paginator=Paginator(
+referral_queryset,
+10,
+)
+
+referral_page=referral_paginator.get_page(
+request.GET.get("referral_page")
+)
 
 
 
 
 
-    for deposit in (
-        Deposit.objects
-        .select_related(
-            "user",
-            "plan",
-        )
-        .order_by("-created_at")[:20]
-    ):
-
-        activity_logs.append({
-            "type": "Deposit",
-            "user": deposit.user,
-            "amount": deposit.amount_usd,
-            "asset_amount": (
-                deposit.received_asset_amount
-                or deposit.asset_amount
-            ),
-            "asset_code": deposit.payment_method,
-            "status": deposit.status,
-            "created_at": deposit.created_at,
-        })
+activity_logs=[]
 
 
 
 
 
-    for withdrawal in (
-        Withdrawal.objects
-        .select_related(
-            "user",
-            "wallet",
-        )
-        .order_by("-created_at")[:20]
-    ):
+fordepositin(
+Deposit.objects
+.select_related(
+"user",
+"plan",
+)
+.order_by("-created_at")[:20]
+):
 
         activity_logs.append({
-            "type": "Withdrawal",
-            "user": withdrawal.user,
-            "amount": withdrawal.amount_usd,
-            "asset_amount": withdrawal.asset_amount,
-            "asset_code": (
-                withdrawal.wallet.currency
-                if withdrawal.wallet
-                else "â€”"
-            ),
-            "status": withdrawal.status,
-            "created_at": withdrawal.created_at,
-        })
+"type":"Deposit",
+"user":deposit.user,
+"amount":deposit.amount_usd,
+"asset_amount":(
+deposit.received_asset_amount
+ordeposit.asset_amount
+),
+"asset_code":deposit.payment_method,
+"status":deposit.status,
+"created_at":deposit.created_at,
+})
 
 
 
 
 
-    for investment in (
-        Investment.objects
-        .select_related(
-            "user",
-            "plan",
-            "wallet",
-        )
-        .order_by("-created_at")[:20]
-    ):
+forwithdrawalin(
+Withdrawal.objects
+.select_related(
+"user",
+"wallet",
+)
+.order_by("-created_at")[:20]
+):
 
         activity_logs.append({
-            "type": "Investment",
-            "user": investment.user,
-            "amount": investment.amount_usd,
-            "asset_amount": investment.asset_amount,
-            "asset_code": (
-                investment.wallet.currency
-                if investment.wallet
-                else "â€”"
-            ),
-            "status": investment.status,
-            "created_at": investment.created_at,
-        })
+"type":"Withdrawal",
+"user":withdrawal.user,
+"amount":withdrawal.amount_usd,
+"asset_amount":withdrawal.asset_amount,
+"asset_code":(
+withdrawal.wallet.currency
+ifwithdrawal.wallet
+else"â€”"
+),
+"status":withdrawal.status,
+"created_at":withdrawal.created_at,
+})
 
 
 
 
 
-    activity_logs = sorted(
-        activity_logs,
-        key=lambda item: item["created_at"],
-        reverse=True,
-    )
+forinvestmentin(
+Investment.objects
+.select_related(
+"user",
+"plan",
+"wallet",
+)
+.order_by("-created_at")[:20]
+):
 
-    activity_page = Paginator(
-        activity_logs,
-        5,
-    ).get_page(
-        request.GET.get("activity_page")
-    )
-
-
-
-    deposits_total = total_deposits
-    withdrawals_total = total_withdrawals
-
-    net_balance = (
-        deposits_total
-        - withdrawals_total
-    ).quantize(
-        Decimal("0.01")
-    )
-
-
-
-
-
-    top_investors_qs = (
-        User.objects
-        .annotate(
-            total_investment=Sum(
-                "investments__amount_usd",
-                filter=Q(
-                    investments__status__in=[
-                        "active",
-                        "completed",
-                    ]
-                ),
-            )
-        )
-        .filter(
-            total_investment__isnull=False
-        )
-        .order_by(
-            "-total_investment"
-        )
-    )
-
-    top_investors_page = Paginator(
-        top_investors_qs,
-        5,
-    ).get_page(
-        request.GET.get("investors_page")
-    )
+        activity_logs.append({
+"type":"Investment",
+"user":investment.user,
+"amount":investment.amount_usd,
+"asset_amount":investment.asset_amount,
+"asset_code":(
+investment.wallet.currency
+ifinvestment.wallet
+else"â€”"
+),
+"status":investment.status,
+"created_at":investment.created_at,
+})
 
 
 
 
 
-    unread_replies_count = (
-        AnnouncementReply.objects
-        .filter(
-            is_read_by_admin=False
-        )
-        .count()
-    )
+activity_logs=sorted(
+activity_logs,
+key=lambdaitem:item["created_at"],
+reverse=True,
+)
+
+activity_page=Paginator(
+activity_logs,
+5,
+).get_page(
+request.GET.get("activity_page")
+)
+
+
+
+deposits_total=total_deposits
+withdrawals_total=total_withdrawals
+
+net_balance=(
+deposits_total
+-withdrawals_total
+).quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-    context = {
-        "settings": settings,
-        "menus": menus,
+top_investors_qs=(
+User.objects
+.annotate(
+total_investment=Sum(
+"investments__amount_usd",
+filter=Q(
+investments__status__in=[
+"active",
+"completed",
+]
+),
+)
+)
+.filter(
+total_investment__isnull=False
+)
+.order_by(
+"-total_investment"
+)
+)
+
+top_investors_page=Paginator(
+top_investors_qs,
+5,
+).get_page(
+request.GET.get("investors_page")
+)
 
 
-        "total_users": total_users,
-        "total_deposits": total_deposits,
-        "total_investments": total_investments,
-        "active_investments": active_investments,
-        "total_withdrawals": total_withdrawals,
 
 
-        "investments_page": investments_page,
-        "users_page": users_page,
-        "all_users_page": all_users_page,
+
+unread_replies_count=(
+AnnouncementReply.objects
+.filter(
+is_read_by_admin=False
+)
+.count()
+)
 
 
-        "referral_page": referral_page,
-        "search_query": search_query,
 
 
-        "activity_page": activity_page,
+
+context={
+"settings":settings,
+"menus":menus,
 
 
-        "deposits_total": deposits_total,
-        "withdrawals_total": withdrawals_total,
-        "net_balance": net_balance,
+"total_users":total_users,
+"total_deposits":total_deposits,
+"total_investments":total_investments,
+"active_investments":active_investments,
+"total_withdrawals":total_withdrawals,
 
 
-        "top_investors_page": top_investors_page,
+"investments_page":investments_page,
+"users_page":users_page,
+"all_users_page":all_users_page,
 
 
-        "unread_replies_count": unread_replies_count,
-        "total_referrals": total_referrals,
-    }
+"referral_page":referral_page,
+"search_query":search_query,
 
-    return render(
-        request,
-        "control/dashboard.html",
-        context,
-    )
 
-class InvestmentPlanForm(forms.ModelForm):
-    class Meta:
-        model = InvestmentPlan
-        fields = [
-            "name",
-            "return_rate",
-            "frequency",
-            "duration",
-            "total_return",
-            "minimum_investment",
-            "maximum_investment",
-        ]
+"activity_page":activity_page,
+
+
+"deposits_total":deposits_total,
+"withdrawals_total":withdrawals_total,
+"net_balance":net_balance,
+
+
+"top_investors_page":top_investors_page,
+
+
+"unread_replies_count":unread_replies_count,
+"total_referrals":total_referrals,
+}
+
+returnrender(
+request,
+"control/dashboard.html",
+context,
+)
+
+classInvestmentPlanForm(forms.ModelForm):
+    classMeta:
+        model=InvestmentPlan
+fields=[
+"name",
+"return_rate",
+"frequency",
+"duration",
+"total_return",
+"minimum_investment",
+"maximum_investment",
+]
 
 
 @admin_required
-def investment_plans_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+definvestment_plans_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    plans = InvestmentPlan.objects.all().order_by("id")
-    total_plans = plans.count()
+plans=InvestmentPlan.objects.all().order_by("id")
+total_plans=plans.count()
 
-    return render(
-        request,
-        "control/investment_plans.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "plans": plans,
-            "total_plans": total_plans,
-        },
-    )
+returnrender(
+request,
+"control/investment_plans.html",
+{
+"settings":settings,
+"menus":menus,
+"plans":plans,
+"total_plans":total_plans,
+},
+)
 
 
 @admin_required
-def update_plan_view(request, plan_id):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defupdate_plan_view(request,plan_id):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    plan = get_object_or_404(
-        InvestmentPlan,
-        id=plan_id,
-    )
+plan=get_object_or_404(
+InvestmentPlan,
+id=plan_id,
+)
 
-    if request.method == "POST":
-        form = InvestmentPlanForm(
-            request.POST,
-            instance=plan,
-        )
+ifrequest.method=="POST":
+        form=InvestmentPlanForm(
+request.POST,
+instance=plan,
+)
 
-        if form.is_valid():
+ifform.is_valid():
             form.save()
-            messages.success(
-                request,
-                "Investment plan updated successfully.",
-            )
-            return redirect("investment_plans")
-    else:
-        form = InvestmentPlanForm(
-            instance=plan,
-        )
+messages.success(
+request,
+"Investment plan updated successfully.",
+)
+returnredirect("investment_plans")
+else:
+        form=InvestmentPlanForm(
+instance=plan,
+)
 
-    return render(
-        request,
-        "control/update_plan.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "form": form,
-            "plan": plan,
-        },
-    )
-
-
-@admin_required
-def records_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
-
-    records_qs = (
-        Investment.objects
-        .select_related("user", "plan")
-        .order_by("-created_at")
-    )
-
-    paginator = Paginator(records_qs, 10)
-
-    records_page = paginator.get_page(
-        request.GET.get("page")
-    )
-
-    return render(
-        request,
-        "control/records.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "records_page": records_page,
-        },
-    )
-
-
-class CompanyWalletForm(forms.ModelForm):
-    class Meta:
-        model = CompanyWallet
-        fields = ["address", "qr_code"]
+returnrender(
+request,
+"control/update_plan.html",
+{
+"settings":settings,
+"menus":menus,
+"form":form,
+"plan":plan,
+},
+)
 
 
 @admin_required
-def payment_methods_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defrecords_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    wallets = CompanyWallet.objects.all()
+records_qs=(
+Investment.objects
+.select_related("user","plan")
+.order_by("-created_at")
+)
 
-    return render(
-        request,
-        "control/payment_methods.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "wallets": wallets,
-        },
-    )
+paginator=Paginator(records_qs,10)
+
+records_page=paginator.get_page(
+request.GET.get("page")
+)
+
+returnrender(
+request,
+"control/records.html",
+{
+"settings":settings,
+"menus":menus,
+"records_page":records_page,
+},
+)
+
+
+classCompanyWalletForm(forms.ModelForm):
+    classMeta:
+        model=CompanyWallet
+fields=["address","qr_code"]
 
 
 @admin_required
-def update_wallet_view(request, wallet_id):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defpayment_methods_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    wallet = get_object_or_404(
-        CompanyWallet,
-        id=wallet_id,
-    )
+wallets=CompanyWallet.objects.all()
 
-    if request.method == "POST":
-        form = CompanyWalletForm(
-            request.POST,
-            request.FILES,
-            instance=wallet,
-        )
+returnrender(
+request,
+"control/payment_methods.html",
+{
+"settings":settings,
+"menus":menus,
+"wallets":wallets,
+},
+)
 
-        if form.is_valid():
+
+@admin_required
+defupdate_wallet_view(request,wallet_id):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
+
+wallet=get_object_or_404(
+CompanyWallet,
+id=wallet_id,
+)
+
+ifrequest.method=="POST":
+        form=CompanyWalletForm(
+request.POST,
+request.FILES,
+instance=wallet,
+)
+
+ifform.is_valid():
             form.save()
-            messages.success(
-                request,
-                "Payment wallet updated successfully.",
-            )
-            return redirect("payment_methods")
-    else:
-        form = CompanyWalletForm(
-            instance=wallet,
-        )
+messages.success(
+request,
+"Payment wallet updated successfully.",
+)
+returnredirect("payment_methods")
+else:
+        form=CompanyWalletForm(
+instance=wallet,
+)
 
-    return render(
-        request,
-        "control/update_wallet.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "form": form,
-            "wallet": wallet,
-        },
-    )
+returnrender(
+request,
+"control/update_wallet.html",
+{
+"settings":settings,
+"menus":menus,
+"form":form,
+"wallet":wallet,
+},
+)
 
 
-class DepositForm(forms.ModelForm):
-    class Meta:
-        model = Deposit
-        fields = ["status"]
+classDepositForm(forms.ModelForm):
+    classMeta:
+        model=Deposit
+fields=["status"]
 
 
 @admin_required
-def deposits_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defdeposits_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    deposits_qs = (
-        Deposit.objects
-        .select_related("user", "plan")
-        .order_by("-created_at")
-    )
+deposits_qs=(
+Deposit.objects
+.select_related("user","plan")
+.order_by("-created_at")
+)
 
-    paginator = Paginator(
-        deposits_qs,
-        5,
-    )
+paginator=Paginator(
+deposits_qs,
+5,
+)
 
-    deposits_page = paginator.get_page(
-        request.GET.get("page")
-    )
+deposits_page=paginator.get_page(
+request.GET.get("page")
+)
 
-    return render(
-        request,
-        "control/deposits.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "deposits_page": deposits_page,
-        },
-    )
+returnrender(
+request,
+"control/deposits.html",
+{
+"settings":settings,
+"menus":menus,
+"deposits_page":deposits_page,
+},
+)
 
 
 @login_required
 @admin_required
-def deposit_detail_view(request, deposit_id):
+defdeposit_detail_view(request,deposit_id):
 
-    settings = AdminDashboardSettings.objects.first()
+    settings=AdminDashboardSettings.objects.first()
 
-    menus = AdminMenu.objects.all()
+menus=AdminMenu.objects.all()
 
-    deposit = (
-        Deposit.objects
-        .select_related(
-            "user",
-            "plan",
-        )
-        .filter(id=deposit_id)
-        .first()
-    )
+deposit=(
+Deposit.objects
+.select_related(
+"user",
+"plan",
+)
+.filter(id=deposit_id)
+.first()
+)
 
-    if not deposit:
+ifnotdeposit:
         messages.error(
-            request,
-            "Deposit was not found.",
-        )
-        return redirect("deposits")
+request,
+"Deposit was not found.",
+)
+returnredirect("deposits")
 
-    # Live Trading deposits must only be processed
-    # through the dedicated Live Trading admin flow.
-    if deposit.source == "live_trade":
+
+
+ifdeposit.source=="live_trade":
         messages.warning(
-            request,
-            "Live Trading deposits must be processed from Live Trading.",
-        )
-        return redirect("approve_deposits")
+request,
+"Live Trading deposits must be processed from Live Trading.",
+)
+returnredirect("approve_deposits")
 
-    if request.method == "GET":
+ifrequest.method=="GET":
 
-        form = DepositApprovalForm(
-            instance=deposit,
-        )
+        form=DepositApprovalForm(
+instance=deposit,
+)
 
-        return render(
-            request,
-            "control/deposit_detail.html",
-            {
-                "settings": settings,
-                "menus": menus,
-                "deposit": deposit,
-                "form": form,
-            },
-        )
+returnrender(
+request,
+"control/deposit_detail.html",
+{
+"settings":settings,
+"menus":menus,
+"deposit":deposit,
+"form":form,
+},
+)
 
-    if request.method == "POST":
+ifrequest.method=="POST":
 
-        referral = None
-        referral_commission = Decimal("0.00")
-        asset_amount = Decimal("0")
-        wallet = None
+        referral=None
+referral_commission=Decimal("0.00")
+asset_amount=Decimal("0")
+wallet=None
 
-        with transaction.atomic():
+withtransaction.atomic():
 
-            deposit = (
-                Deposit.objects
-                .select_for_update()
-                .select_related(
-                    "user",
-                    "plan",
-                )
-                .filter(id=deposit_id)
-                .first()
-            )
+            deposit=(
+Deposit.objects
+.select_for_update()
+.select_related(
+"user",
+"plan",
+)
+.filter(id=deposit_id)
+.first()
+)
 
-            if not deposit:
+ifnotdeposit:
                 messages.error(
-                    request,
-                    "Deposit was not found.",
-                )
-                return redirect("deposits")
+request,
+"Deposit was not found.",
+)
+returnredirect("deposits")
 
-            # Defensive protection in case the deposit changed
-            # after the initial lookup.
-            if deposit.source == "live_trade":
+
+
+ifdeposit.source=="live_trade":
                 messages.warning(
-                    request,
-                    "Live Trading deposits must be processed from Live Trading.",
-                )
-                return redirect("approve_deposits")
+request,
+"Live Trading deposits must be processed from Live Trading.",
+)
+returnredirect("approve_deposits")
 
-            if (
-                deposit.status != "pending"
-                or deposit.credited_to_wallet
-            ):
+if(
+deposit.status!="pending"
+ordeposit.credited_to_wallet
+):
                 messages.warning(
-                    request,
-                    "This deposit has already been processed.",
-                )
-                return redirect("deposits")
+request,
+"This deposit has already been processed.",
+)
+returnredirect("deposits")
 
-            form = DepositApprovalForm(
-                request.POST,
-                instance=deposit,
-            )
+form=DepositApprovalForm(
+request.POST,
+instance=deposit,
+)
 
-            if not form.is_valid():
-                return render(
-                    request,
-                    "control/deposit_detail.html",
-                    {
-                        "settings": settings,
-                        "menus": menus,
-                        "deposit": deposit,
-                        "form": form,
-                    },
-                )
+ifnotform.is_valid():
+                returnrender(
+request,
+"control/deposit_detail.html",
+{
+"settings":settings,
+"menus":menus,
+"deposit":deposit,
+"form":form,
+},
+)
 
-            new_status = form.cleaned_data.get("status")
+new_status=form.cleaned_data.get("status")
 
-            if new_status == "rejected":
+ifnew_status=="rejected":
 
-                deposit.status = "rejected"
+                deposit.status="rejected"
 
-                deposit.save(
-                    update_fields=[
-                        "status",
-                    ],
-                )
+deposit.save(
+update_fields=[
+"status",
+],
+)
 
-                messages.warning(
-                    request,
-                    "Deposit rejected successfully.",
-                )
+messages.warning(
+request,
+"Deposit rejected successfully.",
+)
 
-                return redirect("deposits")
+returnredirect("deposits")
 
-            if new_status != "approved":
-
-                messages.error(
-                    request,
-                    "Invalid deposit status.",
-                )
-
-                return redirect("deposits")
-
-            amount_usd = deposit.amount_usd
-
-            if (
-                amount_usd is None
-                or not amount_usd.is_finite()
-                or amount_usd <= Decimal("0")
-            ):
-                messages.error(
-                    request,
-                    "The deposit USD amount is invalid.",
-                )
-                return redirect("deposits")
-
-            wallet = (
-                Wallet.objects
-                .select_for_update()
-                .filter(
-                    user=deposit.user,
-                    currency=deposit.payment_method,
-                )
-                .first()
-            )
-
-            if not wallet:
+ifnew_status!="approved":
 
                 messages.error(
-                    request,
-                    (
-                        "The user's "
-                        f"{deposit.get_payment_method_display()} "
-                        "wallet was not found. "
-                        "The deposit was not approved."
-                    ),
-                )
+request,
+"Invalid deposit status.",
+)
 
-                return redirect("deposits")
+returnredirect("deposits")
 
-            asset_price = (
-                AssetPrice.objects
-                .filter(
-                    currency=deposit.payment_method,
-                )
-                .first()
-            )
+amount_usd=deposit.amount_usd
 
-            if not asset_price:
+if(
+amount_usdisNone
+ornotamount_usd.is_finite()
+oramount_usd<=Decimal("0")
+):
+                messages.error(
+request,
+"The deposit USD amount is invalid.",
+)
+returnredirect("deposits")
+
+wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+user=deposit.user,
+currency=deposit.payment_method,
+)
+.first()
+)
+
+ifnotwallet:
 
                 messages.error(
-                    request,
-                    (
-                        "No USD exchange rate has been configured "
-                        f"for {deposit.get_payment_method_display()}."
-                    ),
-                )
+request,
+(
+"The user's "
+f"{deposit.get_payment_method_display()} "
+"wallet was not found. "
+"The deposit was not approved."
+),
+)
 
-                return redirect("deposits")
+returnredirect("deposits")
 
-            exchange_rate = asset_price.usd_price
+asset_price=(
+AssetPrice.objects
+.filter(
+currency=deposit.payment_method,
+)
+.first()
+)
 
-            if (
-                exchange_rate is None
-                or not exchange_rate.is_finite()
-                or exchange_rate <= Decimal("0")
-            ):
+ifnotasset_price:
+
                 messages.error(
-                    request,
-                    "The asset exchange rate is invalid.",
-                )
-                return redirect("deposits")
+request,
+(
+"No USD exchange rate has been configured "
+f"for {deposit.get_payment_method_display()}."
+),
+)
 
-            asset_amount = (
-                amount_usd / exchange_rate
-            ).quantize(
-                Decimal("0.000000000001")
-            )
+returnredirect("deposits")
 
-            if (
-                not asset_amount.is_finite()
-                or asset_amount <= Decimal("0")
-            ):
+exchange_rate=asset_price.usd_price
+
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
                 messages.error(
-                    request,
-                    "The calculated asset amount is invalid.",
-                )
-                return redirect("deposits")
+request,
+"The asset exchange rate is invalid.",
+)
+returnredirect("deposits")
 
-            usd_value = (
-                asset_amount * exchange_rate
-            ).quantize(
-                Decimal("0.01")
-            )
+asset_amount=(
+amount_usd/exchange_rate
+).quantize(
+Decimal("0.000000000001")
+)
 
-            wallet.balance += asset_amount
+if(
+notasset_amount.is_finite()
+orasset_amount<=Decimal("0")
+):
+                messages.error(
+request,
+"The calculated asset amount is invalid.",
+)
+returnredirect("deposits")
 
-            wallet.save(
-                update_fields=[
-                    "balance",
-                    "updated_at",
-                ],
-            )
+usd_value=(
+asset_amount*exchange_rate
+).quantize(
+Decimal("0.01")
+)
 
-            investor, _ = (
-                Investor.objects
-                .get_or_create(
-                    user=deposit.user,
-                    defaults={
-                        "name": deposit.user.username,
-                    },
-                )
-            )
+wallet.balance+=asset_amount
 
-            Transaction.objects.create(
-                investor=investor,
-                wallet=wallet,
-                transaction_type="deposit",
-                direction="credit",
-                asset_amount=asset_amount,
-                usd_value=usd_value,
-                exchange_rate=exchange_rate,
-                reference=f"DEP-{deposit.id}",
-                description=(
-                    "Deposit credited to "
-                    f"{wallet.get_currency_display()} wallet"
-                ),
-            )
+wallet.save(
+update_fields=[
+"balance",
+"updated_at",
+],
+)
 
-            referral = (
-                Referral.objects
-                .select_for_update()
-                .filter(
-                    referred_user=deposit.user,
-                )
-                .first()
-            )
+investor,_=(
+Investor.objects
+.get_or_create(
+user=deposit.user,
+defaults={
+"name":deposit.user.username,
+},
+)
+)
 
-            referral_commission = Decimal("0.00")
+Transaction.objects.create(
+investor=investor,
+wallet=wallet,
+transaction_type="deposit",
+direction="credit",
+asset_amount=asset_amount,
+usd_value=usd_value,
+exchange_rate=exchange_rate,
+reference=f"DEP-{deposit.id}",
+description=(
+"Deposit credited to "
+f"{wallet.get_currency_display()} wallet"
+),
+)
 
-            if referral:
+referral=(
+Referral.objects
+.select_for_update()
+.filter(
+referred_user=deposit.user,
+)
+.first()
+)
 
-                referral_commission = (
-                    amount_usd * Decimal("0.084")
-                ).quantize(
-                    Decimal("0.01")
-                )
+referral_commission=Decimal("0.00")
 
-                if referral_commission > Decimal("0"):
+ifreferral:
 
-                    referral.commission_earned += (
-                        referral_commission
-                    )
+                referral_commission=(
+amount_usd*Decimal("0.084")
+).quantize(
+Decimal("0.01")
+)
 
-                    referral.save(
-                        update_fields=[
-                            "commission_earned",
-                        ],
-                    )
+ifreferral_commission>Decimal("0"):
 
-            deposit.asset_amount = asset_amount
-            deposit.received_asset_amount = asset_amount
-            deposit.exchange_rate = exchange_rate
-            deposit.status = "approved"
-            deposit.credited_to_wallet = True
-            deposit.approved_at = timezone.now()
+                    referral.commission_earned+=(
+referral_commission
+)
 
-            deposit.save(
-                update_fields=[
-                    "asset_amount",
-                    "received_asset_amount",
-                    "exchange_rate",
-                    "status",
-                    "credited_to_wallet",
-                    "approved_at",
-                ],
-            )
+referral.save(
+update_fields=[
+"commission_earned",
+],
+)
 
-        # Notifications are handled by accounts.signals.py.
-        #
-        # Deposit approval:
-        # Deposit post_save -> notify_deposit_approved()
-        #
-        # Referral bonus:
-        # Referral post_save -> notify_referral_bonus()
+deposit.asset_amount=asset_amount
+deposit.received_asset_amount=asset_amount
+deposit.exchange_rate=exchange_rate
+deposit.status="approved"
+deposit.credited_to_wallet=True
+deposit.approved_at=timezone.now()
 
-        if (
-            referral
-            and referral_commission > Decimal("0")
-        ):
+deposit.save(
+update_fields=[
+"asset_amount",
+"received_asset_amount",
+"exchange_rate",
+"status",
+"credited_to_wallet",
+"approved_at",
+],
+)
+
+
+
+
+
+
+
+
+
+if(
+referral
+andreferral_commission>Decimal("0")
+):
 
             messages.success(
-                request,
-                (
-                    "Deposit approved successfully. "
-                    f"{asset_amount} "
-                    f"{wallet.get_currency_display()} "
-                    "has been credited to the user's wallet. "
-                    f"A ${referral_commission:.2f} referral "
-                    "commission was automatically credited "
-                    f"to {referral.user.username}."
-                ),
-            )
+request,
+(
+"Deposit approved successfully. "
+f"{asset_amount} "
+f"{wallet.get_currency_display()} "
+"has been credited to the user's wallet. "
+f"A ${referral_commission:.2f} referral "
+"commission was automatically credited "
+f"to {referral.user.username}."
+),
+)
 
-        else:
+else:
 
             messages.success(
-                request,
-                (
-                    "Deposit approved successfully. "
-                    f"{asset_amount} "
-                    f"{wallet.get_currency_display()} "
-                    "has been credited to the user's wallet."
-                ),
-            )
+request,
+(
+"Deposit approved successfully. "
+f"{asset_amount} "
+f"{wallet.get_currency_display()} "
+"has been credited to the user's wallet."
+),
+)
 
-        return redirect("deposits")
+returnredirect("deposits")
 
-    messages.error(
-        request,
-        "Invalid request method.",
-    )
+messages.error(
+request,
+"Invalid request method.",
+)
 
-    return redirect("deposits")
+returnredirect("deposits")
 
 
 
-def investments_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+definvestments_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    investments_qs = (
-        Investment.objects
-        .all()
-        .order_by("-created_at")
-    )
+investments_qs=(
+Investment.objects
+.all()
+.order_by("-created_at")
+)
 
-    paginator = Paginator(
-        investments_qs,
-        5,
-    )
+paginator=Paginator(
+investments_qs,
+5,
+)
 
-    investments_page = paginator.get_page(
-        request.GET.get("page")
-    )
+investments_page=paginator.get_page(
+request.GET.get("page")
+)
 
-    return render(
-        request,
-        "control/investments.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "investments_page": investments_page,
-        },
-    )
+returnrender(
+request,
+"control/investments.html",
+{
+"settings":settings,
+"menus":menus,
+"investments_page":investments_page,
+},
+)
 
 
 @admin_required
-def all_transactions_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defall_transactions_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    transactions_qs = (
-        Transaction.objects
-        .all()
-        .order_by("-date")
-    )
+transactions_qs=(
+Transaction.objects
+.all()
+.order_by("-date")
+)
 
-    paginator = Paginator(
-        transactions_qs,
-        5,
-    )
+paginator=Paginator(
+transactions_qs,
+5,
+)
 
-    transactions_page = paginator.get_page(
-        request.GET.get("page")
-    )
+transactions_page=paginator.get_page(
+request.GET.get("page")
+)
 
-    return render(
-        request,
-        "control/all_transactions.html",
-        {
-            "transactions_page": transactions_page,
-            "settings": settings,
-            "menus": menus,
-        },
-    )
+returnrender(
+request,
+"control/all_transactions.html",
+{
+"transactions_page":transactions_page,
+"settings":settings,
+"menus":menus,
+},
+)
 
 
 @admin_required
-def user_verifications_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defuser_verifications_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    submissions = (
-        KYCSubmission.objects
-        .select_related("user")
-        .order_by("-uploaded_at")
-    )
+submissions=(
+KYCSubmission.objects
+.select_related("user")
+.order_by("-uploaded_at")
+)
 
-    return render(
-        request,
-        "control/user_verifications.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "submissions": submissions,
-        },
-    )
+returnrender(
+request,
+"control/user_verifications.html",
+{
+"settings":settings,
+"menus":menus,
+"submissions":submissions,
+},
+)
 
 
 
 @admin_required
 @require_POST
-def approve_kyc(request, submission_id):
+defapprove_kyc(request,submission_id):
 
-    with transaction.atomic():
+    withtransaction.atomic():
 
-        submission = (
-            KYCSubmission.objects
-            .select_for_update()
-            .select_related("user")
-            .filter(id=submission_id)
-            .first()
-        )
+        submission=(
+KYCSubmission.objects
+.select_for_update()
+.select_related("user")
+.filter(id=submission_id)
+.first()
+)
 
-        if not submission:
+ifnotsubmission:
             messages.error(
-                request,
-                "KYC submission was not found.",
-            )
+request,
+"KYC submission was not found.",
+)
 
-            return redirect(
-                "user_verifications"
-            )
+returnredirect(
+"user_verifications"
+)
 
-        profile, created = (
-            UserProfile.objects
-            .get_or_create(
-                user=submission.user,
-            )
-        )
+profile,created=(
+UserProfile.objects
+.get_or_create(
+user=submission.user,
+)
+)
 
-        submission.approved = True
+submission.approved=True
 
-        submission.save(
-            update_fields=[
-                "approved",
-            ]
-        )
+submission.save(
+update_fields=[
+"approved",
+]
+)
 
-        profile.kyc_verified = True
+profile.kyc_verified=True
 
-        profile.save(
-            update_fields=[
-                "kyc_verified",
-            ]
-        )
+profile.save(
+update_fields=[
+"kyc_verified",
+]
+)
 
-    # Verification notification is handled automatically
-    # by the UserProfile post_save signal.
-    #
-    # When kyc_verified changes from False to True:
-    # notify_account_verified() is called once by accounts.signals.py.
 
-    messages.success(
-        request,
-        f"KYC for {submission.user.username} approved.",
-    )
 
-    return redirect(
-        "user_verifications"
-    )
+
+
+
+
+messages.success(
+request,
+f"KYC for {submission.user.username} approved.",
+)
+
+returnredirect(
+"user_verifications"
+)
 
 
 @admin_required
 @require_POST
-def reject_kyc(request, submission_id):
-    with transaction.atomic():
-        submission = (
-            KYCSubmission.objects
-            .select_for_update()
-            .select_related("user")
-            .filter(id=submission_id)
-            .first()
-        )
+defreject_kyc(request,submission_id):
+    withtransaction.atomic():
+        submission=(
+KYCSubmission.objects
+.select_for_update()
+.select_related("user")
+.filter(id=submission_id)
+.first()
+)
 
-        if not submission:
+ifnotsubmission:
             messages.error(
-                request,
-                "KYC submission was not found.",
-            )
-            return redirect("user_verifications")
+request,
+"KYC submission was not found.",
+)
+returnredirect("user_verifications")
 
-        submission.approved = False
-        submission.save(
-            update_fields=["approved"]
-        )
+submission.approved=False
+submission.save(
+update_fields=["approved"]
+)
 
-        profile, created = (
-            UserProfile.objects
-            .get_or_create(
-                user=submission.user
-            )
-        )
+profile,created=(
+UserProfile.objects
+.get_or_create(
+user=submission.user
+)
+)
 
-        profile.kyc_verified = False
-        profile.save(
-            update_fields=["kyc_verified"]
-        )
+profile.kyc_verified=False
+profile.save(
+update_fields=["kyc_verified"]
+)
 
-    messages.warning(
-        request,
-        f"KYC for {submission.user.username} rejected.",
-    )
+messages.warning(
+request,
+f"KYC for {submission.user.username} rejected.",
+)
 
-    return redirect("user_verifications")
+returnredirect("user_verifications")
 
 
 @admin_required
-def kyc_detail_view(request, submission_id):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defkyc_detail_view(request,submission_id):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    submission = get_object_or_404(
-        KYCSubmission,
-        id=submission_id,
-    )
+submission=get_object_or_404(
+KYCSubmission,
+id=submission_id,
+)
 
-    file_url = (
-        submission.document.url
-        if submission.document
-        else ""
-    )
+file_url=(
+submission.document.url
+ifsubmission.document
+else""
+)
 
-    file_type = ""
+file_type=""
 
-    if file_url.lower().endswith(".pdf"):
-        file_type = "pdf"
-    elif file_url.lower().endswith(
-        (".jpg", ".jpeg", ".png")
-    ):
-        file_type = "image"
-    else:
-        file_type = "other"
+iffile_url.lower().endswith(".pdf"):
+        file_type="pdf"
+eliffile_url.lower().endswith(
+(".jpg",".jpeg",".png")
+):
+        file_type="image"
+else:
+        file_type="other"
 
-    return render(
-        request,
-        "control/kyc_detail.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "submission": submission,
-            "file_type": file_type,
-        },
-    )
+returnrender(
+request,
+"control/kyc_detail.html",
+{
+"settings":settings,
+"menus":menus,
+"submission":submission,
+"file_type":file_type,
+},
+)
 
 
 @login_required
 @admin_required
-def user_wallets_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defuser_wallets_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    users_qs = (
-        User.objects
-        .select_related("userprofile")
-        .order_by("-date_joined")
-    )
+users_qs=(
+User.objects
+.select_related("userprofile")
+.order_by("-date_joined")
+)
 
-    wallet_data = []
+wallet_data=[]
 
-    for u in users_qs:
-
-
+foruinusers_qs:
 
 
-        wallets = (
-            Wallet.objects
-            .filter(user=u)
-            .order_by("currency")
-        )
 
 
+        wallets=(
+Wallet.objects
+.filter(user=u)
+.order_by("currency")
+)
 
 
 
@@ -1380,42 +1378,44 @@ def user_wallets_view(request):
 
 
 
-        wallet_balance = Decimal("0.00")
 
-        for wallet in wallets:
-            available_asset = (
-                wallet.balance
-                - wallet.reserved_balance
-            )
 
-            if available_asset < Decimal("0"):
-                available_asset = Decimal("0")
+wallet_balance=Decimal("0.00")
 
-            asset_price = (
-                AssetPrice.objects
-                .filter(currency=wallet.currency)
-                .first()
-            )
+forwalletinwallets:
+            available_asset=(
+wallet.balance
+-wallet.reserved_balance
+)
 
-            if not asset_price:
+ifavailable_asset<Decimal("0"):
+                available_asset=Decimal("0")
+
+asset_price=(
+AssetPrice.objects
+.filter(currency=wallet.currency)
+.first()
+)
+
+ifnotasset_price:
                 continue
 
-            exchange_rate = asset_price.usd_price
+exchange_rate=asset_price.usd_price
 
-            if (
-                exchange_rate is None
-                or not exchange_rate.is_finite()
-                or exchange_rate <= Decimal("0")
-            ):
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
                 continue
 
-            wallet_balance += (
-                available_asset * exchange_rate
-            )
+wallet_balance+=(
+available_asset*exchange_rate
+)
 
-        wallet_balance = wallet_balance.quantize(
-            Decimal("0.01")
-        )
+wallet_balance=wallet_balance.quantize(
+Decimal("0.01")
+)
 
 
 
@@ -1426,110 +1426,110 @@ def user_wallets_view(request):
 
 
 
-        wallet = wallets.first()
+wallet=wallets.first()
 
-        wallet_address = (
-            wallet.address
-            if wallet and wallet.address
-            else "N/A"
-        )
+wallet_address=(
+wallet.address
+ifwalletandwallet.address
+else"N/A"
+)
 
 
 
 
 
-        deposits_total = (
-            Deposit.objects
-            .filter(
-                user=u,
-                status="approved",
-            )
-            .aggregate(
-                total=Sum("amount_usd")
-            )["total"]
-            or Decimal("0.00")
-        )
+deposits_total=(
+Deposit.objects
+.filter(
+user=u,
+status="approved",
+)
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
 
-        deposits_total = deposits_total.quantize(
-            Decimal("0.01")
-        )
+deposits_total=deposits_total.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-        withdrawals_total = (
-            Withdrawal.objects
-            .filter(
-                user=u,
-                status="approved",
-            )
-            .aggregate(
-                total=Sum("amount_usd")
-            )["total"]
-            or Decimal("0.00")
-        )
+withdrawals_total=(
+Withdrawal.objects
+.filter(
+user=u,
+status="approved",
+)
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
 
-        withdrawals_total = withdrawals_total.quantize(
-            Decimal("0.01")
-        )
+withdrawals_total=withdrawals_total.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-        investments_total = (
-            Investment.objects
-            .filter(user=u)
-            .aggregate(
-                total=Sum("amount_usd")
-            )["total"]
-            or Decimal("0.00")
-        )
+investments_total=(
+Investment.objects
+.filter(user=u)
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
 
-        investments_total = investments_total.quantize(
-            Decimal("0.01")
-        )
+investments_total=investments_total.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-        profits_total = (
-            Profit.objects
-            .filter(
-                user=u,
-                status="approved",
-            )
-            .aggregate(
-                total=Sum("amount")
-            )["total"]
-            or Decimal("0.00")
-        )
+profits_total=(
+Profit.objects
+.filter(
+user=u,
+status="approved",
+)
+.aggregate(
+total=Sum("amount")
+)["total"]
+orDecimal("0.00")
+)
 
-        profits_total = profits_total.quantize(
-            Decimal("0.01")
-        )
+profits_total=profits_total.quantize(
+Decimal("0.01")
+)
 
 
 
 
 
-        bonuses_total = (
-            Bonus.objects
-            .filter(
-                user=u,
-                status="approved",
-            )
-            .aggregate(
-                total=Sum("amount")
-            )["total"]
-            or Decimal("0.00")
-        )
+bonuses_total=(
+Bonus.objects
+.filter(
+user=u,
+status="approved",
+)
+.aggregate(
+total=Sum("amount")
+)["total"]
+orDecimal("0.00")
+)
 
-        bonuses_total = bonuses_total.quantize(
-            Decimal("0.01")
-        )
+bonuses_total=bonuses_total.quantize(
+Decimal("0.01")
+)
 
 
 
@@ -1543,857 +1543,857 @@ def user_wallets_view(request):
 
 
 
-        net_balance = wallet_balance
+net_balance=wallet_balance
 
 
 
 
 
-        recent_deposits = (
-            Deposit.objects
-            .filter(user=u)
-            .select_related("plan")
-            .order_by("-created_at")[:5]
-        )
+recent_deposits=(
+Deposit.objects
+.filter(user=u)
+.select_related("plan")
+.order_by("-created_at")[:5]
+)
 
 
 
 
 
-        recent_withdrawals = (
-            Withdrawal.objects
-            .filter(user=u)
-            .select_related("wallet")
-            .order_by("-created_at")[:5]
-        )
+recent_withdrawals=(
+Withdrawal.objects
+.filter(user=u)
+.select_related("wallet")
+.order_by("-created_at")[:5]
+)
 
 
 
 
 
-        wallet_data.append({
-            "user": u,
-            "profile": getattr(
-                u,
-                "userprofile",
-                None,
-            ),
+wallet_data.append({
+"user":u,
+"profile":getattr(
+u,
+"userprofile",
+None,
+),
 
-            "wallets": wallets,
+"wallets":wallets,
 
-            "wallet_balance": wallet_balance,
-            "wallet_address": wallet_address,
+"wallet_balance":wallet_balance,
+"wallet_address":wallet_address,
 
-            "deposits_total": deposits_total,
-            "withdrawals_total": withdrawals_total,
-            "investments_total": investments_total,
-            "profits_total": profits_total,
-            "bonuses_total": bonuses_total,
+"deposits_total":deposits_total,
+"withdrawals_total":withdrawals_total,
+"investments_total":investments_total,
+"profits_total":profits_total,
+"bonuses_total":bonuses_total,
 
-            "net_balance": net_balance,
+"net_balance":net_balance,
 
-            "recent_deposits": recent_deposits,
-            "recent_withdrawals": recent_withdrawals,
-        })
+"recent_deposits":recent_deposits,
+"recent_withdrawals":recent_withdrawals,
+})
 
 
 
 
 
-    page_obj = Paginator(
-        wallet_data,
-        10,
-    ).get_page(
-        request.GET.get("page")
-    )
+page_obj=Paginator(
+wallet_data,
+10,
+).get_page(
+request.GET.get("page")
+)
 
 
 
 
 
-    context = {
-        "settings": settings,
-        "menus": menus,
-        "page_obj": page_obj,
-    }
+context={
+"settings":settings,
+"menus":menus,
+"page_obj":page_obj,
+}
 
-    return render(
-        request,
-        "control/user_wallets.html",
-        context,
-    )
+returnrender(
+request,
+"control/user_wallets.html",
+context,
+)
 
 
 @admin_required
-def admin_user_detail_view(request, user_id):
-    user = get_object_or_404(
-        User,
-        id=user_id,
-    )
+defadmin_user_detail_view(request,user_id):
+    user=get_object_or_404(
+User,
+id=user_id,
+)
 
-    profile = getattr(
-        user,
-        "userprofile",
-        None,
-    )
+profile=getattr(
+user,
+"userprofile",
+None,
+)
 
-    wallet = (
-        Wallet.objects
-        .filter(user=user)
-        .first()
-    )
+wallet=(
+Wallet.objects
+.filter(user=user)
+.first()
+)
 
-    wallet_balance = (
-        wallet.balance
-        if wallet
-        else Decimal("0.00")
-    )
+wallet_balance=(
+wallet.balance
+ifwallet
+elseDecimal("0.00")
+)
 
-    wallet_address = (
-        wallet.address
-        if wallet and hasattr(wallet, "address")
-        else "N/A"
-    )
+wallet_address=(
+wallet.address
+ifwalletandhasattr(wallet,"address")
+else"N/A"
+)
 
-    recent_deposits = (
-        Deposit.objects
-        .filter(user=user)
-        .order_by("-created_at")[:5]
-    )
+recent_deposits=(
+Deposit.objects
+.filter(user=user)
+.order_by("-created_at")[:5]
+)
 
-    recent_withdrawals = (
-        Withdrawal.objects
-        .filter(user=user)
-        .order_by("-created_at")[:5]
-    )
+recent_withdrawals=(
+Withdrawal.objects
+.filter(user=user)
+.order_by("-created_at")[:5]
+)
 
-    context = {
-        "user": user,
-        "profile": profile,
-        "wallet_balance": wallet_balance,
-        "wallet_address": wallet_address,
-        "recent_deposits": recent_deposits,
-        "recent_withdrawals": recent_withdrawals,
-    }
+context={
+"user":user,
+"profile":profile,
+"wallet_balance":wallet_balance,
+"wallet_address":wallet_address,
+"recent_deposits":recent_deposits,
+"recent_withdrawals":recent_withdrawals,
+}
 
-    return render(
-        request,
-        "control/admin_user_detail.html",
-        context,
-    )
+returnrender(
+request,
+"control/admin_user_detail.html",
+context,
+)
 
 
 @admin_required
 @require_POST
-def admin_adjust_wallet_view(request, user_id):
-    user = get_object_or_404(
-        User,
-        id=user_id,
-    )
+defadmin_adjust_wallet_view(request,user_id):
+    user=get_object_or_404(
+User,
+id=user_id,
+)
 
-    amount_raw = request.POST.get(
-        "amount",
-        "0.00",
-    )
+amount_raw=request.POST.get(
+"amount",
+"0.00",
+)
 
-    action = request.POST.get("action")
+action=request.POST.get("action")
 
-    try:
-        amount = Decimal(amount_raw)
-    except (InvalidOperation, TypeError, ValueError):
+try:
+        amount=Decimal(amount_raw)
+except(InvalidOperation,TypeError,ValueError):
         messages.error(
-            request,
-            "Invalid amount.",
-        )
-        return redirect("user_wallets")
+request,
+"Invalid amount.",
+)
+returnredirect("user_wallets")
 
-    if not amount.is_finite():
+ifnotamount.is_finite():
         messages.error(
-            request,
-            "Invalid amount.",
-        )
-        return redirect("user_wallets")
+request,
+"Invalid amount.",
+)
+returnredirect("user_wallets")
 
-    if amount <= Decimal("0.00"):
+ifamount<=Decimal("0.00"):
         messages.error(
-            request,
-            "Amount must be greater than zero.",
-        )
-        return redirect("user_wallets")
+request,
+"Amount must be greater than zero.",
+)
+returnredirect("user_wallets")
 
-    with transaction.atomic():
-        wallet = (
-            Wallet.objects
-            .select_for_update()
-            .filter(user=user)
-            .first()
-        )
+withtransaction.atomic():
+        wallet=(
+Wallet.objects
+.select_for_update()
+.filter(user=user)
+.first()
+)
 
-        if not wallet:
+ifnotwallet:
             messages.error(
-                request,
-                "User wallet was not found.",
-            )
-            return redirect("user_wallets")
+request,
+"User wallet was not found.",
+)
+returnredirect("user_wallets")
 
-        if action == "credit":
-            wallet.balance += amount
+ifaction=="credit":
+            wallet.balance+=amount
 
-        elif action == "debit":
-            if wallet.balance < amount:
+elifaction=="debit":
+            ifwallet.balance<amount:
                 messages.error(
-                    request,
-                    "Insufficient wallet balance.",
-                )
-                return redirect("user_wallets")
+request,
+"Insufficient wallet balance.",
+)
+returnredirect("user_wallets")
 
-            wallet.balance -= amount
+wallet.balance-=amount
 
-        else:
+else:
             messages.error(
-                request,
-                "Invalid wallet action.",
-            )
-            return redirect("user_wallets")
+request,
+"Invalid wallet action.",
+)
+returnredirect("user_wallets")
 
-        wallet.save(
-            update_fields=["balance"]
-        )
+wallet.save(
+update_fields=["balance"]
+)
 
-    messages.success(
-        request,
-        f"Wallet updated for {user.username}.",
-    )
+messages.success(
+request,
+f"Wallet updated for {user.username}.",
+)
 
-    return redirect("user_wallets")
+returnredirect("user_wallets")
 
 
 @admin_required
-def admin_announcements_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defadmin_announcements_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    if request.method == "POST":
-        title = request.POST.get("title", "").strip()
-        message = request.POST.get("message", "").strip()
+ifrequest.method=="POST":
+        title=request.POST.get("title","").strip()
+message=request.POST.get("message","").strip()
 
-        if title and message:
+iftitleandmessage:
             Announcement.objects.create(
-                title=title,
-                message=message,
-                is_active=True,
-            )
+title=title,
+message=message,
+is_active=True,
+)
 
-            messages.success(
-                request,
-                "Announcement created successfully and is now visible to users.",
-            )
+messages.success(
+request,
+"Announcement created successfully and is now visible to users.",
+)
 
-            return redirect("admin_announcements")
+returnredirect("admin_announcements")
 
-        messages.error(
-            request,
-            "Please enter both an announcement title and message.",
-        )
+messages.error(
+request,
+"Please enter both an announcement title and message.",
+)
 
-    announcements_list = (
-        Announcement.objects
-        .order_by("-created_at")
-    )
+announcements_list=(
+Announcement.objects
+.order_by("-created_at")
+)
 
-    paginator = Paginator(
-        announcements_list,
-        5,
-    )
+paginator=Paginator(
+announcements_list,
+5,
+)
 
-    announcements = paginator.get_page(
-        request.GET.get("page")
-    )
+announcements=paginator.get_page(
+request.GET.get("page")
+)
 
-    return render(
-        request,
-        "control/admin_announcements.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "announcements": announcements,
-        },
-    )
+returnrender(
+request,
+"control/admin_announcements.html",
+{
+"settings":settings,
+"menus":menus,
+"announcements":announcements,
+},
+)
 
 @admin_required
-def admin_announcement_detail_view(request, announcement_id):
-    announcement = get_object_or_404(
-        Announcement,
-        id=announcement_id,
-    )
+defadmin_announcement_detail_view(request,announcement_id):
+    announcement=get_object_or_404(
+Announcement,
+id=announcement_id,
+)
 
-    if request.method == "POST":
-        message = request.POST.get(
-            "message",
-            "",
-        ).strip()
+ifrequest.method=="POST":
+        message=request.POST.get(
+"message",
+"",
+).strip()
 
-        if message:
-            users = User.objects.all()
+ifmessage:
+            users=User.objects.all()
 
-            AnnouncementReply.objects.bulk_create([
-                AnnouncementReply(
-                    announcement=announcement,
-                    user=target_user,
-                    message=message,
-                    is_read_by_user=False,
-                    is_read_by_admin=True,
-                )
-                for target_user in users
-            ])
+AnnouncementReply.objects.bulk_create([
+AnnouncementReply(
+announcement=announcement,
+user=target_user,
+message=message,
+is_read_by_user=False,
+is_read_by_admin=True,
+)
+fortarget_userinusers
+])
 
-            messages.success(
-                request,
-                "Your reply has been sent to the users.",
-            )
+messages.success(
+request,
+"Your reply has been sent to the users.",
+)
 
-        return redirect(
-            "admin_announcement_detail",
-            announcement_id=announcement.id,
-        )
+returnredirect(
+"admin_announcement_detail",
+announcement_id=announcement.id,
+)
 
-    replies_list = (
-        AnnouncementReply.objects
-        .filter(
-            announcement=announcement,
-        )
-        .select_related("user")
-        .order_by("-created_at")
-    )
+replies_list=(
+AnnouncementReply.objects
+.filter(
+announcement=announcement,
+)
+.select_related("user")
+.order_by("-created_at")
+)
 
-    paginator = Paginator(
-        replies_list,
-        10,
-    )
+paginator=Paginator(
+replies_list,
+10,
+)
 
-    replies = paginator.get_page(
-        request.GET.get("page")
-    )
+replies=paginator.get_page(
+request.GET.get("page")
+)
 
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    return render(
-        request,
-        "control/admin_announcement_detail.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "announcement": announcement,
-            "replies": replies,
-        },
-    )
+returnrender(
+request,
+"control/admin_announcement_detail.html",
+{
+"settings":settings,
+"menus":menus,
+"announcement":announcement,
+"replies":replies,
+},
+)
 
 @login_required
 @admin_required
-def settings_view(request):
+defsettings_view(request):
 
 
 
 
-    if request.method == "POST":
-        action = request.POST.get("action")
-        user_id = request.POST.get("user_id")
-        current_page = request.POST.get("page", "1")
+    ifrequest.method=="POST":
+        action=request.POST.get("action")
+user_id=request.POST.get("user_id")
+current_page=request.POST.get("page","1")
 
-        if action and user_id:
-            target_user = get_object_or_404(
-                User,
-                id=user_id,
-            )
-
-
+ifactionanduser_id:
+            target_user=get_object_or_404(
+User,
+id=user_id,
+)
 
 
-            try:
-                amount_usd = Decimal(
-                    request.POST.get("amount") or "0"
-                )
-            except (
-                InvalidOperation,
-                TypeError,
-                ValueError,
-            ):
-                amount_usd = Decimal("0")
 
-            if not amount_usd.is_finite():
+
+try:
+                amount_usd=Decimal(
+request.POST.get("amount")or"0"
+)
+except(
+InvalidOperation,
+TypeError,
+ValueError,
+):
+                amount_usd=Decimal("0")
+
+ifnotamount_usd.is_finite():
                 messages.error(
-                    request,
-                    "Invalid amount.",
-                )
-                return redirect(
-                    f"/admin/settings/?page={current_page}"
-                )
+request,
+"Invalid amount.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-            message = request.POST.get(
-                "message",
-                "",
-            ).strip()
+message=request.POST.get(
+"message",
+"",
+).strip()
 
 
 
 
-            if amount_usd < Decimal("0"):
+ifamount_usd<Decimal("0"):
                 messages.error(
-                    request,
-                    "Amount cannot be negative.",
-                )
-                return redirect(
-                    f"/admin/settings/?page={current_page}"
-                )
+request,
+"Amount cannot be negative.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-            amount_usd = amount_usd.quantize(
-                Decimal("0.01")
-            )
-
-
+amount_usd=amount_usd.quantize(
+Decimal("0.01")
+)
 
 
-            if action == "fund":
 
-                if amount_usd <= Decimal("0"):
+
+ifaction=="fund":
+
+                ifamount_usd<=Decimal("0"):
                     messages.error(
-                        request,
-                        "Funding amount must be greater than zero.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"Funding amount must be greater than zero.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                wallet_currency = request.POST.get(
-                    "wallet_currency"
-                )
+wallet_currency=request.POST.get(
+"wallet_currency"
+)
 
-                allowed_wallets = {
-                    "BTC",
-                    "ETH",
-                    "USDT_TRC20",
-                    "USDT_ERC20",
-                }
+allowed_wallets={
+"BTC",
+"ETH",
+"USDT_TRC20",
+"USDT_ERC20",
+}
 
-                if wallet_currency not in allowed_wallets:
+ifwallet_currencynotinallowed_wallets:
                     messages.error(
-                        request,
-                        "Please select a valid wallet.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"Please select a valid wallet.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                with transaction.atomic():
+withtransaction.atomic():
 
-                    wallet = (
-                        Wallet.objects
-                        .select_for_update()
-                        .filter(
-                            user=target_user,
-                            currency=wallet_currency,
-                        )
-                        .first()
-                    )
+                    wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+user=target_user,
+currency=wallet_currency,
+)
+.first()
+)
 
-                    if not wallet:
+ifnotwallet:
                         messages.error(
-                            request,
-                            "The selected user wallet was not found.",
-                        )
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+request,
+"The selected user wallet was not found.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-                    asset_price = (
-                        AssetPrice.objects
-                        .filter(
-                            currency=wallet.currency
-                        )
-                        .first()
-                    )
+asset_price=(
+AssetPrice.objects
+.filter(
+currency=wallet.currency
+)
+.first()
+)
 
-                    if not asset_price:
+ifnotasset_price:
                         messages.error(
-                            request,
-                            (
-                                "No exchange rate is configured "
-                                f"for {wallet.get_currency_display()}."
-                            ),
-                        )
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+request,
+(
+"No exchange rate is configured "
+f"for {wallet.get_currency_display()}."
+),
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                    exchange_rate = asset_price.usd_price
+exchange_rate=asset_price.usd_price
 
-                    if (
-                        exchange_rate is None
-                        or not exchange_rate.is_finite()
-                        or exchange_rate <= Decimal("0")
-                    ):
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
                         messages.error(
-                            request,
-                            "The wallet exchange rate is invalid.",
-                        )
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+request,
+"The wallet exchange rate is invalid.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-                    asset_amount = (
-                        amount_usd / exchange_rate
-                    ).quantize(
-                        Decimal("0.000000000001")
-                    )
+asset_amount=(
+amount_usd/exchange_rate
+).quantize(
+Decimal("0.000000000001")
+)
 
-                    if asset_amount <= Decimal("0"):
+ifasset_amount<=Decimal("0"):
                         messages.error(
-                            request,
-                            "The calculated asset amount is invalid.",
-                        )
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+request,
+"The calculated asset amount is invalid.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-                    wallet.balance += asset_amount
+wallet.balance+=asset_amount
 
-                    wallet.save(
-                        update_fields=[
-                            "balance",
-                            "updated_at",
-                        ]
-                    )
-
-
-
-
-                    investor, _ = (
-                        Investor.objects
-                        .get_or_create(
-                            user=target_user,
-                            defaults={
-                                "name": target_user.username,
-                            },
-                        )
-                    )
+wallet.save(
+update_fields=[
+"balance",
+"updated_at",
+]
+)
 
 
 
 
-                    Transaction.objects.create(
-                        investor=investor,
-                        wallet=wallet,
-                        transaction_type="admin_credit",
-                        direction="credit",
-                        asset_amount=asset_amount,
-                        usd_value=amount_usd,
-                        exchange_rate=exchange_rate,
-                        reference=(
-                            f"ADMIN-CREDIT-{target_user.id}"
-                        ),
-                        description=(
-                            "Admin credited wallet"
-                        ),
-                    )
-
-                messages.success(
-                    request,
-                    (
-                        f"${amount_usd} was credited to "
-                        f"{target_user.username}'s "
-                        f"{wallet.get_currency_display()} wallet."
-                    ),
-                )
+investor,_=(
+Investor.objects
+.get_or_create(
+user=target_user,
+defaults={
+"name":target_user.username,
+},
+)
+)
 
 
 
 
-            elif action == "deduct":
+Transaction.objects.create(
+investor=investor,
+wallet=wallet,
+transaction_type="admin_credit",
+direction="credit",
+asset_amount=asset_amount,
+usd_value=amount_usd,
+exchange_rate=exchange_rate,
+reference=(
+f"ADMIN-CREDIT-{target_user.id}"
+),
+description=(
+"Admin credited wallet"
+),
+)
 
-                if amount_usd <= Decimal("0"):
+messages.success(
+request,
+(
+f"${amount_usd} was credited to "
+f"{target_user.username}'s "
+f"{wallet.get_currency_display()} wallet."
+),
+)
+
+
+
+
+elifaction=="deduct":
+
+                ifamount_usd<=Decimal("0"):
                     messages.error(
-                        request,
-                        "Deduction amount must be greater than zero.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"Deduction amount must be greater than zero.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                wallet_currency = request.POST.get(
-                    "wallet_currency"
-                )
+wallet_currency=request.POST.get(
+"wallet_currency"
+)
 
-                allowed_wallets = {
-                    "BTC",
-                    "ETH",
-                    "USDT_TRC20",
-                    "USDT_ERC20",
-                }
+allowed_wallets={
+"BTC",
+"ETH",
+"USDT_TRC20",
+"USDT_ERC20",
+}
 
-                if wallet_currency not in allowed_wallets:
+ifwallet_currencynotinallowed_wallets:
                     messages.error(
-                        request,
-                        "Please select a valid wallet.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"Please select a valid wallet.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                with transaction.atomic():
+withtransaction.atomic():
 
-                    wallet = (
-                        Wallet.objects
-                        .select_for_update()
-                        .filter(
-                            user=target_user,
-                            currency=wallet_currency,
-                        )
-                        .first()
-                    )
+                    wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+user=target_user,
+currency=wallet_currency,
+)
+.first()
+)
 
-                    if not wallet:
+ifnotwallet:
                         messages.error(
-                            request,
-                            "The selected user wallet was not found.",
-                        )
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+request,
+"The selected user wallet was not found.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-                    asset_price = (
-                        AssetPrice.objects
-                        .filter(
-                            currency=wallet.currency
-                        )
-                        .first()
-                    )
+asset_price=(
+AssetPrice.objects
+.filter(
+currency=wallet.currency
+)
+.first()
+)
 
-                    if not asset_price:
+ifnotasset_price:
                         messages.error(
-                            request,
-                            (
-                                "No exchange rate is configured "
-                                f"for {wallet.get_currency_display()}."
-                            ),
-                        )
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+request,
+(
+"No exchange rate is configured "
+f"for {wallet.get_currency_display()}."
+),
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                    exchange_rate = asset_price.usd_price
+exchange_rate=asset_price.usd_price
 
-                    if (
-                        exchange_rate is None
-                        or not exchange_rate.is_finite()
-                        or exchange_rate <= Decimal("0")
-                    ):
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
                         messages.error(
-                            request,
-                            "The wallet exchange rate is invalid.",
-                        )
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+request,
+"The wallet exchange rate is invalid.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-                    asset_amount = (
-                        amount_usd / exchange_rate
-                    ).quantize(
-                        Decimal("0.000000000001")
-                    )
+asset_amount=(
+amount_usd/exchange_rate
+).quantize(
+Decimal("0.000000000001")
+)
 
 
 
 
-                    available_wallet_asset = (
-                        wallet.balance
-                        - wallet.reserved_balance
-                    )
+available_wallet_asset=(
+wallet.balance
+-wallet.reserved_balance
+)
 
-                    if available_wallet_asset < Decimal("0"):
-                        available_wallet_asset = Decimal("0")
-
-
-
-
-                    if asset_amount > available_wallet_asset:
-
-                        available_usd = (
-                            available_wallet_asset
-                            * exchange_rate
-                        ).quantize(
-                            Decimal("0.01")
-                        )
-
-                        messages.error(
-                            request,
-                            (
-                                f"Insufficient available "
-                                f"{wallet.get_currency_display()} "
-                                f"balance. Only approximately "
-                                f"${available_usd} is available."
-                            ),
-                        )
-
-                        return redirect(
-                            f"/admin/settings/?page={current_page}"
-                        )
+ifavailable_wallet_asset<Decimal("0"):
+                        available_wallet_asset=Decimal("0")
 
 
 
 
-                    wallet.balance -= asset_amount
+ifasset_amount>available_wallet_asset:
 
-                    wallet.save(
-                        update_fields=[
-                            "balance",
-                            "updated_at",
-                        ]
-                    )
+                        available_usd=(
+available_wallet_asset
+*exchange_rate
+).quantize(
+Decimal("0.01")
+)
 
+messages.error(
+request,
+(
+f"Insufficient available "
+f"{wallet.get_currency_display()} "
+f"balance. Only approximately "
+f"${available_usd} is available."
+),
+)
 
-
-
-                    investor, _ = (
-                        Investor.objects
-                        .get_or_create(
-                            user=target_user,
-                            defaults={
-                                "name": target_user.username,
-                            },
-                        )
-                    )
-
-
-
-
-                    Transaction.objects.create(
-                        investor=investor,
-                        wallet=wallet,
-                        transaction_type="admin_debit",
-                        direction="debit",
-                        asset_amount=asset_amount,
-                        usd_value=amount_usd,
-                        exchange_rate=exchange_rate,
-                        reference=(
-                            f"ADMIN-DEBIT-{target_user.id}"
-                        ),
-                        description=(
-                            "Admin deducted from wallet"
-                        ),
-                    )
-
-                messages.success(
-                    request,
-                    (
-                        f"${amount_usd} was deducted from "
-                        f"{target_user.username}'s "
-                        f"{wallet.get_currency_display()} wallet."
-                    ),
-                )
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-            elif action == "add_profit":
+wallet.balance-=asset_amount
 
-                if amount_usd <= Decimal("0"):
+wallet.save(
+update_fields=[
+"balance",
+"updated_at",
+]
+)
+
+
+
+
+investor,_=(
+Investor.objects
+.get_or_create(
+user=target_user,
+defaults={
+"name":target_user.username,
+},
+)
+)
+
+
+
+
+Transaction.objects.create(
+investor=investor,
+wallet=wallet,
+transaction_type="admin_debit",
+direction="debit",
+asset_amount=asset_amount,
+usd_value=amount_usd,
+exchange_rate=exchange_rate,
+reference=(
+f"ADMIN-DEBIT-{target_user.id}"
+),
+description=(
+"Admin deducted from wallet"
+),
+)
+
+messages.success(
+request,
+(
+f"${amount_usd} was deducted from "
+f"{target_user.username}'s "
+f"{wallet.get_currency_display()} wallet."
+),
+)
+
+
+
+
+elifaction=="add_profit":
+
+                ifamount_usd<=Decimal("0"):
                     messages.error(
-                        request,
-                        "Profit amount must be greater than zero.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"Profit amount must be greater than zero.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                plan_id = request.POST.get("plan_id")
+plan_id=request.POST.get("plan_id")
 
-                if not plan_id:
+ifnotplan_id:
                     messages.error(
-                        request,
-                        "Please select an investment plan.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"Please select an investment plan.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                selected_plan = get_object_or_404(
-                    InvestmentPlan,
-                    id=plan_id,
-                )
-
-
+selected_plan=get_object_or_404(
+InvestmentPlan,
+id=plan_id,
+)
 
 
-                has_investment = Investment.objects.filter(
-                    user=target_user,
-                    plan=selected_plan,
-                    status="active",
-                ).exists()
 
-                if not has_investment:
+
+has_investment=Investment.objects.filter(
+user=target_user,
+plan=selected_plan,
+status="active",
+).exists()
+
+ifnothas_investment:
                     messages.error(
-                        request,
-                        (
-                            f"{target_user.username} does not have "
-                            f"an active investment in "
-                            f"{selected_plan.name}."
-                        ),
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+(
+f"{target_user.username} does not have "
+f"an active investment in "
+f"{selected_plan.name}."
+),
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
 
-                Profit.objects.create(
-                    user=target_user,
-                    plan=selected_plan,
-                    amount=amount_usd,
-                    status="approved",
-                )
+Profit.objects.create(
+user=target_user,
+plan=selected_plan,
+amount=amount_usd,
+status="approved",
+)
 
-                messages.success(
-                    request,
-                    (
-                        f"${amount_usd} profit was added to "
-                        f"{target_user.username}'s "
-                        f"{selected_plan.name} investment."
-                    ),
-                )
-
-
+messages.success(
+request,
+(
+f"${amount_usd} profit was added to "
+f"{target_user.username}'s "
+f"{selected_plan.name} investment."
+),
+)
 
 
-            elif action == "referral_bonus":
 
-                if amount_usd <= Decimal("0"):
+
+elifaction=="referral_bonus":
+
+                ifamount_usd<=Decimal("0"):
                     messages.error(
-                        request,
-                        "Bonus amount must be greater than zero.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"Bonus amount must be greater than zero.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
 
 
@@ -2403,2084 +2403,2084 @@ def settings_view(request):
 
 
 
-                Bonus.objects.create(
-                    user=target_user,
-                    amount=amount_usd,
-                    bonus_type="manual",
-                    status="approved",
-                    description="Referral bonus",
-                )
+Bonus.objects.create(
+user=target_user,
+amount=amount_usd,
+bonus_type="manual",
+status="approved",
+description="Referral bonus",
+)
 
-                messages.success(
-                    request,
-                    (
-                        f"${amount_usd} referral bonus was added "
-                        f"to {target_user.username}'s account."
-                    ),
-                )
-
-
+messages.success(
+request,
+(
+f"${amount_usd} referral bonus was added "
+f"to {target_user.username}'s account."
+),
+)
 
 
-            elif action == "send_email":
 
-                if message and target_user.email:
+
+elifaction=="send_email":
+
+                ifmessageandtarget_user.email:
 
                     send_mail(
-                        subject="Message from Admin",
-                        message=message,
-                        from_email=django_settings.DEFAULT_FROM_EMAIL,
-                        recipient_list=[
-                            target_user.email
-                        ],
-                        fail_silently=False,
-                    )
+subject="Message from Admin",
+message=message,
+from_email=django_settings.DEFAULT_FROM_EMAIL,
+recipient_list=[
+target_user.email
+],
+fail_silently=False,
+)
 
-                    messages.success(
-                        request,
-                        "Message sent successfully.",
-                    )
+messages.success(
+request,
+"Message sent successfully.",
+)
 
-                else:
+else:
 
                     messages.error(
-                        request,
-                        "Please provide a message and make sure the user has an email address.",
-                    )
+request,
+"Please provide a message and make sure the user has an email address.",
+)
 
 
 
 
-            elif action == "login_as_user":
+elifaction=="login_as_user":
 
 
-                request.session["admin_user_id"] = (
-                    request.user.id
-                )
+                request.session["admin_user_id"]=(
+request.user.id
+)
 
 
-                login(
-                    request,
-                    target_user,
-                    backend=(
-                        "django.contrib.auth.backends.ModelBackend"
-                    ),
-                )
+login(
+request,
+target_user,
+backend=(
+"django.contrib.auth.backends.ModelBackend"
+),
+)
 
-                return redirect("dashboard")
-
-
+returnredirect("dashboard")
 
 
-            elif action == "delete_user":
 
-                if target_user.id == request.user.id:
+
+elifaction=="delete_user":
+
+                iftarget_user.id==request.user.id:
                     messages.error(
-                        request,
-                        "You cannot delete your own admin account.",
-                    )
-                    return redirect(
-                        f"/admin/settings/?page={current_page}"
-                    )
+request,
+"You cannot delete your own admin account.",
+)
+returnredirect(
+f"/admin/settings/?page={current_page}"
+)
 
-                target_user.delete()
+target_user.delete()
 
-                messages.success(
-                    request,
-                    "User deleted successfully.",
-                )
-
-
+messages.success(
+request,
+"User deleted successfully.",
+)
 
 
-            else:
+
+
+else:
 
                 messages.error(
-                    request,
-                    "Invalid admin action.",
-                )
+request,
+"Invalid admin action.",
+)
 
-            return redirect(
-                f"{reverse('admin_settings')}?page={current_page}"
-            )
-
-
-
-
-    dashboard_settings = (
-        AdminDashboardSettings.objects.first()
-    )
-
-    menus = AdminMenu.objects.all()
+returnredirect(
+f"{reverse('admin_settings')}?page={current_page}"
+)
 
 
 
 
-    users = (
-        User.objects
-        .all()
-        .order_by("-date_joined")
-    )
+dashboard_settings=(
+AdminDashboardSettings.objects.first()
+)
+
+menus=AdminMenu.objects.all()
 
 
 
 
-    paginator = Paginator(
-        users,
-        6,
-    )
-
-    page_obj = paginator.get_page(
-        request.GET.get("page", 1)
-    )
+users=(
+User.objects
+.all()
+.order_by("-date_joined")
+)
 
 
 
 
-    user_data = []
+paginator=Paginator(
+users,
+6,
+)
 
-    for user in page_obj.object_list:
-
-
-
-
-        wallets = (
-            Wallet.objects
-            .filter(user=user)
-            .order_by("currency")
-        )
+page_obj=paginator.get_page(
+request.GET.get("page",1)
+)
 
 
 
 
+user_data=[]
 
-
-        investment_plans = (
-            InvestmentPlan.objects
-            .all()
-            .order_by("name")
-        )
+foruserinpage_obj.object_list:
 
 
 
 
-        wallet_balance = Decimal("0.00")
-
-        for wallet in wallets:
-
-            available_asset = (
-                wallet.balance
-                - wallet.reserved_balance
-            )
-
-            if available_asset < Decimal("0"):
-                available_asset = Decimal("0")
+        wallets=(
+Wallet.objects
+.filter(user=user)
+.order_by("currency")
+)
 
 
 
 
-            asset_price = (
-                AssetPrice.objects
-                .filter(
-                    currency=wallet.currency
-                )
-                .first()
-            )
 
-            if not asset_price:
+
+investment_plans=(
+InvestmentPlan.objects
+.all()
+.order_by("name")
+)
+
+
+
+
+wallet_balance=Decimal("0.00")
+
+forwalletinwallets:
+
+            available_asset=(
+wallet.balance
+-wallet.reserved_balance
+)
+
+ifavailable_asset<Decimal("0"):
+                available_asset=Decimal("0")
+
+
+
+
+asset_price=(
+AssetPrice.objects
+.filter(
+currency=wallet.currency
+)
+.first()
+)
+
+ifnotasset_price:
                 continue
 
-            exchange_rate = asset_price.usd_price
+exchange_rate=asset_price.usd_price
 
-            if (
-                exchange_rate is None
-                or not exchange_rate.is_finite()
-                or exchange_rate <= Decimal("0")
-            ):
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
                 continue
 
 
 
 
-            wallet_usd_value = (
-                available_asset
-                * exchange_rate
-            )
+wallet_usd_value=(
+available_asset
+*exchange_rate
+)
 
-            wallet_balance += wallet_usd_value
+wallet_balance+=wallet_usd_value
 
-        wallet_balance = wallet_balance.quantize(
-            Decimal("0.01")
-        )
-
-
-
-
-        available_balance = wallet_balance
+wallet_balance=wallet_balance.quantize(
+Decimal("0.01")
+)
 
 
 
 
-        active_investments = (
-            Investment.objects
-            .filter(
-                user=user,
-                status="active",
-            )
-            .aggregate(
-                total=Sum("amount_usd")
-            )["total"]
-            or Decimal("0.00")
-        )
-
-        active_investments = active_investments.quantize(
-            Decimal("0.01")
-        )
+available_balance=wallet_balance
 
 
 
 
-        profit_total = (
-            Profit.objects
-            .filter(
-                user=user,
-                status="approved",
-            )
-            .aggregate(
-                total=Sum("amount")
-            )["total"]
-            or Decimal("0.00")
-        )
+active_investments=(
+Investment.objects
+.filter(
+user=user,
+status="active",
+)
+.aggregate(
+total=Sum("amount_usd")
+)["total"]
+orDecimal("0.00")
+)
 
-        profit_total = profit_total.quantize(
-            Decimal("0.01")
-        )
-
-
-
-
-        bonus_total = (
-            Bonus.objects
-            .filter(
-                user=user,
-                status="approved",
-            )
-            .aggregate(
-                total=Sum("amount")
-            )["total"]
-            or Decimal("0.00")
-        )
-
-        bonus_total = bonus_total.quantize(
-            Decimal("0.01")
-        )
+active_investments=active_investments.quantize(
+Decimal("0.01")
+)
 
 
 
 
-        total_earned = (
-            profit_total
-            + bonus_total
-        ).quantize(
-            Decimal("0.01")
-        )
+profit_total=(
+Profit.objects
+.filter(
+user=user,
+status="approved",
+)
+.aggregate(
+total=Sum("amount")
+)["total"]
+orDecimal("0.00")
+)
+
+profit_total=profit_total.quantize(
+Decimal("0.01")
+)
+
+
+
+
+bonus_total=(
+Bonus.objects
+.filter(
+user=user,
+status="approved",
+)
+.aggregate(
+total=Sum("amount")
+)["total"]
+orDecimal("0.00")
+)
+
+bonus_total=bonus_total.quantize(
+Decimal("0.01")
+)
+
+
+
+
+total_earned=(
+profit_total
++bonus_total
+).quantize(
+Decimal("0.01")
+)
 
 
 
 
 
 
-        total_portfolio = (
-            wallet_balance
-            + active_investments
-            + profit_total
-            + bonus_total
-        ).quantize(
-            Decimal("0.01")
-        )
+total_portfolio=(
+wallet_balance
++active_investments
++profit_total
++bonus_total
+).quantize(
+Decimal("0.01")
+)
 
 
 
 
-        user_data.append({
-            "user": user,
-            "wallets": wallets,
+user_data.append({
+"user":user,
+"wallets":wallets,
 
-            "investment_plans": investment_plans,
+"investment_plans":investment_plans,
 
-            "wallet_balance": wallet_balance,
-            "available_balance": available_balance,
-            "active_investments": active_investments,
-            "profit_total": profit_total,
-            "bonus_total": bonus_total,
-            "total_earned": total_earned,
-            "total_portfolio": total_portfolio,
-        })
-
-
+"wallet_balance":wallet_balance,
+"available_balance":available_balance,
+"active_investments":active_investments,
+"profit_total":profit_total,
+"bonus_total":bonus_total,
+"total_earned":total_earned,
+"total_portfolio":total_portfolio,
+})
 
 
-    return render(
-        request,
-        "control/admin_settings.html",
-        {
-            "user_data": user_data,
-            "page_obj": page_obj,
-            "settings": dashboard_settings,
-            "menus": menus,
-        },
-    )
+
+
+returnrender(
+request,
+"control/admin_settings.html",
+{
+"user_data":user_data,
+"page_obj":page_obj,
+"settings":dashboard_settings,
+"menus":menus,
+},
+)
 
 
 @admin_required
-def withdrawals_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defwithdrawals_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    withdrawals_qs = (
-        Withdrawal.objects
-        .exclude(source="live_trade")
-        .order_by("-created_at")
-    )
+withdrawals_qs=(
+Withdrawal.objects
+.exclude(source="live_trade")
+.order_by("-created_at")
+)
 
-    paginator = Paginator(
-        withdrawals_qs,
-        5,
-    )
+paginator=Paginator(
+withdrawals_qs,
+5,
+)
 
-    withdrawals_page = paginator.get_page(
-        request.GET.get("page")
-    )
+withdrawals_page=paginator.get_page(
+request.GET.get("page")
+)
 
-    return render(
-        request,
-        "control/withdrawals.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "withdrawals_page": withdrawals_page,
-        },
-    )
+returnrender(
+request,
+"control/withdrawals.html",
+{
+"settings":settings,
+"menus":menus,
+"withdrawals_page":withdrawals_page,
+},
+)
 
 @login_required
 @admin_required
-def live_trade_withdrawals_view(request):
+deflive_trade_withdrawals_view(request):
 
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    withdrawals_qs = (
-        Withdrawal.objects
-        .filter(
-            source="live_trade",
-        )
-        .select_related(
-            "user",
-            "wallet",
-            "trade",
-            "trade__plan",
-        )
-        .order_by("-created_at")
-    )
+withdrawals_qs=(
+Withdrawal.objects
+.filter(
+source="live_trade",
+)
+.select_related(
+"user",
+"wallet",
+"trade",
+"trade__plan",
+)
+.order_by("-created_at")
+)
 
-    paginator = Paginator(
-        withdrawals_qs,
-        5,
-    )
+paginator=Paginator(
+withdrawals_qs,
+5,
+)
 
-    withdrawals_page = paginator.get_page(
-        request.GET.get("page")
-    )
+withdrawals_page=paginator.get_page(
+request.GET.get("page")
+)
 
-    return render(
-        request,
-        "control/live_trade_withdrawals.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "withdrawals_page": withdrawals_page,
-        },
-    )
+returnrender(
+request,
+"control/live_trade_withdrawals.html",
+{
+"settings":settings,
+"menus":menus,
+"withdrawals_page":withdrawals_page,
+},
+)
 
 @login_required
 @admin_required
 @require_POST
-def approve_live_trade_withdrawal(
-    request,
-    withdrawal_id,
+defapprove_live_trade_withdrawal(
+request,
+withdrawal_id,
 ):
 
-    with transaction.atomic():
+    withtransaction.atomic():
 
-        withdrawal = (
-            Withdrawal.objects
-            .select_for_update()
-            .select_related(
-                "user",
-                "wallet",
-                "trade",
-                "trade__plan",
-            )
-            .filter(
-                id=withdrawal_id,
-                source="live_trade",
-                status="pending",
-            )
-            .first()
-        )
+        withdrawal=(
+Withdrawal.objects
+.select_for_update()
+.select_related(
+"user",
+"wallet",
+"trade",
+"trade__plan",
+)
+.filter(
+id=withdrawal_id,
+source="live_trade",
+status="pending",
+)
+.first()
+)
 
-        if withdrawal is None:
-
-            messages.error(
-                request,
-                (
-                    "Live Trading withdrawal was not found "
-                    "or has already been processed."
-                ),
-            )
-
-            return redirect(
-                "live_trade_withdrawals"
-            )
-
-        trade = withdrawal.trade
-
-        if trade is None:
+ifwithdrawalisNone:
 
             messages.error(
-                request,
-                (
-                    "This Live Trading withdrawal is not "
-                    "linked to a trade."
-                ),
-            )
+request,
+(
+"Live Trading withdrawal was not found "
+"or has already been processed."
+),
+)
 
-            return redirect(
-                "live_trade_withdrawals"
-            )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        if trade.result != "win":
+trade=withdrawal.trade
 
-            messages.error(
-                request,
-                (
-                    "Only winning Live Trading trades "
-                    "can be withdrawn."
-                ),
-            )
-
-            return redirect(
-                "live_trade_withdrawals"
-            )
-
-        if not trade.payout_released:
+iftradeisNone:
 
             messages.error(
-                request,
-                (
-                    "The Live Trading payout has not "
-                    "been released."
-                ),
-            )
+request,
+(
+"This Live Trading withdrawal is not "
+"linked to a trade."
+),
+)
 
-            return redirect(
-                "live_trade_withdrawals"
-            )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        wallet = (
-            Wallet.objects
-            .select_for_update()
-            .filter(
-                id=withdrawal.wallet_id,
-                user=withdrawal.user,
-            )
-            .first()
-        )
-
-        if wallet is None:
+iftrade.result!="win":
 
             messages.error(
-                request,
-                "The wallet for this withdrawal was not found.",
-            )
+request,
+(
+"Only winning Live Trading trades "
+"can be withdrawn."
+),
+)
 
-            return redirect(
-                "live_trade_withdrawals"
-            )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        asset_amount = withdrawal.asset_amount
-        amount_usd = withdrawal.amount_usd
-        exchange_rate = withdrawal.exchange_rate
-
-        if (
-            asset_amount is None
-            or not asset_amount.is_finite()
-            or asset_amount <= Decimal("0")
-        ):
+ifnottrade.payout_released:
 
             messages.error(
-                request,
-                "The Live Trading withdrawal asset amount is invalid.",
-            )
+request,
+(
+"The Live Trading payout has not "
+"been released."
+),
+)
 
-            return redirect(
-                "live_trade_withdrawals"
-            )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        if (
-            amount_usd is None
-            or not amount_usd.is_finite()
-            or amount_usd <= Decimal("0")
-        ):
+wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+id=withdrawal.wallet_id,
+user=withdrawal.user,
+)
+.first()
+)
 
-            messages.error(
-                request,
-                "The Live Trading withdrawal USD amount is invalid.",
-            )
-
-            return redirect(
-                "live_trade_withdrawals"
-            )
-
-        if (
-            exchange_rate is None
-            or not exchange_rate.is_finite()
-            or exchange_rate <= Decimal("0")
-        ):
-
-            asset_price = (
-                AssetPrice.objects
-                .filter(
-                    currency=wallet.currency,
-                )
-                .first()
-            )
-
-            if asset_price is None:
-
-                messages.error(
-                    request,
-                    (
-                        f"No exchange rate is available "
-                        f"for {wallet.get_currency_display()}."
-                    ),
-                )
-
-                return redirect(
-                    "live_trade_withdrawals"
-                )
-
-            exchange_rate = asset_price.usd_price
-
-        wallet_balance = (
-            wallet.balance
-            or Decimal("0")
-        )
-
-        reserved_balance = (
-            wallet.reserved_balance
-            or Decimal("0")
-        )
-
-        if wallet_balance < Decimal("0"):
-            wallet_balance = Decimal("0")
-
-        if reserved_balance < Decimal("0"):
-            reserved_balance = Decimal("0")
-
-        available_balance = (
-            wallet_balance
-            - reserved_balance
-        )
-
-        if available_balance < Decimal("0"):
-            available_balance = Decimal("0")
-
-        if asset_amount > available_balance:
-
-            available_usd = (
-                available_balance * exchange_rate
-            ).quantize(
-                Decimal("0.01")
-            )
+ifwalletisNone:
 
             messages.error(
-                request,
-                (
-                    f"Insufficient available "
-                    f"{wallet.get_currency_display()} balance. "
-                    f"The Live Trading withdrawal requires "
-                    f"{asset_amount} {wallet.currency}, "
-                    f"worth ${amount_usd}, but only "
-                    f"{available_balance} {wallet.currency}, "
-                    f"worth ${available_usd}, is available."
-                ),
-            )
+request,
+"The wallet for this withdrawal was not found.",
+)
 
-            return redirect(
-                "live_trade_withdrawals"
-            )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        wallet.balance = (
-            wallet_balance
-            - asset_amount
-        )
+asset_amount=withdrawal.asset_amount
+amount_usd=withdrawal.amount_usd
+exchange_rate=withdrawal.exchange_rate
 
-        if reserved_balance >= asset_amount:
-
-            wallet.reserved_balance = (
-                reserved_balance
-                - asset_amount
-            )
-
-        else:
-
-            wallet.reserved_balance = Decimal("0")
-
-        wallet.save(
-            update_fields=[
-                "balance",
-                "reserved_balance",
-                "updated_at",
-            ]
-        )
-
-        withdrawal.exchange_rate = exchange_rate
-        withdrawal.status = "approved"
-        withdrawal.approved_at = timezone.now()
-
-        withdrawal.save(
-            update_fields=[
-                "exchange_rate",
-                "status",
-                "approved_at",
-            ]
-        )
-
-        investor, _ = (
-            Investor.objects
-            .get_or_create(
-                user=withdrawal.user,
-                defaults={
-                    "name": withdrawal.user.username,
-                },
-            )
-        )
-
-        Transaction.objects.create(
-            investor=investor,
-            wallet=wallet,
-            transaction_type="withdrawal",
-            direction="debit",
-            asset_amount=asset_amount,
-            usd_value=amount_usd,
-            exchange_rate=exchange_rate,
-            reference=f"LIVE-TRADE-WDR-{withdrawal.id}",
-            description=(
-                f"Live Trading withdrawal for "
-                f"Trade #{trade.id} to "
-                f"{withdrawal.destination_wallet}"
-            ),
-        )
-
-    messages.success(
-        request,
-        (
-            "Live Trading withdrawal approved "
-            "and the payout has been deducted from the user's wallet."
-        ),
-    )
-
-    return redirect(
-        "live_trade_withdrawals"
-    )
-
-
-@login_required
-@admin_required
-@require_POST
-def reject_live_trade_withdrawal(
-    request,
-    withdrawal_id,
+if(
+asset_amountisNone
+ornotasset_amount.is_finite()
+orasset_amount<=Decimal("0")
 ):
 
-    with transaction.atomic():
+            messages.error(
+request,
+"The Live Trading withdrawal asset amount is invalid.",
+)
 
-        withdrawal = (
-            Withdrawal.objects
-            .select_for_update()
-            .select_related(
-                "user",
-                "wallet",
-                "trade",
-                "trade__plan",
-            )
-            .filter(
-                id=withdrawal_id,
-                source="live_trade",
-                status="pending",
-            )
-            .first()
-        )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        if withdrawal is None:
+if(
+amount_usdisNone
+ornotamount_usd.is_finite()
+oramount_usd<=Decimal("0")
+):
 
             messages.error(
-                request,
-                (
-                    "Live Trading withdrawal was not found "
-                    "or has already been processed."
-                ),
-            )
+request,
+"The Live Trading withdrawal USD amount is invalid.",
+)
 
-            return redirect(
-                "live_trade_withdrawals"
-            )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        wallet = (
-            Wallet.objects
-            .select_for_update()
-            .filter(
-                id=withdrawal.wallet_id,
-                user=withdrawal.user,
-            )
-            .first()
-        )
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
 
-        if wallet is None:
+            asset_price=(
+AssetPrice.objects
+.filter(
+currency=wallet.currency,
+)
+.first()
+)
 
-            messages.error(
-                request,
-                "The wallet for this withdrawal was not found.",
-            )
+ifasset_priceisNone:
 
-            return redirect(
-                "live_trade_withdrawals"
-            )
+                messages.error(
+request,
+(
+f"No exchange rate is available "
+f"for {wallet.get_currency_display()}."
+),
+)
 
-        asset_amount = (
-            withdrawal.asset_amount
-            or Decimal("0")
-        )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-        if (
-            asset_amount.is_finite()
-            and asset_amount > Decimal("0")
-        ):
+exchange_rate=asset_price.usd_price
 
-            reserved_balance = (
-                wallet.reserved_balance
-                or Decimal("0")
-            )
+wallet_balance=(
+wallet.balance
+orDecimal("0")
+)
 
-            if reserved_balance < Decimal("0"):
-                reserved_balance = Decimal("0")
+reserved_balance=(
+wallet.reserved_balance
+orDecimal("0")
+)
 
-            if reserved_balance >= asset_amount:
+ifwallet_balance<Decimal("0"):
+            wallet_balance=Decimal("0")
 
-                wallet.reserved_balance = (
-                    reserved_balance - asset_amount
-                )
+ifreserved_balance<Decimal("0"):
+            reserved_balance=Decimal("0")
 
-            else:
+available_balance=(
+wallet_balance
+-reserved_balance
+)
 
-                wallet.reserved_balance = Decimal("0")
+ifavailable_balance<Decimal("0"):
+            available_balance=Decimal("0")
 
-            wallet.save(
-                update_fields=[
-                    "reserved_balance",
-                    "updated_at",
-                ],
-            )
+ifasset_amount>available_balance:
 
-        withdrawal.status = "rejected"
-        withdrawal.approved_at = None
+            available_usd=(
+available_balance*exchange_rate
+).quantize(
+Decimal("0.01")
+)
 
-        withdrawal.save(
-            update_fields=[
-                "status",
-                "approved_at",
-            ],
-        )
+messages.error(
+request,
+(
+f"Insufficient available "
+f"{wallet.get_currency_display()} balance. "
+f"The Live Trading withdrawal requires "
+f"{asset_amount} {wallet.currency}, "
+f"worth ${amount_usd}, but only "
+f"{available_balance} {wallet.currency}, "
+f"worth ${available_usd}, is available."
+),
+)
 
-    messages.success(
-        request,
-        "Live Trading withdrawal rejected successfully.",
-    )
+returnredirect(
+"live_trade_withdrawals"
+)
 
-    return redirect(
-        "live_trade_withdrawals"
-    )
+wallet.balance=(
+wallet_balance
+-asset_amount
+)
+
+ifreserved_balance>=asset_amount:
+
+            wallet.reserved_balance=(
+reserved_balance
+-asset_amount
+)
+
+else:
+
+            wallet.reserved_balance=Decimal("0")
+
+wallet.save(
+update_fields=[
+"balance",
+"reserved_balance",
+"updated_at",
+]
+)
+
+withdrawal.exchange_rate=exchange_rate
+withdrawal.status="approved"
+withdrawal.approved_at=timezone.now()
+
+withdrawal.save(
+update_fields=[
+"exchange_rate",
+"status",
+"approved_at",
+]
+)
+
+investor,_=(
+Investor.objects
+.get_or_create(
+user=withdrawal.user,
+defaults={
+"name":withdrawal.user.username,
+},
+)
+)
+
+Transaction.objects.create(
+investor=investor,
+wallet=wallet,
+transaction_type="withdrawal",
+direction="debit",
+asset_amount=asset_amount,
+usd_value=amount_usd,
+exchange_rate=exchange_rate,
+reference=f"LIVE-TRADE-WDR-{withdrawal.id}",
+description=(
+f"Live Trading withdrawal for "
+f"Trade #{trade.id} to "
+f"{withdrawal.destination_wallet}"
+),
+)
+
+messages.success(
+request,
+(
+"Live Trading withdrawal approved "
+"and the payout has been deducted from the user's wallet."
+),
+)
+
+returnredirect(
+"live_trade_withdrawals"
+)
 
 
 @login_required
 @admin_required
 @require_POST
-def approve_withdrawal(request, withdrawal_id):
+defreject_live_trade_withdrawal(
+request,
+withdrawal_id,
+):
 
+    withtransaction.atomic():
 
+        withdrawal=(
+Withdrawal.objects
+.select_for_update()
+.select_related(
+"user",
+"wallet",
+"trade",
+"trade__plan",
+)
+.filter(
+id=withdrawal_id,
+source="live_trade",
+status="pending",
+)
+.first()
+)
 
-
-
-    with transaction.atomic():
-
-        withdrawal = (
-            Withdrawal.objects
-            .select_for_update()
-            .select_related(
-                "user",
-                "wallet",
-            )
-            .filter(
-                id=withdrawal_id,
-                status="pending",
-            )
-            .first()
-        )
-
-
-
-
-
-        if withdrawal is None:
+ifwithdrawalisNone:
 
             messages.error(
-                request,
-                "Withdrawal was not found or has already been processed.",
-            )
+request,
+(
+"Live Trading withdrawal was not found "
+"or has already been processed."
+),
+)
 
-            return redirect(
-                "withdrawals"
-            )
+returnredirect(
+"live_trade_withdrawals"
+)
 
+wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+id=withdrawal.wallet_id,
+user=withdrawal.user,
+)
+.first()
+)
 
-
-
-
-        amount_usd = withdrawal.amount_usd
-
-        if (
-            amount_usd is None
-            or not amount_usd.is_finite()
-            or amount_usd <= Decimal("0.00")
-        ):
-
-            messages.error(
-                request,
-                "Invalid withdrawal USD amount.",
-            )
-
-            return redirect(
-                "withdrawals"
-            )
-
-
-
-
-
-        wallet = (
-            Wallet.objects
-            .select_for_update()
-            .filter(
-                id=withdrawal.wallet_id,
-                user=withdrawal.user,
-            )
-            .first()
-        )
-
-        if wallet is None:
+ifwalletisNone:
 
             messages.error(
-                request,
-                "The wallet for this withdrawal was not found.",
-            )
-
-            return redirect(
-                "withdrawals"
-            )
-
-
-
-
-
-        destination = (
-            withdrawal.destination_wallet or ""
-        ).strip()
-
-        if not destination:
-
-            messages.error(
-                request,
-                "The withdrawal destination wallet is missing.",
-            )
-
-            return redirect(
-                "withdrawals"
-            )
-
-        if not wallet.address:
-
-            messages.error(
-                request,
-                "The user's wallet address is missing.",
-            )
-
-            return redirect(
-                "withdrawals"
-            )
-
-        if destination != wallet.address.strip():
-
-            messages.error(
-                request,
-                (
-                    "The withdrawal destination does not "
-                    "match the user's saved wallet address."
-                ),
-            )
-
-            return redirect(
-                "withdrawals"
-            )
-
-
-
-
-
-        asset_amount = withdrawal.asset_amount
-        exchange_rate = withdrawal.exchange_rate
-
-
-
-
-
-        if (
-            asset_amount is None
-            or not asset_amount.is_finite()
-            or asset_amount <= Decimal("0")
-        ):
-
-            asset_price = (
-                AssetPrice.objects
-                .filter(
-                    currency=wallet.currency,
-                )
-                .first()
-            )
-
-            if asset_price is None:
-
-                messages.error(
-                    request,
-                    (
-                        "No USD exchange rate has been configured "
-                        f"for {wallet.get_currency_display()}."
-                    ),
-                )
-
-                return redirect(
-                    "withdrawals"
-                )
-
-            exchange_rate = asset_price.usd_price
-
-            if (
-                exchange_rate is None
-                or not exchange_rate.is_finite()
-                or exchange_rate <= Decimal("0")
-            ):
-
-                messages.error(
-                    request,
-                    "The exchange rate for this withdrawal is invalid.",
-                )
-
-                return redirect(
-                    "withdrawals"
-                )
-
-            asset_amount = (
-                amount_usd / exchange_rate
-            ).quantize(
-                Decimal("0.000000000001")
-            )
-
-            if asset_amount <= Decimal("0"):
-
-                messages.error(
-                    request,
-                    "The calculated withdrawal asset amount is invalid.",
-                )
-
-                return redirect(
-                    "withdrawals"
-                )
-
-        else:
-
-
-
-
-
-            if (
-                exchange_rate is None
-                or not exchange_rate.is_finite()
-                or exchange_rate <= Decimal("0")
-            ):
-
-                exchange_rate = (
-                    amount_usd / asset_amount
-                ).quantize(
-                    Decimal("0.000000000001")
-                )
-
-
-
-
-
-        wallet_balance = (
-            wallet.balance
-            or Decimal("0")
-        )
-
-        reserved_balance = (
-            wallet.reserved_balance
-            or Decimal("0")
-        )
-
-        if wallet_balance < Decimal("0"):
-            wallet_balance = Decimal("0")
-
-        if reserved_balance < Decimal("0"):
-            reserved_balance = Decimal("0")
-
-        available_balance = (
-            wallet_balance
-            - reserved_balance
-        )
-
-        if available_balance < Decimal("0"):
-            available_balance = Decimal("0")
-
-
-
-
-
-        if asset_amount > available_balance:
-
-            available_usd = (
-                available_balance * exchange_rate
-            ).quantize(
-                Decimal("0.01")
-            )
-
-            messages.error(
-                request,
-                (
-                    f"Insufficient available "
-                    f"{wallet.get_currency_display()} balance. "
-                    f"The withdrawal requires {asset_amount} "
-                    f"{wallet.currency}, worth ${amount_usd}, "
-                    f"but only {available_balance} "
-                    f"{wallet.currency}, worth ${available_usd}, "
-                    f"is available."
-                ),
-            )
-
-            return redirect(
-                "withdrawals"
-            )
-
-
-
-
-
-        wallet.balance = (
-            wallet_balance
-            - asset_amount
-        )
-
-
-
-
-
-        if reserved_balance >= asset_amount:
-
-            wallet.reserved_balance = (
-                reserved_balance
-                - asset_amount
-            )
-
-        else:
-
-            wallet.reserved_balance = Decimal("0")
-
-        wallet.save(
-            update_fields=[
-                "balance",
-                "reserved_balance",
-                "updated_at",
-            ]
-        )
-
-
-
-
-
-        withdrawal.asset_amount = asset_amount
-        withdrawal.exchange_rate = exchange_rate
-        withdrawal.status = "approved"
-        withdrawal.approved_at = timezone.now()
-
-        withdrawal.save(
-            update_fields=[
-                "asset_amount",
-                "exchange_rate",
-                "status",
-                "approved_at",
-            ]
-        )
-
-
-
-
-
-        investor, _ = (
-            Investor.objects
-            .get_or_create(
-                user=withdrawal.user,
-                defaults={
-                    "name": withdrawal.user.username,
-                },
-            )
-        )
-
-
-
-
-
-        Transaction.objects.create(
-            investor=investor,
-            wallet=wallet,
-            transaction_type="withdrawal",
-            direction="debit",
-            asset_amount=asset_amount,
-            usd_value=amount_usd,
-            exchange_rate=exchange_rate,
-            reference=f"WDR-{withdrawal.id}",
-            description=(
-                f"Withdrawal to {destination}"
-            ),
-        )
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    notify_withdrawal_approved(
-        withdrawal
-    )
-
-
-
-
-
-    messages.success(
-        request,
-        "Withdrawal approved successfully.",
-    )
-
-    return redirect(
-        "withdrawals"
-    )
+request,
+"The wallet for this withdrawal was not found.",
+)
+
+returnredirect(
+"live_trade_withdrawals"
+)
+
+asset_amount=(
+withdrawal.asset_amount
+orDecimal("0")
+)
+
+if(
+asset_amount.is_finite()
+andasset_amount>Decimal("0")
+):
+
+            reserved_balance=(
+wallet.reserved_balance
+orDecimal("0")
+)
+
+ifreserved_balance<Decimal("0"):
+                reserved_balance=Decimal("0")
+
+ifreserved_balance>=asset_amount:
+
+                wallet.reserved_balance=(
+reserved_balance-asset_amount
+)
+
+else:
+
+                wallet.reserved_balance=Decimal("0")
+
+wallet.save(
+update_fields=[
+"reserved_balance",
+"updated_at",
+],
+)
+
+withdrawal.status="rejected"
+withdrawal.approved_at=None
+
+withdrawal.save(
+update_fields=[
+"status",
+"approved_at",
+],
+)
+
+messages.success(
+request,
+"Live Trading withdrawal rejected successfully.",
+)
+
+returnredirect(
+"live_trade_withdrawals"
+)
 
 
 @login_required
 @admin_required
 @require_POST
-def reject_withdrawal(request, withdrawal_id):
-    with transaction.atomic():
+defapprove_withdrawal(request,withdrawal_id):
 
-        withdrawal = (
-            Withdrawal.objects
-            .select_for_update()
-            .select_related("user", "wallet")
-            .filter(
-                id=withdrawal_id,
-                status="pending",
-            )
-            .first()
-        )
 
-        if withdrawal is None:
+
+
+
+    withtransaction.atomic():
+
+        withdrawal=(
+Withdrawal.objects
+.select_for_update()
+.select_related(
+"user",
+"wallet",
+)
+.filter(
+id=withdrawal_id,
+status="pending",
+)
+.first()
+)
+
+
+
+
+
+ifwithdrawalisNone:
+
             messages.error(
-                request,
-                "Withdrawal was not found or has already been processed."
-            )
-            return redirect("withdrawals")
+request,
+"Withdrawal was not found or has already been processed.",
+)
 
-        wallet = (
-            Wallet.objects
-            .select_for_update()
-            .filter(
-                id=withdrawal.wallet_id,
-                user=withdrawal.user,
-            )
-            .first()
-        )
-
-        if wallet is not None:
-
-            reserved_balance = (
-                wallet.reserved_balance or Decimal("0")
-            )
-
-            release_amount = (
-                withdrawal.asset_amount
-                or Decimal("0")
-            )
-
-            if release_amount > Decimal("0"):
-
-                wallet.reserved_balance = max(
-                    Decimal("0"),
-                    reserved_balance - release_amount,
-                )
-
-                wallet.save(
-                    update_fields=[
-                        "reserved_balance",
-                        "updated_at",
-                    ]
-                )
-
-        withdrawal.status = "rejected"
-
-        withdrawal.save(
-            update_fields=[
-                "status",
-            ]
-        )
-
-    messages.success(
-        request,
-        "Withdrawal rejected successfully."
-    )
-
-    return redirect("withdrawals")
+returnredirect(
+"withdrawals"
+)
 
 
-def admin_login_view(request):
-    if request.user.is_authenticated and request.user.is_staff:
-        return redirect("admin_dashboard")
 
-    if request.method == "POST":
-        username = request.POST.get(
-            "username",
-            "",
-        ).strip()
 
-        password = request.POST.get(
-            "password",
-            "",
-        )
 
-        recaptcha_response = request.POST.get(
-            "g-recaptcha-response",
-            "",
-        )
+amount_usd=withdrawal.amount_usd
 
-        ip_address = request.META.get(
-            "REMOTE_ADDR",
-            "unknown",
-        )
+if(
+amount_usdisNone
+ornotamount_usd.is_finite()
+oramount_usd<=Decimal("0.00")
+):
 
-        rate_limit_key = (
-            f"admin_login_attempts:{ip_address}:{username.lower()}"
-        )
-
-        attempts = cache.get(
-            rate_limit_key,
-            0,
-        )
-
-        if attempts >= 3:
             messages.error(
-                request,
-                "Too many failed login attempts. Please try again later."
-            )
+request,
+"Invalid withdrawal USD amount.",
+)
 
-            return render(
-                request,
-                "control/admin_login.html",
-                {
-                    "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
-                },
-            )
+returnredirect(
+"withdrawals"
+)
 
-        if not recaptcha_response:
+
+
+
+
+wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+id=withdrawal.wallet_id,
+user=withdrawal.user,
+)
+.first()
+)
+
+ifwalletisNone:
+
             messages.error(
-                request,
-                "Please complete the reCAPTCHA verification.",
-            )
+request,
+"The wallet for this withdrawal was not found.",
+)
 
-            return render(
-                request,
-                "control/admin_login.html",
-                {
-                    "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
-                },
-            )
+returnredirect(
+"withdrawals"
+)
 
-        try:
-            recaptcha_result = requests.post(
-                "https://www.google.com/recaptcha/api/siteverify",
-                data={
-                    "secret": settings.RECAPTCHA_SECRET_KEY,
-                    "response": recaptcha_response,
-                    "remoteip": request.META.get(
-                        "REMOTE_ADDR"
-                    ),
-                },
-                timeout=10,
-            )
 
-            recaptcha_result.raise_for_status()
 
-            recaptcha_data = recaptcha_result.json()
 
-        except (
-            requests.RequestException,
-            ValueError,
-        ):
+
+destination=(
+withdrawal.destination_walletor""
+).strip()
+
+ifnotdestination:
+
             messages.error(
-                request,
-                "reCAPTCHA verification failed. Please try again.",
-            )
+request,
+"The withdrawal destination wallet is missing.",
+)
 
-            return render(
-                request,
-                "control/admin_login.html",
-                {
-                    "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
-                },
-            )
+returnredirect(
+"withdrawals"
+)
 
-        if not recaptcha_data.get("success"):
+ifnotwallet.address:
+
             messages.error(
-                request,
-                "Please complete the reCAPTCHA verification correctly.",
-            )
+request,
+"The user's wallet address is missing.",
+)
 
-            return render(
-                request,
-                "control/admin_login.html",
-                {
-                    "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
-                },
-            )
+returnredirect(
+"withdrawals"
+)
 
-        user = authenticate(
-            request,
-            username=username,
-            password=password,
-        )
+ifdestination!=wallet.address.strip():
 
-        if user is not None and user.is_staff and user.is_active:
+            messages.error(
+request,
+(
+"The withdrawal destination does not "
+"match the user's saved wallet address."
+),
+)
+
+returnredirect(
+"withdrawals"
+)
+
+
+
+
+
+asset_amount=withdrawal.asset_amount
+exchange_rate=withdrawal.exchange_rate
+
+
+
+
+
+if(
+asset_amountisNone
+ornotasset_amount.is_finite()
+orasset_amount<=Decimal("0")
+):
+
+            asset_price=(
+AssetPrice.objects
+.filter(
+currency=wallet.currency,
+)
+.first()
+)
+
+ifasset_priceisNone:
+
+                messages.error(
+request,
+(
+"No USD exchange rate has been configured "
+f"for {wallet.get_currency_display()}."
+),
+)
+
+returnredirect(
+"withdrawals"
+)
+
+exchange_rate=asset_price.usd_price
+
+if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
+
+                messages.error(
+request,
+"The exchange rate for this withdrawal is invalid.",
+)
+
+returnredirect(
+"withdrawals"
+)
+
+asset_amount=(
+amount_usd/exchange_rate
+).quantize(
+Decimal("0.000000000001")
+)
+
+ifasset_amount<=Decimal("0"):
+
+                messages.error(
+request,
+"The calculated withdrawal asset amount is invalid.",
+)
+
+returnredirect(
+"withdrawals"
+)
+
+else:
+
+
+
+
+
+            if(
+exchange_rateisNone
+ornotexchange_rate.is_finite()
+orexchange_rate<=Decimal("0")
+):
+
+                exchange_rate=(
+amount_usd/asset_amount
+).quantize(
+Decimal("0.000000000001")
+)
+
+
+
+
+
+wallet_balance=(
+wallet.balance
+orDecimal("0")
+)
+
+reserved_balance=(
+wallet.reserved_balance
+orDecimal("0")
+)
+
+ifwallet_balance<Decimal("0"):
+            wallet_balance=Decimal("0")
+
+ifreserved_balance<Decimal("0"):
+            reserved_balance=Decimal("0")
+
+available_balance=(
+wallet_balance
+-reserved_balance
+)
+
+ifavailable_balance<Decimal("0"):
+            available_balance=Decimal("0")
+
+
+
+
+
+ifasset_amount>available_balance:
+
+            available_usd=(
+available_balance*exchange_rate
+).quantize(
+Decimal("0.01")
+)
+
+messages.error(
+request,
+(
+f"Insufficient available "
+f"{wallet.get_currency_display()} balance. "
+f"The withdrawal requires {asset_amount} "
+f"{wallet.currency}, worth ${amount_usd}, "
+f"but only {available_balance} "
+f"{wallet.currency}, worth ${available_usd}, "
+f"is available."
+),
+)
+
+returnredirect(
+"withdrawals"
+)
+
+
+
+
+
+wallet.balance=(
+wallet_balance
+-asset_amount
+)
+
+
+
+
+
+ifreserved_balance>=asset_amount:
+
+            wallet.reserved_balance=(
+reserved_balance
+-asset_amount
+)
+
+else:
+
+            wallet.reserved_balance=Decimal("0")
+
+wallet.save(
+update_fields=[
+"balance",
+"reserved_balance",
+"updated_at",
+]
+)
+
+
+
+
+
+withdrawal.asset_amount=asset_amount
+withdrawal.exchange_rate=exchange_rate
+withdrawal.status="approved"
+withdrawal.approved_at=timezone.now()
+
+withdrawal.save(
+update_fields=[
+"asset_amount",
+"exchange_rate",
+"status",
+"approved_at",
+]
+)
+
+
+
+
+
+investor,_=(
+Investor.objects
+.get_or_create(
+user=withdrawal.user,
+defaults={
+"name":withdrawal.user.username,
+},
+)
+)
+
+
+
+
+
+Transaction.objects.create(
+investor=investor,
+wallet=wallet,
+transaction_type="withdrawal",
+direction="debit",
+asset_amount=asset_amount,
+usd_value=amount_usd,
+exchange_rate=exchange_rate,
+reference=f"WDR-{withdrawal.id}",
+description=(
+f"Withdrawal to {destination}"
+),
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+notify_withdrawal_approved(
+withdrawal
+)
+
+
+
+
+
+messages.success(
+request,
+"Withdrawal approved successfully.",
+)
+
+returnredirect(
+"withdrawals"
+)
+
+
+@login_required
+@admin_required
+@require_POST
+defreject_withdrawal(request,withdrawal_id):
+    withtransaction.atomic():
+
+        withdrawal=(
+Withdrawal.objects
+.select_for_update()
+.select_related("user","wallet")
+.filter(
+id=withdrawal_id,
+status="pending",
+)
+.first()
+)
+
+ifwithdrawalisNone:
+            messages.error(
+request,
+"Withdrawal was not found or has already been processed."
+)
+returnredirect("withdrawals")
+
+wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+id=withdrawal.wallet_id,
+user=withdrawal.user,
+)
+.first()
+)
+
+ifwalletisnotNone:
+
+            reserved_balance=(
+wallet.reserved_balanceorDecimal("0")
+)
+
+release_amount=(
+withdrawal.asset_amount
+orDecimal("0")
+)
+
+ifrelease_amount>Decimal("0"):
+
+                wallet.reserved_balance=max(
+Decimal("0"),
+reserved_balance-release_amount,
+)
+
+wallet.save(
+update_fields=[
+"reserved_balance",
+"updated_at",
+]
+)
+
+withdrawal.status="rejected"
+
+withdrawal.save(
+update_fields=[
+"status",
+]
+)
+
+messages.success(
+request,
+"Withdrawal rejected successfully."
+)
+
+returnredirect("withdrawals")
+
+
+defadmin_login_view(request):
+    ifrequest.user.is_authenticatedandrequest.user.is_staff:
+        returnredirect("admin_dashboard")
+
+ifrequest.method=="POST":
+        username=request.POST.get(
+"username",
+"",
+).strip()
+
+password=request.POST.get(
+"password",
+"",
+)
+
+recaptcha_response=request.POST.get(
+"g-recaptcha-response",
+"",
+)
+
+ip_address=request.META.get(
+"REMOTE_ADDR",
+"unknown",
+)
+
+rate_limit_key=(
+f"admin_login_attempts:{ip_address}:{username.lower()}"
+)
+
+attempts=cache.get(
+rate_limit_key,
+0,
+)
+
+ifattempts>=3:
+            messages.error(
+request,
+"Too many failed login attempts. Please try again later."
+)
+
+returnrender(
+request,
+"control/admin_login.html",
+{
+"recaptcha_site_key":settings.RECAPTCHA_SITE_KEY,
+},
+)
+
+ifnotrecaptcha_response:
+            messages.error(
+request,
+"Please complete the reCAPTCHA verification.",
+)
+
+returnrender(
+request,
+"control/admin_login.html",
+{
+"recaptcha_site_key":settings.RECAPTCHA_SITE_KEY,
+},
+)
+
+try:
+            recaptcha_result=requests.post(
+"https://www.google.com/recaptcha/api/siteverify",
+data={
+"secret":settings.RECAPTCHA_SECRET_KEY,
+"response":recaptcha_response,
+"remoteip":request.META.get(
+"REMOTE_ADDR"
+),
+},
+timeout=10,
+)
+
+recaptcha_result.raise_for_status()
+
+recaptcha_data=recaptcha_result.json()
+
+except(
+requests.RequestException,
+ValueError,
+):
+            messages.error(
+request,
+"reCAPTCHA verification failed. Please try again.",
+)
+
+returnrender(
+request,
+"control/admin_login.html",
+{
+"recaptcha_site_key":settings.RECAPTCHA_SITE_KEY,
+},
+)
+
+ifnotrecaptcha_data.get("success"):
+            messages.error(
+request,
+"Please complete the reCAPTCHA verification correctly.",
+)
+
+returnrender(
+request,
+"control/admin_login.html",
+{
+"recaptcha_site_key":settings.RECAPTCHA_SITE_KEY,
+},
+)
+
+user=authenticate(
+request,
+username=username,
+password=password,
+)
+
+ifuserisnotNoneanduser.is_staffanduser.is_active:
 
             cache.delete(
-                rate_limit_key
-            )
+rate_limit_key
+)
 
-            two_factor, _ = TwoFactorAuth.objects.get_or_create(
-                user=user
-            )
+two_factor,_=TwoFactorAuth.objects.get_or_create(
+user=user
+)
 
-            if (
-                two_factor.is_enabled
-                and two_factor.secret_key
-            ):
-                import time
+if(
+two_factor.is_enabled
+andtwo_factor.secret_key
+):
+                importtime
 
-                request.session[
-                    "pending_2fa_user_id"
-                ] = user.id
+request.session[
+"pending_2fa_user_id"
+]=user.id
 
-                request.session[
-                    "pending_2fa_started_at"
-                ] = time.time()
+request.session[
+"pending_2fa_started_at"
+]=time.time()
 
-                request.session[
-                    "pending_2fa_authenticated_at"
-                ] = request.session.get(
-                    "_auth_user_id"
-                )
+request.session[
+"pending_2fa_authenticated_at"
+]=request.session.get(
+"_auth_user_id"
+)
 
-                request.session[
-                    "pending_2fa_login_type"
-                ] = "admin"
+request.session[
+"pending_2fa_login_type"
+]="admin"
 
-                request.session.modified = True
+request.session.modified=True
 
-                return redirect(
-                    "two_factor_login"
-                )
+returnredirect(
+"two_factor_login"
+)
 
-            login(
-                request,
-                user,
-            )
+login(
+request,
+user,
+)
 
-            return redirect(
-                "admin_dashboard"
-            )
+returnredirect(
+"admin_dashboard"
+)
 
-        attempts += 1
+attempts+=1
 
-        cache.set(
-            rate_limit_key,
-            attempts,
-            5 * 7 * 24 * 60 * 60,
-        )
+cache.set(
+rate_limit_key,
+attempts,
+5*7*24*60*60,
+)
 
-        messages.error(
-            request,
-            "Invalid credentials or not an admin.",
-        )
+messages.error(
+request,
+"Invalid credentials or not an admin.",
+)
 
-    return render(
-        request,
-        "control/admin_login.html",
-        {
-            "recaptcha_site_key": settings.RECAPTCHA_SITE_KEY,
-        },
-    )
+returnrender(
+request,
+"control/admin_login.html",
+{
+"recaptcha_site_key":settings.RECAPTCHA_SITE_KEY,
+},
+)
 
 
 
-def admin_logout_view(request):
+defadmin_logout_view(request):
     logout(request)
-    return redirect("admin_login")
+returnredirect("admin_login")
 
 
 @admin_required
-def security_controls(request):
-    return render(
-        request,
-        "control/security_controls.html",
-    )
+defsecurity_controls(request):
+    returnrender(
+request,
+"control/security_controls.html",
+)
 
 
 @admin_required
-def audit_logs(request):
-    return render(
-        request,
-        "control/audit_logs.html",
-    )
+defaudit_logs(request):
+    returnrender(
+request,
+"control/audit_logs.html",
+)
 
 
 @admin_required
-def email_templates(request):
-    return render(
-        request,
-        "control/email_templates.html",
-    )
+defemail_templates(request):
+    returnrender(
+request,
+"control/email_templates.html",
+)
 
 
 @admin_required
-def platform_management(request):
-    return render(
-        request,
-        "control/platform_management.html",
-    )
+defplatform_management(request):
+    returnrender(
+request,
+"control/platform_management.html",
+)
 
 @admin_required
-def approve_deposits(request):
+defapprove_deposits(request):
 
-    settings = AdminDashboardSettings.objects.first()
+    settings=AdminDashboardSettings.objects.first()
 
-    menus = list(
-        AdminMenu.objects.all()
-    )
+menus=list(
+AdminMenu.objects.all()
+)
 
-    pending_deposits = (
-        Deposit.objects
-        .filter(
-            status="pending",
-            source="live_trade",
-        )
-        .select_related(
-            "user",
-            "plan",
-        )
-        .order_by("-id")
-    )
+pending_deposits=(
+Deposit.objects
+.filter(
+status="pending",
+source="live_trade",
+)
+.select_related(
+"user",
+"plan",
+)
+.order_by("-id")
+)
 
-    return render(
-        request,
-        "control/approve_deposits.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "pending_deposits": pending_deposits,
-        },
-    )
+returnrender(
+request,
+"control/approve_deposits.html",
+{
+"settings":settings,
+"menus":menus,
+"pending_deposits":pending_deposits,
+},
+)
 
 
 @admin_required
-def approve_deposit(request, deposit_id):
+defapprove_deposit(request,deposit_id):
 
-    with transaction.atomic():
+    withtransaction.atomic():
 
-        deposit = (
-            Deposit.objects
-            .select_for_update()
-            .select_related(
-                "user",
-                "plan",
-            )
-            .filter(
-                id=deposit_id,
-                source="live_trade",
-            )
-            .first()
-        )
+        deposit=(
+Deposit.objects
+.select_for_update()
+.select_related(
+"user",
+"plan",
+)
+.filter(
+id=deposit_id,
+source="live_trade",
+)
+.first()
+)
 
-        if not deposit:
+ifnotdeposit:
 
             messages.error(
-                request,
-                "Live Trading deposit was not found.",
-            )
+request,
+"Live Trading deposit was not found.",
+)
 
-            return redirect(
-                "approve_deposits"
-            )
+returnredirect(
+"approve_deposits"
+)
 
-        if deposit.status != "pending":
+ifdeposit.status!="pending":
 
-            trade = getattr(
-                deposit,
-                "trade",
-                None,
-            )
+            trade=getattr(
+deposit,
+"trade",
+None,
+)
 
-            if trade:
-                return redirect(
-                    "trade_detail",
-                    trade_id=trade.id,
-                )
+iftrade:
+                returnredirect(
+"trade_detail",
+trade_id=trade.id,
+)
 
+messages.warning(
+request,
+"This Live Trading deposit has already been processed.",
+)
+
+returnredirect(
+"approve_deposits"
+)
+
+asset_price=(
+AssetPrice.objects
+.filter(
+currency=deposit.payment_method,
+)
+.first()
+)
+
+if(
+notasset_price
+orasset_price.usd_price<=0
+):
+
+            messages.error(
+request,
+(
+f"No valid exchange rate is available "
+f"for {deposit.get_payment_method_display()}."
+),
+)
+
+returnredirect(
+"approve_deposits"
+)
+
+asset_amount=(
+deposit.amount_usd
+/asset_price.usd_price
+)
+
+deposit.exchange_rate=(
+asset_price.usd_price
+)
+
+deposit.asset_amount=asset_amount
+
+deposit.received_asset_amount=(
+asset_amount
+)
+
+deposit.status="approved"
+
+deposit.approved_at=timezone.now()
+
+deposit.save(
+update_fields=[
+"exchange_rate",
+"asset_amount",
+"received_asset_amount",
+"status",
+"approved_at",
+],
+)
+
+trade=execute_trade(
+deposit
+)
+
+returnredirect(
+"trade_detail",
+trade_id=trade.id,
+)
+
+@login_required
+@admin_required
+deftrade_detail(request,trade_id):
+
+    settings=AdminDashboardSettings.objects.first()
+menus=list(AdminMenu.objects.all())
+
+trade=get_object_or_404(
+Trade.objects.select_related(
+"user",
+"plan",
+"deposit",
+),
+id=trade_id,
+)
+
+returnrender(
+request,
+"control/trade_detail.html",
+{
+"settings":settings,
+"menus":menus,
+"trade":trade,
+},
+)
+
+
+@login_required
+@admin_required
+deftrade_gas_payments(request):
+
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
+
+gas_payments=(
+TradeGasPayment.objects
+.filter(status="pending")
+.select_related(
+"user",
+"trade",
+"trade__plan",
+)
+.order_by("-created_at")
+)
+
+returnrender(
+request,
+"control/trade_gas_payments.html",
+{
+"settings":settings,
+"menus":menus,
+"gas_payments":gas_payments,
+},
+)
+
+
+@login_required
+@admin_required
+defapprove_trade_gas_payment(request,payment_id):
+
+    withtransaction.atomic():
+
+        payment=(
+TradeGasPayment.objects
+.select_for_update()
+.select_related(
+"user",
+"trade",
+"trade__deposit",
+)
+.filter(
+id=payment_id,
+status="pending",
+)
+.first()
+)
+
+ifnotpayment:
+            messages.error(
+request,
+"Gas payment was not found.",
+)
+returnredirect(
+"trade_gas_payments"
+)
+
+trade=payment.trade
+
+iftrade.result!="win":
+            messages.error(
+request,
+"Only winning trades can receive payouts.",
+)
+returnredirect(
+"trade_gas_payments"
+)
+
+iftrade.payout_released:
             messages.warning(
-                request,
-                "This Live Trading deposit has already been processed.",
-            )
+request,
+"This trade payout has already been released.",
+)
+returnredirect(
+"trade_detail",
+trade_id=trade.id,
+)
 
-            return redirect(
-                "approve_deposits"
-            )
-
-        asset_price = (
-            AssetPrice.objects
-            .filter(
-                currency=deposit.payment_method,
-            )
-            .first()
-        )
-
-        if (
-            not asset_price
-            or asset_price.usd_price <= 0
-        ):
-
+ifnottrade.payout_amount:
             messages.error(
-                request,
-                (
-                    f"No valid exchange rate is available "
-                    f"for {deposit.get_payment_method_display()}."
-                ),
-            )
+request,
+"This trade does not have a valid payout amount.",
+)
+returnredirect(
+"trade_gas_payments"
+)
 
-            return redirect(
-                "approve_deposits"
-            )
+deposit=trade.deposit
 
-        asset_amount = (
-            deposit.amount_usd
-            / asset_price.usd_price
-        )
-
-        deposit.exchange_rate = (
-            asset_price.usd_price
-        )
-
-        deposit.asset_amount = asset_amount
-
-        deposit.received_asset_amount = (
-            asset_amount
-        )
-
-        deposit.status = "approved"
-
-        deposit.approved_at = timezone.now()
-
-        deposit.save(
-            update_fields=[
-                "exchange_rate",
-                "asset_amount",
-                "received_asset_amount",
-                "status",
-                "approved_at",
-            ],
-        )
-
-        trade = execute_trade(
-            deposit
-        )
-
-    return redirect(
-        "trade_detail",
-        trade_id=trade.id,
-    )
-
-@login_required
-@admin_required
-def trade_detail(request, trade_id):
-
-    settings = AdminDashboardSettings.objects.first()
-    menus = list(AdminMenu.objects.all())
-
-    trade = get_object_or_404(
-        Trade.objects.select_related(
-            "user",
-            "plan",
-            "deposit",
-        ),
-        id=trade_id,
-    )
-
-    return render(
-        request,
-        "control/trade_detail.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "trade": trade,
-        },
-    )
-
-
-@login_required
-@admin_required
-def trade_gas_payments(request):
-
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
-
-    gas_payments = (
-        TradeGasPayment.objects
-        .filter(status="pending")
-        .select_related(
-            "user",
-            "trade",
-            "trade__plan",
-        )
-        .order_by("-created_at")
-    )
-
-    return render(
-        request,
-        "control/trade_gas_payments.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "gas_payments": gas_payments,
-        },
-    )
-
-
-@login_required
-@admin_required
-def approve_trade_gas_payment(request, payment_id):
-
-    with transaction.atomic():
-
-        payment = (
-            TradeGasPayment.objects
-            .select_for_update()
-            .select_related(
-                "user",
-                "trade",
-                "trade__deposit",
-            )
-            .filter(
-                id=payment_id,
-                status="pending",
-            )
-            .first()
-        )
-
-        if not payment:
+ifnotdeposit:
             messages.error(
-                request,
-                "Gas payment was not found.",
-            )
-            return redirect(
-                "trade_gas_payments"
-            )
+request,
+"The trade deposit could not be found.",
+)
+returnredirect(
+"trade_gas_payments"
+)
 
-        trade = payment.trade
+payment_currency=deposit.payment_method
 
-        if trade.result != "win":
+asset_price=(
+AssetPrice.objects
+.select_for_update()
+.filter(
+currency=payment_currency,
+)
+.first()
+)
+
+if(
+notasset_price
+orasset_price.usd_price<=0
+):
             messages.error(
-                request,
-                "Only winning trades can receive payouts.",
-            )
-            return redirect(
-                "trade_gas_payments"
-            )
+request,
+(
+f"No valid exchange rate is available "
+f"for {deposit.get_payment_method_display()}."
+),
+)
+returnredirect(
+"trade_gas_payments"
+)
 
-        if trade.payout_released:
-            messages.warning(
-                request,
-                "This trade payout has already been released.",
-            )
-            return redirect(
-                "trade_detail",
-                trade_id=trade.id,
-            )
+payout_asset_amount=(
+trade.payout_amount
+/asset_price.usd_price
+).quantize(
+Decimal("0.000000000001")
+)
 
-        if not trade.payout_amount:
-            messages.error(
-                request,
-                "This trade does not have a valid payout amount.",
-            )
-            return redirect(
-                "trade_gas_payments"
-            )
+wallet=(
+Wallet.objects
+.select_for_update()
+.filter(
+user=trade.user,
+currency=payment_currency,
+)
+.first()
+)
 
-        deposit = trade.deposit
+ifnotwallet:
+            wallet=Wallet.objects.create(
+user=trade.user,
+currency=payment_currency,
+balance=Decimal("0"),
+reserved_balance=Decimal("0"),
+)
 
-        if not deposit:
-            messages.error(
-                request,
-                "The trade deposit could not be found.",
-            )
-            return redirect(
-                "trade_gas_payments"
-            )
+wallet.balance+=payout_asset_amount
 
-        payment_currency = deposit.payment_method
+wallet.save(
+update_fields=[
+"balance",
+"updated_at",
+]
+)
 
-        asset_price = (
-            AssetPrice.objects
-            .select_for_update()
-            .filter(
-                currency=payment_currency,
-            )
-            .first()
-        )
+investor,_=(
+Investor.objects
+.get_or_create(
+user=trade.user,
+defaults={
+"name":trade.user.username,
+},
+)
+)
 
-        if (
-            not asset_price
-            or asset_price.usd_price <= 0
-        ):
-            messages.error(
-                request,
-                (
-                    f"No valid exchange rate is available "
-                    f"for {deposit.get_payment_method_display()}."
-                ),
-            )
-            return redirect(
-                "trade_gas_payments"
-            )
+Transaction.objects.create(
+investor=investor,
+wallet=wallet,
+transaction_type="profit",
+direction="credit",
+asset_amount=payout_asset_amount,
+usd_value=trade.payout_amount,
+exchange_rate=asset_price.usd_price,
+reference=f"TRADE-PAYOUT-{trade.id}",
+description=(
+f"Live Trading payout for "
+f"Trade #{trade.id}"
+),
+)
 
-        payout_asset_amount = (
-            trade.payout_amount
-            / asset_price.usd_price
-        ).quantize(
-            Decimal("0.000000000001")
-        )
+payment.status="approved"
+payment.approved_at=timezone.now()
 
-        wallet = (
-            Wallet.objects
-            .select_for_update()
-            .filter(
-                user=trade.user,
-                currency=payment_currency,
-            )
-            .first()
-        )
+payment.save(
+update_fields=[
+"status",
+"approved_at",
+]
+)
 
-        if not wallet:
-            wallet = Wallet.objects.create(
-                user=trade.user,
-                currency=payment_currency,
-                balance=Decimal("0"),
-                reserved_balance=Decimal("0"),
-            )
+trade.gas_payment_status="paid"
+trade.payout_released=True
 
-        wallet.balance += payout_asset_amount
+trade.save(
+update_fields=[
+"gas_payment_status",
+"payout_released",
+]
+)
 
-        wallet.save(
-            update_fields=[
-                "balance",
-                "updated_at",
-            ]
-        )
+messages.success(
+request,
+"Gas payment approved and trade payout released successfully.",
+)
 
-        investor, _ = (
-            Investor.objects
-            .get_or_create(
-                user=trade.user,
-                defaults={
-                    "name": trade.user.username,
-                },
-            )
-        )
-
-        Transaction.objects.create(
-            investor=investor,
-            wallet=wallet,
-            transaction_type="profit",
-            direction="credit",
-            asset_amount=payout_asset_amount,
-            usd_value=trade.payout_amount,
-            exchange_rate=asset_price.usd_price,
-            reference=f"TRADE-PAYOUT-{trade.id}",
-            description=(
-                f"Live Trading payout for "
-                f"Trade #{trade.id}"
-            ),
-        )
-
-        payment.status = "approved"
-        payment.approved_at = timezone.now()
-
-        payment.save(
-            update_fields=[
-                "status",
-                "approved_at",
-            ]
-        )
-
-        trade.gas_payment_status = "paid"
-        trade.payout_released = True
-
-        trade.save(
-            update_fields=[
-                "gas_payment_status",
-                "payout_released",
-            ]
-        )
-
-    messages.success(
-        request,
-        "Gas payment approved and trade payout released successfully.",
-    )
-
-    return redirect(
-        "trade_detail",
-        trade_id=trade.id,
-    )
+returnredirect(
+"trade_detail",
+trade_id=trade.id,
+)
 
 
 @admin_required
-def security_settings_view(request):
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
+defsecurity_settings_view(request):
+    settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-    two_factor, created = TwoFactorAuth.objects.get_or_create(
-        user=request.user
-    )
+two_factor,created=TwoFactorAuth.objects.get_or_create(
+user=request.user
+)
 
-    secret_key = None
-    provisioning_uri = None
+secret_key=None
+provisioning_uri=None
 
-    if not two_factor.is_enabled:
-        secret_key = two_factor.get_secret()
-        provisioning_uri = two_factor.provisioning_uri()
+ifnottwo_factor.is_enabled:
+        secret_key=two_factor.get_secret()
+provisioning_uri=two_factor.provisioning_uri()
 
-    return render(
-        request,
-        "control/security_settings.html",
-        {
-            "settings": settings,
-            "menus": menus,
-            "two_factor": two_factor,
-            "secret_key": secret_key,
-            "provisioning_uri": provisioning_uri,
-        },
-    )
+returnrender(
+request,
+"control/security_settings.html",
+{
+"settings":settings,
+"menus":menus,
+"two_factor":two_factor,
+"secret_key":secret_key,
+"provisioning_uri":provisioning_uri,
+},
+)
 
-
-@admin_required
-def enable_two_factor_view(request):
-    if request.method != "POST":
-        return redirect("security_settings")
-
-    two_factor, created = TwoFactorAuth.objects.get_or_create(
-        user=request.user
-    )
-
-    if two_factor.is_enabled:
-        return redirect("security_settings")
-
-    token = request.POST.get("token", "").strip()
-
-    if two_factor.verify_token(token):
-        two_factor.is_enabled = True
-        two_factor.save(update_fields=["is_enabled", "updated_at"])
-
-        messages.success(
-            request,
-            "Two-factor authentication has been enabled successfully.",
-        )
-
-        return redirect("security_settings")
-
-    messages.error(
-        request,
-        "The verification code is invalid or has expired. Please try again.",
-    )
-
-    return redirect("security_settings")
 
 @admin_required
-def disable_two_factor_view(request):
-    if request.method != "POST":
-        return redirect("security_settings")
+defenable_two_factor_view(request):
+    ifrequest.method!="POST":
+        returnredirect("security_settings")
 
-    two_factor = (
-        TwoFactorAuth.objects
-        .filter(user=request.user)
-        .first()
-    )
+two_factor,created=TwoFactorAuth.objects.get_or_create(
+user=request.user
+)
 
-    if not two_factor or not two_factor.is_enabled:
+iftwo_factor.is_enabled:
+        returnredirect("security_settings")
+
+token=request.POST.get("token","").strip()
+
+iftwo_factor.verify_token(token):
+        two_factor.is_enabled=True
+two_factor.save(update_fields=["is_enabled","updated_at"])
+
+messages.success(
+request,
+"Two-factor authentication has been enabled successfully.",
+)
+
+returnredirect("security_settings")
+
+messages.error(
+request,
+"The verification code is invalid or has expired. Please try again.",
+)
+
+returnredirect("security_settings")
+
+@admin_required
+defdisable_two_factor_view(request):
+    ifrequest.method!="POST":
+        returnredirect("security_settings")
+
+two_factor=(
+TwoFactorAuth.objects
+.filter(user=request.user)
+.first()
+)
+
+ifnottwo_factorornottwo_factor.is_enabled:
         messages.info(
-            request,
-            "Two-factor authentication is already disabled.",
-        )
+request,
+"Two-factor authentication is already disabled.",
+)
 
-        return redirect("security_settings")
+returnredirect("security_settings")
 
-    token = request.POST.get(
-        "token",
-        "",
-    ).strip()
+token=request.POST.get(
+"token",
+"",
+).strip()
 
-    if not token.isdigit() or len(token) != 6:
+ifnottoken.isdigit()orlen(token)!=6:
         messages.error(
-            request,
-            "Please enter the current 6-digit authenticator code.",
-        )
+request,
+"Please enter the current 6-digit authenticator code.",
+)
 
-        return redirect("security_settings")
+returnredirect("security_settings")
 
-    if not two_factor.verify_token(token):
+ifnottwo_factor.verify_token(token):
         messages.error(
-            request,
-            "The authenticator code is incorrect. Two-factor authentication remains enabled.",
-        )
+request,
+"The authenticator code is incorrect. Two-factor authentication remains enabled.",
+)
 
-        return redirect("security_settings")
+returnredirect("security_settings")
 
-    two_factor.is_enabled = False
+two_factor.is_enabled=False
 
-    two_factor.save(
-        update_fields=[
-            "is_enabled",
-            "updated_at",
-        ]
-    )
+two_factor.save(
+update_fields=[
+"is_enabled",
+"updated_at",
+]
+)
 
-    request.user.recovery_codes.all().delete()
+request.user.recovery_codes.all().delete()
 
-    messages.success(
-        request,
-        "Two-factor authentication has been disabled and all recovery codes have been invalidated.",
-    )
+messages.success(
+request,
+"Two-factor authentication has been disabled and all recovery codes have been invalidated.",
+)
 
-    return redirect("security_settings")
+returnredirect("security_settings")
 
 
 @admin_required
-def security_qr_code_view(request):
-    two_factor, created = TwoFactorAuth.objects.get_or_create(
-        user=request.user
-    )
+defsecurity_qr_code_view(request):
+    two_factor,created=TwoFactorAuth.objects.get_or_create(
+user=request.user
+)
 
-    if two_factor.is_enabled:
-        return HttpResponse(status=404)
+iftwo_factor.is_enabled:
+        returnHttpResponse(status=404)
 
-    provisioning_uri = two_factor.provisioning_uri()
+provisioning_uri=two_factor.provisioning_uri()
 
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_M,
-        box_size=10,
-        border=4,
-    )
+qr=qrcode.QRCode(
+version=1,
+error_correction=qrcode.constants.ERROR_CORRECT_M,
+box_size=10,
+border=4,
+)
 
-    qr.add_data(provisioning_uri)
-    qr.make(fit=True)
+qr.add_data(provisioning_uri)
+qr.make(fit=True)
 
-    image = qr.make_image()
+image=qr.make_image()
 
-    buffer = io.BytesIO()
-    image.save(buffer, format="PNG")
+buffer=io.BytesIO()
+image.save(buffer,format="PNG")
 
-    return HttpResponse(
-        buffer.getvalue(),
-        content_type="image/png",
-    )
+returnHttpResponse(
+buffer.getvalue(),
+content_type="image/png",
+)
 
 @admin_required
-def generate_recovery_codes_view(request):
-    if request.method != "POST":
-        return redirect("security_settings")
+defgenerate_recovery_codes_view(request):
+    ifrequest.method!="POST":
+        returnredirect("security_settings")
 
-    two_factor, created = TwoFactorAuth.objects.get_or_create(
-        user=request.user
-    )
+two_factor,created=TwoFactorAuth.objects.get_or_create(
+user=request.user
+)
 
-    if not two_factor.is_enabled:
+ifnottwo_factor.is_enabled:
         messages.error(
-            request,
-            "Please enable two-factor authentication before generating recovery codes.",
-        )
+request,
+"Please enable two-factor authentication before generating recovery codes.",
+)
 
-        return redirect("security_settings")
+returnredirect("security_settings")
 
-    recovery_codes = generate_recovery_codes(
-        request.user
-    )
+recovery_codes=generate_recovery_codes(
+request.user
+)
 
-    settings = AdminDashboardSettings.objects.first()
-    menus = AdminMenu.objects.all()
-    
+settings=AdminDashboardSettings.objects.first()
+menus=AdminMenu.objects.all()
 
-  
 
-    return render(
-        request,
-        "control/recovery_codes.html",
-        {
-            "recovery_codes": recovery_codes,
-            "settings": settings,
-            "menus": menus,
-        },
-    )
+
+
+returnrender(
+request,
+"control/recovery_codes.html",
+{
+"recovery_codes":recovery_codes,
+"settings":settings,
+"menus":menus,
+},
+)

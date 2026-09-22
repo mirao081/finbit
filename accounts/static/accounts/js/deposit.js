@@ -46,7 +46,7 @@ function loadMarketData() {
     .catch((err) => console.error("Market data error:", err));
 }
 loadMarketData();
-setInterval(loadMarketData, 60000); // refresh every 60s
+setInterval(loadMarketData, 60000); 
 document.addEventListener("DOMContentLoaded", function () {
   const carousel = document.querySelector(".testimonial-carousel");
   if (carousel) {

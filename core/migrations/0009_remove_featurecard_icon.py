@@ -1,17 +1,17 @@
-                                             
-
-from django.db import migrations
 
 
-class Migration(migrations.Migration):
+fromdjango.dbimportmigrations
 
-    dependencies = [
-        ('core', '0008_featurecard'),
-    ]
 
-    operations = [
-        migrations.RemoveField(
-            model_name='featurecard',
-            name='icon',
-        ),
-    ]
+classMigration(migrations.Migration):
+
+    dependencies=[
+('core','0008_featurecard'),
+]
+
+operations=[
+migrations.RemoveField(
+model_name='featurecard',
+name='icon',
+),
+]

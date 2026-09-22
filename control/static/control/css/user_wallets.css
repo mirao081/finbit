@@ -2182,3 +2182,34 @@
         transition: none;
     }
 }
+
+
+
+
+@media (max-width:700px){
+.transactions-row{display:block;width:100%;margin:0 0 18px}
+.transactions-row>td{display:block;width:100%;padding:0!important;background:transparent!important;border:none;overflow:visible!important}
+.transactions-table{display:block;width:100%;min-width:0;border-radius:18px;overflow:hidden;border:1px solid rgba(77,232,255,.12);background:linear-gradient(145deg,rgba(12,28,48,.98),rgba(4,12,24,.99));box-shadow:0 12px 30px rgba(0,0,0,.3)}
+.transactions-table thead{display:none}
+.transactions-table tbody{display:block;width:100%}
+.transactions-table tbody tr{display:block;padding:16px}
+.transaction-inner-table,.transaction-inner-table tbody,.transaction-inner-table tr{display:block;width:100%}
+.transaction-inner-table thead{display:none}
+.transaction-inner-table td{display:flex;justify-content:space-between;align-items:flex-start;width:100%;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:.68rem;line-height:1.5}
+.transaction-inner-table td:last-child{border-bottom:none}
+.transaction-inner-table td:nth-child(1)::before{content:"Asset";color:#66cfff;font-weight:700}
+.transaction-inner-table td:nth-child(2)::before{content:"Amount";color:#66cfff;font-weight:700}
+.transaction-inner-table td:nth-child(3)::before{content:"Status";color:#66cfff;font-weight:700}
+}
+
+@media (max-width:480px){
+.wallets-page{padding:0}
+.wallets-header h1{font-size:1.3rem}
+.wallets-header p{font-size:.68rem}
+.wallets-table tbody tr:not(.transactions-row){border-radius:18px;margin-bottom:14px}
+.wallets-table tbody tr:not(.transactions-row)>td{padding:12px 14px}
+.wallets-table tbody tr:not(.transactions-row)>.actions-cell{grid-template-columns:1fr}
+.actions-cell a{height:40px;font-size:.62rem}
+.admin-wallet-card{padding:14px;border-radius:16px}
+.admin-wallet-address code{font-size:.62rem;line-height:1.6}
+}

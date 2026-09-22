@@ -1,412 +1,412 @@
-from django.contrib import admin
+fromdjango.contribimportadmin
 
-from .models import (
-    SiteSettings,
-    MenuItem,
-    InvestmentPlan,
-    CryptoStat,
-    FeatureCard,
-    FeatureSection,
-    ProfitCalculatorSection,
-    ThreeStepSection,
-    StepItem,
-    Testimonial,
-    TeamMember,
-    Investor,
-    Transaction,
-    GetStartedSection,
-    PaymentSection,
-    PaymentMethod,
-    NewsItem,
-    NewsSection,
-    NewsCategory,
-    SiteFooter,
-    NewsTag,
-    NewsComment,
-    ContactMessage,
-    SiteMap,
-    SupportInfo,
-    ComplianceNotice,
-    SocialLink,
-    NewsletterSignup,
+from.modelsimport(
+SiteSettings,
+MenuItem,
+InvestmentPlan,
+CryptoStat,
+FeatureCard,
+FeatureSection,
+ProfitCalculatorSection,
+ThreeStepSection,
+StepItem,
+Testimonial,
+TeamMember,
+Investor,
+Transaction,
+GetStartedSection,
+PaymentSection,
+PaymentMethod,
+NewsItem,
+NewsSection,
+NewsCategory,
+SiteFooter,
+NewsTag,
+NewsComment,
+ContactMessage,
+SiteMap,
+SupportInfo,
+ComplianceNotice,
+SocialLink,
+NewsletterSignup,
 )
 
 
 @admin.register(SiteSettings)
-class SiteSettingsAdmin(admin.ModelAdmin):
+classSiteSettingsAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "site_name",
-    )
+    list_display=(
+"site_name",
+)
 
-    fieldsets = (
-        (
-            "General",
-            {
-                "fields": (
-                    "site_name",
-                    "logo",
-                    "favicon",
-                )
-            },
-        ),
-        (
-            "Homepage Hero",
-            {
-                "fields": (
-                    "hero_title_white",
-                    "hero_title_gold",
-                    "hero_subtitle",
-                    "hero_button_text",
-                    "hero_background",
-                )
-            },
-        ),
-        (
-            "About Us Section",
-            {
-                "fields": (
-                    "about_heading",
-                    "about_content",
-                    "about_button_text",
-                    "about_button_link",
-                )
-            },
-        ),
-    )
+fieldsets=(
+(
+"General",
+{
+"fields":(
+"site_name",
+"logo",
+"favicon",
+)
+},
+),
+(
+"Homepage Hero",
+{
+"fields":(
+"hero_title_white",
+"hero_title_gold",
+"hero_subtitle",
+"hero_button_text",
+"hero_background",
+)
+},
+),
+(
+"About Us Section",
+{
+"fields":(
+"about_heading",
+"about_content",
+"about_button_text",
+"about_button_link",
+)
+},
+),
+)
 
 
 @admin.register(MenuItem)
-class MenuItemAdmin(admin.ModelAdmin):
+classMenuItemAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "title",
-        "url_name",
-        "order",
-        "is_active",
-    )
+    list_display=(
+"title",
+"url_name",
+"order",
+"is_active",
+)
 
-    list_editable = (
-        "order",
-        "is_active",
-    )
+list_editable=(
+"order",
+"is_active",
+)
 
-    search_fields = (
-        "title",
-        "url_name",
-    )
+search_fields=(
+"title",
+"url_name",
+)
 
-    ordering = (
-        "order",
-    )
+ordering=(
+"order",
+)
 
 
 @admin.register(InvestmentPlan)
-class InvestmentPlanAdmin(admin.ModelAdmin):
+classInvestmentPlanAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-        "return_rate",
-        "frequency",
-        "duration",
-        "total_return",
-        "minimum_investment",
-        "maximum_investment",
-    )
+    list_display=(
+"name",
+"return_rate",
+"frequency",
+"duration",
+"total_return",
+"minimum_investment",
+"maximum_investment",
+)
 
 
 @admin.register(ProfitCalculatorSection)
-class ProfitCalculatorSectionAdmin(admin.ModelAdmin):
+classProfitCalculatorSectionAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "heading",
-        "subheading",
-    )
+    list_display=(
+"heading",
+"subheading",
+)
 
 
 @admin.register(CryptoStat)
-class CryptoStatAdmin(admin.ModelAdmin):
+classCryptoStatAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "label",
-        "value",
-    )
+    list_display=(
+"label",
+"value",
+)
 
 
 @admin.register(FeatureSection)
-class FeatureSectionAdmin(admin.ModelAdmin):
+classFeatureSectionAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "heading",
-        "subheading",
-    )
+    list_display=(
+"heading",
+"subheading",
+)
 
 
 @admin.register(FeatureCard)
-class FeatureCardAdmin(admin.ModelAdmin):
+classFeatureCardAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "title",
-        "is_active",
-        "section",
-    )
+    list_display=(
+"title",
+"is_active",
+"section",
+)
 
-    list_filter = (
-        "is_active",
-        "section",
-    )
+list_filter=(
+"is_active",
+"section",
+)
 
 
-class StepItemInline(admin.TabularInline):
+classStepItemInline(admin.TabularInline):
 
-    model = StepItem
-    extra = 0
+    model=StepItem
+extra=0
 
 
 @admin.register(ThreeStepSection)
-class ThreeStepSectionAdmin(admin.ModelAdmin):
+classThreeStepSectionAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "heading",
-        "subheading",
-    )
+    list_display=(
+"heading",
+"subheading",
+)
 
-    inlines = [
-        StepItemInline,
-    ]
+inlines=[
+StepItemInline,
+]
 
 
 @admin.register(Testimonial)
-class TestimonialAdmin(admin.ModelAdmin):
+classTestimonialAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-        "position",
-        "stars",
-    )
+    list_display=(
+"name",
+"position",
+"stars",
+)
 
 
 @admin.register(TeamMember)
-class TeamMemberAdmin(admin.ModelAdmin):
+classTeamMemberAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-        "position",
-    )
+    list_display=(
+"name",
+"position",
+)
 
 
 @admin.register(Investor)
-class InvestorAdmin(admin.ModelAdmin):
+classInvestorAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-    )
+    list_display=(
+"name",
+)
 
 
 @admin.register(Transaction)
-class TransactionAdmin(admin.ModelAdmin):
+classTransactionAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "investor",
-        "transaction_type",
-        "direction",
-        "wallet",
-        "asset_amount",
-        "usd_value",
-        "exchange_rate",
-        "date",
-    )
+    list_display=(
+"investor",
+"transaction_type",
+"direction",
+"wallet",
+"asset_amount",
+"usd_value",
+"exchange_rate",
+"date",
+)
 
-    list_filter = (
-        "transaction_type",
-        "direction",
-        "wallet__currency",
-        "date",
-    )
+list_filter=(
+"transaction_type",
+"direction",
+"wallet__currency",
+"date",
+)
 
-    search_fields = (
-        "investor__name",
-        "wallet__user__username",
-        "reference",
-        "description",
-    )
+search_fields=(
+"investor__name",
+"wallet__user__username",
+"reference",
+"description",
+)
 
-    readonly_fields = (
-        "date",
-    )
+readonly_fields=(
+"date",
+)
 
 
 @admin.register(GetStartedSection)
-class GetStartedSectionAdmin(admin.ModelAdmin):
+classGetStartedSectionAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "title",
-        "button_text",
-        "button_link",
-    )
+    list_display=(
+"title",
+"button_text",
+"button_link",
+)
 
-    search_fields = (
-        "title",
-        "subtitle",
-    )
+search_fields=(
+"title",
+"subtitle",
+)
 
 
 @admin.register(PaymentSection)
-class PaymentSectionAdmin(admin.ModelAdmin):
+classPaymentSectionAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "heading",
-        "subheading",
-    )
+    list_display=(
+"heading",
+"subheading",
+)
 
 
 @admin.register(PaymentMethod)
-class PaymentMethodAdmin(admin.ModelAdmin):
+classPaymentMethodAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-        "section",
-        "is_active",
-    )
+    list_display=(
+"name",
+"section",
+"is_active",
+)
 
-    list_filter = (
-        "is_active",
-    )
+list_filter=(
+"is_active",
+)
 
 
 @admin.register(NewsSection)
-class NewsSectionAdmin(admin.ModelAdmin):
+classNewsSectionAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "heading",
-        "subheading",
-    )
+    list_display=(
+"heading",
+"subheading",
+)
 
 
 @admin.register(NewsItem)
-class NewsItemAdmin(admin.ModelAdmin):
+classNewsItemAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "subheading",
-        "category",
-        "author",
-        "date",
-        "is_active",
-    )
+    list_display=(
+"subheading",
+"category",
+"author",
+"date",
+"is_active",
+)
 
-    list_filter = (
-        "category",
-        "is_active",
-        "date",
-    )
+list_filter=(
+"category",
+"is_active",
+"date",
+)
 
-    search_fields = (
-        "subheading",
-        "author",
-        "content_title",
-    )
+search_fields=(
+"subheading",
+"author",
+"content_title",
+)
 
 
 @admin.register(SiteFooter)
-class SiteFooterAdmin(admin.ModelAdmin):
+classSiteFooterAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "company_name",
-        "year",
-    )
+    list_display=(
+"company_name",
+"year",
+)
 
-    search_fields = (
-        "company_name",
-    )
+search_fields=(
+"company_name",
+)
 
 
 @admin.register(NewsCategory)
-class NewsCategoryAdmin(admin.ModelAdmin):
+classNewsCategoryAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-        "slug",
-    )
+    list_display=(
+"name",
+"slug",
+)
 
-    prepopulated_fields = {
-        "slug": (
-            "name",
-        )
-    }
+prepopulated_fields={
+"slug":(
+"name",
+)
+}
 
 
 @admin.register(NewsTag)
-class NewsTagAdmin(admin.ModelAdmin):
+classNewsTagAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-        "slug",
-    )
+    list_display=(
+"name",
+"slug",
+)
 
-    prepopulated_fields = {
-        "slug": (
-            "name",
-        )
-    }
+prepopulated_fields={
+"slug":(
+"name",
+)
+}
 
 
 @admin.register(NewsComment)
-class NewsCommentAdmin(admin.ModelAdmin):
+classNewsCommentAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "name",
-        "news",
-        "created_at",
-        "approved",
-    )
+    list_display=(
+"name",
+"news",
+"created_at",
+"approved",
+)
 
-    list_filter = (
-        "approved",
-        "created_at",
-    )
+list_filter=(
+"approved",
+"created_at",
+)
 
-    search_fields = (
-        "name",
-        "comment",
-    )
+search_fields=(
+"name",
+"comment",
+)
 
 
 @admin.register(ContactMessage)
-class ContactMessageAdmin(admin.ModelAdmin):
+classContactMessageAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "full_name",
-        "email",
-        "created_at",
-    )
+    list_display=(
+"full_name",
+"email",
+"created_at",
+)
 
-    search_fields = (
-        "full_name",
-        "email",
-    )
+search_fields=(
+"full_name",
+"email",
+)
 
 
 @admin.register(SiteMap)
-class SiteMapAdmin(admin.ModelAdmin):
+classSiteMapAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "address",
-    )
+    list_display=(
+"address",
+)
 
 
 @admin.register(SupportInfo)
-class SupportInfoAdmin(admin.ModelAdmin):
+classSupportInfoAdmin(admin.ModelAdmin):
 
-    list_display = (
-        "type",
-        "heading",
-        "detail_line1",
-        "detail_line2",
-    )
+    list_display=(
+"type",
+"heading",
+"detail_line1",
+"detail_line2",
+)
 
-    list_filter = (
-        "type",
-    )
+list_filter=(
+"type",
+)
 
 
 admin.site.register(ComplianceNotice)

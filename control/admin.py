@@ -1,5 +1,5 @@
-from django.contrib import admin
-from .models import AdminDashboardSettings, AdminMenu
+fromdjango.contribimportadmin
+from.modelsimportAdminDashboardSettings,AdminMenu
 
 admin.site.register(AdminDashboardSettings)
 admin.site.register(AdminMenu)

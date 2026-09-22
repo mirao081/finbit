@@ -1,5 +1,5 @@
-from django.apps import AppConfig
+fromdjango.appsimportAppConfig
 
 
-class ControlConfig(AppConfig):
-    name = 'control'
+classControlConfig(AppConfig):
+    name='control'

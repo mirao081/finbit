@@ -1,21 +1,21 @@
-                                             
-
-from django.db import migrations
 
 
-class Migration(migrations.Migration):
+fromdjango.dbimportmigrations
 
-    dependencies = [
-        ('core', '0022_sitefooter'),
-    ]
 
-    operations = [
-        migrations.RemoveField(
-            model_name='sitefooter',
-            name='telegram_url',
-        ),
-        migrations.RemoveField(
-            model_name='sitefooter',
-            name='whatsapp_url',
-        ),
-    ]
+classMigration(migrations.Migration):
+
+    dependencies=[
+('core','0022_sitefooter'),
+]
+
+operations=[
+migrations.RemoveField(
+model_name='sitefooter',
+name='telegram_url',
+),
+migrations.RemoveField(
+model_name='sitefooter',
+name='whatsapp_url',
+),
+]
