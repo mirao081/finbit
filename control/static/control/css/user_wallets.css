@@ -26,15 +26,7 @@
     font-size: 2rem;
     line-height: 1.2;
     font-weight: 800;
-    background: linear-gradient(
-        90deg,
-        #b8ecff,
-        #66cfff,
-        #438cff,
-        #8b6cff,
-        #d9f5ff,
-        #f2c66d
-    );
+    background: linear-gradient(90deg, #b8ecff, #66cfff, #438cff, #8b6cff, #d9f5ff, #f2c66d);
     background-size: 220% auto;
     -webkit-background-clip: text;
     background-clip: text;
@@ -72,20 +64,10 @@
     overflow-y: hidden;
     border-radius: 20px;
     border: 1px solid rgba(77, 232, 255, .13);
-    background:
-        linear-gradient(
-            145deg,
-            rgba(20, 45, 78, .82),
-            rgba(7, 20, 40, .96)
-        );
-    box-shadow:
-        0 18px 45px rgba(0, 0, 0, .28),
-        inset 0 1px 0 rgba(255, 255, 255, .035);
+    background: linear-gradient(145deg, rgba(20, 45, 78, .82), rgba(7, 20, 40, .96));
+    box-shadow: 0 18px 45px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .035);
     scrollbar-width: thin;
-    scrollbar-color:
-        rgba(102, 207, 255, .45)
-        transparent;
-    -webkit-overflow-scrolling: touch;
+    scrollbar-color: rgba(102, 207, 255, .45) transparent;
 }
 
 .wallets-table-container::-webkit-scrollbar {
@@ -98,14 +80,7 @@
 
 .wallets-table-container::-webkit-scrollbar-thumb {
     border-radius: 20px;
-    background:
-        linear-gradient(
-            90deg,
-            #66cfff,
-            #438cff,
-            #8b6cff,
-            #f2c66d
-        );
+    background: linear-gradient(90deg, #66cfff, #438cff, #8b6cff, #f2c66d);
 }
 
 .wallets-table {
@@ -186,13 +161,7 @@
     overflow-wrap: break-word;
     border-right: 1px solid rgba(77, 232, 255, .055);
     border-bottom: 1px solid rgba(77, 232, 255, .13);
-    background:
-        linear-gradient(
-            90deg,
-            rgba(77, 232, 255, .07),
-            rgba(67, 140, 255, .055),
-            rgba(139, 108, 255, .07)
-        );
+    background: linear-gradient(90deg, rgba(77, 232, 255, .07), rgba(67, 140, 255, .055), rgba(139, 108, 255, .07));
 }
 
 .wallets-table > tbody > tr:not(.transactions-row) > td {
@@ -211,13 +180,8 @@
 }
 
 .wallets-table > tbody > tr:not(.transactions-row):hover > td {
-    background:
-        linear-gradient(
-            90deg,
-            rgba(77, 232, 255, .055),
-            rgba(139, 108, 255, .055)
-        );
-    color: #ffffff;
+    background: linear-gradient(90deg, rgba(77, 232, 255, .055), rgba(139, 108, 255, .055));
+    color: #fff;
 }
 
 .user-cell {
@@ -281,8 +245,7 @@
     color: #f2c66d !important;
     font-size: .86rem !important;
     font-weight: 900 !important;
-    text-shadow:
-        0 0 14px rgba(242, 198, 109, .12);
+    text-shadow: 0 0 14px rgba(242, 198, 109, .12);
 }
 
 .actions-cell {
@@ -302,50 +265,31 @@
     text-decoration: none;
     font-size: .62rem;
     font-weight: 800;
-    transition:
-        transform .25s ease,
-        box-shadow .25s ease,
-        filter .25s ease;
+    transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
 }
 
 .view-btn {
     color: #06111f;
-    background:
-        linear-gradient(
-            135deg,
-            #b8ecff,
-            #66cfff,
-            #438cff
-        );
-    box-shadow:
-        0 5px 15px rgba(67, 140, 255, .22);
+    background: linear-gradient(135deg, #b8ecff, #66cfff, #438cff);
+    box-shadow: 0 5px 15px rgba(67, 140, 255, .22);
 }
 
 .view-btn:hover {
     transform: translateY(-2px);
     filter: brightness(1.08);
-    box-shadow:
-        0 9px 22px rgba(67, 140, 255, .36);
+    box-shadow: 0 9px 22px rgba(67, 140, 255, .36);
 }
 
 .adjust-btn {
     color: #07111f;
-    background:
-        linear-gradient(
-            135deg,
-            #f1d9a5,
-            #f2c66d,
-            #c7a570
-        );
-    box-shadow:
-        0 5px 15px rgba(199, 165, 112, .22);
+    background: linear-gradient(135deg, #f1d9a5, #f2c66d, #c7a570);
+    box-shadow: 0 5px 15px rgba(199, 165, 112, .22);
 }
 
 .adjust-btn:hover {
     transform: translateY(-2px);
     filter: brightness(1.08);
-    box-shadow:
-        0 9px 22px rgba(199, 165, 112, .36);
+    box-shadow: 0 9px 22px rgba(199, 165, 112, .36);
 }
 
 .transactions-row > td {
@@ -356,18 +300,18 @@
 }
 
 .transactions-table {
-    width: 90%;
+    width: 100%;
     min-width: 0;
-    margin: 0 auto;
     border-collapse: collapse;
     border-spacing: 0;
     table-layout: fixed;
 }
 
-.transactions-table > thead th {
-    padding: 22px 15px;
+.transactions-table > thead > tr > th {
+    width: 50%;
+    padding: 20px 15px;
     color: #b8ecff;
-    font-size: 1rem;
+    font-size: .9rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: .8px;
@@ -375,27 +319,28 @@
     vertical-align: middle;
     border-right: 1px solid rgba(77, 232, 255, .06);
     border-bottom: 1px solid rgba(77, 232, 255, .07);
-    background: rgba(77, 232, 255, .035);
-    text-shadow:
-        0 0 12px rgba(77, 232, 255, .12);
+    background: linear-gradient(90deg, rgba(77, 232, 255, .035), rgba(67, 140, 255, .025));
+    text-shadow: 0 0 12px rgba(77, 232, 255, .12);
 }
 
 .transactions-table > tbody > tr > td {
     width: 50%;
-    padding: 18px 12px;
+    padding: 0;
     vertical-align: top;
+    border-right: 1px solid rgba(77, 232, 255, .055);
+    background: transparent;
+}
+
+.transactions-table > tbody > tr > td:last-child {
+    border-right: none;
 }
 
 .transaction-inner-table {
-    width: 100%;
-    min-width: 0;
+    width: 90%;
+    margin: 0 auto;
     border-collapse: collapse;
     border-spacing: 0;
     table-layout: fixed;
-    background: rgba(255, 255, 255, .012);
-    border: 1px solid rgba(77, 232, 255, .055);
-    border-radius: 12px;
-    overflow: hidden;
 }
 
 .transaction-inner-table th {
@@ -405,6 +350,7 @@
     font-weight: 800;
     text-transform: uppercase;
     text-align: center;
+    vertical-align: middle;
     border-bottom: 1px solid rgba(255, 255, 255, .045);
     overflow-wrap: break-word;
 }
@@ -413,6 +359,7 @@
     padding: 10px 8px;
     color: #91a9c4;
     font-size: .66rem;
+    line-height: 1.45;
     text-align: center;
     vertical-align: middle;
     border-bottom: 1px solid rgba(255, 255, 255, .035);
@@ -422,10 +369,6 @@
 
 .transaction-inner-table tbody tr:last-child td {
     border-bottom: none;
-}
-
-.transaction-inner-table tbody tr:hover td {
-    background: rgba(77, 232, 255, .025);
 }
 
 .deposit-amount {
@@ -463,7 +406,7 @@
 .empty-transaction {
     color: #7188a6 !important;
     font-style: italic;
-    padding: 16px !important;
+    padding: 16px 10px !important;
     text-align: center !important;
 }
 
@@ -501,15 +444,8 @@
 .wallets-page .pagination a {
     color: #07111f;
     text-decoration: none;
-    background:
-        linear-gradient(
-            135deg,
-            #f1d9a5,
-            #f2c66d,
-            #c7a570
-        );
-    box-shadow:
-        0 6px 18px rgba(199, 165, 112, .20);
+    background: linear-gradient(135deg, #f1d9a5, #f2c66d, #c7a570);
+    box-shadow: 0 6px 18px rgba(199, 165, 112, .20);
 }
 
 .wallets-page .pagination span {
@@ -534,39 +470,24 @@
     overflow: hidden;
     padding: 18px;
     border-radius: 20px;
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255, 255, 255, .06),
-            rgba(255, 255, 255, .025)
-        );
+    background: linear-gradient(145deg, rgba(255, 255, 255, .06), rgba(255, 255, 255, .025));
     border: 1px solid rgba(199, 165, 112, .18);
     backdrop-filter: blur(18px);
-    transition:
-        transform .35s ease,
-        border-color .35s ease,
-        box-shadow .35s ease;
+    transition: transform .35s ease, border-color .35s ease, box-shadow .35s ease;
 }
 
 .admin-wallet-card::before {
     content: "";
     position: absolute;
     inset: 0;
-    background:
-        radial-gradient(
-            circle at top right,
-            rgba(199, 165, 112, .18),
-            transparent 65%
-        );
+    background: radial-gradient(circle at top right, rgba(199, 165, 112, .18), transparent 65%);
     pointer-events: none;
 }
 
 .admin-wallet-card:hover {
     transform: translateY(-4px);
     border-color: rgba(199, 165, 112, .4);
-    box-shadow:
-        0 15px 35px rgba(0, 0, 0, .35),
-        0 0 25px rgba(199, 165, 112, .12);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, .35), 0 0 25px rgba(199, 165, 112, .12);
 }
 
 .admin-wallet-top {
@@ -587,14 +508,8 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background:
-        linear-gradient(
-            135deg,
-            #c7a570,
-            #f0d49a
-        );
-    box-shadow:
-        0 8px 20px rgba(199, 165, 112, .35);
+    background: linear-gradient(135deg, #c7a570, #f0d49a);
+    box-shadow: 0 8px 20px rgba(199, 165, 112, .35);
 }
 
 .admin-wallet-icon i {
@@ -681,10 +596,7 @@
     line-height: 1.7;
     overflow-wrap: anywhere;
     word-break: break-all;
-    font-family:
-        "JetBrains Mono",
-        "Courier New",
-        monospace;
+    font-family: "JetBrains Mono", "Courier New", monospace;
 }
 
 .admin-wallet-empty {
@@ -750,7 +662,7 @@
         padding: 15px;
     }
 
-    .transactions-table {
+    .transaction-inner-table {
         width: 90%;
     }
 }
@@ -781,21 +693,23 @@
         font-size: .58rem;
     }
 
-    .transactions-table {
+    .transactions-table > thead > tr > th {
+        padding: 17px 10px;
+        font-size: .75rem;
+    }
+
+    .transaction-inner-table {
         width: 90%;
     }
 
-    .transactions-table > thead th {
-        padding: 18px 10px;
-        font-size: .72rem;
-    }
-
     .transaction-inner-table th {
-        font-size: .57rem;
+        padding: 8px 5px;
+        font-size: .55rem;
     }
 
     .transaction-inner-table td {
-        font-size: .62rem;
+        padding: 9px 5px;
+        font-size: .61rem;
     }
 }
 
@@ -826,7 +740,7 @@
         max-width: 100%;
         overflow: visible;
         border-radius: 16px;
-        border: 1px solid rgba(77, 232, 255, .10);
+        border: none;
         background: transparent;
         box-shadow: none;
     }
@@ -857,15 +771,8 @@
         border-radius: 20px;
         overflow: hidden;
         border: 1px solid rgba(77, 232, 255, .12);
-        background:
-            linear-gradient(
-                145deg,
-                rgba(15, 35, 63, .96),
-                rgba(6, 17, 34, .98)
-            );
-        box-shadow:
-            0 16px 38px rgba(0, 0, 0, .28),
-            inset 0 1px 0 rgba(255, 255, 255, .035);
+        background: linear-gradient(145deg, rgba(15, 35, 63, .96), rgba(6, 17, 34, .98));
+        box-shadow: 0 16px 38px rgba(0, 0, 0, .28), inset 0 1px 0 rgba(255, 255, 255, .035);
     }
 
     .wallets-table > tbody > tr:not(.transactions-row) > td {
@@ -883,10 +790,6 @@
         white-space: normal;
         overflow: visible;
         gap: 14px;
-    }
-
-    .wallets-table > tbody > tr:not(.transactions-row) > td:last-child {
-        border-bottom: none;
     }
 
     .wallets-table > tbody > tr:not(.transactions-row) > td::before {
@@ -949,12 +852,7 @@
         color: #d9f5ff !important;
         font-size: .88rem !important;
         font-weight: 800 !important;
-        background:
-            linear-gradient(
-                90deg,
-                rgba(77, 232, 255, .055),
-                rgba(139, 108, 255, .055)
-            );
+        background: linear-gradient(90deg, rgba(77, 232, 255, .055), rgba(139, 108, 255, .055));
     }
 
     .wallets-table > tbody > tr:not(.transactions-row) > .user-cell::before {
@@ -996,14 +894,8 @@
         padding: 13px;
         border-radius: 16px;
         border: 1px solid rgba(199, 165, 112, .20);
-        background:
-            linear-gradient(
-                145deg,
-                rgba(255, 255, 255, .055),
-                rgba(255, 255, 255, .018)
-            );
-        box-shadow:
-            0 8px 22px rgba(0, 0, 0, .20);
+        background: linear-gradient(145deg, rgba(255, 255, 255, .055), rgba(255, 255, 255, .018));
+        box-shadow: 0 8px 22px rgba(0, 0, 0, .20);
     }
 
     .admin-wallet-card:hover {
@@ -1078,20 +970,14 @@
     .wallets-table > tbody > tr:not(.transactions-row) > .withdrawal-cell,
     .wallets-table > tbody > tr:not(.transactions-row) > .investment-cell,
     .wallets-table > tbody > tr:not(.transactions-row) > .profit-cell,
-    .wallets-table > tbody > tr:not(.transactions-row) > .bonus-cell,
-    .wallets-table > tbody > tr:not(.transactions-row) > .net-cell {
+    .wallets-table > tbody > tr:not(.transactions-row) > .bonus-cell {
         font-size: .73rem !important;
         font-weight: 800 !important;
     }
 
     .wallets-table > tbody > tr:not(.transactions-row) > .net-cell {
         min-height: 58px;
-        background:
-            linear-gradient(
-                90deg,
-                rgba(242, 198, 109, .045),
-                rgba(199, 165, 112, .08)
-            );
+        background: linear-gradient(90deg, rgba(242, 198, 109, .045), rgba(199, 165, 112, .08));
         border-bottom: 1px solid rgba(242, 198, 109, .10);
         font-size: .84rem !important;
     }
@@ -1120,59 +1006,36 @@
     }
 
     .transactions-row {
-        display: block;
+        display: block !important;
         width: 100%;
-        margin: 0 0 18px;
+        margin: 0 0 20px;
     }
 
     .transactions-row > td {
-        display: block;
-        width: 100%;
+        display: block !important;
+        width: 100% !important;
         padding: 0 !important;
-        border: none;
+        border: none !important;
         background: transparent !important;
         overflow: visible !important;
     }
 
     .transactions-table {
         display: block;
-        width: 90%;
+        width: 100%;
         min-width: 0;
-        margin: 0 auto;
         border-collapse: separate;
         border-spacing: 0;
         table-layout: auto;
         border-radius: 18px;
         overflow: hidden;
-        border: 1px solid rgba(77, 232, 255, .10);
-        background:
-            linear-gradient(
-                145deg,
-                rgba(10, 27, 49, .96),
-                rgba(4, 13, 27, .98)
-            );
-        box-shadow:
-            0 12px 30px rgba(0, 0, 0, .25);
+        border: 1px solid rgba(77, 232, 255, .12);
+        background: linear-gradient(145deg, rgba(10, 27, 49, .98), rgba(4, 13, 27, .99));
+        box-shadow: 0 12px 30px rgba(0, 0, 0, .28);
     }
 
     .transactions-table > thead {
-        display: table;
-        width: 100%;
-        table-layout: fixed;
-    }
-
-    .transactions-table > thead > tr {
-        display: table-row;
-    }
-
-    .transactions-table > thead th {
-        display: table-cell;
-        width: 50%;
-        padding: 14px 8px;
-        font-size: .61rem;
-        letter-spacing: .5px;
-        line-height: 1.35;
-        white-space: normal;
+        display: none;
     }
 
     .transactions-table > tbody {
@@ -1181,75 +1044,159 @@
     }
 
     .transactions-table > tbody > tr {
-        display: flex;
-        flex-direction: column;
+        display: block;
         width: 100%;
+        padding: 0;
     }
 
     .transactions-table > tbody > tr > td {
         display: block;
-        width: 100%;
+        width: 100% !important;
         padding: 0 !important;
-        border: none;
-        background: transparent;
-        overflow: visible;
+        border: none !important;
+        background: transparent !important;
+    }
+
+    .transactions-table > tbody > tr > td:first-child {
+        border-bottom: 1px solid rgba(77, 232, 255, .12) !important;
+    }
+
+    .transactions-table > tbody > tr > td::before {
+        display: block;
+        width: 100%;
+        padding: 14px 15px 12px;
+        color: #66cfff;
+        font-size: .7rem;
+        font-weight: 900;
+        text-transform: uppercase;
+        letter-spacing: .7px;
+        line-height: 1.3;
+        background: linear-gradient(90deg, rgba(77, 232, 255, .075), rgba(67, 140, 255, .035));
+        border-bottom: 1px solid rgba(77, 232, 255, .08);
+    }
+
+    .transactions-table > tbody > tr > td:first-child::before {
+        content: "Recent Deposits";
+    }
+
+    .transactions-table > tbody > tr > td:last-child::before {
+        content: "Recent Withdrawals";
     }
 
     .transaction-inner-table {
-        display: table;
+        display: block;
         width: 100%;
         min-width: 0;
-        table-layout: fixed;
-        border-collapse: collapse;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: auto;
     }
 
-    .transaction-inner-table thead {
-        display: table-header-group;
+    .transaction-inner-table > thead {
+        display: none;
     }
 
-    .transaction-inner-table tbody {
-        display: table-row-group;
+    .transaction-inner-table > tbody {
+        display: block;
+        width: 100%;
+        padding: 10px 12px 12px;
     }
 
-    .transaction-inner-table tr {
-        display: table-row;
+    .transaction-inner-table > tbody > tr {
+        display: block;
+        width: 100%;
+        margin: 0 0 9px;
+        padding: 0;
+        border: 1px solid rgba(77, 232, 255, .08);
+        border-radius: 12px;
+        background: rgba(255, 255, 255, .025);
+        overflow: hidden;
     }
 
-    .transaction-inner-table th {
-        display: table-cell;
-        padding: 8px 4px;
-        font-size: .48rem;
-        line-height: 1.3;
-        color: #7188a6;
-        white-space: normal;
+    .transaction-inner-table > tbody > tr:last-child {
+        margin-bottom: 0;
     }
 
-    .transaction-inner-table td {
-        display: table-cell;
-        padding: 8px 4px;
-        font-size: .52rem;
-        line-height: 1.4;
+    .transaction-inner-table > tbody > tr > td {
+        display: grid;
+        grid-template-columns: minmax(78px, 34%) minmax(0, 1fr);
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 38px;
+        padding: 9px 10px;
         color: #91a9c4;
+        font-size: .67rem;
+        line-height: 1.45;
+        text-align: right;
         vertical-align: middle;
+        border-bottom: 1px solid rgba(255, 255, 255, .045);
         overflow-wrap: anywhere;
         word-break: break-word;
     }
 
+    .transaction-inner-table > tbody > tr > td:last-child {
+        border-bottom: none;
+    }
+
+    .transaction-inner-table > tbody > tr > td::before {
+        display: block;
+        color: #7188a6;
+        font-size: .57rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .55px;
+        line-height: 1.35;
+        text-align: left;
+    }
+
+    .transaction-inner-table > tbody > tr > td:nth-child(1)::before {
+        content: "Amount";
+    }
+
+    .transaction-inner-table > tbody > tr > td:nth-child(2)::before {
+        content: "Asset";
+    }
+
+    .transaction-inner-table > tbody > tr > td:nth-child(3)::before {
+        content: "Date";
+    }
+
+    .transaction-inner-table > tbody > tr > td:nth-child(4)::before {
+        content: "Status";
+    }
+
+    .transaction-inner-table > tbody > tr > td.empty-transaction {
+        display: block;
+        min-height: auto;
+        padding: 14px 10px !important;
+        text-align: center !important;
+        color: #7188a6 !important;
+        font-size: .65rem !important;
+        font-style: italic;
+        border-bottom: none !important;
+    }
+
+    .transaction-inner-table > tbody > tr > td.empty-transaction::before {
+        display: none;
+    }
+
     .deposit-amount,
     .withdrawal-amount {
-        font-size: .54rem !important;
+        font-size: .69rem !important;
+        font-weight: 800 !important;
     }
 
     .status-badge {
-        min-width: 45px;
-        padding: 3px 5px;
+        justify-self: end;
+        min-width: 58px;
+        max-width: 100%;
+        padding: 4px 7px;
         border-radius: 6px;
-        font-size: .45rem;
-    }
-
-    .empty-transaction {
-        padding: 13px 8px !important;
-        font-size: .57rem !important;
+        font-size: .53rem;
+        line-height: 1.3;
+        white-space: nowrap;
     }
 
     .wallets-page .pagination {
@@ -1273,16 +1220,16 @@
     }
 
     .wallets-header h1 {
-        font-size: 1.28rem;
+        font-size: 1.3rem;
     }
 
     .wallets-header p {
-        font-size: .64rem;
+        font-size: .66rem;
     }
 
     .wallets-table > tbody > tr:not(.transactions-row) {
         border-radius: 17px;
-        margin-bottom: 13px;
+        margin-bottom: 14px;
     }
 
     .wallets-table > tbody > tr:not(.transactions-row) > td {
@@ -1395,29 +1342,44 @@
     }
 
     .transactions-table {
-        width: 94%;
         border-radius: 15px;
     }
 
-    .transactions-table > thead th {
-        padding: 12px 5px;
-        font-size: .54rem;
+    .transactions-table > tbody > tr > td::before {
+        padding: 13px 13px 11px;
+        font-size: .62rem;
     }
 
-    .transaction-inner-table th {
-        padding: 6px 3px;
-        font-size: .43rem;
+    .transaction-inner-table > tbody {
+        padding: 9px 9px 10px;
     }
 
-    .transaction-inner-table td {
-        padding: 7px 3px;
-        font-size: .47rem;
+    .transaction-inner-table > tbody > tr {
+        margin-bottom: 8px;
+        border-radius: 11px;
+    }
+
+    .transaction-inner-table > tbody > tr > td {
+        grid-template-columns: minmax(70px, 33%) minmax(0, 1fr);
+        gap: 8px;
+        min-height: 36px;
+        padding: 8px 9px;
+        font-size: .62rem;
+    }
+
+    .transaction-inner-table > tbody > tr > td::before {
+        font-size: .52rem;
+    }
+
+    .deposit-amount,
+    .withdrawal-amount {
+        font-size: .64rem !important;
     }
 
     .status-badge {
-        min-width: 42px;
-        padding: 3px 4px;
-        font-size: .42rem;
+        min-width: 53px;
+        padding: 4px 6px;
+        font-size: .5rem;
     }
 
     .wallets-page .pagination {
@@ -1527,29 +1489,35 @@
         font-size: .53rem;
     }
 
-    .transactions-table {
-        width: 96%;
+    .transactions-table > tbody > tr > td::before {
+        padding: 11px 11px 10px;
+        font-size: .57rem;
     }
 
-    .transactions-table > thead th {
-        padding: 10px 4px;
-        font-size: .5rem;
+    .transaction-inner-table > tbody {
+        padding: 8px;
     }
 
-    .transaction-inner-table th {
-        padding: 5px 2px;
-        font-size: .39rem;
+    .transaction-inner-table > tbody > tr > td {
+        grid-template-columns: minmax(62px, 34%) minmax(0, 1fr);
+        gap: 7px;
+        padding: 7px 8px;
+        font-size: .58rem;
     }
 
-    .transaction-inner-table td {
-        padding: 6px 2px;
-        font-size: .43rem;
+    .transaction-inner-table > tbody > tr > td::before {
+        font-size: .48rem;
+    }
+
+    .deposit-amount,
+    .withdrawal-amount {
+        font-size: .6rem !important;
     }
 
     .status-badge {
-        min-width: 39px;
-        padding: 2px 3px;
-        font-size: .39rem;
+        min-width: 49px;
+        padding: 3px 5px;
+        font-size: .47rem;
     }
 
     .wallets-page .pagination a,
