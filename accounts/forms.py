@@ -1,524 +1,509 @@
-fromdecimalimportDecimal
-fromdjango.contrib.auth.formsimportUserCreationForm
-fromdjangoimportforms
-fromdjango.contrib.auth.modelsimportUser
-fromdjango.contrib.authimportauthenticate
-from.modelsimport(
-KYCSubmission,
-Wallet,
-Deposit,
-Withdrawal,
-UserProfile,
+from decimal import Decimal
+
+from django.contrib.auth.forms import UserCreationForm
+from django import forms
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+
+from .models import (
+    KYCSubmission,
+    Wallet,
+    Deposit,
+    Withdrawal,
+    UserProfile,
 )
 
 
-classKYCForm(forms.ModelForm):
+class KYCForm(forms.ModelForm):
 
-    classMeta:
-        model=KYCSubmission
-fields=["document"]
+    class Meta:
+        model = KYCSubmission
+        fields = ["document"]
 
-widgets={
-"document":forms.ClearableFileInput(
-attrs={
-"accept":"image/*",
-"capture":"environment",
-}
-)
-}
-
-
-classWalletForm(forms.ModelForm):
-
-    classMeta:
-        model=Wallet
-fields=["currency","address"]
-
-widgets={
-"currency":forms.Select(
-attrs={
-"class":"form-control",
-}
-),
-"address":forms.TextInput(
-attrs={
-"class":"form-control",
-"placeholder":"Enter wallet address",
-}
-),
-}
+        widgets = {
+            "document": forms.ClearableFileInput(
+                attrs={
+                    "accept": "image/*",
+                    "capture": "environment",
+                }
+            )
+        }
 
 
-classDepositForm(forms.ModelForm):
+class WalletForm(forms.ModelForm):
 
-    classMeta:
-        model=Deposit
+    class Meta:
+        model = Wallet
+        fields = ["currency", "address"]
 
-fields=[
-"plan",
-"amount_usd",
-"proof",
-"payment_method",
-]
-
-widgets={
-"amount_usd":forms.NumberInput(
-attrs={
-"step":"0.01",
-"min":"0.01",
-"placeholder":"Enter amount in USD",
-}
-),
-}
-
-defclean(self):
-
-        cleaned_data=super().clean()
-
-plan=cleaned_data.get("plan")
-amount_usd=cleaned_data.get("amount_usd")
-payment_method=cleaned_data.get("payment_method")
+        widgets = {
+            "currency": forms.Select(
+                attrs={
+                    "class": "form-control",
+                }
+            ),
+            "address": forms.TextInput(
+                attrs={
+                    "class": "form-control",
+                    "placeholder": "Enter wallet address",
+                }
+            ),
+        }
 
 
+class DepositForm(forms.ModelForm):
 
+    class Meta:
+        model = Deposit
 
+        fields = [
+            "plan",
+            "amount_usd",
+            "proof",
+            "payment_method",
+        ]
 
-ifnotpayment_method:
+        widgets = {
+            "amount_usd": forms.NumberInput(
+                attrs={
+                    "step": "0.01",
+                    "min": "0.01",
+                    "placeholder": "Enter amount in USD",
+                }
+            ),
+        }
+
+    def clean(self):
+
+        cleaned_data = super().clean()
+
+        plan = cleaned_data.get("plan")
+        amount_usd = cleaned_data.get("amount_usd")
+        payment_method = cleaned_data.get("payment_method")
+
+        if not payment_method:
             self.add_error(
-"payment_method",
-"Please select a payment method.",
-)
+                "payment_method",
+                "Please select a payment method.",
+            )
 
-
-
-
-
-ifamount_usdisNone:
+        if amount_usd is None:
             self.add_error(
-"amount_usd",
-"Please enter a deposit amount.",
-)
+                "amount_usd",
+                "Please enter a deposit amount.",
+            )
 
-elifnotamount_usd.is_finite():
+        elif not amount_usd.is_finite():
             self.add_error(
-"amount_usd",
-"Please enter a valid amount.",
-)
+                "amount_usd",
+                "Please enter a valid amount.",
+            )
 
-elifamount_usd<=Decimal("0.00"):
+        elif amount_usd <= Decimal("0.00"):
             self.add_error(
-"amount_usd",
-"Amount must be greater than zero.",
-)
+                "amount_usd",
+                "Amount must be greater than zero.",
+            )
 
+        if (
+            plan
+            and amount_usd is not None
+            and amount_usd.is_finite()
+            and amount_usd > Decimal("0.00")
+        ):
 
-
-
-
-if(
-plan
-andamount_usdisnotNone
-andamount_usd.is_finite()
-andamount_usd>Decimal("0.00")
-):
-
-            ifamount_usd<plan.minimum_investment:
+            if amount_usd < plan.minimum_investment:
                 self.add_error(
-"amount_usd",
-(
-f"Minimum deposit for {plan.name} "
-f"is ${plan.minimum_investment}."
-),
-)
+                    "amount_usd",
+                    (
+                        f"Minimum deposit for {plan.name} "
+                        f"is ${plan.minimum_investment}."
+                    ),
+                )
 
-elif(
-plan.maximum_investmentisnotNone
-andamount_usd>plan.maximum_investment
-):
+            elif (
+                plan.maximum_investment is not None
+                and amount_usd > plan.maximum_investment
+            ):
                 self.add_error(
-"amount_usd",
-(
-f"Maximum deposit for {plan.name} "
-f"is ${plan.maximum_investment}."
-),
-)
+                    "amount_usd",
+                    (
+                        f"Maximum deposit for {plan.name} "
+                        f"is ${plan.maximum_investment}."
+                    ),
+                )
+
+        return cleaned_data
+
+
+class DepositApprovalForm(forms.ModelForm):
+
+    class Meta:
+        model = Deposit
+        fields = ["status"]
+
+    def clean_status(self):
+
+        status = self.cleaned_data.get("status")
+
+        if status not in ["approved", "rejected"]:
+            raise forms.ValidationError(
+                "Please select a valid deposit status."
+            )
 
-returncleaned_data
+        return status
 
 
+class WithdrawalForm(forms.ModelForm):
+
+    WALLET_CHOICES = [
+        ("BTC", "Bitcoin (BTC)"),
+        ("ETH", "Ethereum (ETH)"),
+        ("USDT_ERC20", "Tether (USDT ERC20)"),
+        ("USDT_TRC20", "Tether (USDT TRC20)"),
+    ]
 
-classDepositApprovalForm(forms.ModelForm):
+    wallet_currency = forms.ChoiceField(
+        choices=WALLET_CHOICES,
+        label="Withdraw From",
+    )
+
+    class Meta:
+        model = Withdrawal
 
-    classMeta:
-        model=Deposit
-fields=["status"]
+        fields = [
+            "wallet_currency",
+            "amount_usd",
+            "destination_wallet",
+        ]
+
+        widgets = {
+            "amount_usd": forms.NumberInput(
+                attrs={
+                    "step": "0.01",
+                    "min": "6.00",
+                    "placeholder": "Enter withdrawal amount in USD",
+                }
+            ),
+            "destination_wallet": forms.TextInput(
+                attrs={
+                    "placeholder": "Enter destination wallet address",
+                }
+            ),
+        }
+
+        labels = {
+            "amount_usd": "Withdrawal Amount (USD)",
+            "destination_wallet": "Destination Wallet",
+        }
+
+    def clean_amount_usd(self):
+
+        amount_usd = self.cleaned_data.get(
+            "amount_usd"
+        )
+
+        if amount_usd is None:
+            raise forms.ValidationError(
+                "Please enter a withdrawal amount."
+            )
+
+        if not amount_usd.is_finite():
+            raise forms.ValidationError(
+                "Please enter a valid withdrawal amount."
+            )
+
+        if amount_usd <= Decimal("0.00"):
+            raise forms.ValidationError(
+                "Withdrawal amount must be greater than zero."
+            )
+
+        if amount_usd < Decimal("6.00"):
+            raise forms.ValidationError(
+                "Minimum withdrawal is $6."
+            )
+
+        return amount_usd
+
+    def clean_wallet_currency(self):
+
+        wallet_currency = self.cleaned_data.get(
+            "wallet_currency"
+        )
+
+        allowed_wallets = {
+            "BTC",
+            "ETH",
+            "USDT_ERC20",
+            "USDT_TRC20",
+        }
+
+        if wallet_currency not in allowed_wallets:
+            raise forms.ValidationError(
+                "Please select a valid wallet."
+            )
+
+        return wallet_currency
+
+
+class ProfilePictureForm(forms.ModelForm):
+
+    class Meta:
+        model = UserProfile
+        fields = ["picture"]
+
+        widgets = {
+            "picture": forms.FileInput(
+                attrs={
+                    "class": "file-upload-input",
+                    "accept": "image/*",
+                }
+            )
+        }
+
+
+class SettingsForm(forms.Form):
+
+    username = forms.CharField(
+        max_length=150,
+        label="Username",
+    )
+
+    email = forms.EmailField(
+        label="Email Address",
+    )
+
+    preferred_currency = forms.ChoiceField(
+        label="Preferred Investment Option",
+        choices=[
+            ("BTC", "Bitcoin (BTC)"),
+            ("ETH", "Ethereum (ETH)"),
+            ("USDT_ERC20", "Tether (USDT ERC20)"),
+            ("USDT_TRC20", "Tether (USDT TRC20)"),
+        ],
+    )
 
-defclean_status(self):
-        status=self.cleaned_data.get("status")
+    risk_level = forms.ChoiceField(
+        label="Investment Risk Level",
+        choices=[
+            ("low", "Low"),
+            ("medium", "Medium"),
+            ("high", "High"),
+        ],
+    )
+
+    notification_emails = forms.BooleanField(
+        label="Receive investment updates via email",
+        required=False,
+    )
+
+    two_factor_auth = forms.BooleanField(
+        label="Enable Two-Factor Authentication",
+        required=False,
+    )
 
-ifstatusnotin["approved","rejected"]:
-            raiseforms.ValidationError(
-"Please select a valid deposit status."
-)
+    def __init__(self, user, *args, **kwargs):
 
-returnstatus
+        super().__init__(*args, **kwargs)
 
+        self.user = user
 
+        self.fields["username"].initial = user.username
 
+        self.fields["email"].initial = user.email
 
-classWithdrawalForm(forms.ModelForm):
+        self.fields["preferred_currency"].initial = getattr(
+            user,
+            "preferred_currency",
+            "BTC",
+        )
 
-    WALLET_CHOICES=[
-("BTC","Bitcoin (BTC)"),
-("ETH","Ethereum (ETH)"),
-("USDT_ERC20","Tether (USDT ERC20)"),
-("USDT_TRC20","Tether (USDT TRC20)"),
-]
+        self.fields["risk_level"].initial = getattr(
+            user,
+            "risk_level",
+            "medium",
+        )
+
+        self.fields["notification_emails"].initial = getattr(
+            user,
+            "notification_emails",
+            True,
+        )
 
-wallet_currency=forms.ChoiceField(
-choices=WALLET_CHOICES,
-label="Withdraw From",
-)
+        self.fields["two_factor_auth"].initial = getattr(
+            user,
+            "two_factor_auth",
+            False,
+        )
+
+    def clean_username(self):
+
+        username = self.cleaned_data["username"]
+
+        existing_user = (
+            User.objects
+            .filter(username=username)
+            .exclude(pk=self.user.pk)
+            .first()
+        )
+
+        if existing_user:
+            raise forms.ValidationError(
+                "That username is already in use."
+            )
+
+        return username
+
+    def clean_email(self):
+
+        email = self.cleaned_data["email"]
 
-classMeta:
-        model=Withdrawal
+        existing_user = (
+            User.objects
+            .filter(email=email)
+            .exclude(pk=self.user.pk)
+            .first()
+        )
 
-fields=[
-"wallet_currency",
-"amount_usd",
-"destination_wallet",
-]
+        if existing_user:
+            raise forms.ValidationError(
+                "That email address is already in use."
+            )
 
-widgets={
-"amount_usd":forms.NumberInput(
-attrs={
-"step":"0.01",
-"min":"6.00",
-"placeholder":"Enter withdrawal amount in USD",
-}
-),
-"destination_wallet":forms.TextInput(
-attrs={
-"placeholder":"Enter destination wallet address",
-}
-),
-}
-
-labels={
-"amount_usd":"Withdrawal Amount (USD)",
-"destination_wallet":"Destination Wallet",
-}
-
-defclean_amount_usd(self):
-
-        amount_usd=self.cleaned_data.get(
-"amount_usd"
-)
-
-ifamount_usdisNone:
-            raiseforms.ValidationError(
-"Please enter a withdrawal amount."
-)
-
-ifnotamount_usd.is_finite():
-            raiseforms.ValidationError(
-"Please enter a valid withdrawal amount."
-)
+        return email
 
-ifamount_usd<=Decimal("0.00"):
-            raiseforms.ValidationError(
-"Withdrawal amount must be greater than zero."
-)
-
-ifamount_usd<Decimal("6.00"):
-            raiseforms.ValidationError(
-"Minimum withdrawal is $6."
-)
-
-returnamount_usd
+    def save(self):
 
-defclean_wallet_currency(self):
-
-        wallet_currency=self.cleaned_data.get(
-"wallet_currency"
-)
-
-allowed_wallets={
-"BTC",
-"ETH",
-"USDT_ERC20",
-"USDT_TRC20",
-}
-
-ifwallet_currencynotinallowed_wallets:
-            raiseforms.ValidationError(
-"Please select a valid wallet."
-)
-
-returnwallet_currency
-
-
-classProfilePictureForm(forms.ModelForm):
-
-    classMeta:
-        model=UserProfile
-fields=["picture"]
-
-widgets={
-"picture":forms.FileInput(
-attrs={
-"class":"file-upload-input",
-"accept":"image/*",
-}
-)
-}
+        self.user.username = self.cleaned_data["username"]
 
-
-classSettingsForm(forms.Form):
-
-    username=forms.CharField(
-max_length=150,
-label="Username",
-)
-
-email=forms.EmailField(
-label="Email Address",
-)
+        self.user.email = self.cleaned_data["email"]
 
-preferred_currency=forms.ChoiceField(
-label="Preferred Investment Option",
-choices=[
-("BTC","Bitcoin (BTC)"),
-("ETH","Ethereum (ETH)"),
-("USDT_ERC20","Tether (USDT ERC20)"),
-("USDT_TRC20","Tether (USDT TRC20)"),
-],
-)
+        if hasattr(self.user, "preferred_currency"):
+            self.user.preferred_currency = (
+                self.cleaned_data["preferred_currency"]
+            )
 
-risk_level=forms.ChoiceField(
-label="Investment Risk Level",
-choices=[
-("low","Low"),
-("medium","Medium"),
-("high","High"),
-],
-)
+        if hasattr(self.user, "risk_level"):
+            self.user.risk_level = (
+                self.cleaned_data["risk_level"]
+            )
 
-notification_emails=forms.BooleanField(
-label="Receive investment updates via email",
-required=False,
-)
+        if hasattr(self.user, "notification_emails"):
+            self.user.notification_emails = (
+                self.cleaned_data["notification_emails"]
+            )
 
-two_factor_auth=forms.BooleanField(
-label="Enable Two-Factor Authentication",
-required=False,
-)
+        if hasattr(self.user, "two_factor_auth"):
+            self.user.two_factor_auth = (
+                self.cleaned_data["two_factor_auth"]
+            )
 
-def__init__(self,user,*args,**kwargs):
+        self.user.save()
 
-        super().__init__(*args,**kwargs)
+        return self.user
 
-self.user=user
 
-self.fields["username"].initial=user.username
+class SignupForm(UserCreationForm):
 
-self.fields["email"].initial=user.email
+    email = forms.EmailField(
+        required=True,
+        widget=forms.EmailInput(
+            attrs={
+                "autocomplete": "email",
+                "placeholder": "Enter your email address",
+            }
+        ),
+    )
 
-self.fields["preferred_currency"].initial=getattr(
-user,
-"preferred_currency",
-"BTC",
-)
-
-self.fields["risk_level"].initial=getattr(
-user,
-"risk_level",
-"medium",
-)
-
-self.fields["notification_emails"].initial=getattr(
-user,
-"notification_emails",
-True,
-)
-
-self.fields["two_factor_auth"].initial=getattr(
-user,
-"two_factor_auth",
-False,
-)
-
-defclean_username(self):
-
-        username=self.cleaned_data["username"]
-
-existing_user=(
-User.objects
-.filter(username=username)
-.exclude(pk=self.user.pk)
-.first()
-)
-
-ifexisting_user:
-            raiseforms.ValidationError(
-"That username is already in use."
-)
-
-returnusername
-
-defclean_email(self):
-
-        email=self.cleaned_data["email"]
-
-existing_user=(
-User.objects
-.filter(email=email)
-.exclude(pk=self.user.pk)
-.first()
-)
-
-ifexisting_user:
-            raiseforms.ValidationError(
-"That email address is already in use."
-)
-
-returnemail
+    class Meta:
+        model = User
 
-defsave(self):
+        fields = (
+            "username",
+            "email",
+            "password1",
+            "password2",
+        )
 
-        self.user.username=self.cleaned_data["username"]
 
-self.user.email=self.cleaned_data["email"]
+class LoginForm(forms.Form):
 
-ifhasattr(self.user,"preferred_currency"):
-            self.user.preferred_currency=(
-self.cleaned_data["preferred_currency"]
-)
+    username = forms.CharField(
+        label="Username or Email",
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Username or Email",
+                "autocomplete": "username",
+            }
+        ),
+    )
 
-ifhasattr(self.user,"risk_level"):
-            self.user.risk_level=(
-self.cleaned_data["risk_level"]
-)
+    password = forms.CharField(
+        label="Password",
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": "Password",
+                "autocomplete": "current-password",
+            }
+        ),
+    )
 
-ifhasattr(self.user,"notification_emails"):
-            self.user.notification_emails=(
-self.cleaned_data["notification_emails"]
-)
+    def __init__(self, request=None, *args, **kwargs):
 
-ifhasattr(self.user,"two_factor_auth"):
-            self.user.two_factor_auth=(
-self.cleaned_data["two_factor_auth"]
-)
+        super().__init__(*args, **kwargs)
 
-self.user.save()
+        self.request = request
+        self.user_cache = None
 
-returnself.user
+    def clean(self):
 
+        cleaned_data = super().clean()
 
-classSignupForm(UserCreationForm):
-    email=forms.EmailField(
-required=True,
-widget=forms.EmailInput(
-attrs={
-"autocomplete":"email",
-"placeholder":"Enter your email address",
-}
-),
-)
+        username_or_email = cleaned_data.get("username")
+        password = cleaned_data.get("password")
 
-classMeta:
-        model=User
-fields=(
-"username",
-"email",
-"password1",
-"password2",
-)
+        if not username_or_email or not password:
+            return cleaned_data
 
-classLoginForm(forms.Form):
-    username=forms.CharField(
-label="Username or Email",
-widget=forms.TextInput(
-attrs={
-"placeholder":"Username or Email",
-"autocomplete":"username",
-}
-),
-)
+        user = authenticate(
+            self.request,
+            username=username_or_email,
+            password=password,
+        )
 
-password=forms.CharField(
-label="Password",
-widget=forms.PasswordInput(
-attrs={
-"placeholder":"Password",
-"autocomplete":"current-password",
-}
-),
-)
+        if user is None:
 
-def__init__(self,request=None,*args,**kwargs):
-        super().__init__(*args,**kwargs)
-
-self.request=request
-self.user_cache=None
-
-defclean(self):
-        cleaned_data=super().clean()
-
-username_or_email=cleaned_data.get("username")
-password=cleaned_data.get("password")
-
-ifnotusername_or_emailornotpassword:
-            returncleaned_data
-
-
-
-
-user=authenticate(
-self.request,
-username=username_or_email,
-password=password,
-)
-
-
-
-
-ifuserisNone:
             try:
-                email_user=User.objects.get(
-email__iexact=username_or_email
-)
-exceptUser.DoesNotExist:
-                email_user=None
-exceptUser.MultipleObjectsReturned:
-                email_user=None
+                email_user = User.objects.get(
+                    email__iexact=username_or_email
+                )
 
-ifemail_user:
-                user=authenticate(
-self.request,
-username=email_user.username,
-password=password,
-)
+            except User.DoesNotExist:
+                email_user = None
 
+            except User.MultipleObjectsReturned:
+                email_user = None
 
+            if email_user:
+                user = authenticate(
+                    self.request,
+                    username=email_user.username,
+                    password=password,
+                )
 
+        if user is None:
+            raise forms.ValidationError(
+                "Invalid username/email or password."
+            )
 
-ifuserisNone:
-            raiseforms.ValidationError(
-"Invalid username/email or password."
-)
+        if not user.is_active:
+            raise forms.ValidationError(
+                "This account is inactive."
+            )
 
+        self.user_cache = user
 
+        return cleaned_data
 
-
-ifnotuser.is_active:
-            raiseforms.ValidationError(
-"This account is inactive."
-)
-
-self.user_cache=user
-
-returncleaned_data
-
-defget_user(self):
-        returnself.user_cache
+    def get_user(self):
+        return self.user_cache

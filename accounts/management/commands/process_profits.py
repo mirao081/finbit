@@ -1,457 +1,377 @@
+from datetime import timedelta
 
-fromdatetimeimporttimedelta
+from decimal import Decimal, InvalidOperation, ROUND_DOWN
 
-fromdecimalimportDecimal,InvalidOperation,ROUND_DOWN
+from django.core.management.base import BaseCommand
 
-fromdjango.core.management.baseimportBaseCommand
+from django.db import transaction
 
-fromdjango.dbimporttransaction
+from django.utils import timezone
 
-fromdjango.utilsimporttimezone
-
-fromaccounts.modelsimport(
-AssetPrice,
-Investment,
-Profit,
-Wallet,
+from accounts.models import (
+    AssetPrice,
+    Investment,
+    Profit,
+    Wallet,
 )
 
-fromaccounts.notificationsimportnotify_profit_paid
+from accounts.notifications import notify_profit_paid
 
-fromcore.modelsimportInvestor,Transaction
+from core.models import Investor, Transaction
 
 
-classCommand(BaseCommand):
+class Command(BaseCommand):
 
-    help=(
-"Process scheduled investment profit payouts "
-"for active investments."
-)
+    help = (
+        "Process scheduled investment profit payouts "
+        "for active investments."
+    )
 
-defhandle(self,*args,**options):
+    def handle(self, *args, **options):
 
-        now=timezone.now()
+        now = timezone.now()
 
-processed_count=0
+        processed_count = 0
 
-investments=(
-Investment.objects
-.select_related(
-"user",
-"plan",
-"wallet",
-)
-.filter(
-status="active",
-wallet__isnull=False,
-amount_usd__gt=0,
-)
-.order_by("id")
-)
+        investments = (
+            Investment.objects
+            .select_related(
+                "user",
+                "plan",
+                "wallet",
+            )
+            .filter(
+                status="active",
+                wallet__isnull=False,
+                amount_usd__gt=0,
+            )
+            .order_by("id")
+        )
 
-forinvestmentininvestments:
+        for investment in investments:
 
             try:
 
-                withtransaction.atomic():
+                with transaction.atomic():
 
-                    locked_investment=(
-Investment.objects
-.select_for_update()
-.select_related(
-"user",
-"plan",
-"wallet",
-)
-.get(
-pk=investment.pk
-)
-)
+                    locked_investment = (
+                        Investment.objects
+                        .select_for_update()
+                        .select_related(
+                            "user",
+                            "plan",
+                            "wallet",
+                        )
+                        .get(
+                            pk=investment.pk
+                        )
+                    )
 
-iflocked_investment.status!="active":
+                    if locked_investment.status != "active":
                         continue
 
-ifnotlocked_investment.amount_usd:
+                    if not locked_investment.amount_usd:
                         continue
 
-plan=locked_investment.plan
+                    plan = locked_investment.plan
 
-frequency=(
-plan.frequencyor""
-).lower().strip()
+                    frequency = (
+                        plan.frequency or ""
+                    ).lower().strip()
 
-return_rate=(
-plan.return_rateor""
-).lower().strip()
+                    return_rate = (
+                        plan.return_rate or ""
+                    ).lower().strip()
 
+                    if "hour" in frequency:
 
+                        interval_seconds = 60 * 60
 
+                    elif "day" in frequency:
 
+                        interval_seconds = 24 * 60 * 60
 
-if"hour"infrequency:
+                    elif "week" in frequency:
 
-                        interval_seconds=(
-60*60
-)
+                        interval_seconds = 7 * 24 * 60 * 60
 
-elif"day"infrequency:
-
-                        interval_seconds=(
-24*60*60
-)
-
-elif"week"infrequency:
-
-                        interval_seconds=(
-7*24*60*60
-)
-
-else:
+                    else:
 
                         self.stdout.write(
-self.style.WARNING(
-f"Investment "
-f"#{locked_investment.id}: "
-f"unsupported frequency "
-f"'{plan.frequency}'."
-)
-)
+                            self.style.WARNING(
+                                f"Investment "
+                                f"#{locked_investment.id}: "
+                                f"unsupported frequency "
+                                f"'{plan.frequency}'."
+                            )
+                        )
 
-continue
+                        continue
 
+                    existing_profit = (
+                        Profit.objects
+                        .filter(
+                            investment=locked_investment,
+                            payout_at__isnull=False,
+                        )
+                        .order_by("-payout_at")
+                        .first()
+                    )
 
+                    if existing_profit:
 
+                        next_payout_at = (
+                            existing_profit.payout_at
+                            + timedelta(
+                                seconds=interval_seconds
+                            )
+                        )
 
+                    else:
 
-existing_profit=(
-Profit.objects
-.filter(
-investment=locked_investment,
-payout_at__isnull=False,
-)
-.order_by("-payout_at")
-.first()
-)
-
-ifexisting_profit:
-
-                        next_payout_at=(
-existing_profit.payout_at
-+timedelta(
-seconds=interval_seconds
-)
-)
-
-else:
-
-                        ifnotlocked_investment.created_at:
+                        if not locked_investment.created_at:
                             continue
 
-next_payout_at=(
-locked_investment.created_at
-+timedelta(
-seconds=interval_seconds
-)
-)
+                        next_payout_at = (
+                            locked_investment.created_at
+                            + timedelta(
+                                seconds=interval_seconds
+                            )
+                        )
 
+                    if (
+                        not existing_profit
+                        and next_payout_at <= now
+                    ):
 
+                        next_payout_at = now
 
-
-
-
-
-
-
-if(
-notexisting_profit
-andnext_payout_at<=now
-):
-
-                        next_payout_at=now
-
-
-
-
-
-ifnext_payout_at>now:
+                    if next_payout_at > now:
                         continue
 
-
-
-
-
-
-
-
-
-if(
-locked_investment.end_date
-andnext_payout_at
->locked_investment.end_date
-):
+                    if (
+                        locked_investment.end_date
+                        and next_payout_at
+                        > locked_investment.end_date
+                    ):
 
                         continue
 
+                    if "%" in return_rate:
 
+                        number_text = (
+                            return_rate
+                            .replace("return", "")
+                            .replace("%", "")
+                            .strip()
+                        )
 
+                        try:
 
+                            percentage = Decimal(
+                                number_text
+                            )
 
-if"%"inreturn_rate:
-
-                        number_text=(
-return_rate
-.replace("return","")
-.replace("%","")
-.strip()
-)
-
-try:
-
-                            percentage=Decimal(
-number_text
-)
-
-exceptInvalidOperation:
+                        except InvalidOperation:
 
                             self.stdout.write(
-self.style.WARNING(
-f"Investment "
-f"#{locked_investment.id}: "
-f"invalid percentage "
-f"'{plan.return_rate}'."
-)
-)
+                                self.style.WARNING(
+                                    f"Investment "
+                                    f"#{locked_investment.id}: "
+                                    f"invalid percentage "
+                                    f"'{plan.return_rate}'."
+                                )
+                            )
 
-continue
+                            continue
 
-profit_usd=(
-locked_investment.amount_usd
-*percentage
-/Decimal("100")
-)
+                        profit_usd = (
+                            locked_investment.amount_usd
+                            * percentage
+                            / Decimal("100")
+                        )
 
-elif"usd"inreturn_rate:
+                    elif "usd" in return_rate:
 
-                        number_text=(
-return_rate
-.replace("return","")
-.replace("usd","")
-.strip()
-)
+                        number_text = (
+                            return_rate
+                            .replace("return", "")
+                            .replace("usd", "")
+                            .strip()
+                        )
 
-try:
+                        try:
 
-                            profit_usd=Decimal(
-number_text
-)
+                            profit_usd = Decimal(
+                                number_text
+                            )
 
-exceptInvalidOperation:
+                        except InvalidOperation:
 
                             self.stdout.write(
-self.style.WARNING(
-f"Investment "
-f"#{locked_investment.id}: "
-f"invalid USD return "
-f"'{plan.return_rate}'."
-)
-)
+                                self.style.WARNING(
+                                    f"Investment "
+                                    f"#{locked_investment.id}: "
+                                    f"invalid USD return "
+                                    f"'{plan.return_rate}'."
+                                )
+                            )
 
-continue
+                            continue
 
-else:
-
-                        self.stdout.write(
-self.style.WARNING(
-f"Investment "
-f"#{locked_investment.id}: "
-f"unsupported return rate "
-f"'{plan.return_rate}'."
-)
-)
-
-continue
-
-profit_usd=profit_usd.quantize(
-Decimal("0.01"),
-rounding=ROUND_DOWN,
-)
-
-ifprofit_usd<=0:
-                        continue
-
-
-
-
-
-wallet=(
-Wallet.objects
-.select_for_update()
-.get(
-pk=locked_investment.wallet_id
-)
-)
-
-
-
-
-
-asset_price=(
-AssetPrice.objects
-.filter(
-currency=wallet.currency
-)
-.first()
-)
-
-if(
-notasset_price
-ornotasset_price.usd_price
-orasset_price.usd_price<=0
-):
+                    else:
 
                         self.stdout.write(
-self.style.WARNING(
-f"Investment "
-f"#{locked_investment.id}: "
-f"no valid USD price for "
-f"{wallet.currency}."
-)
-)
+                            self.style.WARNING(
+                                f"Investment "
+                                f"#{locked_investment.id}: "
+                                f"unsupported return rate "
+                                f"'{plan.return_rate}'."
+                            )
+                        )
 
-continue
-
-
-
-
-
-asset_profit=(
-profit_usd
-/asset_price.usd_price
-).quantize(
-Decimal("0.000000000001"),
-rounding=ROUND_DOWN,
-)
-
-ifasset_profit<=0:
                         continue
 
+                    profit_usd = profit_usd.quantize(
+                        Decimal("0.01"),
+                        rounding=ROUND_DOWN,
+                    )
 
-
-
-
-
-duplicate=(
-Profit.objects
-.filter(
-investment=locked_investment,
-payout_at=next_payout_at,
-)
-.exists()
-)
-
-ifduplicate:
+                    if profit_usd <= 0:
                         continue
 
+                    wallet = (
+                        Wallet.objects
+                        .select_for_update()
+                        .get(
+                            pk=locked_investment.wallet_id
+                        )
+                    )
 
+                    asset_price = (
+                        AssetPrice.objects
+                        .filter(
+                            currency=wallet.currency
+                        )
+                        .first()
+                    )
 
+                    if (
+                        not asset_price
+                        or not asset_price.usd_price
+                        or asset_price.usd_price <= 0
+                    ):
 
+                        self.stdout.write(
+                            self.style.WARNING(
+                                f"Investment "
+                                f"#{locked_investment.id}: "
+                                f"no valid USD price for "
+                                f"{wallet.currency}."
+                            )
+                        )
 
-investor,_=(
-Investor.objects
-.get_or_create(
-user=locked_investment.user,
-defaults={
-"name":(
-locked_investment
-.user
-.username
-),
-},
-)
-)
+                        continue
 
+                    asset_profit = (
+                        profit_usd
+                        / asset_price.usd_price
+                    ).quantize(
+                        Decimal("0.000000000001"),
+                        rounding=ROUND_DOWN,
+                    )
 
+                    if asset_profit <= 0:
+                        continue
 
+                    duplicate = (
+                        Profit.objects
+                        .filter(
+                            investment=locked_investment,
+                            payout_at=next_payout_at,
+                        )
+                        .exists()
+                    )
 
+                    if duplicate:
+                        continue
 
-profit=Profit.objects.create(
-user=locked_investment.user,
-investment=locked_investment,
-plan=plan,
-amount=profit_usd,
-payout_at=next_payout_at,
-status="approved",
-)
+                    investor, _ = (
+                        Investor.objects
+                        .get_or_create(
+                            user=locked_investment.user,
+                            defaults={
+                                "name": (
+                                    locked_investment
+                                    .user
+                                    .username
+                                ),
+                            },
+                        )
+                    )
 
+                    profit = Profit.objects.create(
+                        user=locked_investment.user,
+                        investment=locked_investment,
+                        plan=plan,
+                        amount=profit_usd,
+                        payout_at=next_payout_at,
+                        status="approved",
+                    )
 
+                    wallet.balance += asset_profit
 
+                    wallet.save(
+                        update_fields=[
+                            "balance",
+                            "updated_at",
+                        ]
+                    )
 
+                    Transaction.objects.create(
+                        investor=investor,
+                        wallet=wallet,
+                        transaction_type="profit",
+                        direction="credit",
+                        asset_amount=asset_profit,
+                        usd_value=profit_usd,
+                        exchange_rate=asset_price.usd_price,
+                        reference=f"PROFIT-{profit.id}",
+                        description=(
+                            f"Profit payout from "
+                            f"{plan.name} investment"
+                        ),
+                    )
 
-wallet.balance+=asset_profit
+                    notify_profit_paid(profit)
 
-wallet.save(
-update_fields=[
-"balance",
-"updated_at",
-]
-)
+                    processed_count += 1
 
+                    self.stdout.write(
+                        self.style.SUCCESS(
+                            f"Investment "
+                            f"#{locked_investment.id}: "
+                            f"${profit_usd:,.2f} "
+                            f"profit credited."
+                        )
+                    )
 
-
-
-
-Transaction.objects.create(
-investor=investor,
-wallet=wallet,
-transaction_type="profit",
-direction="credit",
-asset_amount=asset_profit,
-usd_value=profit_usd,
-exchange_rate=asset_price.usd_price,
-reference=f"PROFIT-{profit.id}",
-description=(
-f"Profit payout from "
-f"{plan.name} investment"
-),
-)
-
-
-
-
-
-
-
-
-
-notify_profit_paid(profit)
-
-processed_count+=1
-
-self.stdout.write(
-self.style.SUCCESS(
-f"Investment "
-f"#{locked_investment.id}: "
-f"${profit_usd:,.2f} "
-f"profit credited."
-)
-)
-
-exceptInvestment.DoesNotExist:
+            except Investment.DoesNotExist:
 
                 continue
 
-exceptExceptionasexc:
+            except Exception as exc:
 
                 self.stdout.write(
-self.style.ERROR(
-f"Failed to process investment "
-f"#{investment.id}: {exc}"
-)
-)
+                    self.style.ERROR(
+                        f"Failed to process investment "
+                        f"#{investment.id}: {exc}"
+                    )
+                )
 
-self.stdout.write(
-self.style.SUCCESS(
-f"Processed {processed_count} "
-f"profit payout(s)."
-)
-)
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Processed {processed_count} "
+                f"profit payout(s)."
+            )
+        )

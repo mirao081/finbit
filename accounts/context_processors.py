@@ -1,26 +1,27 @@
-fromcore.modelsimportSiteSettings,MenuItem
-from.modelsimportDashboardMenu
-
-defsidebar_context(request):
-    return{
-"site_settings":SiteSettings.objects.first(),
-"menu_items":MenuItem.objects.filter(is_active=True),
-"menus":DashboardMenu.objects.all(),
-}
+from core.models import SiteSettings, MenuItem
+from .models import DashboardMenu
 
 
-from.modelsimportUserProfile
+def sidebar_context(request):
+    return {
+        "site_settings": SiteSettings.objects.first(),
+        "menu_items": MenuItem.objects.filter(is_active=True),
+        "menus": DashboardMenu.objects.all(),
+    }
 
 
-defuser_dashboard_context(request):
+from .models import UserProfile
 
-    ifnotrequest.user.is_authenticated:
-        return{}
 
-profile,created=UserProfile.objects.get_or_create(
-user=request.user
-)
+def user_dashboard_context(request):
 
-return{
-"user_profile":profile,
-}
+    if not request.user.is_authenticated:
+        return {}
+
+    profile, created = UserProfile.objects.get_or_create(
+        user=request.user
+    )
+
+    return {
+        "user_profile": profile,
+    }

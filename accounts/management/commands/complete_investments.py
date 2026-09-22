@@ -1,187 +1,192 @@
-fromdjango.core.management.baseimportBaseCommand
-fromdjango.dbimporttransaction
-fromdjango.utilsimporttimezone
+from django.core.management.base import BaseCommand
+from django.db import transaction
+from django.utils import timezone
 
-fromaccounts.modelsimportInvestment,Wallet
-fromaccounts.notificationsimportnotify_investment_completed
-fromcore.modelsimportInvestor,Transaction
+from accounts.models import Investment, Wallet
+from accounts.notifications import notify_investment_completed
+from core.models import Investor, Transaction
 
 
-classCommand(BaseCommand):
+class Command(BaseCommand):
 
-    help=(
-"Complete finite investments whose end date has elapsed, "
-"return the original principal, and notify the user."
-)
+    help = (
+        "Complete finite investments whose end date has elapsed, "
+        "return the original principal, and notify the user."
+    )
 
-defhandle(self,*args,**options):
+    def handle(self, *args, **options):
 
-        now=timezone.now()
+        now = timezone.now()
 
-investments=(
-Investment.objects
-.select_related("user","plan","wallet")
-.filter(
-status="active",
-end_date__isnull=False,
-end_date__lte=now,
-)
-.order_by("end_date")
-)
+        investments = (
+            Investment.objects
+            .select_related("user", "plan", "wallet")
+            .filter(
+                status="active",
+                end_date__isnull=False,
+                end_date__lte=now,
+            )
+            .order_by("end_date")
+        )
 
-completed_count=0
+        completed_count = 0
 
-forinvestmentininvestments:
+        for investment in investments:
 
             try:
 
-                withtransaction.atomic():
+                with transaction.atomic():
 
-                    locked_investment=(
-Investment.objects
-.select_for_update()
-.select_related(
-"user",
-"plan",
-)
-.filter(
-pk=investment.pk,
-status="active",
-end_date__isnull=False,
-end_date__lte=now,
-)
-.first()
-)
+                    locked_investment = (
+                        Investment.objects
+                        .select_for_update()
+                        .select_related(
+                            "user",
+                            "plan",
+                        )
+                        .filter(
+                            pk=investment.pk,
+                            status="active",
+                            end_date__isnull=False,
+                            end_date__lte=now,
+                        )
+                        .first()
+                    )
 
-ifnotlocked_investment:
+                    if not locked_investment:
                         continue
 
-if(
-notlocked_investment.wallet_id
-ornotlocked_investment.asset_amount
-orlocked_investment.asset_amount<=0
-):
+                    if (
+                        not locked_investment.wallet_id
+                        or not locked_investment.asset_amount
+                        or locked_investment.asset_amount <= 0
+                    ):
+
                         self.stdout.write(
-self.style.WARNING(
-f"Investment "
-f"#{locked_investment.id} "
-f"could not be completed because "
-f"its wallet or principal amount "
-f"is invalid."
-)
-)
-continue
+                            self.style.WARNING(
+                                f"Investment "
+                                f"#{locked_investment.id} "
+                                f"could not be completed because "
+                                f"its wallet or principal amount "
+                                f"is invalid."
+                            )
+                        )
 
-wallet=(
-Wallet.objects
-.select_for_update()
-.get(
-pk=locked_investment.wallet_id
-)
-)
+                        continue
 
-maturity_reference=(
-f"INV-MATURITY-{locked_investment.id}"
-)
+                    wallet = (
+                        Wallet.objects
+                        .select_for_update()
+                        .get(
+                            pk=locked_investment.wallet_id
+                        )
+                    )
 
-existing_transaction=(
-Transaction.objects
-.filter(
-reference=maturity_reference
-)
-.first()
-)
+                    maturity_reference = (
+                        f"INV-MATURITY-{locked_investment.id}"
+                    )
 
-ifnotexisting_transaction:
+                    existing_transaction = (
+                        Transaction.objects
+                        .filter(
+                            reference=maturity_reference
+                        )
+                        .first()
+                    )
 
-                        investor,_=(
-Investor.objects
-.get_or_create(
-user=locked_investment.user,
-defaults={
-"name":(
-locked_investment
-.user
-.username
-),
-},
-)
-)
+                    if not existing_transaction:
 
-wallet.balance+=(
-locked_investment.asset_amount
-)
+                        investor, _ = (
+                            Investor.objects
+                            .get_or_create(
+                                user=locked_investment.user,
+                                defaults={
+                                    "name": (
+                                        locked_investment
+                                        .user
+                                        .username
+                                    ),
+                                },
+                            )
+                        )
 
-wallet.save(
-update_fields=[
-"balance",
-"updated_at",
-]
-)
+                        wallet.balance += (
+                            locked_investment.asset_amount
+                        )
 
-Transaction.objects.create(
-investor=investor,
-wallet=wallet,
-transaction_type="investment",
-direction="credit",
-asset_amount=(
-locked_investment.asset_amount
-),
-usd_value=(
-locked_investment.amount_usd
-),
-exchange_rate=(
-locked_investment.exchange_rate
-),
-reference=maturity_reference,
-description=(
-f"Return of principal for "
-f"{locked_investment.plan.name} "
-f"investment"
-),
-)
+                        wallet.save(
+                            update_fields=[
+                                "balance",
+                                "updated_at",
+                            ]
+                        )
 
-locked_investment.status="completed"
+                        Transaction.objects.create(
+                            investor=investor,
+                            wallet=wallet,
+                            transaction_type="investment",
+                            direction="credit",
+                            asset_amount=(
+                                locked_investment.asset_amount
+                            ),
+                            usd_value=(
+                                locked_investment.amount_usd
+                            ),
+                            exchange_rate=(
+                                locked_investment.exchange_rate
+                            ),
+                            reference=maturity_reference,
+                            description=(
+                                f"Return of principal for "
+                                f"{locked_investment.plan.name} "
+                                f"investment"
+                            ),
+                        )
 
-locked_investment.save(
-update_fields=["status"]
-)
+                    locked_investment.status = "completed"
 
-completed_count+=1
+                    locked_investment.save(
+                        update_fields=["status"]
+                    )
 
-try:
-                    notify_investment_completed(
-locked_investment
-)
-exceptExceptionasexc:
+                    completed_count += 1
+
+                    try:
+
+                        notify_investment_completed(
+                            locked_investment
+                        )
+
+                    except Exception as exc:
+
+                        self.stdout.write(
+                            self.style.WARNING(
+                                f"Investment "
+                                f"#{locked_investment.id} "
+                                f"completed, but notification failed: "
+                                f"{exc}"
+                            )
+                        )
+
                     self.stdout.write(
-self.style.WARNING(
-f"Investment "
-f"#{locked_investment.id} "
-f"completed, but notification failed: "
-f"{exc}"
-)
-)
+                        self.style.SUCCESS(
+                            f"Investment "
+                            f"#{locked_investment.id} "
+                            f"completed and principal returned."
+                        )
+                    )
 
-self.stdout.write(
-self.style.SUCCESS(
-f"Investment "
-f"#{locked_investment.id} "
-f"completed and principal returned."
-)
-)
-
-exceptExceptionasexc:
+            except Exception as exc:
 
                 self.stdout.write(
-self.style.ERROR(
-f"Failed to complete investment "
-f"#{investment.id}: {exc}"
-)
-)
+                    self.style.ERROR(
+                        f"Failed to complete investment "
+                        f"#{investment.id}: {exc}"
+                    )
+                )
 
-self.stdout.write(
-self.style.SUCCESS(
-f"Completed {completed_count} investment(s)."
-)
-)
+        self.stdout.write(
+            self.style.SUCCESS(
+                f"Completed {completed_count} investment(s)."
+            )
+        )

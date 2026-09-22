@@ -1,304 +1,308 @@
-fromdjango.urlsimportpath
-fromdjango.contrib.authimportviewsasauth_views
-from.importviews
+from django.urls import path
+from django.contrib.auth import views as auth_views
 
-urlpatterns=[
+from . import views
 
-path(
-"login/",
-views.UserLoginView.as_view(),
-name="login",
-),
 
-path(
-"logout/",
-views.user_logout,
-name="logout",
-),
+urlpatterns = [
 
-path(
-"dashboard/",
-views.dashboard,
-name="dashboard",
-),
+    path(
+        "login/",
+        views.UserLoginView.as_view(),
+        name="login",
+    ),
 
-path(
-"wallets/",
-views.wallets,
-name="wallets",
-),
+    path(
+        "logout/",
+        views.user_logout,
+        name="logout",
+    ),
 
-path(
-"wallets/edit/<int:wallet_id>/",
-views.edit_wallet,
-name="edit_wallet",
-),
+    path(
+        "dashboard/",
+        views.dashboard,
+        name="dashboard",
+    ),
 
-path(
-"wallets/delete/<int:wallet_id>/",
-views.delete_wallet,
-name="delete_wallet",
-),
+    path(
+        "wallets/",
+        views.wallets,
+        name="wallets",
+    ),
 
-path(
-"wallets/confirm-delete/<int:wallet_id>/",
-views.confirm_delete_wallet,
-name="confirm_delete_wallet",
-),
+    path(
+        "wallets/edit/<int:wallet_id>/",
+        views.edit_wallet,
+        name="edit_wallet",
+    ),
 
-path(
-"deposit/",
-views.deposit,
-name="deposit",
-),
+    path(
+        "wallets/delete/<int:wallet_id>/",
+        views.delete_wallet,
+        name="delete_wallet",
+    ),
 
-path(
-"deposit/invoice/<int:deposit_id>/",
-views.deposit_invoice,
-name="deposit_invoice",
-),
+    path(
+        "wallets/confirm-delete/<int:wallet_id>/",
+        views.confirm_delete_wallet,
+        name="confirm_delete_wallet",
+    ),
 
-path(
-"start-investment/",
-views.start_investment,
-name="start_investment",
-),
+    path(
+        "deposit/",
+        views.deposit,
+        name="deposit",
+    ),
 
-path(
-"withdraw/",
-views.withdraw,
-name="withdraw",
-),
+    path(
+        "deposit/invoice/<int:deposit_id>/",
+        views.deposit_invoice,
+        name="deposit_invoice",
+    ),
 
-path(
-"withdraw/confirm/",
-views.withdraw_invoice,
-name="withdraw_invoice",
-),
+    path(
+        "start-investment/",
+        views.start_investment,
+        name="start_investment",
+    ),
 
-path(
-"withdraw/confirm/submit/",
-views.confirm_withdrawal,
-name="confirm_withdrawal",
-),
+    path(
+        "withdraw/",
+        views.withdraw,
+        name="withdraw",
+    ),
 
-path(
-"withdraw/success/<int:withdrawal_id>/",
-views.withdrawal_confirmation_success,
-name="withdrawal_confirmation_success",
-),
+    path(
+        "withdraw/confirm/",
+        views.withdraw_invoice,
+        name="withdraw_invoice",
+    ),
 
-path(
-"transactions/",
-views.transactions,
-name="transactions",
-),
+    path(
+        "withdraw/confirm/submit/",
+        views.confirm_withdrawal,
+        name="confirm_withdrawal",
+    ),
 
-path(
-"transactions/",
-views.transactions,
-name="user_transactions",
-),
+    path(
+        "withdraw/success/<int:withdrawal_id>/",
+        views.withdrawal_confirmation_success,
+        name="withdrawal_confirmation_success",
+    ),
 
-path(
-"profit-history/",
-views.profit_history,
-name="profit_history",
-),
+    path(
+        "transactions/",
+        views.transactions,
+        name="transactions",
+    ),
 
-path(
-"referrals/",
-views.referrals,
-name="referrals",
-),
+    path(
+        "transactions/",
+        views.transactions,
+        name="user_transactions",
+    ),
 
-path(
-"markets/",
-views.markets,
-name="markets",
-),
+    path(
+        "profit-history/",
+        views.profit_history,
+        name="profit_history",
+    ),
 
-path(
-"support/",
-views.support,
-name="support",
-),
+    path(
+        "referrals/",
+        views.referrals,
+        name="referrals",
+    ),
 
-path(
-"profile/",
-views.profile,
-name="profile",
-),
+    path(
+        "markets/",
+        views.markets,
+        name="markets",
+    ),
 
-path(
-"security-center/",
-views.security_center,
-name="security_center",
-),
+    path(
+        "support/",
+        views.support,
+        name="support",
+    ),
 
-path(
-"update-recovery/",
-views.update_recovery,
-name="update_recovery",
-),
+    path(
+        "profile/",
+        views.profile,
+        name="profile",
+    ),
 
-path(
-"download-account-data/",
-views.download_account_data,
-name="download_account_data",
-),
+    path(
+        "security-center/",
+        views.security_center,
+        name="security_center",
+    ),
 
-path(
-"login-activity/",
-views.login_activity,
-name="login_activity",
-),
+    path(
+        "update-recovery/",
+        views.update_recovery,
+        name="update_recovery",
+    ),
 
-path(
-"revoke-sessions/",
-views.revoke_sessions,
-name="revoke_sessions",
-),
+    path(
+        "download-account-data/",
+        views.download_account_data,
+        name="download_account_data",
+    ),
 
-path(
-"password-change/",
-auth_views.PasswordChangeView.as_view(
-template_name="accounts/password_change.html"
-),
-name="password_change",
-),
+    path(
+        "login-activity/",
+        views.login_activity,
+        name="login_activity",
+    ),
 
-path(
-"password-change/done/",
-auth_views.PasswordChangeDoneView.as_view(
-template_name="accounts/password_change_done.html"
-),
-name="password_change_done",
-),
+    path(
+        "revoke-sessions/",
+        views.revoke_sessions,
+        name="revoke_sessions",
+    ),
 
-path(
-"password-reset/",
-auth_views.PasswordResetView.as_view(
-template_name="accounts/password_reset.html"
-),
-name="password_reset",
-),
+    path(
+        "password-change/",
+        auth_views.PasswordChangeView.as_view(
+            template_name="accounts/password_change.html"
+        ),
+        name="password_change",
+    ),
 
-path(
-"password-reset/done/",
-auth_views.PasswordResetDoneView.as_view(
-template_name="accounts/password_reset_done.html"
-),
-name="password_reset_done",
-),
+    path(
+        "password-change/done/",
+        auth_views.PasswordChangeDoneView.as_view(
+            template_name="accounts/password_change_done.html"
+        ),
+        name="password_change_done",
+    ),
 
-path(
-"reset/<uidb64>/<token>/",
-auth_views.PasswordResetConfirmView.as_view(
-template_name="accounts/password_reset_confirm.html"
-),
-name="password_reset_confirm",
-),
+    path(
+        "password-reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="accounts/password_reset.html"
+        ),
+        name="password_reset",
+    ),
 
-path(
-"reset/done/",
-auth_views.PasswordResetCompleteView.as_view(
-template_name="accounts/password_reset_complete.html"
-),
-name="password_reset_complete",
-),
+    path(
+        "password-reset/done/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="accounts/password_reset_done.html"
+        ),
+        name="password_reset_done",
+    ),
 
-path(
-"settings/delete/",
-views.delete_account,
-name="delete_account",
-),
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="accounts/password_reset_confirm.html"
+        ),
+        name="password_reset_confirm",
+    ),
 
-path(
-"account-deleted/",
-views.account_deleted,
-name="account_deleted",
-),
+    path(
+        "reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="accounts/password_reset_complete.html"
+        ),
+        name="password_reset_complete",
+    ),
 
-path(
-"settings/",
-views.account_settings,
-name="settings",
-),
+    path(
+        "settings/delete/",
+        views.delete_account,
+        name="delete_account",
+    ),
 
-path(
-"announcements/",
-views.announcements,
-name="announcements",
-),
+    path(
+        "account-deleted/",
+        views.account_deleted,
+        name="account_deleted",
+    ),
 
-path(
-"kyc-verification/",
-views.kyc_verification,
-name="kyc_verification",
-),
+    path(
+        "settings/",
+        views.account_settings,
+        name="settings",
+    ),
 
-path(
-"performance-data/",
-views.performance_data,
-name="performance_data",
-),
+    path(
+        "announcements/",
+        views.announcements,
+        name="announcements",
+    ),
 
-path(
-"two-factor/setup/",
-views.two_factor_setup,
-name="two_factor_setup",
-),
+    path(
+        "kyc-verification/",
+        views.kyc_verification,
+        name="kyc_verification",
+    ),
 
-path(
-"two-factor/login/",
-views.two_factor_login,
-name="two_factor_login",
-),
+    path(
+        "performance-data/",
+        views.performance_data,
+        name="performance_data",
+    ),
 
-path(
-"notifications/",
-views.notifications,
-name="notifications",
-),
+    path(
+        "two-factor/setup/",
+        views.two_factor_setup,
+        name="two_factor_setup",
+    ),
 
-path(
-"notifications/<int:notification_id>/read/",
-views.mark_notification_read,
-name="mark_notification_read",
-),
+    path(
+        "two-factor/login/",
+        views.two_factor_login,
+        name="two_factor_login",
+    ),
 
-path(
-"notifications/read-all/",
-views.mark_all_notifications_read,
-name="mark_all_notifications_read",
-),
-path(
-"trade/",
-views.trading_page,
-name="trade",
-),
+    path(
+        "notifications/",
+        views.notifications,
+        name="notifications",
+    ),
 
-path(
-"deposit/<int:deposit_id>/confirm/",
-views.confirm_deposit,
-name="confirm_deposit",
-),
+    path(
+        "notifications/<int:notification_id>/read/",
+        views.mark_notification_read,
+        name="mark_notification_read",
+    ),
 
-path(
-"trade/result/<int:trade_id>/",
-views.trade_result,
-name="trade_result",
-),
+    path(
+        "notifications/read-all/",
+        views.mark_all_notifications_read,
+        name="mark_all_notifications_read",
+    ),
 
-path(
-"trade/history/",
-views.trade_history,
-name="trade_history",
-),
-path(
-"live-trade/withdraw/<int:trade_id>/",
-views.live_trade_withdrawal,
-name="live_trade_withdrawal",
-),
+    path(
+        "trade/",
+        views.trading_page,
+        name="trade",
+    ),
+
+    path(
+        "deposit/<int:deposit_id>/confirm/",
+        views.confirm_deposit,
+        name="confirm_deposit",
+    ),
+
+    path(
+        "trade/result/<int:trade_id>/",
+        views.trade_result,
+        name="trade_result",
+    ),
+
+    path(
+        "trade/history/",
+        views.trade_history,
+        name="trade_history",
+    ),
+
+    path(
+        "live-trade/withdraw/<int:trade_id>/",
+        views.live_trade_withdrawal,
+        name="live_trade_withdrawal",
+    ),
 ]

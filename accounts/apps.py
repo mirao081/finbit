@@ -1,13 +1,10 @@
+from django.apps import AppConfig
 
-fromdjango.appsimportAppConfig
 
+class AccountsConfig(AppConfig):
 
-classAccountsConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "accounts"
 
-    default_auto_field="django.db.models.BigAutoField"
-
-name="accounts"
-
-defready(self):
-        importaccounts.signals
-
+    def ready(self):
+        import accounts.signals

@@ -1,5 +1,5 @@
-fromdjango.urlsimportpath
-from.importviews
+from django.urls import path
+from.import views
 
 urlpatterns=[
 path('',views.home,name='home'),
@@ -15,8 +15,8 @@ path("privacy-policy/",views.privacy_policy,name="privacy_policy"),
 path("terms-conditions/",views.terms_conditions,name="terms_conditions"),
 
 ]
-fromdjango.confimportsettings
-fromdjango.conf.urls.staticimportstatic
+from django.conf import settings
+from django.conf.urls.static import static
 
-ifsettings.DEBUG:
+if settings.DEBUG:
     urlpatterns+=static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)

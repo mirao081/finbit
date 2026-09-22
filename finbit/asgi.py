@@ -7,10 +7,15 @@ For more information on this file, see
 https://docs.djangoproject.com/en/6.1/howto/deployment/asgi/
 """
 
-importos
+import os
 
-fromdjango.core.asgiimportget_asgi_application
+from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE','finbit.settings')
 
-application=get_asgi_application()
+os.environ.setdefault(
+    "DJANGO_SETTINGS_MODULE",
+    "finbit.settings",
+)
+
+
+application = get_asgi_application()

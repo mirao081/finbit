@@ -1,5 +1,6 @@
-fromdjango.appsimportAppConfig
+from django.apps import AppConfig
 
 
-classControlConfig(AppConfig):
-    name='control'
+class ControlConfig(AppConfig):
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "control"
