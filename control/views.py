@@ -1,5 +1,5 @@
 from decimal import Decimal, InvalidOperation
-
+from django.http import HttpResponseNotAllowed
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from django import forms
@@ -1605,7 +1605,7 @@ def admin_adjust_wallet_view(request, user_id):
 
         return render(
             request,
-            "control/adjust_wallet.html",
+            "control/admin_adjust_wallet.html",
             {
                 "user": user,
                 "wallet": wallet,
