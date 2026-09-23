@@ -1799,3 +1799,32 @@ body {
         scroll-behavior: auto !important;
     }
 }
+.signup-page {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 5 !important;
+    width: 100% !important;
+    min-height: 500px !important;
+    margin: 0 auto !important;
+    padding: 30px 15px !important;
+    color: #111 !important;
+    background: #fff !important;
+}
+
+.signup-card {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 6 !important;
+    width: 100% !important;
+    max-width: 500px !important;
+    min-height: 300px !important;
+    margin: auto !important;
+    padding: 30px !important;
+    background: #fff !important;
+    color: #111 !important;
+    border-radius: 15px !important;
+}
