@@ -1,3 +1,10 @@
+html,
+body {
+    margin: 0;
+    min-height: 100%;
+    background: #07090d;
+}
+
 .signup-page {
     min-height: calc(100vh - 72px);
     width: 100%;
@@ -8,9 +15,9 @@
     box-sizing: border-box;
     background:
         radial-gradient(circle at 15% 20%, rgba(77, 163, 255, 0.10), transparent 30%),
-        radial-gradient(circle at 85% 80%, rgba(217, 181, 111, 0.08), transparent 30%);
+        radial-gradient(circle at 85% 80%, rgba(217, 181, 111, 0.08), transparent 30%),
+        #07090d;
 }
-
 .signup-card {
     position: relative;
     width: 100%;
