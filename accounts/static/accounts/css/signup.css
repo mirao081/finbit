@@ -4,7 +4,6 @@ body {
     min-height: 100%;
     background: #07090d;
 }
-
 .signup-page {
     min-height: calc(100vh - 72px);
     width: 100%;
