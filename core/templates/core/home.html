@@ -1128,13 +1128,9 @@
             </span>
         </h2>
 
-
         <p class="transactions-subtitle">
             Discover the latest deposits, investments, and withdrawals made by our investors.
         </p>
-
-
-        
 
         <div class="transaction-buttons">
 
@@ -1144,13 +1140,11 @@
                 Latest Deposit
             </a>
 
-
             <a
                 href="?activity_type=investment#transactions"
                 class="btn btn-investment {% if activity_type == 'investment' %}active{% endif %}">
                 Latest Investment
             </a>
-
 
             <a
                 href="?activity_type=withdrawal#transactions"
@@ -1159,9 +1153,6 @@
             </a>
 
         </div>
-
-
-        
 
         <div class="transactions-table-wrapper">
 
@@ -1199,14 +1190,11 @@
 
                 </thead>
 
-
                 <tbody>
 
                     {% for transaction in page_obj_tx %}
 
                     <tr>
-
-                        
 
                         <td>
 
@@ -1216,16 +1204,17 @@
 
                                     <img
                                         src="{{ transaction.investor.user.userprofile.picture.url }}"
-                                        alt="{{ transaction.investor.name }}">
+                                        alt="{{ transaction.investor.name }}"
+                                    >
 
                                 {% else %}
 
                                     <img
                                         src="{% static 'core/images/default-user.png' %}"
-                                        alt="{{ transaction.investor.name }}">
+                                        alt="{{ transaction.investor.name }}"
+                                    >
 
                                 {% endif %}
-
 
                                 <span>
                                     {{ transaction.investor.name }}
@@ -1235,51 +1224,61 @@
 
                         </td>
 
-
-                        
-
                         <td>
-                            {{ transaction.get_activity_type_display }}
+                            {{ transaction.get_transaction_type_display }}
                         </td>
-
-
-                        
 
                         <td>
                             ${{ transaction.usd_value|floatformat:"-2" }}
                         </td>
 
-
-
-                        
-
                         <td>
-                            {{ transaction.wallet_currency }}
+
+                            {% if transaction.wallet %}
+
+                                {{ transaction.wallet.currency }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
                         </td>
-
-
-                        
 
                         <td>
                             {{ transaction.date|date:"M d, Y H:i" }}
                         </td>
 
-
-                        
-
                         <td>
 
-                            {% if transaction.activity_type == "deposit" %}
-
-                                Approved
-
-                            {% elif transaction.activity_type == "investment" %}
+                            {% if transaction.transaction_type == "investment" %}
 
                                 Active
 
-                            {% elif transaction.activity_type == "withdrawal" %}
+                            {% elif transaction.transaction_type == "deposit" %}
 
                                 Approved
+
+                            {% elif transaction.transaction_type == "withdrawal" %}
+
+                                Approved
+
+                            {% elif transaction.transaction_type == "profit" %}
+
+                                Completed
+
+                            {% elif transaction.transaction_type == "bonus" %}
+
+                                Completed
+
+                            {% elif transaction.transaction_type == "admin_credit" %}
+
+                                Completed
+
+                            {% elif transaction.transaction_type == "admin_debit" %}
+
+                                Completed
 
                             {% else %}
 
@@ -1290,7 +1289,6 @@
                         </td>
 
                     </tr>
-
 
                     {% empty %}
 
@@ -1310,22 +1308,16 @@
 
         </div>
 
-
-        
-
         <div class="pagination">
 
             {% if page_obj_tx.has_previous %}
 
                 <a
                     href="?tx_page={{ page_obj_tx.previous_page_number }}&activity_type={{ activity_type }}#transactions">
-
                     Previous
-
                 </a>
 
             {% endif %}
-
 
             <span>
 
@@ -1336,14 +1328,11 @@
 
             </span>
 
-
             {% if page_obj_tx.has_next %}
 
                 <a
                     href="?tx_page={{ page_obj_tx.next_page_number }}&activity_type={{ activity_type }}#transactions">
-
                     Next
-
                 </a>
 
             {% endif %}
@@ -1360,9 +1349,17 @@
     <div class="container text-center">
 
         <h2 class="transactions-title">
-            <span class="white">Our</span>
-            <span class="gold">Top</span>
-            <span class="white">Investors</span>
+            <span class="white">
+                Our
+            </span>
+
+            <span class="gold">
+                Top
+            </span>
+
+            <span class="white">
+                Investors
+            </span>
         </h2>
 
         <p class="transactions-subtitle">
@@ -1397,7 +1394,6 @@
 
                     {% endif %}
 
-
                     <div class="investor-details">
 
                         <h4>
@@ -1418,10 +1414,11 @@
 
                         </h4>
 
-
                         <p>
 
-                            <span>Total Investment:</span>
+                            <span>
+                                Total Investment:
+                            </span>
 
                             <strong>
                                 ${{ investor.current_investment|default:0|floatformat:2 }}
@@ -1445,7 +1442,6 @@
 
         </div>
 
-
         {% if page_obj_inv.paginator.num_pages > 1 %}
 
         <div class="pagination">
@@ -1461,7 +1457,6 @@
 
             {% endif %}
 
-
             <span class="pagination-status">
 
                 Page
@@ -1470,7 +1465,6 @@
                 {{ page_obj_inv.paginator.num_pages }}
 
             </span>
-
 
             {% if page_obj_inv.has_next %}
 
