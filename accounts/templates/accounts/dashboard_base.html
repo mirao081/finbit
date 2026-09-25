@@ -329,4 +329,173 @@
                     type="file"
                     name="document"
                     id="kyc-file"
-                    accept="image
+                    accept="image/*"
+                    hidden
+                    onchange="this.form.submit()"
+                >
+
+
+                <label
+                    for="kyc-file"
+                    class="kyc-btn"
+                >
+
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+
+                    <span>
+                        Upload Document
+                    </span>
+
+                </label>
+
+            </form>
+
+        </div>
+
+
+
+        
+
+        <nav
+            class="sidebar-navigation"
+            aria-label="Dashboard navigation"
+        >
+
+            <ul class="menu-list">
+
+
+                {% for menu in menus %}
+
+                    <li>
+
+                        <a
+                            href="{% url menu.url_name %}"
+                            class="menu-link"
+                        >
+
+
+                            
+
+                            <span class="menu-icon">
+
+                                <i class="{{ menu.icon }}"></i>
+
+                            </span>
+
+
+                            
+
+                            <span class="menu-title">
+
+                                {{ menu.title }}
+
+                            </span>
+
+
+                            
+
+                            <span class="menu-arrow">
+
+                                <i class="fa-solid fa-chevron-right"></i>
+
+                            </span>
+
+
+                        </a>
+
+                    </li>
+
+
+                {% empty %}
+
+                    <li>
+
+                        No menus configured
+
+                    </li>
+
+                {% endfor %}
+
+
+            </ul>
+
+        </nav>
+
+    </aside>
+
+
+
+    
+
+    <main class="dashboard-main">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+
+    
+
+    <footer class="dashboard-footer">
+
+        <p>
+
+            &copy; 2020
+            {{ site_settings.site_name }}
+            —
+            All rights reserved.
+
+        </p>
+
+    </footer>
+
+
+
+    
+
+    <script
+        src="https://cdn.jsdelivr.net/npm/chart.js"
+    ></script>
+
+
+
+    
+
+    <script
+        src="{% static 'accounts/js/dashboard.js' %}"
+    ></script>
+
+
+
+    
+
+    <script
+        src="{% static 'core/js/google-translate.js' %}"
+    ></script>
+
+
+    <script
+        src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+    ></script>
+
+
+
+    
+
+    <script
+        src="{% static 'accounts/js/darkmode.js' %}"
+    ></script>
+
+
+
+    
+
+    {% block extra_js %}
+    {% endblock %}
+
+
+</body>
+
+</html>
