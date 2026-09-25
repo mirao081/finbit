@@ -1196,9 +1196,13 @@ def approve_kyc(request, submission_id):
 
         profile.kyc_verified = True
 
+        if submission.document:
+            profile.picture = submission.document
+
         profile.save(
             update_fields=[
                 "kyc_verified",
+                "picture",
             ]
         )
 
@@ -1210,7 +1214,6 @@ def approve_kyc(request, submission_id):
     return redirect(
         "user_verifications"
     )
-
 
 @admin_required
 @require_POST
